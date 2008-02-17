@@ -35,9 +35,19 @@ if [[ "$TERM" != emacs ]]; then
 [[ "$terminfo[khome]" == "O"* ]] && bindkey -M emacs "${terminfo[khome]/O/[}" beginning-of-line
 [[ "$terminfo[kend]" == "O"* ]] && bindkey -M emacs "${terminfo[kend]/O/[}" end-of-line
 fi
+
+zstyle ':completion:*:sudo:*' command-path \
+	/usr/local/sbin /usr/local/bin \
+	/usr/sbin /usr/bin \
+	/sbin /bin \
+	/usr/X11R6/bin
+
+unalias run-help
 autoload run-help
 
-umask 0027
+if [ -d $HOME/bin ]; then
+	export PATH=$PATH:$HOME/bin
+fi
 
 saneGrep() {
   grep $@ | grep -v grep

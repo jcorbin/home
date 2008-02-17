@@ -1,5 +1,14 @@
-# Enable compsys completion.
-export LC_CTYPE=en_US
+if which fortune >/dev/null 2>&1 && [ ! -f ~/.no_fortune_motd ]; then
+	echo
+	fortune -a | sed -e 's/^/    /'
+	echo
+fi
+
+autoload -U compinit
+compinit
+
 export EDITOR=vim
 export PAGER=less
-export MAIL='imap://localhost'
+export LC_CTYPE=en_US
+
+alias l=ls
