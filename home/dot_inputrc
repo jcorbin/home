@@ -1,0 +1,3 @@
+set editing-mode vi
+set mark-directories On
+set visible-stats On

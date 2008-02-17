@@ -1,0 +1,5 @@
+# Enable compsys completion.
+export LC_CTYPE=en_US
+export EDITOR=vim
+export PAGER=less
+export MAIL='imap://localhost'
