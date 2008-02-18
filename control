@@ -1,6 +1,31 @@
 #!/bin/sh
 # Git based syncing for home data such as dot files
 
+update_data() {
+	TODIR=$1
+
+	# Dot Files
+	for ENT in dot/*; do
+		DEST=$TODIR/.$(echo $ENT | sed -e 's/^dot\///')
+		ETCENT=etc/$(basename $ENT)
+		echo -n "$DEST: "
+		if [ -f $ENT ] && [ -f $ETCENT ]; then
+			[ -f $DEST ] && rm -f $DEST >/dev/null
+			if cat $ETCENT $ENT >> $DEST; then
+				echo "done."
+			else
+				echo "failed."
+			fi
+		else
+			if rsync -a -q $ENT $DEST; then
+				echo "done."
+			else
+				echo "failed."
+			fi
+		fi
+	done
+}
+
 if [ -z $DOTDATADIR ]; then
 	if [ -d .git ]; then
 		export DOTDATADIR=$(pwd);
@@ -24,26 +49,52 @@ case $1 in
 		# Update control util
 		cp $0 $HOME/bin/dotdatactl
 
-		# Dot Files
-		for ENT in dot/*; do
-			HOMEENT=$HOME/.$(echo $ENT | sed -e 's/^dot\///')
-			ETCENT=etc/$(basename $ENT)
-			echo -n "$HOMEENT: "
-			if [ -f $ENT ] && [ -f $ETCENT ]; then
-				[ -f $HOMEENT ] && rm -f $HOMEENT >/dev/null
-				if cat $ETCENT $ENT >> $HOMEENT; then
-					echo "done."
-				else
-					echo "failed."
+		update_data $HOME
+
+		;;
+	export)
+		OUT=$2
+
+		if [ -z $OUT ]; then
+			echo "Usage $0 export <destination>" >&2
+			exit 1
+		fi
+
+		DESTDIR=
+
+		case $OUT in
+			*.tar|*.tar.*)
+				DESTDIR=$(mktemp -d);
+				update_data $DESTDIR
+				case ${OUT##*.} in
+					tar)
+						tar -C $DESTDIR -cf $OUT .
+						;;
+					gz)
+						tar -C $DESTDIR -czf $OUT .
+						;;
+					bz2)
+						tar -C $DESTDIR -cjf $OUT .
+						;;
+					*)
+						echo "Unrecognized output file type in $OUT" >&2
+						exit 1
+						;;
+				esac
+				rm -rf $DESTDIR
+				;;
+			*)
+				if ! [ -d $OUT ]; then
+					if [ -e $OUT ]; then
+						echo "$OUT exists as a non-directory" >&2
+						exit 1
+					fi
+					echo $OUT
+					mkdir $OUT -p
+					update_data $OUT
 				fi
-			else
-				if rsync -a -q $ENT $HOMEENT; then
-					echo "done."
-				else
-					echo "failed."
-				fi
-			fi
-		done
+				;;
+		esac
 
 		;;
 	*)
