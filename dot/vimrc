@@ -1,7 +1,11 @@
-if has("gui")
-  set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
-  set guioptions=acgit
-  set background=dark
+set background=dark
+
+if has("gui_running")
+	set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
+	set guioptions=acgit
+	colorscheme moria
+else
+	colorscheme desert
 endif
 
 let perl_include_pod = 1
@@ -18,10 +22,10 @@ let xml_no_auto_nesting = 1
 
 map ; ::
 
-set ve=all
-set tabstop=2
-" set shiftwidth=2
-set noexpandtab
-set foldmethod=indent
+set virtualedit=all
 
-colorscheme moria
+set noexpandtab
+set tabstop=4
+set shiftwidth=4
+
+set foldmethod=indent

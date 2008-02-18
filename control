@@ -16,7 +16,7 @@ fi
 
 chdir $DOTDATADIR
 
-# TODO etc data merging
+# TODO better etc data handling
 # TODO ssh keys
 # TODO don't use rsync
 case $1 in
@@ -27,11 +27,21 @@ case $1 in
 		# Dot Files
 		for ENT in dot/*; do
 			HOMEENT=$HOME/.$(echo $ENT | sed -e 's/^dot\///')
+			ETCENT=etc/$(basename $ENT)
 			echo -n "$HOMEENT: "
-			if rsync -a -q $ENT $HOMEENT; then
-				echo "done."
+			if [ -f $ENT ] && [ -f $ETCENT ]; then
+				[ -f $HOMEENT ] && rm -f $HOMEENT >/dev/null
+				if cat $ETCENT $ENT >> $HOMEENT; then
+					echo "done."
+				else
+					echo "failed."
+				fi
 			else
-				echo "failed."
+				if rsync -a -q $ENT $HOMEENT; then
+					echo "done."
+				else
+					echo "failed."
+				fi
 			fi
 		done
 
