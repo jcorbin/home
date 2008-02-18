@@ -1,6 +1,7 @@
 if has("gui")
   set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
   set guioptions=acgit
+  set background=dark
 endif
 
 let perl_include_pod = 1
@@ -22,3 +23,5 @@ set tabstop=2
 " set shiftwidth=2
 set noexpandtab
 set foldmethod=indent
+
+colorscheme moria
