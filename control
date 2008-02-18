@@ -1,0 +1,43 @@
+#!/bin/sh
+# Git based syncing for home data such as dot files
+
+if [ -z $DOTDATADIR ]; then
+	if [ -d .git ]; then
+		export DOTDATADIR=$(pwd);
+	elif [ -d $HOME/dotdata ]; then
+		export DOTDATADIR=$HOME/dotdata
+	fi
+fi
+
+if ! [ -d $DOTDATADIR ]; then
+	echo "Could not determine data directory, set DOTDATADIR or execute from within" >&2
+	exit 1
+fi
+
+chdir $DOTDATADIR
+
+# TODO etc data merging
+# TODO ssh keys
+# TODO don't use rsync
+case $1 in
+	update)
+		# Update control util
+		cp $0 $HOME/bin/dotdatactl
+
+		# Dot Files
+		for ENT in dot/*; do
+			HOMEENT=$HOME/.$(echo $ENT | sed -e 's/^dot\///')
+			echo -n "$HOMEENT: "
+			if rsync -a -q $ENT $HOMEENT; then
+				echo "done."
+			else
+				echo "failed."
+			fi
+		done
+
+		;;
+	*)
+		echo "Missing action to $0" >&2
+		exit 1
+		;;
+esac
