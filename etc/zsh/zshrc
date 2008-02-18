@@ -36,11 +36,8 @@ if [[ "$TERM" != emacs ]]; then
 [[ "$terminfo[kend]" == "O"* ]] && bindkey -M emacs "${terminfo[kend]/O/[}" end-of-line
 fi
 
-zstyle ':completion:*:sudo:*' command-path \
-	/usr/local/sbin /usr/local/bin \
-	/usr/sbin /usr/bin \
-	/sbin /bin \
-	/usr/X11R6/bin
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+			     /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 unalias run-help
 autoload run-help
