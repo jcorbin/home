@@ -1,0 +1,101 @@
+#!/bin/sh
+# Convenience for communications with Red Tree Systems
+
+DOMAIN=redtreesystems.com
+DEV=development.$DOMAIN
+
+PROXY_BIND=127.0.0.1:8080
+
+RD_OPTS="-r disk:pub=$HOME/pub,temp=/tmp"
+
+tunnel_status() {
+	TUNNEL_PID=$(
+		ps -C ssh --no-headers -o pid,args | grep -- "-D$PROXY_BIND .*$DEV" | \
+		while read pid line; do
+			echo $pid
+			exit 0
+		done
+	)
+
+	if [ -z $TUNNEL_PID ]; then
+		return 1
+	else
+		return 0
+	fi
+}
+cmd_tunnel_start() {
+	echo -n "Starting tunnel: "
+	if ! tunnel_status; then
+		ssh -f -N -D$PROXY_BIND $DEV
+	fi
+	echo "done."
+}
+cmd_tunnel_stop() {
+	echo -n "Stopping tunnel: "
+	if tunnel_status; then
+		kill $TUNNEL_PID
+		sleep 2
+		if tunnel_status; then
+			echo -n " SIG9 "
+			kill -9 $TUNNEL_PID
+		fi
+	fi
+	echo "done."
+}
+cmd_tunnel_status() {
+	if tunnel_status; then
+		echo "Tunnel running: [$TUNNEL_PID]"
+	else
+		echo "Tunnel not running"
+	fi
+}
+
+sshscreen () {
+  if [ "$TERM" = "screen" ]; then
+    screen -t $1 ssh -t $1 screen -D -R -e'^Ee'
+  else
+    screen -t $1 ssh -t $1 screen -D -R -e'^Uu'
+  fi
+}
+
+case $1 in
+tunnel)
+	case $2 in
+	start)
+		cmd_tunnel_start
+		;;
+	stop)
+		cmd_tunnel_stop
+		;;
+	status)
+		cmd_tunnel_status
+		;;
+	*)
+		echo "Expecting one of start, stop, or status" >&2
+		exit 1
+		;;
+	esac
+	;;
+witch)
+	STARTED_TUNNEL=
+	if ! tunnel_status; then
+		cmd_tunnel_start
+		STARTED_TUNNEL=1
+	fi
+
+	shift
+	if [ "$2" = "-f" ]; then
+		RD_OPTS="$RD_OPTS -g 100% -f"
+		shift
+	fi
+
+	tsocks rdesktop $RD_OPTS $@ 10.1.1.21:3389
+
+	if [ $STARTED_TUNNEL ]; then
+		cmd_tunnel_stop
+	fi
+	;;
+devsh)
+	sshscreen $DEV
+	;;
+esac
