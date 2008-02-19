@@ -1,0 +1,10 @@
+[user]
+email=jcorbin@wunjo.org
+name=Joshua T Corbin
+
+[web]
+browser=w3m
+
+[alias]
+st=status
+ci=commit -a
