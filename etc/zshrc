@@ -6,14 +6,6 @@ saneGrep() {
   grep $@ | grep -v grep
 }
 
-sshscreen () {
-  if [ "$TERM" = "screen" ]; then
-    screen -t $1 ssh -t $1 screen -D -R -e'^Ee'
-  else
-    screen -t $1 ssh -t $1 screen -D -R -e'^Aa'
-  fi
-}
-
 bindkey -v # Vi-style bindings
 
 alias -g L='|less'

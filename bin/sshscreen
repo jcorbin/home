@@ -1,0 +1,39 @@
+#!/bin/sh
+# Small utility to intelligently start a (sub)screen session to a remote
+
+LOCAL_ESCAPE="^Uu"
+NESTED_ESCAPE="^Ee"
+
+REMOTE=$1
+
+if [ -z $REMOTE ]; then
+	echo "Missing argumet, expecting [user@]host[:port]" >&2
+	exit 1
+fi
+
+case $REMOTE in *@*)
+	USER=${REMOTE%@*}
+	REMOTE=${REMOTE#*@}
+	;;
+esac
+
+case $REMOTE in *:*)
+	PORT=${REMOTE#*:}
+	REMOTE=${REMOTE%:*}
+	;;
+esac
+
+[ ! -z $USER ] && USER="-l $USER"
+[ ! -z $PORT ] && PORT="-p $PORT"
+
+if [ "$TERM" = "screen" ]; then
+	NAME=$REMOTE
+	[ ! -z $USER ] && NAME="$USER@$NAME"
+	[ ! -z $PORT ] && NAME="$NAME:$PONT"
+	screen -t $NAME \
+	ssh $USER $PORT -t $REMOTE \
+	screen -D -R -e $NESTED_ESCAPE
+else
+	ssh $USER $PORT -t $REMOTE \
+	screen -D -R -e $LOCAL_ESCAPE
+fi
