@@ -52,7 +52,7 @@ if ! [ -d $DOTDATADIR ]; then
 	exit 1
 fi
 
-chdir $DOTDATADIR
+cd $DOTDATADIR
 
 # TODO better etc data handling
 # TODO ssh keys
