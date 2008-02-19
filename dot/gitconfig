@@ -8,3 +8,4 @@ browser=w3m
 [alias]
 st=status
 ci=commit -a
+pack=repack -adlf
