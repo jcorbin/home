@@ -4,6 +4,19 @@
 update_data() {
 	TODIR=$1
 
+	[ -d $TODIR ] || mkdir -p $TODIR || return 1
+
+	# Bin
+	[ -d $TODIR/bin ] || mkdir $TODIR/bin
+	for ENT in bin/*; do
+		if [ -f $ENT ]; then
+			cp $ENT $TODIR/bin/$(basename $ENT)
+		fi
+	done
+
+	# Update control util
+	cp $0 $TODIR/bin/dotdatactl
+
 	# Dot Files
 	for ENT in dot/*; do
 		DEST=$TODIR/.$(echo $ENT | sed -e 's/^dot\///')
@@ -46,11 +59,7 @@ chdir $DOTDATADIR
 # TODO don't use rsync
 case $1 in
 	update)
-		# Update control util
-		cp $0 $HOME/bin/dotdatactl
-
-		update_data $HOME
-
+		update_data $HOME || exit 1
 		;;
 	export)
 		OUT=$2
@@ -65,22 +74,23 @@ case $1 in
 		case $OUT in
 			*.tar|*.tar.*)
 				DESTDIR=$(mktemp -d);
-				update_data $DESTDIR
-				case ${OUT##*.} in
-					tar)
-						tar -C $DESTDIR -cf $OUT .
-						;;
-					gz)
-						tar -C $DESTDIR -czf $OUT .
-						;;
-					bz2)
-						tar -C $DESTDIR -cjf $OUT .
-						;;
-					*)
-						echo "Unrecognized output file type in $OUT" >&2
-						exit 1
-						;;
-				esac
+				if update_data $DESTDIR; then
+					case ${OUT##*.} in
+						tar)
+							tar -C $DESTDIR -cf $OUT .
+							;;
+						gz)
+							tar -C $DESTDIR -czf $OUT .
+							;;
+						bz2)
+							tar -C $DESTDIR -cjf $OUT .
+							;;
+						*)
+							echo "Unrecognized output file type in $OUT" >&2
+							exit 1
+							;;
+					esac
+				fi
 				rm -rf $DESTDIR
 				;;
 			*)
@@ -90,8 +100,7 @@ case $1 in
 						exit 1
 					fi
 					echo $OUT
-					mkdir $OUT -p
-					update_data $OUT
+					update_data $OUT || exit 1
 				fi
 				;;
 		esac
