@@ -2,8 +2,8 @@
 email=jcorbin@wunjo.org
 name=Joshua T Corbin
 
-[web]
-browser=w3m
+[help]
+format=html
 
 [alias]
 st=status
