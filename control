@@ -38,6 +38,9 @@ update_data() {
 				fi
 			fi
 		else
+			[ -d $DEST ] || mkdir -p $DEST
+			ENT="$ENT/"
+			DEST="$DEST/"
 			if rsync -a -q $ENT $DEST; then
 				echo "done."
 			else
