@@ -1,7 +1,6 @@
 #!/bin/sh
 # Small utility to intelligently start a (sub)screen session to a remote
 
-LOCAL_ESCAPE="^Uu"
 NESTED_ESCAPE="^Ee"
 
 REMOTE=$1
@@ -23,17 +22,16 @@ case $REMOTE in *:*)
 	;;
 esac
 
-[ ! -z "$USERNAME" ] && USERNAME="-l $USERNAME"
-[ ! -z "$PORT" ] && PORT="-p $PORT"
+CMD="ssh -t $REMOTE"
+[ ! -z "$USERNAME" ] && CMD="$CMD -l $USERNAME"
+[ ! -z "$PORT" ] && CMD="$CMD -p $PORT"
+CMD="$CMD screen -D -R"
 
 if [ "$TERM" = "screen" ]; then
 	NAME=$REMOTE
 	[ ! -z "$USERNAME" ] && NAME="$USERNAME@$NAME"
 	[ ! -z "$PORT" ] && NAME="$NAME:$PONT"
-	screen -t $NAME \
-	ssh $USERNAME $PORT -t $REMOTE \
-	screen -D -R -e $NESTED_ESCAPE
-else
-	ssh $USERNAME $PORT -t $REMOTE \
-	screen -D -R -e $LOCAL_ESCAPE
+	CMD="screen -t $NAME $CMD -e $NESTED_ESCAPE"
 fi
+
+$CMD
