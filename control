@@ -15,7 +15,7 @@ update_data() {
 	done
 
 	# Update control util
-	cp $0 $TODIR/bin/dotdatactl
+	cp control $TODIR/bin/dotdatactl
 
 	# Dot Files
 	for ENT in dot/*; do
