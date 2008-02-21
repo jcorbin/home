@@ -23,13 +23,13 @@ case $REMOTE in *:*)
 	;;
 esac
 
-[ ! -z $USER ] && USER="-l $USER"
-[ ! -z $PORT ] && PORT="-p $PORT"
+[ ! -z "$USER" ] && USER="-l $USER"
+[ ! -z "$PORT" ] && PORT="-p $PORT"
 
 if [ "$TERM" = "screen" ]; then
 	NAME=$REMOTE
-	[ ! -z $USER ] && NAME="$USER@$NAME"
-	[ ! -z $PORT ] && NAME="$NAME:$PONT"
+	[ ! -z "$USER" ] && NAME="$USER@$NAME"
+	[ ! -z "$PORT" ] && NAME="$NAME:$PONT"
 	screen -t $NAME \
 	ssh $USER $PORT -t $REMOTE \
 	screen -D -R -e $NESTED_ESCAPE
