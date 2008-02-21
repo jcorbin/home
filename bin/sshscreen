@@ -12,7 +12,7 @@ if [ -z $REMOTE ]; then
 fi
 
 case $REMOTE in *@*)
-	USER=${REMOTE%@*}
+	USERNAME=${REMOTE%@*}
 	REMOTE=${REMOTE#*@}
 	;;
 esac
@@ -23,17 +23,17 @@ case $REMOTE in *:*)
 	;;
 esac
 
-[ ! -z "$USER" ] && USER="-l $USER"
+[ ! -z "$USERNAME" ] && USERNAME="-l $USERNAME"
 [ ! -z "$PORT" ] && PORT="-p $PORT"
 
 if [ "$TERM" = "screen" ]; then
 	NAME=$REMOTE
-	[ ! -z "$USER" ] && NAME="$USER@$NAME"
+	[ ! -z "$USERNAME" ] && NAME="$USERNAME@$NAME"
 	[ ! -z "$PORT" ] && NAME="$NAME:$PONT"
 	screen -t $NAME \
-	ssh $USER $PORT -t $REMOTE \
+	ssh $USERNAME $PORT -t $REMOTE \
 	screen -D -R -e $NESTED_ESCAPE
 else
-	ssh $USER $PORT -t $REMOTE \
+	ssh $USERNAME $PORT -t $REMOTE \
 	screen -D -R -e $LOCAL_ESCAPE
 fi
