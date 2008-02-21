@@ -22,12 +22,20 @@ update_data() {
 		DEST=$TODIR/.$(echo $ENT | sed -e 's/^dot\///')
 		ETCENT=etc/$(basename $ENT)
 		echo -n "$DEST: "
-		if [ -f $ENT ] && [ -f $ETCENT ]; then
+		if [ -f $ENT ]; then
 			[ -f $DEST ] && rm -f $DEST >/dev/null
-			if cat $ETCENT $ENT >> $DEST; then
-				echo "done."
+			if [ -f $ETCENT ]; then
+				if cat $ETCENT $ENT > $DEST; then
+					echo "done."
+				else
+					echo "failed."
+				fi
 			else
-				echo "failed."
+				if cp $ENT $DEST >/dev/null; then
+					echo "done."
+				else
+					echo "failed."
+				fi
 			fi
 		else
 			if rsync -a -q $ENT $DEST; then
