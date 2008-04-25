@@ -14,7 +14,6 @@ alias -g T='|tail'
 alias -g TF='tail -f'
 alias -g H='|head'
 
-alias sudosh='screen -t sudosh sudo -H -s' # TODO case this for term
 alias psaux='ps aux G'
 alias cl='clear'
 alias mv='nocorrect mv -vi'     # no spelling correction on mv
