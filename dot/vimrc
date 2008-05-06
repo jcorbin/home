@@ -1,7 +1,7 @@
 set background=dark
 
 if has("gui_running")
-	set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
+	set guifont=FreeMono\ 8,Bitstream\ Vera\ Sans\ Mono\ 8
 	set guioptions=acgit
 	colorscheme moria
 else
