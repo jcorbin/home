@@ -9,5 +9,6 @@ compinit
 
 export EDITOR=vim
 export PAGER=less
+export LESS=-r
 
 alias l=ls
