@@ -9,6 +9,6 @@ compinit
 
 export EDITOR=vim
 export PAGER=less
-export LESS=-r
+export LESS='-MRci'
 
 alias l=ls

@@ -25,6 +25,7 @@ alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias clls="clear;ls --color -F -b -T 0 -h"
+alias ltail='less +F'
 
 setopt CORRECT # Spelling correction
 
@@ -34,7 +35,7 @@ GREEN="%{\e[1;32m%}"
 YELLOW="%{\e[1;33m%}"
 BLUE="%{\e[1;34m%}"
 PINK="%{\e[1;35m%}"
-CYAN="%{\e[1;36m%}"		
+CYAN="%{\e[1;36m%}"
 WHITE="%{\e[1;37m%}"
 
 bareprompt() {
