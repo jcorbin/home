@@ -8,7 +8,11 @@ autoload -U compinit
 compinit
 
 export EDITOR=vim
-export PAGER=less
-export LESS='-MRci'
+if which most>/dev/null; then
+	export PAGER=$(which most)
+elif which less>/dev/null; then
+	export LESS='-MRci'
+	export PAGER=$(which less)
+fi
 
 alias l=ls
