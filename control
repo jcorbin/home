@@ -20,22 +20,13 @@ update_data() {
 	# Dot Files
 	for ENT in dot/*; do
 		DEST=$TODIR/.$(echo $ENT | sed -e 's/^dot\///')
-		ETCENT=etc/$(basename $ENT)
 		echo -n "$DEST: "
 		if [ -f $ENT ]; then
 			[ -f $DEST ] && rm -f $DEST >/dev/null
-			if [ -f $ETCENT ]; then
-				if cat $ETCENT $ENT > $DEST; then
-					echo "done."
-				else
-					echo "failed."
-				fi
+			if cp $ENT $DEST >/dev/null; then
+				echo "done."
 			else
-				if cp $ENT $DEST >/dev/null; then
-					echo "done."
-				else
-					echo "failed."
-				fi
+				echo "failed."
 			fi
 		else
 			[ -d $DEST ] || mkdir -p $DEST
@@ -65,7 +56,6 @@ fi
 
 cd $DOTDATADIR
 
-# TODO better etc data handling
 # TODO ssh keys
 # TODO don't use rsync
 case $1 in
