@@ -25,7 +25,7 @@ set pastetoggle=<F11>
 map , @@
 
 " Show tabs, trailing spaces, and line wraps
-set list listchars=tab:^-,trail:_,extends:+
+set list listchars=tab:^-,trail:_,extends:+,nbsp:·
 set background=dark
 
 if has("gui_running")
