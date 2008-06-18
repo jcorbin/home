@@ -1,18 +1,476 @@
+# Path {{{
+if [ -d $HOME/bin ]; then
+	export PATH=$HOME/bin:$PATH
+fi
+# }}}
+
+saneGrep() {
+  grep $@ | grep -v grep
+}
+
+bindkey -v # Vi-style bindings
+bindkey '^L' clear-screen
+
+# Global Aliases {{{
+alias -g L='|less'
+alias -g G='| saneGrep'
+alias -g T='|tail'
+alias -g TF='tail -f'
+alias -g H='|head'
+# }}}
+
+# Command aliases {{{
+alias psaux='ps aux G'
+alias cl='clear'
+alias mv='nocorrect mv -vi'
+alias cp='nocorrect cp -vi'
+alias mkdir='nocorrect mkdir'
+alias rm='rm -vi'
+alias ls="ls --color=auto -Fhb -T 0"
+alias l=ls
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias clls="clear;ls --color -F -b -T 0 -h"
+alias ltail='less +F'
+# }}}
+
+eval $(dircolors)
+ZLS_COLORS="$LS_COLORS"
+export ZLS_COLORS
+zmodload zsh/complist 2> /dev/null
+
+# set command completions {{{
+compctl -a {,un}alias
+compctl -/ {c,push,pop}d
+compctl -c exec
+compctl -c man
+compctl -c {where,which}
+compctl -o {,un}setopt
+compctl -E {,un}setenv
+compctl -E printenv
+compctl -b bindkey
+compctl -j fg
+compctl -j kill
+compctl -u chown
+compctl -g '*.(ps|eps)' gv
+# }}}
+
+# Autocomplete for current dir on filetypes {{{
+compctl -g '*.Z *.gz *.tgz' + -g '*' zcat gunzip
+compctl -g '*.tar.Z *.tar.gz *.tgz *.tar.bz2' + -g '*' tar
+compctl -g '*.zip *.ZIP' + -g '*' unzip zip
+compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
+# }}}
+
+# Editor# {{{
+export EDITOR=vim
+# }}}
+
+# Pager {{{
+if which most>/dev/null; then
+	export PAGER=$(which most)
+elif which less>/dev/null; then
+	export PAGER=$(which less)
+fi
+export LESS='-MRci'
+# }}}
+
+# Misc options {{{
+setopt correct # Spelling correction
+setopt dvorak # Spelling correction for dvorak
+setopt pathdirs
+setopt extended_glob
+setopt no_hup
+setopt no_flowcontrol
+setopt noclobber
+setopt notify # Notify of job status immediantely
+setopt transientrprompt
+# }}}
+
+# History {{{
+#export HISTFILE=$HOME/.zsh_history
+#export HISTSIZE=8192
+#export SAVEHIST=8192
+#setopt share_history
+#setopt append_history
+setopt hist_reduce_blanks
+setopt hist_ignore_dups
+# }}}
+
+# Directory navigation {{{
+export CDPATH=.:~
+setopt autocd
+setopt autopushd
+setopt pushd_ignoredups
+setopt cdablevars
+# }}}
+
+#unalias run-help
+autoload run-help
+
+# Titlebars {{{
+
+writetitle()
+{
+	case "$TERM" in
+		screen|screen-w|screen-16color*|screen-256color*)
+		export TITLETEXT="zsh %d"
+		;;
+		*)
+		export TITLETEXT="%n@%m:%d | ${COLUMNS}x${LINES} | %y"
+		;;
+	esac
+}
+
+writeexectitle()
+{
+    #  export EXECTEXT1="%n@%m:%d : "
+    export EXECTEXT1="%n@%m:%d : "
+    export EXECTEXT2="$*"
+}
+
+# TERMINAL TYPES
+
+case "$TERM" in
+	# Standalone terminal emulator {{{
+	*xterm*|rxvt*|putty*|gnome-terminal|*onsole|zvt|(dt|k|E|z)term)
+		precmd()
+		{
+			writetitle
+			print -Pn "\e]0;${TITLETEXT}\a"
+			unset TITLETEXT
+		}
+
+		preexec()
+		{
+			writeexectitle $1
+			print -Pn '\e]0;'"${EXECTEXT1}"
+			print -rn "${EXECTEXT2}"
+			print -Pn '\a'
+			unset EXECTEXT1 EXECTEXT2
+		}
+		;;
+	# }}}
+	# Fucked up osx vt100 {{{
+	vt100)
+		# This is weird but true:
+
+		# Apple's MacOS X includes a Terminal.app derived from the old NeXT
+		# Terminal.app. It is a partial VT100 emulation with some extensions.
+		#
+		# There are no function keys, at least not in version 41.
+		#
+		# It supports mouse pointer position reporting using xterm-like
+		# sequences (not used in these entries.) When using emacs, the cursor
+		# can be positioned using option-click.
+		#
+		# It provides partial ANSI color support (background colors interact
+		# badly with bold, though.) The monochrome (-m) entries are useful if
+		# you've disabled color support.
+		#
+		# The configurable titlebar is set using xterm-compatible sequences;
+		# it is used as a status bar in these entries.
+		#
+		# The MacRoman character encoding is used for some of the alternate
+		# characters in the "MacRoman" entries; the "ASCII" (-ascii) entries
+		# rely instead on Terminal.app's own buggy VT100 graphics emulation,
+		# which seems to think the character encoding is the old NeXT charset
+		# instead of MacRoman.
+		#
+		# Terminal.app reports "vt100" as the terminal type, but exports
+		# several environment variables which may aid detection in a shell
+		# profile:
+		#
+		# TERM=vt100
+		# TERM_PROGRAM=Apple_Terminal
+		# TERM_PROGRAM_VERSION=41
+
+
+		if test "$TERM_PROGRAM" = "Apple_Terminal"
+		then
+			precmd()
+			{
+				writetitle
+				print -Pn "\e]0;${TITLETEXT}\a"
+				unset TITLETEXT
+			}
+
+			preexec()
+			{
+				writeexectitle $1
+				print -Pn '\e]0;'"${EXECTEXT1}"
+				print -rn "${EXECTEXT2}"
+				print -Pn '\a'
+				unset EXECTEXT1 EXECTEXT2
+			}
+		fi
+		;;
+# }}}
+	# Screen {{{
+	screen|screen-w|screen-16color*|screen-256color*)
+		precmd()
+		{
+			writetitle
+			print -Pn "\ek${TITLETEXT}\e\\"
+			unset TITLETEXT
+		}
+
+		preexec()
+		{
+			writeexectitle $1
+			print -Pn "\ek""${EXECTEXT2}"
+			#print -rn "${EXECTEXT1}"
+			print -Pn "\e\\"
+			unset EXECTEXT1 EXECTEXT2
+		}
+		;;
+	# }}}
+
+	*)
+		true
+		;;
+
+esac
+
+# }}}
+# {{{ Prompt colors
+
+#/usr/share/zsh/4.0.2/functions/Misc/colors
+
+# Attribute codes:
+#  00 none
+#  01 bold
+#  02 faint                  22 normal
+#  03 standout               23 no-standout
+#  04 underline              24 no-underline
+#  05 blink                  25 no-blink
+#  07 reverse                27 no-reverse
+#  08 conceal
+
+# Text color codes:
+#  30 black                  40 bg-black
+#  31 red                    41 bg-red
+#  32 green                  42 bg-green
+#  33 yellow                 43 bg-yellow
+#  34 blue                   44 bg-blue
+#  35 magenta                45 bg-magenta
+#  36 cyan                   46 bg-cyan
+#  37 white                  47 bg-white
+#  39 default                49 bg-default
+
+#PS1="%{"$'\e[01;31m'"%}$PS1%{"$'\e[00m'"%}"
+#             ^^ ^^                 ^^
+#             |  |                  |
+#          bold  red                reset
+
+#export FOO="%{"$'\e[31m'"%}"
+#PS1="${FOO}$PS1%{"$'\e[0m'"%}"
+
+# DEFINE ALL COLORS IN THIS PLACE
+# for example color for "%h" is in variable "COLOR_p_h"
+# except
+# color for "%#" is in variable "COLOR_p_hash"
+# color for "%/" is in variable "COLOR_p_slash"
+# color for "%*" is in variable "COLOR_p_star"
+# color for "@" is in variable "COLOR_at"
+
+#COLOR="%{"$'\e[31m'"%}"
+
+COLOR_ROOT_BOLD=""
+COLOR_RESET="%{"$'\e[39;49;00m'"%}"
+
+COLOR_REAL_RESET="%{"$'\e[39;49;00m'"%}"
+
+colorize()
+{
+    COLOR_p_h="%{"$'\e[32;49m'"%}"
+    COLOR_p_l="%{"$'\e[32;49m'"%}"
+    COLOR_p_y="%{"$'\e[32;49m'"%}"
+
+    COLOR_p_n="%{"$'\e[35;49m'"%}"
+    COLOR_at="%{"$'\e[35;49m'"%}"
+    COLOR_p_m="%{"$'\e[35;49m'"%}"
+
+    COLOR_WHOLEHOST="%{"$'\e[35;49m'"%}"
+    COLOR_SHORTHOST="%{"$'\e[35;49m'"%}"
+    COLOR_DOMAINHOST="%{"$'\e[35;49m'"%}"
+
+    COLOR_p_D="%{"$'\e[31;49m'"%}"
+    COLOR_MY_DATE="%{"$'\e[36;49m'"%}"
+    COLOR_p_star="%{"$'\e[31;49m'"%}"
+    COLOR_MY_TIME="%{"$'\e[36;49m'"%}"
+
+    COLOR_ROOT="%{"$'\e[01;31;49m'"%}"
+
+    COLOR_p_hash="%{"$'\e[01;33;49m'"%}"
+    COLOR_p_slash="%{"$'\e[31;49m'"%}"
+
+    $LATEST_PROMPT
+}
+
+uncolorize()
+{
+    COLOR_p_h="${COLOR_RESET}"
+    COLOR_p_l="${COLOR_RESET}"
+    COLOR_p_y="${COLOR_RESET}"
+
+    COLOR_p_n="${COLOR_RESET}"
+    COLOR_at="${COLOR_RESET}"
+    COLOR_p_m="${COLOR_RESET}"
+
+    COLOR_WHOLEHOST="${COLOR_RESET}"
+    COLOR_SHORTHOST="${COLOR_RESET}"
+    COLOR_DOMAINHOST="${COLOR_RESET}"
+
+    COLOR_p_D="${COLOR_RESET}"
+    COLOR_MY_DATE="${COLOR_RESET}"
+    COLOR_p_star="${COLOR_RESET}"
+    COLOR_MY_TIME="${COLOR_RESET}"
+
+    COLOR_ROOT="%{"$'\e[39;49;01m'"%}"
+
+    if (( EUID == 0 ))
+    then
+        COLOR_p_hash="%s${COLOR_ROOT}"
+        COLOR_p_slash="%s${COLOR_ROOT}"
+    else
+        COLOR_p_hash="${COLOR_RESET}"
+        COLOR_p_slash="${COLOR_RESET}"
+    fi
+
+    $LATEST_PROMPT
+}
+
+
+# So, you don't like those colors anymore and your eyes are burning
+# and bleeding?  Just comment away "colorize" and uncomment
+# "uncolorize". You can give those commands via command line, too.
+
+colorize
+#uncolorize
+
+# }}}
+# {{{ Prompts
+
+MY_DATE="%D{%Y-%m-%d}"
+MY_TIME="%D{%H:%M:%S}"
+
+hostprompt()
+{
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+	unset RPROMPT
+	LATEST_PROMPT="hostprompt"
+}
+
+publicprompt()
+{
+    export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_slash}%/${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+    unset RPROMPT
+    LATEST_PROMPT="publicprompt"
+}
+
+pwdcutprompt()
+{
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%/${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+	export RPROMPT="${COLOR_ROOT_BOLD}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_h}%h${COLOR_RESET}|${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_REAL_RESET}"
+	LATEST_PROMPT="pwdcutprompt"
+}
+
+pwdprompt()
+{
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%/${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+	unset RPROMPT
+	LATEST_PROMPT="pwdprompt"
+}
+
+twolineprompt()
+{
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_h}%h${COLOR_RESET} | ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_RESET} | ${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} : ${COLOR_p_slash}%/${COLOR_RESET}%E
+	${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+	unset RPROMPT
+	LATEST_PROMPT="twolineprompt"
+}
+
+cuttwolineprompt()
+{
+	export PS1="${COLOR_MY_DATE}${MY_DATE}${COLOR_RESET} ${COLOR_MY_TIME}${MY_TIME}${COLOR_RESET} ${COLOR_p_slash}%/${COLOR_RESET}
+${COLOR_p_h}%h${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+	export RPROMPT="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_REAL_RESET}"
+	LATEST_PROMPT="cuttwolineprompt"
+}
+
+defaultprompt()
+{
+	cuttwolineprompt
+}
+
+defaultprompt
+
+case `uname -s` in
+    *SunOS*)
+
+    export PS1="%B%n@%m | ${MY_DATE} ${MY_TIME}%E | %h
+%/
+%S%#%s%b "
+    unset RPROMPT
+    ;;
+
+    *)
+    :
+esac
+
+# }}}
+
+#Completion {{{
+
+# Rmdir only real directories
+compctl -g '*(D/)' rmdir
+
+# Cd/pushd only directories or symbolic links to directories
+compctl -g '*(D-/)' cd pushd
+
+autoload compinit 2> /dev/null
+autoload -U compinit 2> /dev/null
+compinit 2> /dev/null
+
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' add-space true
+#zstyle ':completion:*' completer _list _oldlist _expand _complete _ignored _match _correct _approximate _prefix
+# Complete first as much as you can. Then show alternatives.
+zstyle ':completion:*' completer _complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
+zstyle ':completion:*' completions 1
+zstyle ':completion:*' file-sort name
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' glob 1
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' ignore-parents pwd
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' max-errors 3 numeric
+zstyle ':completion:*' menu select=long-list select=0
+zstyle ':completion:*' old-menu false
+zstyle ':completion:*' original true
+zstyle ':completion:*' prompt '%e errors>'
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' substitute 1
+zstyle ':completion:*' use-compctl true
+zstyle ':completion:*' verbose true
+zstyle ':completion:*' word true
+
+compdef _gnu_generic qiv
+
+# }}}
+
+# Display fortune {{{
 if which fortune >/dev/null 2>&1 && [ ! -f ~/.no_fortune_motd ]; then
 	echo
 	fortune -a | sed -e 's/^/    /'
 	echo
 fi
+# }}}
 
-autoload -U compinit
-compinit
-
-export EDITOR=vim
-if which most>/dev/null; then
-	export PAGER=$(which most)
-elif which less>/dev/null; then
-	export LESS='-MRci'
-	export PAGER=$(which less)
-fi
-
-alias l=ls
+# vim:set foldmethod=marker:
