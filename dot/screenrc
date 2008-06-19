@@ -81,7 +81,7 @@ hardstatus off
 # Set the hardstatus prop on gui terms to set the titlebar/icon title
 termcapinfo putty*|xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
 # use this for the hard status string
-hardstatus lastline "%H:%t"
+hardstatus string "%H:%t"
 
 # An alternative hardstatus to display a bar at the bottom listing the
 # windownames and highlighting the current windowname in blue. (This is only
@@ -119,7 +119,7 @@ defutf8 on
 #hardstatus alwayslastline "%0`"
 
 # Set caption in the last line of screen:
-caption always "%{wb}%-Lw%{= Ck}%50>%n%f* %t%{-}%{wb}%+Lw%<%{wk} %= %{Gk}%H %{w.}|%{G.} %Y-%m-%d %c:%s %{w.}|%{G.} %l"
+caption always "%{cb}[%{W.}%Y-%m-%d %c%{c.}][%{W.}%H%{c.} - %{W.}%t%{c.}] %{b.}[%{w.}%-Lw%{W.}%50>%n%f* %t%{-}%{w.}%+Lw%{c.}] %>%= %{c.}[%{R.}%l%{c.}]"
 
 term screen
 
