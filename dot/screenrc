@@ -28,8 +28,6 @@ nethack on
 #defflow on # will force screen to process ^S/^Q
 deflogin on
 
-shell -/bin/zsh
-
 # turn visual bell on
 vbell on
 #vbell_msg "   Wuff  ----  Wuff!!  "
@@ -130,5 +128,3 @@ term screen
 # I find this annoying:
 #blankerprg /usr/bin/nice -n 19 /usr/games/rain -d 100
 #idle 300 blanker
-
-escape ^uu
