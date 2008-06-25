@@ -6,12 +6,15 @@ update_data() {
 
 	[ -d $TODIR ] || mkdir -p $TODIR || return 1
 
-	# Bin
-	[ -d $TODIR/bin ] || mkdir $TODIR/bin
-	for ENT in bin/*; do
-		if [ -f $ENT ]; then
-			cp $ENT $TODIR/bin/$(basename $ENT)
-		fi
+	# Dirs
+	for dir in lib bin; do
+		[ -d $TODIR/$dir ] || mkdir $TODIR/$dir
+		for ENT in $dir/*; do
+			if [ -f $ENT ]; then
+				echo $ENT
+				cp $ENT $TODIR/$dir/$(basename $ENT)
+			fi
+		done
 	done
 
 	# Update control util
