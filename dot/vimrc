@@ -70,3 +70,6 @@ set swapsync=
 set modeline
 set nu
 set laststatus=2
+
+" C-t for new tab
+map <C-T> <Esc>:tabnew<CR>
