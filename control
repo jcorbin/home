@@ -110,6 +110,17 @@ case $1 in
 		esac
 
 		;;
+	vimdiff)
+		# Dot Files
+		for ENT in $(find dot -type f); do
+			DEST=$HOME/.$(echo $ENT | sed -e 's/^dot\///')
+			SRC_HASH=$(md5sum $ENT | cut -d ' ' -f1)
+			DEST_HASH=$(md5sum $DEST | cut -d ' ' -f1)
+			if [ $SRC_HASH != $DEST_HASH ]; then
+				vimdiff $ENT $DEST
+			fi
+		done
+		;;
 	*)
 		echo "Missing action to $0" >&2
 		exit 1
