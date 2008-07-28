@@ -22,7 +22,7 @@ update_data() {
 
 	# Dot Files
 	for ENT in dot/*; do
-		DEST=$TODIR/.$(echo $ENT | sed -e 's/^dot\///')
+		DEST=$TODIR/.$(basename $ENT)
 		echo -n "$DEST: "
 		if [ -f $ENT ]; then
 			[ -f $DEST ] && rm -f $DEST >/dev/null
