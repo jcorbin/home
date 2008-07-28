@@ -30,7 +30,16 @@ set background=dark
 
 if has("gui_running")
 	set guifont=DejaVu\ Sans\ Mono\ 6,Bitstream\ Vera\ Sans\ Mono\ 6
-	set guioptions=acgit
+	" guioptions:
+	"   a - autoselect
+	"   c - console dialogs
+	"   e - gui tabline
+	"   i - icon hint
+	"   m - menubar
+	"   g - grey out menu items
+	"   r - right scroll always
+	set guioptions=aceimgr
+	set guiheadroom=0
 	colorscheme moria
 else
 	colorscheme desert
