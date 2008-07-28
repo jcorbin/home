@@ -59,3 +59,5 @@ set shiftwidth=4
 set foldmethod=indent
 set swapsync=
 set modeline
+set nu
+set laststatus=2
