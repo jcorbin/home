@@ -29,7 +29,7 @@ set list listchars=tab:^-,trail:_,extends:+,nbsp:.
 set background=dark
 
 if has("gui_running")
-	set guifont=ProggyCleanTTSZBP\ 8,FreeMono\ 8,Bitstream\ Vera\ Sans\ Mono\ 8
+	set guifont=DejaVu\ Sans\ Mono\ 6,Bitstream\ Vera\ Sans\ Mono\ 6
 	set guioptions=acgit
 	colorscheme moria
 else
