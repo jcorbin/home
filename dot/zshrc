@@ -26,7 +26,7 @@ alias mv='nocorrect mv -vi'
 alias cp='nocorrect cp -vi'
 alias mkdir='nocorrect mkdir'
 alias rm='rm -vi'
-alias ls="ls --color=auto -Fhb -T 0"
+alias ls="ls --time-style=long-iso --color=auto -Fhb -T 0"
 alias l=ls
 alias ll='ls -l'
 alias la='ls -a'
