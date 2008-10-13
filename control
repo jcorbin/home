@@ -111,14 +111,28 @@ case $1 in
 
 		;;
 	vimdiff)
-		# Dot Files
-		for ENT in $(find dot -type f); do
-			DEST=$HOME/.$(echo $ENT | sed -e 's/^dot\///')
+		diffent() {
+			ENT=$1
+			DEST=$2
 			SRC_HASH=$(md5sum $ENT | cut -d ' ' -f1)
 			DEST_HASH=$(md5sum $DEST | cut -d ' ' -f1)
-			if [ $SRC_HASH != $DEST_HASH ]; then
+			if [ "$SRC_HASH" != "$DEST_HASH" ]; then
 				vimdiff $ENT $DEST
 			fi
+		}
+
+		# Dirs
+		for dir in lib bin; do
+			for ENT in $dir/*; do
+				if [ -f $ENT ]; then
+					diffent $ENT $HOME/$ENT
+				fi
+			done
+		done
+
+		# Dot Files
+		for ENT in $(find dot -type f); do
+			diffent $ENT $HOME/.$(echo $ENT | sed -e 's/^dot\///')
 		done
 		;;
 	*)
