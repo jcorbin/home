@@ -1,12 +1,53 @@
 #!/bin/sh
 # Convenience for communications with Red Tree Systems
 
+VPNDIR=$HOME/redtree/vpn
 DOMAIN=redtreesystems.com
 DEV=development.$DOMAIN
 
 PROXY_BIND=127.0.0.1:8080
 
 RD_OPTS="-r disk:pub=$HOME/pub,temp=/tmp"
+
+vpn_status() {
+	VPN_PID=$(cat $VPNDIR/openvpn.pid);
+
+	if [ -z $VPN_PID ]; then
+		return 1
+	fi
+
+	if kill -0 $VPN_PID >/dev/null 2>&1; then
+		return 0
+	else
+		return 1
+	fi
+}
+cmd_vpn_start() {
+	echo -n "Starting vpn: "
+	if ! vpn_status; then
+		openvpn --cd $VPNDIR --daemon --config client.conf --writepid openvpn.pid
+	fi
+	echo "done."
+}
+cmd_vpn_stop() {
+	echo -n "Stopping vpn: "
+	if vpn_status; then
+		kill $VPN_PID
+		sleep 2
+		if vpn_status; then
+			echo -n " SIG9 "
+			kill -9 $VPN_PID
+		fi
+	fi
+	echo "done."
+}
+cmd_vpn_status() {
+	if vpn_status; then
+		echo "vpn running: [$VPN_PID]"
+	else
+		echo "vpn not running"
+	fi
+}
 
 tunnel_status() {
 	TUNNEL_PID=$(
@@ -59,6 +100,19 @@ sshscreen () {
 }
 
 case $1 in
+vpn)
+	case $2 in
+	start)
+		cmd_vpn_start
+		;;
+	stop)
+		cmd_vpn_stop
+		;;
+	status)
+		cmd_vpn_status
+		;;
+	esac
+	;;
 tunnel)
 	case $2 in
 	start)
