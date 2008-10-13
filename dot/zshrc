@@ -68,12 +68,10 @@ export EDITOR=vim
 # }}}
 
 # Pager {{{
-if which most>/dev/null; then
-	export PAGER=$(which most)
-elif which less>/dev/null; then
+if which less>/dev/null; then
 	export PAGER=$(which less)
+	export LESS='-MRci'
 fi
-export LESS='-MRci'
 # }}}
 
 # Misc options {{{
