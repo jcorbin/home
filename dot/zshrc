@@ -99,7 +99,6 @@ setopt hist_ignore_dups
 # Directory navigation {{{
 export CDPATH=.
 setopt autocd
-setopt autopushd
 setopt pushd_ignoredups
 setopt cdablevars
 # }}}
