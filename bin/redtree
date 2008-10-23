@@ -9,6 +9,11 @@ PROXY_BIND=127.0.0.1:8080
 
 RD_OPTS="-r disk:pub=$HOME/pub,temp=/tmp"
 
+die() {
+	echo $@ >&2
+	exit 1
+}
+
 vpn_status() {
 	VPN_PID=$(cat $VPNDIR/openvpn.pid);
 
@@ -125,8 +130,7 @@ tunnel)
 		cmd_tunnel_status
 		;;
 	*)
-		echo "Expecting one of start, stop, or status" >&2
-		exit 1
+		die "Expecting one of start, stop, or status"
 		;;
 	esac
 	;;
