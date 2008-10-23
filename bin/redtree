@@ -3,6 +3,7 @@
 
 DEVDIR=$HOME/redtree
 VPNDIR=$DEVDIR/vpn
+REPOBASE=http://goblin/svn
 DOMAIN=redtreesystems.com
 DEV=development.$DOMAIN
 
@@ -156,5 +157,22 @@ witch)
 	;;
 devsh)
 	sshscreen $DEV
+	;;
+svn-clone)
+	project=$2
+	[ -z "$project" ] &&
+		die "Missing project argument"
+
+	cd $DEVDIR
+	if [ -d $project ]; then
+		mv $project $project.old
+	fi
+
+	git svn clone $REPOBASE/$project ||
+		die "git svn clone failed"
+
+	cd $project
+	git pack
+
 	;;
 esac
