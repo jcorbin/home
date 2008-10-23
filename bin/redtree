@@ -1,7 +1,8 @@
 #!/bin/sh
 # Convenience for communications with Red Tree Systems
 
-VPNDIR=$HOME/redtree/vpn
+DEVDIR=$HOME/redtree
+VPNDIR=$DEVDIR/vpn
 DOMAIN=redtreesystems.com
 DEV=development.$DOMAIN
 
