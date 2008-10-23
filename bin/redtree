@@ -9,7 +9,7 @@ DEV=development.$DOMAIN
 
 PROXY_BIND=127.0.0.1:8080
 
-RD_OPTS="-r disk:pub=$HOME/pub,temp=/tmp"
+RD_OPTS="-r disk:redtree=$HOME/redtree,temp=/tmp"
 
 die() {
 	echo $@ >&2
@@ -79,23 +79,8 @@ vpn)
 	esac
 	;;
 witch)
-	STARTED_VPN=
-	if ! vpn_status; then
-		cmd_vpn_start
-		STARTED_VPN=1
-	fi
-
-	shift
-	if [ "$2" = "-f" ]; then
-		RD_OPTS="$RD_OPTS -g 100% -f"
-		shift
-	fi
-
-	tsocks rdesktop $RD_OPTS $@ 10.1.1.21:3389
-
-	if [ $STARTED_VPN ]; then
-		cmd_vpn_stop
-	fi
+  shift
+	rdesktop $RD_OPTS $@ witch:3389
 	;;
 devsh)
 	sshscreen $DEV
