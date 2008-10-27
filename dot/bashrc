@@ -1,0 +1,16 @@
+alias rm="rm -vi"
+alias mv="mv -vi"
+alias cp="cp -vi"
+
+export EDITOR=$(which vim)
+
+if which less >/dev/null; then
+  export PAGER=$(which less)
+  export LESS='-MRci'
+fi
+
+alias ls="ls -G -Fhb"
+alias l=ls
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
