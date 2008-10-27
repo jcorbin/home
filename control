@@ -1,6 +1,11 @@
 #!/bin/sh
 # Git based syncing for home data such as dot files
 
+die() {
+	echo $@ >&2
+	exit 1
+}
+
 update_data() {
 	TODIR=$1
 
@@ -52,10 +57,8 @@ if [ -z $DOTDATADIR ]; then
 	fi
 fi
 
-if ! [ -d $DOTDATADIR ]; then
-	echo "Could not determine data directory, set DOTDATADIR or execute from within" >&2
-	exit 1
-fi
+[ -d $DOTDATADIR ] || \
+	die "Could not determine data directory, set DOTDATADIR or execute from within"
 
 cd $DOTDATADIR
 
@@ -68,10 +71,7 @@ case $1 in
 	export)
 		OUT=$2
 
-		if [ -z $OUT ]; then
-			echo "Usage $0 export <destination>" >&2
-			exit 1
-		fi
+		[ -z $OUT ] && die "Usage $0 export <destination>"
 
 		DESTDIR=
 
@@ -90,8 +90,7 @@ case $1 in
 							tar -C $DESTDIR -cjf $OUT .
 							;;
 						*)
-							echo "Unrecognized output file type in $OUT" >&2
-							exit 1
+							die "Unrecognized output file type in $OUT"
 							;;
 					esac
 				fi
@@ -99,10 +98,7 @@ case $1 in
 				;;
 			*)
 				if ! [ -d $OUT ]; then
-					if [ -e $OUT ]; then
-						echo "$OUT exists as a non-directory" >&2
-						exit 1
-					fi
+					[ -e $OUT ] && die "$OUT exists as a non-directory"
 					echo $OUT
 					update_data $OUT || exit 1
 				fi
@@ -136,7 +132,6 @@ case $1 in
 		done
 		;;
 	*)
-		echo "Missing action to $0" >&2
-		exit 1
+		die "Missing action to $0"
 		;;
 esac
