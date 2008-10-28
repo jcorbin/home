@@ -108,6 +108,60 @@ case $1 in
 			cat $HOME/.dotdata_profile
 		fi
 		;;
+	remote-update)
+		REMOTE=$2
+		[ -z $REMOTE ] && die "Usage $0 remote-update [user@]host"
+
+		SSHOPT="-C"
+		case $REMOTE in
+			*@*)
+				user=${REMOTE%@*}
+				host=${REMOTE#*@}
+				SSHOPT="$SSHOPT -l $user"
+				;;
+			*)
+				user=
+				host=$REMOTE
+				;;
+		esac
+
+		REMOTECALL='test -d $HOME/bin || mkdir $HOME/bin >/dev/null 2>&1;'
+		REMOTECALL=$REMOTECALL' cat >$HOME/bin/dotdatactl;'
+		REMOTECALL=$REMOTECALL' chmod +x $HOME/bin/dotdatactl;'
+		REMOTECALL=$REMOTECALL' echo $HOME/bin/dotdatactl'
+
+		REMOTECALL=$(cat $0 | ssh $SSHOPT $host -- /bin/sh -c "$REMOTECALL")
+		[ -n "$REMOTECALL" ] || die "Failed to deploy remote control scirpt"
+		REMOTECALL="ssh $SSHOPT $host $REMOTECALL"
+
+		if [ -z "$PROFILE" ]; then
+			PROFILE=$($REMOTECALL home-profile)
+		fi
+
+		DESTDIR=$(mktemp -u)
+		if update_data $DESTDIR $PROFILE; then
+			TARFILE=$(mktemp)
+			tar -C $DESTDIR -c . > $TARFILE
+			rm -rf $DESTDIR >/dev/null 2>&1
+			cat $TARFILE | $REMOTECALL receive-tar
+			rm -f $TARFILE
+		else
+			rm -rf $DESTDIR >/dev/null 2>&1
+		fi
+		;;
+	receive-tar)
+		TMPDIR=$HOME/.dotdata_update_$$
+		mkdir $TMPDIR || die "Failed to create temporary directory"
+		if ! tar -C $TMPDIR -x; then
+			rm -rf $TMPDIR >/dev/null 2>&1
+			die "Failed to unpack recieved tarball"
+		fi
+		if ! rsync -a -q $TMPDIR/ $HOME; then
+			rm -rf $TMPDIR >/dev/null 2>&1
+			die "Failed to integrat received tarball"
+		fi
+		rm -rf $TMPDIR >/dev/null 2>&1
+		;;
 	update)
 		if [ -n "$2" ]; then
 			DOT_PROFILE=$2
