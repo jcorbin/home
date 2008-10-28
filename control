@@ -103,6 +103,11 @@ cd $DOTDATADIR
 
 # TODO ssh keys
 case $1 in
+	home-profile)
+		if [ -f $HOME/.dotdata_profile ]; then
+			cat $HOME/.dotdata_profile
+		fi
+		;;
 	update)
 		if [ -n "$2" ]; then
 			DOT_PROFILE=$2
