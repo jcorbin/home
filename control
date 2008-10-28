@@ -84,7 +84,7 @@ case $1 in
 			[ -f profiles/$DOT_PROFILE ] ||
 				die "Invalid dot profile '$DOT_PROFILE'."
 		elif [ -f $HOME/.dotdata_profile ]; then
-			DOT_PROFILE=$(cat .dotdata_profile)
+			DOT_PROFILE=$(cat $HOME/.dotdata_profile)
 		fi
 
 		TMPDIR=$HOME/.dotdata_update_$$
