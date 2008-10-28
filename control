@@ -9,7 +9,10 @@ die() {
 update_data() {
 	TODIR=$1
 
-	[ -d $TODIR ] || mkdir -p $TODIR || return 1
+	if [ -e $TODIR ]; then
+		echo "Destination $TODIR already exists" >&2
+		return 1
+	fi
 
 	# Dirs
 	for dir in lib bin; do
@@ -23,6 +26,7 @@ update_data() {
 	done
 
 	# Update control util
+	[ -d $TODIR/bin ] || mkdir -p $TODIR/bin
 	cp control $TODIR/bin/dotdatactl
 
 	# Dot Files
@@ -66,7 +70,12 @@ cd $DOTDATADIR
 # TODO don't use rsync
 case $1 in
 	update)
-		update_data $HOME || exit 1
+		TMPDIR=$HOME/.dotdata_update_$$
+		if ! update_data $TMPDIR; then
+			[ -d $TMPDIR ] && rm -rf $TMPDIR >/dev/null 2>&1
+			exit 1
+		fi
+		rsync -a -q $TMPDIR/ $HOME
 		;;
 	export)
 		OUT=$2
@@ -97,11 +106,8 @@ case $1 in
 				rm -rf $DESTDIR
 				;;
 			*)
-				if ! [ -d $OUT ]; then
-					[ -e $OUT ] && die "$OUT exists as a non-directory"
-					echo $OUT
-					update_data $OUT || exit 1
-				fi
+				echo $OUT
+				update_data $OUT || exit 1
 				;;
 		esac
 
