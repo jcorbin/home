@@ -6,6 +6,29 @@ die() {
 	exit 1
 }
 
+copy_list() {
+	LIST=$1
+
+	for ENT in $LIST; do
+		DEST=
+		case "$ENT" in
+			dot/*)
+				DEST=$TODIR/.${ENT##dot/}
+				;;
+			*)
+				DEST=$TODIR/$ENT
+			;;
+		esac
+		if [ -n "$ENT" ] && [ -n "$DEST" ]; then
+			entdir=$(dirname $DEST)
+			[ -d $entdir ] || mkdir -p $entdir || return 1
+			cp -a $ENT $DEST >/dev/null || return 1
+		fi
+	done
+
+	return 0
+}
+
 update_data() {
 	TODIR=$1
 
@@ -14,43 +37,18 @@ update_data() {
 		return 1
 	fi
 
-	# Dirs
-	for dir in lib bin; do
-		[ -d $TODIR/$dir ] || mkdir $TODIR/$dir
-		for ENT in $dir/*; do
-			if [ -f $ENT ]; then
-				echo $ENT
-				cp $ENT $TODIR/$dir/$(basename $ENT)
-			fi
-		done
-	done
+	MANIFEST=$(find dot lib bin -maxdepth 1 -mindepth 1)
+	mkdir -p $TODIR || return 1
+	if ! copy_list "$MANIFEST"; then
+		rm -rf $TODIR >/dev/null 2>&1
+		return 1
+	fi
 
 	# Update control util
 	[ -d $TODIR/bin ] || mkdir -p $TODIR/bin
 	cp control $TODIR/bin/dotdatactl
 
-	# Dot Files
-	for ENT in dot/*; do
-		DEST=$TODIR/.$(basename $ENT)
-		echo -n "$DEST: "
-		if [ -f $ENT ]; then
-			[ -f $DEST ] && rm -f $DEST >/dev/null
-			if cp $ENT $DEST >/dev/null; then
-				echo "done."
-			else
-				echo "failed."
-			fi
-		else
-			[ -d $DEST ] || mkdir -p $DEST
-			ENT="$ENT/"
-			DEST="$DEST/"
-			if rsync -a -q $ENT $DEST; then
-				echo "done."
-			else
-				echo "failed."
-			fi
-		fi
-	done
+	return 0
 }
 
 if [ -z $DOTDATADIR ]; then
@@ -67,7 +65,6 @@ fi
 cd $DOTDATADIR
 
 # TODO ssh keys
-# TODO don't use rsync
 case $1 in
 	update)
 		TMPDIR=$HOME/.dotdata_update_$$
