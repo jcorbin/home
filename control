@@ -31,13 +31,21 @@ copy_list() {
 
 update_data() {
 	TODIR=$1
+	PROFILE=$2
 
 	if [ -e $TODIR ]; then
 		echo "Destination $TODIR already exists" >&2
 		return 1
 	fi
 
-	MANIFEST=$(find dot lib bin -maxdepth 1 -mindepth 1)
+	if [ -n "$PROFILE" ]; then
+		[ -f profiles/$PROFILE ] ||
+			die "Invalid dot profile '$PROFILE'."
+		MANIFEST=$(cat profiles/$PROFILE)
+	else
+		MANIFEST=$(find dot lib bin -maxdepth 1 -mindepth 1)
+	fi
+
 	mkdir -p $TODIR || return 1
 	if ! copy_list "$MANIFEST"; then
 		rm -rf $TODIR >/dev/null 2>&1
@@ -47,6 +55,10 @@ update_data() {
 	# Update control util
 	[ -d $TODIR/bin ] || mkdir -p $TODIR/bin
 	cp control $TODIR/bin/dotdatactl
+
+	if [ -n "$PROFILE" ]; then
+		echo $PROFILE > $TODIR/.dotdata_profile
+	fi
 
 	return 0
 }
@@ -67,8 +79,16 @@ cd $DOTDATADIR
 # TODO ssh keys
 case $1 in
 	update)
+		if [ -n "$2" ]; then
+			DOT_PROFILE=$2
+			[ -f profiles/$DOT_PROFILE ] ||
+				die "Invalid dot profile '$DOT_PROFILE'."
+		elif [ -f $HOME/.dotdata_profile ]; then
+			DOT_PROFILE=$(cat .dotdata_profile)
+		fi
+
 		TMPDIR=$HOME/.dotdata_update_$$
-		if ! update_data $TMPDIR; then
+		if ! update_data $TMPDIR $DOT_PROFILE; then
 			[ -d $TMPDIR ] && rm -rf $TMPDIR >/dev/null 2>&1
 			exit 1
 		fi
@@ -76,6 +96,7 @@ case $1 in
 		;;
 	export)
 		OUT=$2
+		PROFILE=$3
 
 		[ -z $OUT ] && die "Usage $0 export <destination>"
 
@@ -84,7 +105,7 @@ case $1 in
 		case $OUT in
 			*.tar|*.tar.*)
 				DESTDIR=$(mktemp -d);
-				if update_data $DESTDIR; then
+				if update_data $DESTDIR $PROFILE; then
 					case ${OUT##*.} in
 						tar)
 							tar -C $DESTDIR -cf $OUT .
@@ -104,7 +125,7 @@ case $1 in
 				;;
 			*)
 				echo $OUT
-				update_data $OUT || exit 1
+				update_data $OUT $PROFILE || exit 1
 				;;
 		esac
 

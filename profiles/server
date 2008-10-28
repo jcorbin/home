@@ -1,0 +1,9 @@
+dot/vimrc
+dot/inputrc
+dot/bash_profile
+dot/bashrc
+dot/zshrc
+dot/vim/colors/moria.vim
+dot/vim/ftplugin/xml.vim
+dot/vim/ftplugin/html.vim
+bin/unfuck-newlines
