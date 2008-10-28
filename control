@@ -23,8 +23,15 @@ copy_list() {
 			entdir=$(dirname $DEST)
 			[ -d $entdir ] || mkdir -p $entdir || return 1
 			cp -a $ENT $DEST >/dev/null || return 1
+			echo $DEST >> $TODIR/.list
 		fi
 	done
+
+	find $(cat $TODIR/.list) -type f | \
+		sed -e "s~$TODIR/~~" > \
+		$TODIR/.dotdata_manifest
+
+	rm -f $TODIR/.list
 
 	return 0
 }
