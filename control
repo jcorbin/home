@@ -63,6 +63,31 @@ update_data() {
 	return 0
 }
 
+make_tar() {
+	FILE=$1
+	PROFILE=$2
+
+	DESTDIR=$(mktemp -u);
+	if update_data $DESTDIR $PROFILE; then
+		case ${FILE##*.} in
+			tar)
+				tar -C $DESTDIR -cf $FILE .
+				;;
+			gz)
+				tar -C $DESTDIR -czf $FILE .
+				;;
+			bz2)
+				tar -C $DESTDIR -cjf $FILE .
+				;;
+			*)
+				rm -rf $DESTDIR >/dev/null 2>&1
+				die "Unrecognized output file type in $FILE"
+				;;
+		esac
+	fi
+	rm -rf $DESTDIR >/dev/null 2>&1
+}
+
 if [ -z $DOTDATADIR ]; then
 	if [ -d .git ]; then
 		export DOTDATADIR=$(pwd);
@@ -104,24 +129,7 @@ case $1 in
 
 		case $OUT in
 			*.tar|*.tar.*)
-				DESTDIR=$(mktemp -d);
-				if update_data $DESTDIR $PROFILE; then
-					case ${OUT##*.} in
-						tar)
-							tar -C $DESTDIR -cf $OUT .
-							;;
-						gz)
-							tar -C $DESTDIR -czf $OUT .
-							;;
-						bz2)
-							tar -C $DESTDIR -cjf $OUT .
-							;;
-						*)
-							die "Unrecognized output file type in $OUT"
-							;;
-					esac
-				fi
-				rm -rf $DESTDIR
+				make_tar "$OUT" $PROFILE
 				;;
 			*)
 				echo $OUT
