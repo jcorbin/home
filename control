@@ -36,7 +36,7 @@ copy_list() {
 	return 0
 }
 
-update_data() {
+checkout() {
 	TODIR=$1
 	PROFILE=$2
 
@@ -75,7 +75,7 @@ make_tar() {
 	PROFILE=$2
 
 	DESTDIR=$(mktemp -u);
-	if update_data $DESTDIR $PROFILE; then
+	if checkout $DESTDIR $PROFILE; then
 		case ${FILE##*.} in
 			tar)
 				tar -C $DESTDIR -cf $FILE .
@@ -146,7 +146,7 @@ case $1 in
 		fi
 
 		DESTDIR=$(mktemp -u)
-		if update_data $DESTDIR $PROFILE; then
+		if checkout $DESTDIR $PROFILE; then
 			TARFILE=$(mktemp)
 			tar -C $DESTDIR -c . > $TARFILE
 			rm -rf $DESTDIR >/dev/null 2>&1
@@ -179,7 +179,7 @@ case $1 in
 		fi
 
 		TMPDIR=$HOME/.dotdata_update_$$
-		if ! update_data $TMPDIR $DOT_PROFILE; then
+		if ! checkout $TMPDIR $DOT_PROFILE; then
 			[ -d $TMPDIR ] && rm -rf $TMPDIR >/dev/null 2>&1
 			exit 1
 		fi
@@ -199,7 +199,7 @@ case $1 in
 				;;
 			*)
 				echo $OUT
-				update_data $OUT $PROFILE || exit 1
+				checkout $OUT $PROFILE || exit 1
 				;;
 		esac
 
