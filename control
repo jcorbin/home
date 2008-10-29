@@ -45,6 +45,10 @@ checkout() {
 		return 1
 	fi
 
+	if [ "$PROFILE" = "default" ]; then
+		PROFILE=
+	fi
+
 	if [ -n "$PROFILE" ]; then
 		[ -f profiles/$PROFILE ] ||
 			die "Invalid dot profile '$PROFILE'."
@@ -95,6 +99,29 @@ make_tar() {
 	rm -rf $DESTDIR >/dev/null 2>&1
 }
 
+profile() {
+	if [ -f $HOME/.dotdata_profile ]; then
+		PROFILE=$(cat $HOME/.dotdata_profile)
+	else
+		PROFILE="default"
+	fi
+
+	if [ -z "$1" ]; then
+		echo $PROFILE
+	else
+		NEW_PROFILE=$1
+		if [ $NEW_PROFILE = "default" ]; then
+			rm -f $HOME/.dotdata_profile
+		else
+			echo $NEW_PROFILE > $HOME/.dotdata_profile
+		fi
+
+		if [ "$PROFILE" != "$NEW_PROFILE" ]; then
+			echo "Profile $PROFILE -> $NEW_PROFILE"
+		fi
+	fi
+}
+
 if [ -z $DOTDATADIR ]; then
 	if [ -d .git ]; then
 		export DOTDATADIR=$(pwd);
@@ -110,10 +137,8 @@ cd $DOTDATADIR
 
 # TODO ssh keys
 case $1 in
-	home-profile)
-		if [ -f $HOME/.dotdata_profile ]; then
-			cat $HOME/.dotdata_profile
-		fi
+	profile)
+		profile $2
 		;;
 	push)
 		REMOTE=$2
@@ -142,7 +167,7 @@ case $1 in
 		REMOTECALL="ssh $SSHOPT $host $REMOTECALL"
 
 		if [ -z "$PROFILE" ]; then
-			PROFILE=$($REMOTECALL home-profile)
+			PROFILE=$($REMOTECALL profile)
 		fi
 
 		DESTDIR=$(mktemp -u)
@@ -156,6 +181,18 @@ case $1 in
 			rm -rf $DESTDIR >/dev/null 2>&1
 		fi
 		;;
+	pull)
+		if [ -f $HOME/.dotdata_profile ]; then
+			DOT_PROFILE=$(cat $HOME/.dotdata_profile)
+		fi
+
+		TMPDIR=$HOME/.dotdata_update_$$
+		if ! checkout $TMPDIR $DOT_PROFILE; then
+			[ -d $TMPDIR ] && rm -rf $TMPDIR >/dev/null 2>&1
+			exit 1
+		fi
+		rsync -a -q $TMPDIR/ $HOME
+		;;
 	receive-tar)
 		TMPDIR=$HOME/.dotdata_update_$$
 		mkdir $TMPDIR || die "Failed to create temporary directory"
@@ -168,22 +205,6 @@ case $1 in
 			die "Failed to integrat received tarball"
 		fi
 		rm -rf $TMPDIR >/dev/null 2>&1
-		;;
-	update)
-		if [ -n "$2" ]; then
-			DOT_PROFILE=$2
-			[ -f profiles/$DOT_PROFILE ] ||
-				die "Invalid dot profile '$DOT_PROFILE'."
-		elif [ -f $HOME/.dotdata_profile ]; then
-			DOT_PROFILE=$(cat $HOME/.dotdata_profile)
-		fi
-
-		TMPDIR=$HOME/.dotdata_update_$$
-		if ! checkout $TMPDIR $DOT_PROFILE; then
-			[ -d $TMPDIR ] && rm -rf $TMPDIR >/dev/null 2>&1
-			exit 1
-		fi
-		rsync -a -q $TMPDIR/ $HOME
 		;;
 	export)
 		OUT=$2
