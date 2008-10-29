@@ -2,6 +2,7 @@
 # Small utility to intelligently start a (sub)screen session to a remote
 
 NESTED_ESCAPE="^Ee"
+TOP_ESCAPE="^Uu"
 
 REMOTE=$1
 
@@ -25,7 +26,7 @@ esac
 CMD="ssh -t $REMOTE"
 [ ! -z "$USERNAME" ] && CMD="$CMD -l $USERNAME"
 [ ! -z "$PORT" ] && CMD="$CMD -p $PORT"
-CMD="$CMD screen -D -R"
+CMD="$CMD screen -D -R -e $TOP_ESCAPE"
 
 if [ "$TERM" = "screen" ]; then
 	NAME=$REMOTE
