@@ -115,9 +115,9 @@ case $1 in
 			cat $HOME/.dotdata_profile
 		fi
 		;;
-	remote-update)
+	push)
 		REMOTE=$2
-		[ -z $REMOTE ] && die "Usage $0 remote-update [user@]host"
+		[ -z $REMOTE ] && die "Usage $0 push [user@]host"
 
 		SSHOPT="-C"
 		case $REMOTE in
