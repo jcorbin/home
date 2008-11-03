@@ -3,7 +3,7 @@
 
 DEVDIR=$HOME/redtree
 VPNDIR=$DEVDIR/vpn
-REPOBASE=http://goblin/svn
+REPOBASE=https://development.redtreesystems.com/svn
 DOMAIN=redtreesystems.com
 DEV=development.$DOMAIN
 
