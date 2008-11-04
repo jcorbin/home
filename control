@@ -74,6 +74,51 @@ checkout() {
 	return 0
 }
 
+remote_push() {
+	REMOTE=$1
+	PROFILE=$2
+
+	SSHOPT="-C"
+	case $REMOTE in
+		*@*)
+			user=${REMOTE%@*}
+			host=${REMOTE#*@}
+			SSHOPT="$SSHOPT -l $user"
+			;;
+		*)
+			user=
+			host=$REMOTE
+			;;
+	esac
+
+	REMOTECALL='test -d $HOME/bin || mkdir $HOME/bin >/dev/null 2>&1;'
+	REMOTECALL=$REMOTECALL' cat >$HOME/bin/dotdatactl;'
+	REMOTECALL=$REMOTECALL' chmod +x $HOME/bin/dotdatactl;'
+	REMOTECALL=$REMOTECALL' echo $HOME/bin/dotdatactl'
+
+	REMOTECALL=$(cat $0 | ssh $SSHOPT $host -- /bin/sh -c "$REMOTECALL")
+	if [ -z "$REMOTECALL" ]; then
+		echo "Failed to deploy remote control scirpt" >&2
+		return 1
+	fi
+	REMOTECALL="ssh $SSHOPT $host $REMOTECALL"
+
+	if [ -z "$PROFILE" ]; then
+		PROFILE=$($REMOTECALL profile)
+	fi
+
+	DESTDIR=$(mktemp -u)
+	if checkout $DESTDIR $PROFILE; then
+		TARFILE=$(mktemp)
+		tar -C $DESTDIR -c . > $TARFILE
+		rm -rf $DESTDIR >/dev/null 2>&1
+		cat $TARFILE | $REMOTECALL receive-tar
+		rm -f $TARFILE
+	else
+		rm -rf $DESTDIR >/dev/null 2>&1
+	fi
+}
+
 make_tar() {
 	FILE=$1
 	PROFILE=$2
@@ -142,44 +187,9 @@ case $1 in
 		;;
 	push)
 		REMOTE=$2
-		[ -z $REMOTE ] && die "Usage $0 push [user@]host"
+		[ -z $REMOTE ] && die "Usage $0 push [user@]host [profile]"
 
-		SSHOPT="-C"
-		case $REMOTE in
-			*@*)
-				user=${REMOTE%@*}
-				host=${REMOTE#*@}
-				SSHOPT="$SSHOPT -l $user"
-				;;
-			*)
-				user=
-				host=$REMOTE
-				;;
-		esac
-
-		REMOTECALL='test -d $HOME/bin || mkdir $HOME/bin >/dev/null 2>&1;'
-		REMOTECALL=$REMOTECALL' cat >$HOME/bin/dotdatactl;'
-		REMOTECALL=$REMOTECALL' chmod +x $HOME/bin/dotdatactl;'
-		REMOTECALL=$REMOTECALL' echo $HOME/bin/dotdatactl'
-
-		REMOTECALL=$(cat $0 | ssh $SSHOPT $host -- /bin/sh -c "$REMOTECALL")
-		[ -n "$REMOTECALL" ] || die "Failed to deploy remote control scirpt"
-		REMOTECALL="ssh $SSHOPT $host $REMOTECALL"
-
-		if [ -z "$PROFILE" ]; then
-			PROFILE=$($REMOTECALL profile)
-		fi
-
-		DESTDIR=$(mktemp -u)
-		if checkout $DESTDIR $PROFILE; then
-			TARFILE=$(mktemp)
-			tar -C $DESTDIR -c . > $TARFILE
-			rm -rf $DESTDIR >/dev/null 2>&1
-			cat $TARFILE | $REMOTECALL receive-tar
-			rm -f $TARFILE
-		else
-			rm -rf $DESTDIR >/dev/null 2>&1
-		fi
+		remote_push $REMOTE $3 || exit 1
 		;;
 	pull)
 		if [ -f $HOME/.dotdata_profile ]; then
