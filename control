@@ -182,6 +182,16 @@ cd $DOTDATADIR
 
 # TODO ssh keys
 case $1 in
+	deploy)
+		for r in $(cat remotes); do
+			echo -n "$r: "
+			if remote_push $r; then
+				echo "done."
+			else
+				echo "fail."
+			fi
+		done
+		;;
 	profile)
 		profile $2
 		;;
@@ -190,6 +200,15 @@ case $1 in
 		[ -z $REMOTE ] && die "Usage $0 push [user@]host [profile]"
 
 		remote_push $REMOTE $3 || exit 1
+
+		if ! grep $REMOTE remotes >/dev/null 2>&1; then
+			{
+				cat remotes;
+				echo $REMOTE
+			} | uniq | sort > remotes.new || \
+				die "Failed to update remote list"
+			mv remotes.new remotes
+		fi
 		;;
 	pull)
 		if [ -f $HOME/.dotdata_profile ]; then
