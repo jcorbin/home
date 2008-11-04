@@ -16,3 +16,7 @@ alias cp="cp -vi"
 alias cl='clear'
 alias psaux='ps aux | grep'
 alias ltail='less +F'
+
+if which dircolors >/dev/null 2>&1; then
+  eval $(dircolors)
+fi

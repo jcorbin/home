@@ -34,10 +34,12 @@ alias mkdir='nocorrect mkdir'
 alias ltail='less +F'
 # }}}
 
-eval $(dircolors)
-ZLS_COLORS="$LS_COLORS"
-export ZLS_COLORS
-zmodload zsh/complist 2> /dev/null
+if which dircolors >/dev/null 2>&1; then
+  eval $(dircolors)
+  ZLS_COLORS="$LS_COLORS"
+  export ZLS_COLORS
+  zmodload zsh/complist 2> /dev/null
+fi
 
 # set command completions {{{
 compctl -a {,un}alias
