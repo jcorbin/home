@@ -20,18 +20,17 @@ alias -g H='|head'
 # }}}
 
 # Command aliases {{{
-alias psaux='ps aux G'
-alias cl='clear'
-alias mv='nocorrect mv -vi'
-alias cp='nocorrect cp -vi'
-alias mkdir='nocorrect mkdir'
-alias rm='rm -vi'
-alias ls="ls --time-style=long-iso --color=auto -Fhb -T 0"
+alias ls="ls -Fhb --time-style=long-iso --color=auto"
 alias l=ls
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
-alias clls="clear;ls --color -F -b -T 0 -h"
+alias mv='nocorrect mv -vi'
+alias cp='nocorrect cp -vi'
+alias rm='rm -vi'
+alias cl='clear'
+alias psaux='ps aux G'
+alias mkdir='nocorrect mkdir'
 alias ltail='less +F'
 # }}}
 

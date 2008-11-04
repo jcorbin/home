@@ -1,7 +1,3 @@
-alias rm="rm -vi"
-alias mv="mv -vi"
-alias cp="cp -vi"
-
 export EDITOR=$(which vim)
 
 if which less >/dev/null; then
@@ -9,8 +5,14 @@ if which less >/dev/null; then
   export LESS='-MRci'
 fi
 
-alias ls="ls -G -Fhb"
+alias ls='ls -Fhb --time-style=long-iso --color=auto'
 alias l=ls
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
+alias rm="rm -vi"
+alias mv="mv -vi"
+alias cp="cp -vi"
+alias cl='clear'
+alias psaux='ps aux | grep'
+alias ltail='less +F'
