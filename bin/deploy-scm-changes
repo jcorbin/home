@@ -4,6 +4,7 @@ WC=$(pwd)
 TYPE='diff'
 FROM_COMMIT=
 TO_COMMIT=
+BARE=0
 
 die() {
 	echo $@
@@ -19,6 +20,7 @@ syntax() {
 		echo "    -d <dest> Export destination (can also be a third unqualified argument)"
 		echo "    -s <scm> SCM type, one of git or svn"
 		echo "    -t <type> Export type one of diff, dir, tar, zip"
+		echo "    -b Create a bare export, no meta information"
 		echo "  Commits are anythnig honored by the local scm, one wrinkle being that strings"
 		echo "  such as 'r123' are converted to git commit ids using git-svn find-rev if the"
 		echo "  git repository looks like a git-svn clone."
@@ -78,53 +80,57 @@ export_to_dir() {
 			;;
 	esac
 
-	cd $DIR
+	if [ $BARE ]; then
+		rm -f $DIR/MANIFEST
+	else
+		cd $DIR
 
-	# Generate checksum lists
-	if which md5sum >/dev/null 2>&1; then
-		md5sum $(cat MANIFEST) > $DIR/MANIFEST.md5
-	fi
-	if which sha1sum >/dev/null 2>&1; then
-		sha1sum $(cat MANIFEST) > $DIR/MANIFEST.sha1
-	fi
-
-	if [ -f $DIR/MANIFEST.sha1 ] || [ -f $DIR/MANIFEST.md5 ]; then
-		DOSUMS=1
-	fi
-
-	if [ -f $DIR/REMOVED_FILES ] || [ $DOSUMS ]; then
-		echo "#!/bin/sh" > update.sh
-		echo >> update.sh
-
-		if [ -f $DIR/REMOVED_FILES ]; then
-			for p in $(cat REMOVED_FILES); do
-				echo "rm -fv '$p'" >> update.sh
-			done
-			rm -f REMOVED_FILES
+		# Generate checksum lists
+		if which md5sum >/dev/null 2>&1; then
+			md5sum $(cat MANIFEST) > $DIR/MANIFEST.md5
+		fi
+		if which sha1sum >/dev/null 2>&1; then
+			sha1sum $(cat MANIFEST) > $DIR/MANIFEST.sha1
 		fi
 
-		if [ $DOSUMS ]; then
-			{
-				echo
-				if [ -f $DIR/MANIFEST.sha1 ]; then
-					echo "if which sha1sum >/dev/null 2>&1; then"
-					echo "  sha1sum -c MANIFEST.sha1"
+		if [ -f $DIR/MANIFEST.sha1 ] || [ -f $DIR/MANIFEST.md5 ]; then
+			DOSUMS=1
+		fi
+
+		if [ -f $DIR/REMOVED_FILES ] || [ $DOSUMS ]; then
+			echo "#!/bin/sh" > update.sh
+			echo >> update.sh
+
+			if [ -f $DIR/REMOVED_FILES ]; then
+				for p in $(cat REMOVED_FILES); do
+					echo "rm -fv '$p'" >> update.sh
+				done
+				rm -f REMOVED_FILES
+			fi
+
+			if [ $DOSUMS ]; then
+				{
+					echo
+					if [ -f $DIR/MANIFEST.sha1 ]; then
+						echo "if which sha1sum >/dev/null 2>&1; then"
+						echo "  sha1sum -c MANIFEST.sha1"
+						if [ -f $DIR/MANIFEST.md5 ]; then
+							echo -n "el"
+						else
+							echo "fi"
+						fi
+					fi
 					if [ -f $DIR/MANIFEST.md5 ]; then
-						echo -n "el"
-					else
+						echo "if which md5sum >/dev/null 2>&1; then"
+						echo "  md5sum -c MANIFEST.md5"
 						echo "fi"
 					fi
-				fi
-				if [ -f $DIR/MANIFEST.md5 ]; then
-					echo "if which md5sum >/dev/null 2>&1; then"
-					echo "  md5sum -c MANIFEST.md5"
-					echo "fi"
-				fi
-			} >> update.sh
+				} >> update.sh
+			fi
 		fi
-	fi
 
-	cd $WC
+		cd $WC
+	fi
 }
 
 for arg in $@; do
@@ -137,6 +143,9 @@ for arg in $@; do
 			;;
 		-t)
 			ARGN='TYPE'
+			;;
+		-b)
+			BARE=1
 			;;
 		*)
 			if [ -n "$ARGN" ]; then
