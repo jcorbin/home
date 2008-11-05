@@ -1,0 +1,274 @@
+#!/bin/sh
+
+WC=$(pwd)
+TYPE='diff'
+FROM_COMMIT=
+TO_COMMIT=
+
+die() {
+	echo $@
+	exit 1
+}
+
+syntax() {
+	{
+		echo $@
+		echo
+		echo "Syntax: "$(basename $0)" [options] <from-commit> [<to-commit>]"
+		echo "  Options:"
+		echo "    -d Export destination"
+		echo "    -s SCM type, one of git or svn"
+		echo "    -t Export type one of diff, dir, tar, zip"
+	} >&2
+	exit 1
+}
+
+git_massage_commit() {
+	if [ -z "$1" ]; then
+		echo 'HEAD'
+	else
+		case "$1" in
+			r*)
+				if [ -d .git/svn ]; then
+					git svn find-rev $1
+				else
+					die "Cannot translate $1 to a git commit"
+				fi
+				;;
+			*)
+				echo $1
+				;;
+		esac
+	fi
+}
+
+export_to_dir() {
+	DIR=$1
+
+	if [ -e $DIR ]; then
+		echo "$DIR exists already" >&2
+		return 1
+	fi
+
+	mkdir -p $DIR
+
+	case $SCM in
+		git)
+			touch $DIR/MANIFEST
+			git diff --name-status $FROM_COMMIT $TO_COMMIT | \
+				while read action path; do
+					case $action in
+						D)
+							echo $PATH >> $DIR/REMOVED_FILES
+							;;
+						*)
+							mkdir -p $DIR/$(dirname $path)
+							git show $TO_COMMIT:$path > $DIR/$path
+							echo $path >> $DIR/MANIFEST
+							;;
+					esac
+				done
+			;;
+		svn)
+			echo "SVN support unimplemneted" >&2
+			exit 1
+			;;
+	esac
+
+	cd $DIR
+
+	# Generate checksum lists
+	if which md5sum >/dev/null 2>&1; then
+		md5sum $(cat MANIFEST) > $DIR/MANIFEST.md5
+	fi
+	if which sha1sum >/dev/null 2>&1; then
+		sha1sum $(cat MANIFEST) > $DIR/MANIFEST.sha1
+	fi
+
+	if [ -f $DIR/REMOVED_FILES ]; then
+		echo "#!/bin/sh" > update.sh
+		echo >> update.sh
+
+		for p in $(cat REMOVED_FILES); do
+			echo "rm -fv '$p'" >> update.sh
+		done
+
+		if [ -f $DIR/MANIFEST.sha1 ] || [ -f $DIR/MANIFEST.md5 ]; then
+			{
+				echo
+				if [ -f $DIR/MANIFEST.sha1 ]; then
+					echo "if which sha1sum >/dev/null 2>&1; then"
+					echo "  sha1sum -c MANIFEST.sha1"
+					if [ -f $DIR/MANIFEST.md5 ]; then
+						echo -n "el"
+					else
+						echo "fi"
+					fi
+				fi
+				if [ -f $DIR/MANIFEST.md5 ]; then
+					echo "if which md5sum >/dev/null 2>&1; then"
+					echo "  md5sum -c MANIFEST.md5"
+					echo "fi"
+				fi
+			} >> update.sh
+		fi
+
+		rm -f REMOVED_FILES
+	fi
+
+	cd $WC
+}
+
+for arg in $@; do
+	case $arg in
+		-d)
+			ARGN='DEST'
+			;;
+		-s)
+			ARGN='SCM'
+			;;
+		-t)
+			ARGN='TYPE'
+			;;
+		*)
+			if [ -n "$ARGN" ]; then
+				eval "$ARGN='$arg'"
+				ARGN=
+			else
+				if [ -z "$FROM_COMMIT" ]; then
+					FROM_COMMIT=$arg
+				elif [ -z "$TO_COMMIT" ]; then
+					TO_COMMIT=$arg
+				else
+					syntax "Unrecognized argument $arg"
+				fi
+			fi
+			;;
+	esac
+done
+
+if [ -z "$FROM_COMMIT" ]; then
+	syntax
+fi
+
+# Detect SCM
+if [ -z "$SCM" ]; then
+	if [ -d $WC/.git ]; then
+		SCM='git'
+	elif [ -d $WC/.svn ]; then
+		SCM='svn'
+	else
+		die "Unable to determine SCM in use"
+	fi
+fi
+
+if [ -z "$TO_COMMIT" ]; then
+	TO_COMMIT='HEAD'
+fi
+
+# Absolute path to provided destination
+if [ -n "$DEST" ]; then
+	case $DEST in
+		/*)
+			;;
+		*)
+			DESt=$(pwd)/$DEST
+			;;
+	esac
+else
+	AUTOGEN_DEST=1
+	DEST=$(pwd)/"changes_$FROM_COMMIT-$TO_COMMIT"
+fi
+
+# Massage possible svn revisions into git commits
+if [ "$SCM" = "git" ]; then
+	FROM_COMMIT=$(git_massage_commit $FROM_COMMIT)
+	TO_COMMIT=$(git_massage_commit $TO_COMMIT)
+fi
+
+cd $WC
+case "$TYPE" in
+	diff)
+		if [ $AUTOGEN_DEST ]; then
+			DEST="$DEST.diff.gz"
+		fi
+
+		BUFFER=$(tempfile)
+		case $SCM in
+			git)
+				git diff $FROM_COMMIT $TO_COMMIT > $BUFFER
+				;;
+			svn)
+				svn diff -r$FROM_COMMIT:$TO_COMMIT > $BUFFER
+				;;
+		esac
+		if [ -z $DEST ]; then
+			cat $BUFFER
+		else
+			case $DEST in
+				*.gz)
+					MOD="gzip -c"
+					;;
+				*.bz2)
+					MOD="bzip2 -c"
+					;;
+				*)
+					MOD="cat"
+					;;
+			esac
+			$MOD < $BUFFER > $DEST
+		fi
+		rm -f $BUFFER
+		;;
+	dir)
+		if [ -z $DEST ]; then
+			syntax "Directory export type requires a specified destination"
+		fi
+		export_to_dir $DEST || exit 1
+		;;
+	tar)
+		if [ $AUTOGEN_DEST ]; then
+			DEST="$DEST.tar.gz"
+		fi
+
+		TEMPDIR=$(tempfile)
+		rm -f $TEMPDIR
+		if ! export_to_dir $TEMPDIR; then
+			rm -rf $TEMPDIR
+			exit 1
+		fi
+
+		TAR="tar -c"
+		case $DEST in
+			*.gz|*.z|*.tgz)
+				TAR="$TAR -z"
+				;;
+			*.bz2|*.bz)
+				TAR="$TAR -j"
+				;;
+		esac
+
+		cd $TEMPDIR
+		$TAR -f $DEST *
+
+		cd $WC
+		rm -rf $TEMPDIR
+		;;
+	zip)
+		if [ $AUTOGEN_DEST ]; then
+			DEST="$DEST.zip"
+		fi
+
+		TEMPDIR=$(tempfile)
+		rm -f $TEMPDIR
+		if ! export_to_dir $TEMPDIR; then
+			rm -rf $TEMPDIR
+			exit 1
+		fi
+
+		cd $TEMPDIR
+		zip -r $DEST *
+		cd $WC
+		rm -rf $TEMPDIR
+		;;
+esac
