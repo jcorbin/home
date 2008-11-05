@@ -14,11 +14,14 @@ syntax() {
 	{
 		echo $@
 		echo
-		echo "Syntax: "$(basename $0)" [options] <from-commit> [<to-commit>]"
+		echo "Syntax: "$(basename $0)" [options] <from-commit> [<to-commit> [<dest>]]"
 		echo "  Options:"
-		echo "    -d Export destination"
+		echo "    -d Export destination (can also be a third unqualified argument)"
 		echo "    -s SCM type, one of git or svn"
 		echo "    -t Export type one of diff, dir, tar, zip"
+		echo "  Commits are anythnig honored by the local scm, one wrinkle being that strings"
+		echo "  such as 'r123' are converted to git commit ids using git-svn find-rev if the"
+		echo "  git repository looks like a git-svn clone."
 	} >&2
 	exit 1
 }
@@ -144,6 +147,22 @@ for arg in $@; do
 					FROM_COMMIT=$arg
 				elif [ -z "$TO_COMMIT" ]; then
 					TO_COMMIT=$arg
+				elif [ -z "$DEST" ]; then
+					DEST=$arg
+					case $DEST in
+						*.tar*)
+							TYPE='tar'
+							;;
+						*.zip)
+							TYPE='zip'
+							;;
+						*.diff*)
+							TYPE='diff'
+							;;
+						*.d)
+							TYPE='dir'
+							;;
+					esac
 				else
 					syntax "Unrecognized argument $arg"
 				fi
