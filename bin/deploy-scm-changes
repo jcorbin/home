@@ -172,7 +172,7 @@ if [ -n "$DEST" ]; then
 		/*)
 			;;
 		*)
-			DESt=$(pwd)/$DEST
+			DEST=$(pwd)/$DEST
 			;;
 	esac
 else
