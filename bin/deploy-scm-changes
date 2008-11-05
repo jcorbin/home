@@ -20,6 +20,7 @@ syntax() {
 		echo "    -d <dest> Export destination (can also be a third unqualified argument)"
 		echo "    -s <scm> SCM type, one of git or svn"
 		echo "    -t <type> Export type one of diff, dir, tar, zip"
+		echo "    -x <file> Exclude paths that match entries in file"
 		echo "    -b Create a bare export, no meta information"
 		echo "  Commits are anythnig honored by the local scm, one wrinkle being that strings"
 		echo "  such as 'r123' are converted to git commit ids using git-svn find-rev if the"
@@ -62,16 +63,18 @@ export_to_dir() {
 			touch $DIR/MANIFEST
 			git diff --name-status $FROM_COMMIT $TO_COMMIT | \
 				while read action ent; do
-					case $action in
-						D)
-							echo $ent >> $DIR/REMOVED_FILES
-							;;
-						*)
-							mkdir -p $DIR/$(dirname $ent)
-							git show $TO_COMMIT:$ent > $DIR/$ent
-							echo $ent >> $DIR/MANIFEST
-							;;
-					esac
+					if ! [ $USE_EXCLUDE ] || exclude_check $ent; then
+						case $action in
+							D)
+								echo $ent >> $DIR/REMOVED_FILES
+								;;
+							*)
+								mkdir -p $DIR/$(dirname $ent)
+								git show $TO_COMMIT:$ent > $DIR/$ent
+								echo $ent >> $DIR/MANIFEST
+								;;
+						esac
+					fi
 				done
 			;;
 		svn)
@@ -133,6 +136,27 @@ export_to_dir() {
 	fi
 }
 
+EXCLUDE_CASE=
+read_exclude_file() {
+	EXCLUDE_FILE=$1
+
+	[ -f $EXCLUDE_FILE ] || die "No such file $EXCLUDE_FILE";
+
+	EXCLUDE_CASE=$(
+		cat $EXCLUDE_FILE | grep -v '^#' | {\
+			while read x; do
+				if [ -z $EXCLUDE_CASE ]; then
+					EXCLUDE_CASE="$x"
+				else
+					EXCLUDE_CASE="$EXCLUDE_CASE|$x"
+				fi
+			done
+			echo $EXCLUDE_CASE
+		}
+	)
+}
+
+ARG_EXCLUDE=0
 for arg in $@; do
 	case $arg in
 		-d)
@@ -144,6 +168,9 @@ for arg in $@; do
 		-t)
 			ARGN='TYPE'
 			;;
+		-x)
+			ARG_EXCLUDE=1
+			;;
 		-b)
 			BARE=1
 			;;
@@ -151,6 +178,9 @@ for arg in $@; do
 			if [ -n "$ARGN" ]; then
 				eval "$ARGN='$arg'"
 				ARGN=
+			elif [ $ARG_EXCLUDE -eq 1 ]; then
+				read_exclude_file $arg
+				ARG_EXCLUDE=0
 			else
 				if [ -z "$FROM_COMMIT" ]; then
 					FROM_COMMIT=$arg
@@ -179,6 +209,12 @@ for arg in $@; do
 			;;
 	esac
 done
+
+USE_EXCLUDE=0
+if [ -n "$EXCLUDE_CASE" ]; then
+	USE_EXCLUDE=1
+	eval "exclude_check() { case \$1 in $EXCLUDE_CASE) return 1 ;; *) return 0 ;; esac }"
+fi
 
 if [ -z "$FROM_COMMIT" ]; then
 	syntax
@@ -222,6 +258,7 @@ fi
 cd $WC
 case "$TYPE" in
 	diff)
+		# TODO support exclude
 		if [ $AUTOGEN_DEST ]; then
 			DEST="$DEST.diff.gz"
 		fi
