@@ -52,6 +52,7 @@ let perl_fold = 1
 let javaScript_fold = 1
 let xml_use_xhtml = 1
 let xml_no_auto_nesting = 1
+let php_folding = 0
 
 " augroup cleanup
 " au BufWritePre * :normal mz:%s/ *$//:normal 'z
