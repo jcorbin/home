@@ -61,15 +61,15 @@ export_to_dir() {
 		git)
 			touch $DIR/MANIFEST
 			git diff --name-status $FROM_COMMIT $TO_COMMIT | \
-				while read action path; do
+				while read action ent; do
 					case $action in
 						D)
-							echo $PATH >> $DIR/REMOVED_FILES
+							echo $ent >> $DIR/REMOVED_FILES
 							;;
 						*)
-							mkdir -p $DIR/$(dirname $path)
-							git show $TO_COMMIT:$path > $DIR/$path
-							echo $path >> $DIR/MANIFEST
+							mkdir -p $DIR/$(dirname $ent)
+							git show $TO_COMMIT:$ent > $DIR/$ent
+							echo $ent >> $DIR/MANIFEST
 							;;
 					esac
 				done
