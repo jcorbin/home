@@ -51,6 +51,16 @@ parse_commit() {
 				fi
 			fi
 			;;
+		svn)
+			case $commit in
+				HEAD)
+					ret=$(svn info | grep '^Revision:' | cut -d ' ' -f2)
+					;;
+				r*)
+					ret=${commit#r*}
+					;;
+			esac
+			;;
 	esac
 
 	if [ -z "$ret" ]; then
@@ -247,6 +257,14 @@ case $SCM in
 		}
 		catfile() {
 			git show $1:$2
+		}
+		;;
+	svn)
+		whatchanged() {
+			svn diff --summarize -r$1:$2
+		}
+		catfile() {
+			svn cat -r $1 $2
 		}
 		;;
 	*)
