@@ -83,7 +83,7 @@ export_to_dir() {
 			;;
 	esac
 
-	if [ $BARE ]; then
+	if [ $BARE -eq 1 ]; then
 		rm -f $DIR/MANIFEST
 	else
 		cd $DIR
