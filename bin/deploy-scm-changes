@@ -70,30 +70,23 @@ export_to_dir() {
 
 	mkdir -p $DIR
 
-	case $SCM in
-		git)
-			touch $DIR/MANIFEST
-			git diff --name-status $FROM_COMMIT $TO_COMMIT | \
-				while read action ent; do
-					if ! [ $USE_EXCLUDE -eq 1 ] || exclude_check $ent; then
-						case $action in
-							D)
-								echo $ent >> $DIR/REMOVED_FILES
-								;;
-							*)
-								mkdir -p $DIR/$(dirname $ent)
-								git show $TO_COMMIT:$ent > $DIR/$ent
-								echo $ent >> $DIR/MANIFEST
-								;;
-						esac
-					fi
-				done
-			;;
-		svn)
-			echo "SVN support unimplemneted" >&2
-			exit 1
-			;;
-	esac
+	touch $DIR/MANIFEST
+
+	whatchanged $FROM_COMMIT $TO_COMMIT | \
+		while read action ent; do
+			if ! [ $USE_EXCLUDE -eq 1 ] || exclude_check $ent; then
+				case $action in
+					D)
+						echo $ent >> $DIR/REMOVED_FILES
+						;;
+					*)
+						mkdir -p $DIR/$(dirname $ent)
+						catfile $TO_COMMIT $ent > $DIR/$ent
+						echo $ent >> $DIR/MANIFEST
+						;;
+				esac
+			fi
+		done
 
 	if [ $BARE -eq 1 ]; then
 		[ -f $DIR/MANIFEST ] && rm -f $DIR/MANIFEST
@@ -243,6 +236,23 @@ if [ -z "$SCM" ]; then
 		die "Unable to determine SCM in use"
 	fi
 fi
+
+# Setup SCM specific functions
+# whatchanged $FROM_COMMIT $TO_COMMIT
+# catfile $COMMIT $FILE
+case $SCM in
+	git)
+		whatchanged() {
+			git diff --name-status $1 $2
+		}
+		catfile() {
+			git show $1:$2
+		}
+		;;
+	*)
+		die "Unimplemented SCM $SCM"
+		;;
+esac
 
 if [ -z "$TO_COMMIT" ]; then
 	TO_COMMIT='HEAD'
