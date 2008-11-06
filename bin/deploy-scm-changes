@@ -29,23 +29,35 @@ syntax() {
 	exit 1
 }
 
-git_massage_commit() {
-	if [ -z "$1" ]; then
-		echo 'HEAD'
-	else
-		case "$1" in
-			r*)
-				if [ -d .git/svn ]; then
-					git svn find-rev $1
-				else
-					die "Cannot translate $1 to a git commit"
-				fi
-				;;
-			*)
-				echo $1
-				;;
-		esac
+parse_commit() {
+	commit=$1
+	ret=
+
+	if [ -z "$commit" ]; then
+		commit='HEAD'
 	fi
+
+	case $SCM in
+		git)
+			new=$(git rev-parse $commit 2>/dev/null)
+			if [ $? -eq 0 ]; then
+				ret=$new
+			else
+				if [ -d .git/svn ]; then
+					new=$(git svn find-rev $1 2>/dev/null)
+					if [ $? -eq 0 ]; then
+						ret=$new
+					fi
+				fi
+			fi
+			;;
+	esac
+
+	if [ -z "$ret" ]; then
+		die "Invalid commit argument '$commit'"
+	fi
+
+	echo $ret
 }
 
 export_to_dir() {
@@ -250,11 +262,9 @@ else
 	DEST=$(pwd)/"changes_$FROM_COMMIT-$TO_COMMIT"
 fi
 
-# Massage possible svn revisions into git commits
-if [ "$SCM" = "git" ]; then
-	FROM_COMMIT=$(git_massage_commit $FROM_COMMIT)
-	TO_COMMIT=$(git_massage_commit $TO_COMMIT)
-fi
+# Parse commits for convenience
+FROM_COMMIT=$(parse_commit $FROM_COMMIT)
+TO_COMMIT=$(parse_commit $TO_COMMIT)
 
 cd $WC
 case "$TYPE" in
