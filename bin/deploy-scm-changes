@@ -84,7 +84,8 @@ export_to_dir() {
 	esac
 
 	if [ $BARE -eq 1 ]; then
-		rm -f $DIR/MANIFEST
+		[ -f $DIR/MANIFEST ] && rm -f $DIR/MANIFEST
+		[ -f $DIR/REMOVED_FILES ] && rm -f $DIR/REMOVED_FILES
 	else
 		cd $DIR
 
