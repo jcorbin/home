@@ -85,13 +85,16 @@ export_to_dir() {
 	whatchanged $FROM_COMMIT $TO_COMMIT | \
 		while read action ent; do
 			if ! [ $USE_EXCLUDE -eq 1 ] || exclude_check $ent; then
+				echo -n "$ent: "
 				case $action in
 					D)
 						echo $ent >> $DIR/REMOVED_FILES
+						echo "removed."
 						;;
 					*)
 						mkdir -p $DIR/$(dirname $ent)
 						catfile $TO_COMMIT $ent > $DIR/$ent
+						echo "done."
 						echo $ent >> $DIR/MANIFEST
 						;;
 				esac
