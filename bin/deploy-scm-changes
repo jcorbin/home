@@ -75,7 +75,7 @@ export_to_dir() {
 			touch $DIR/MANIFEST
 			git diff --name-status $FROM_COMMIT $TO_COMMIT | \
 				while read action ent; do
-					if ! [ $USE_EXCLUDE ] || exclude_check $ent; then
+					if ! [ $USE_EXCLUDE -eq 1 ] || exclude_check $ent; then
 						case $action in
 							D)
 								echo $ent >> $DIR/REMOVED_FILES
