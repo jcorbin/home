@@ -9,3 +9,4 @@ format=html
 st=status
 ci=commit -a
 pack=repack -adlf
+doh=commit --amend
