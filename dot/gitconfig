@@ -1,3 +1,4 @@
+# Commiter identity
 [user]
 email=jcorbin@wunjo.org
 name=Joshua T Corbin
@@ -6,21 +7,28 @@ name=Joshua T Corbin
 format=html
 
 [core]
+# Use less as our pager, turn off the -c option if it was specified in $LESS,
+# also don't use -S as per git default
 pager="less -+c -FRX"
 
 [color]
+# Color all commands automatically
 ui=auto
 
 [apply]
+# Fix all whitespace sins when applying patches
 whitespace=fix
 
 [branch]
+# Track when branching and rebase by default
 autosetupmerge=always
 autosetuprebase=always
 
 [pack]
+# Use one thread per processor core for pac king
 threads=0
 
+# Command aliases
 [alias]
 st=status
 br=branch
