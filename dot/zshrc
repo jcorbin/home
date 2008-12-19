@@ -109,45 +109,18 @@ setopt cdablevars
 autoload run-help
 
 # Titlebars {{{
-
-writetitle()
-{
-	case "$TERM" in
-		screen|screen-w|screen-16color*|screen-256color*)
-		export TITLETEXT="zsh %d"
-		;;
-		*)
-		export TITLETEXT="%n@%m:%d | ${COLUMNS}x${LINES} | %y"
-		;;
-	esac
-}
-
-writeexectitle()
-{
-    #  export EXECTEXT1="%n@%m:%d : "
-    export EXECTEXT1="%n@%m:%d : "
-    export EXECTEXT2="$*"
-}
-
-# TERMINAL TYPES
+PRECMDTITLE="%n@%m:%~%#"
+PREEXECTITLE="%n@%m:%~%#"
 
 case "$TERM" in
 	# Standalone terminal emulator {{{
 	*xterm*|rxvt*|putty*|gnome-terminal|*onsole|zvt|(dt|k|E|z)term)
-		precmd()
-		{
-			writetitle
-			print -Pn "\e]0;${TITLETEXT}\a"
-			unset TITLETEXT
+		precmd() {
+			print -Pn "\e]0;${PRECMDTITLE}\a"
 		}
 
-		preexec()
-		{
-			writeexectitle $1
-			print -Pn '\e]0;'"${EXECTEXT1}"
-			print -rn "${EXECTEXT2}"
-			print -Pn '\a'
-			unset EXECTEXT1 EXECTEXT2
+		preexec() {
+			print -Pn "\e]0;${PREEXECTITLE} $1\a"
 		}
 		;;
 	# }}}
@@ -185,43 +158,35 @@ case "$TERM" in
 		# TERM_PROGRAM=Apple_Terminal
 		# TERM_PROGRAM_VERSION=41
 
-
-		if test "$TERM_PROGRAM" = "Apple_Terminal"
-		then
-			precmd()
-			{
-				writetitle
-				print -Pn "\e]0;${TITLETEXT}\a"
-				unset TITLETEXT
+		if test "$TERM_PROGRAM" = "Apple_Terminal"; then
+			precmd() {
+				print -Pn "\e]0;${PRECMDTITLE}\a"
 			}
 
-			preexec()
-			{
-				writeexectitle $1
-				print -Pn '\e]0;'"${EXECTEXT1}"
-				print -rn "${EXECTEXT2}"
-				print -Pn '\a'
-				unset EXECTEXT1 EXECTEXT2
+			preexec() {
+				print -Pn "\e]0;${PREEXECTITLE} $1\a"
 			}
 		fi
 		;;
-# }}}
+	# }}}
 	# Screen {{{
 	screen|screen-w|screen-16color*|screen-256color*)
-		precmd()
-		{
-			writetitle
-			print -Pn "\ek${TITLETEXT}\e\\"
-			unset TITLETEXT
+		precmd() {
+			print -Pn "\e]0;${PRECMDTITLE}\a"
+			if [ -z "$SSH_CONNECTION" ]; then
+				print -Pn "\ekzsh: %~\e\\"
+			else
+				print -Pn "\ek${PRECMDTITLE}\e\\"
+			fi
 		}
 
-		preexec()
-		{
-			writeexectitle $1
-			print -Pn "\ek""${EXECTEXT2}"
-			#print -rn "${EXECTEXT1}"
-			print -Pn "\e\\"
-			unset EXECTEXT1 EXECTEXT2
+		preexec() {
+			print -Pn "\e]0;${PREEXECTITLE} $1\a"
+			if [ -z "$SSH_CONNECTION" ]; then
+				print -Pn "\ek$1\e\\"
+			else
+				print -Pn "\ek${PREEXECTITLE} $1\e\\"
+			fi
 		}
 		;;
 	# }}}
@@ -229,7 +194,6 @@ case "$TERM" in
 	*)
 		true
 		;;
-
 esac
 
 # }}}
