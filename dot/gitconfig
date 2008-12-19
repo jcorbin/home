@@ -8,6 +8,9 @@ format=html
 [core]
 pager="less -+c -FRX"
 
+[color]
+ui=auto
+
 [alias]
 st=status
 br=branch
