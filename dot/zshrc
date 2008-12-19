@@ -83,7 +83,7 @@ if which less>/dev/null; then
 fi
 
 # Man
-export MANOPT="--html"
+export MANOPT="--html=w3m:lynx"
 
 # }}}
 
