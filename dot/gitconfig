@@ -14,6 +14,10 @@ ui=auto
 [apply]
 whitespace=fix
 
+[branch]
+autosetupmerge=always
+autosetuprebase=always
+
 [alias]
 st=status
 br=branch
