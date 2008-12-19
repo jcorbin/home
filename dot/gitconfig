@@ -18,6 +18,7 @@ whitespace=fix
 st=status
 br=branch
 ci=commit
+co=checkout
 pack=repack -adlf
 doh=commit --amend
 onelog=log --pretty=oneline
