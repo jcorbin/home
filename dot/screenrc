@@ -119,7 +119,7 @@ defutf8 on
 #hardstatus alwayslastline "%0`"
 
 # Set caption in the last line of screen:
-caption always "%{cb}[%{W.}%Y-%m-%d %c%{c.}][%{W.}%H%{c.}]%{c.}[%{w.}%-Lw%{W.}%50>%n%f* %t%{-}%{w.}%+Lw%{c.}] %>%= %{c.}[%{R.}%l%{c.}]"
+caption always "%{cb}[%{W.}%Y-%m-%d %c%{c.}]%{c.}[%{w.}%-Lw%{W.}%50>%n%f* %t%{-}%{w.}%+Lw%{c.}] %>%= [%{W.}%H%{c.}][%{R.}%l%{c.}]"
 
 term screen
 
