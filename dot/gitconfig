@@ -36,4 +36,5 @@ ci=commit
 co=checkout
 pack=repack -adlf
 doh=commit --amend
-onelog=log --pretty=oneline
+ol=log --pretty=oneline
+vol=log --pretty=oneline --name-status
