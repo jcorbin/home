@@ -32,6 +32,7 @@ alias cl='clear'
 alias psaux='ps aux G'
 alias mkdir='nocorrect mkdir'
 alias ltail='less +F'
+alias gb='gitback'
 # }}}
 
 if which dircolors >/dev/null 2>&1; then
