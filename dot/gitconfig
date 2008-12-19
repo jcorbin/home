@@ -11,3 +11,4 @@ br=branch
 ci=commit
 pack=repack -adlf
 doh=commit --amend
+onelog=log --pretty=oneline
