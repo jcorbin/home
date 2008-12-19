@@ -65,15 +65,26 @@ compctl -g '*.zip *.ZIP' + -g '*' unzip zip
 compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
 # }}}
 
-# Editor# {{{
+# Program selections and options {{{
+# Editor
 export EDITOR=vim
-# }}}
 
-# Pager {{{
+# Browser
+if [ -n "$DISPLAY" ]; then
+	export BROWSER="konqueror:firefox:opera:w3m:lynx"
+else
+	export BROWSER="w3m:lynx"
+fi
+
+# Pager
 if which less>/dev/null; then
 	export PAGER=$(which less)
 	export LESS='-MRci'
 fi
+
+# Man
+export MANOPT="--html"
+
 # }}}
 
 # Misc options {{{
