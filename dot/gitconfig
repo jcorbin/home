@@ -11,6 +11,9 @@ pager="less -+c -FRX"
 [color]
 ui=auto
 
+[apply]
+whitespace=fix
+
 [alias]
 st=status
 br=branch
