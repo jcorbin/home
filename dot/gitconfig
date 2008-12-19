@@ -18,6 +18,9 @@ whitespace=fix
 autosetupmerge=always
 autosetuprebase=always
 
+[pack]
+threads=0
+
 [alias]
 st=status
 br=branch
