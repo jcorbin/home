@@ -7,6 +7,7 @@ format=html
 
 [alias]
 st=status
+br=branch
 ci=commit -a
 pack=repack -adlf
 doh=commit --amend
