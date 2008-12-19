@@ -5,6 +5,9 @@ name=Joshua T Corbin
 [help]
 format=html
 
+[core]
+pager="less -+c -FRX"
+
 [alias]
 st=status
 br=branch
