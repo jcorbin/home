@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Editor
+export EDITOR=vim
+
+# Path
+if [ -d $HOME/bin ]; then
+	export PATH=$HOME/bin:$PATH
+fi
+
+# Python
+if [ -d $HOME/lib/python ]; then
+	if [ -z "$PYTHONPATH" ]; then
+		export PYTHONPATH=$HOME/lib/python
+	else
+		export PYTHONPATH=$PYTHONPATH:$HOME/lib/python
+	fi
+fi
+
+# Man
+export MANOPT="--html=w3m:lynx"
+
+# Pager
+if which less>/dev/null; then
+	export PAGER=$(which less)
+	export LESS='-MRci'
+fi
+
+# Browser
+if [ -n "$DISPLAY" ]; then
+	export BROWSER="konqueror:firefox:opera:w3m:lynx"
+else
+	export BROWSER="w3m:lynx"
+fi
+
+if which dircolors >/dev/null 2>&1; then
+  eval $(dircolors)
+fi

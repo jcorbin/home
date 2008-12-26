@@ -1,16 +1,3 @@
-# Path {{{
-if [ -d $HOME/bin ]; then
-	export PATH=$HOME/bin:$PATH
-fi
-# }}}
-
-# Python
-if [ -z "$PYTHONPATH" ]; then
-	export PYTHONPATH=$HOME/lib/python
-else
-	export PYTHONPATH=$PYTHONPATH:$HOME/lib/python
-fi
-
 saneGrep() {
   grep $@ | grep -v grep
 }
@@ -42,8 +29,7 @@ alias ltail='less +F'
 alias gb='gitback'
 # }}}
 
-if which dircolors >/dev/null 2>&1; then
-  eval $(dircolors)
+if [ -n "$LS_COLORS" ]; then
   ZLS_COLORS="$LS_COLORS"
   export ZLS_COLORS
   zmodload zsh/complist 2> /dev/null
@@ -70,28 +56,6 @@ compctl -g '*.Z *.gz *.tgz' + -g '*' zcat gunzip
 compctl -g '*.tar.Z *.tar.gz *.tgz *.tar.bz2' + -g '*' tar
 compctl -g '*.zip *.ZIP' + -g '*' unzip zip
 compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
-# }}}
-
-# Program selections and options {{{
-# Editor
-export EDITOR=vim
-
-# Browser
-if [ -n "$DISPLAY" ]; then
-	export BROWSER="konqueror:firefox:opera:w3m:lynx"
-else
-	export BROWSER="w3m:lynx"
-fi
-
-# Pager
-if which less>/dev/null; then
-	export PAGER=$(which less)
-	export LESS='-MRci'
-fi
-
-# Man
-export MANOPT="--html=w3m:lynx"
-
 # }}}
 
 # Misc options {{{
