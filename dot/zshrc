@@ -1,19 +1,14 @@
+# Aliases {{{
+# Globals {{{
 saneGrep() {
   grep $@ | grep -v grep
 }
-
-bindkey -v # Vi-style bindings
-bindkey '^L' clear-screen
-
-# Global Aliases {{{
 alias -g L='|less'
 alias -g G='| saneGrep'
 alias -g T='|tail'
 alias -g TF='tail -f'
 alias -g H='|head'
 # }}}
-
-# Command aliases {{{
 alias ls="ls -Fhb --time-style=long-iso --color=auto"
 alias l=ls
 alias ll='ls -l'
@@ -28,37 +23,7 @@ alias mkdir='nocorrect mkdir'
 alias ltail='less +F'
 alias gb='gitback'
 # }}}
-
-if [ -n "$LS_COLORS" ]; then
-  ZLS_COLORS="$LS_COLORS"
-  export ZLS_COLORS
-  zmodload zsh/complist 2> /dev/null
-fi
-
-# set command completions {{{
-compctl -a {,un}alias
-compctl -/ {c,push,pop}d
-compctl -c exec
-compctl -c man
-compctl -c {where,which}
-compctl -o {,un}setopt
-compctl -E {,un}setenv
-compctl -E printenv
-compctl -b bindkey
-compctl -j fg
-compctl -j kill
-compctl -u chown
-compctl -g '*.(ps|eps)' gv
-# }}}
-
-# Autocomplete for current dir on filetypes {{{
-compctl -g '*.Z *.gz *.tgz' + -g '*' zcat gunzip
-compctl -g '*.tar.Z *.tar.gz *.tgz *.tar.bz2' + -g '*' tar
-compctl -g '*.zip *.ZIP' + -g '*' unzip zip
-compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
-# }}}
-
-# Misc options {{{
+# Options {{{
 setopt correct # Spelling correction
 setopt dvorak # Spelling correction for dvorak
 setopt pathdirs
@@ -68,32 +33,23 @@ setopt no_flowcontrol
 setopt noclobber
 setopt notify # Notify of job status immediantely
 setopt transientrprompt
-# }}}
-
 # History {{{
-#export HISTFILE=$HOME/.zsh_history
-#export HISTSIZE=8192
-#export SAVEHIST=8192
-#setopt share_history
-#setopt append_history
 setopt hist_reduce_blanks
 setopt hist_ignore_dups
 # }}}
-
 # Directory navigation {{{
 export CDPATH=.
 setopt autocd
 setopt pushd_ignoredups
 setopt cdablevars
 # }}}
-
-#unalias run-help
-autoload run-help
-
-# Titlebars {{{
+# }}}
+# Terminal titles {{{
+# PRECMDTITLE is the terminal title set for an idle prompt, all expansions as in $PS1 work
 PRECMDTITLE="%n@%m:%~%#"
-PREEXECTITLE="%n@%m:%~%#"
-
+# PREXECTITLE is prefixed to a command before it's about to be executed and set as the terminal title
+PREEXECTITLE="%n@%m"
+# Terminal title setup {{{
 case "$TERM" in
 	# Standalone terminal emulator {{{
 	*xterm*|rxvt*|putty*|gnome-terminal|*onsole|zvt|(dt|k|E|z)term)
@@ -164,17 +120,14 @@ case "$TERM" in
 		}
 		;;
 	# }}}
-
 	*)
 		true
 		;;
 esac
-
 # }}}
-# {{{ Prompt colors
-
-#/usr/share/zsh/4.0.2/functions/Misc/colors
-
+# }}}
+# Prompts {{{
+# Colors {{{
 # Attribute codes:
 #  00 none
 #  01 bold
@@ -214,152 +167,140 @@ esac
 
 #COLOR="%{"$'\e[31m'"%}"
 
+# colorize() Edit colors here {{{
+colorize() {
+	COLOR_p_h="%{"$'\e[32;49m'"%}"
+	COLOR_p_l="%{"$'\e[32;49m'"%}"
+	COLOR_p_y="%{"$'\e[32;49m'"%}"
+
+	COLOR_p_n="%{"$'\e[35;49m'"%}"
+	COLOR_at="%{"$'\e[35;49m'"%}"
+	COLOR_p_m="%{"$'\e[35;49m'"%}"
+
+	COLOR_WHOLEHOST="%{"$'\e[35;49m'"%}"
+	COLOR_SHORTHOST="%{"$'\e[35;49m'"%}"
+	COLOR_DOMAINHOST="%{"$'\e[35;49m'"%}"
+
+	COLOR_p_D="%{"$'\e[31;49m'"%}"
+	COLOR_MY_DATE="%{"$'\e[36;49m'"%}"
+	COLOR_p_star="%{"$'\e[31;49m'"%}"
+	COLOR_MY_TIME="%{"$'\e[36;49m'"%}"
+
+	COLOR_ROOT="%{"$'\e[01;31;49m'"%}"
+
+	COLOR_p_hash="%{"$'\e[01;33;49m'"%}"
+	COLOR_p_slash="%{"$'\e[31;49m'"%}"
+
+	$LATEST_PROMPT
+}
+# }}}
+# uncolorize() {{{
+uncolorize() {
+	COLOR_p_h="${COLOR_RESET}"
+	COLOR_p_l="${COLOR_RESET}"
+	COLOR_p_y="${COLOR_RESET}"
+
+	COLOR_p_n="${COLOR_RESET}"
+	COLOR_at="${COLOR_RESET}"
+	COLOR_p_m="${COLOR_RESET}"
+
+	COLOR_WHOLEHOST="${COLOR_RESET}"
+	COLOR_SHORTHOST="${COLOR_RESET}"
+	COLOR_DOMAINHOST="${COLOR_RESET}"
+
+	COLOR_p_D="${COLOR_RESET}"
+	COLOR_MY_DATE="${COLOR_RESET}"
+	COLOR_p_star="${COLOR_RESET}"
+	COLOR_MY_TIME="${COLOR_RESET}"
+
+	COLOR_ROOT="%{"$'\e[39;49;01m'"%}"
+
+	if (( EUID == 0 ))
+	then
+			COLOR_p_hash="%s${COLOR_ROOT}"
+			COLOR_p_slash="%s${COLOR_ROOT}"
+	else
+			COLOR_p_hash="${COLOR_RESET}"
+			COLOR_p_slash="${COLOR_RESET}"
+	fi
+
+	$LATEST_PROMPT
+}
+# }}}
+# }}}
+# Prompt code {{{
 COLOR_ROOT_BOLD=""
 COLOR_RESET="%{"$'\e[39;49;00m'"%}"
-
 COLOR_REAL_RESET="%{"$'\e[39;49;00m'"%}"
 
-colorize()
-{
-    COLOR_p_h="%{"$'\e[32;49m'"%}"
-    COLOR_p_l="%{"$'\e[32;49m'"%}"
-    COLOR_p_y="%{"$'\e[32;49m'"%}"
-
-    COLOR_p_n="%{"$'\e[35;49m'"%}"
-    COLOR_at="%{"$'\e[35;49m'"%}"
-    COLOR_p_m="%{"$'\e[35;49m'"%}"
-
-    COLOR_WHOLEHOST="%{"$'\e[35;49m'"%}"
-    COLOR_SHORTHOST="%{"$'\e[35;49m'"%}"
-    COLOR_DOMAINHOST="%{"$'\e[35;49m'"%}"
-
-    COLOR_p_D="%{"$'\e[31;49m'"%}"
-    COLOR_MY_DATE="%{"$'\e[36;49m'"%}"
-    COLOR_p_star="%{"$'\e[31;49m'"%}"
-    COLOR_MY_TIME="%{"$'\e[36;49m'"%}"
-
-    COLOR_ROOT="%{"$'\e[01;31;49m'"%}"
-
-    COLOR_p_hash="%{"$'\e[01;33;49m'"%}"
-    COLOR_p_slash="%{"$'\e[31;49m'"%}"
-
-    $LATEST_PROMPT
-}
-
-uncolorize()
-{
-    COLOR_p_h="${COLOR_RESET}"
-    COLOR_p_l="${COLOR_RESET}"
-    COLOR_p_y="${COLOR_RESET}"
-
-    COLOR_p_n="${COLOR_RESET}"
-    COLOR_at="${COLOR_RESET}"
-    COLOR_p_m="${COLOR_RESET}"
-
-    COLOR_WHOLEHOST="${COLOR_RESET}"
-    COLOR_SHORTHOST="${COLOR_RESET}"
-    COLOR_DOMAINHOST="${COLOR_RESET}"
-
-    COLOR_p_D="${COLOR_RESET}"
-    COLOR_MY_DATE="${COLOR_RESET}"
-    COLOR_p_star="${COLOR_RESET}"
-    COLOR_MY_TIME="${COLOR_RESET}"
-
-    COLOR_ROOT="%{"$'\e[39;49;01m'"%}"
-
-    if (( EUID == 0 ))
-    then
-        COLOR_p_hash="%s${COLOR_ROOT}"
-        COLOR_p_slash="%s${COLOR_ROOT}"
-    else
-        COLOR_p_hash="${COLOR_RESET}"
-        COLOR_p_slash="${COLOR_RESET}"
-    fi
-
-    $LATEST_PROMPT
-}
-
-
-# So, you don't like those colors anymore and your eyes are burning
-# and bleeding?  Just comment away "colorize" and uncomment
-# "uncolorize". You can give those commands via command line, too.
-
-colorize
-#uncolorize
-
-# }}}
-# {{{ Prompts
-
-MY_DATE="%D{%Y-%m-%d}"
-MY_TIME="%D{%H:%M:%S}"
-
-hostprompt()
-{
+hostprompt() {
 	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
 	unset RPROMPT
 	LATEST_PROMPT="hostprompt"
 }
 
-publicprompt()
-{
-    export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_slash}%/${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-    unset RPROMPT
-    LATEST_PROMPT="publicprompt"
+publicprompt() {
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_slash}%~${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+	unset RPROMPT
+	LATEST_PROMPT="publicprompt"
 }
 
-pwdcutprompt()
-{
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%/${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+pwdcutprompt() {
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%~${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
 	export RPROMPT="${COLOR_ROOT_BOLD}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_h}%h${COLOR_RESET}|${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_REAL_RESET}"
 	LATEST_PROMPT="pwdcutprompt"
 }
 
-pwdprompt()
-{
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%/${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
+pwdprompt() {
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%~${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
 	unset RPROMPT
 	LATEST_PROMPT="pwdprompt"
 }
 
-twolineprompt()
-{
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_h}%h${COLOR_RESET} | ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_RESET} | ${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} : ${COLOR_p_slash}%/${COLOR_RESET}%E
+twolineprompt() {
+	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_h}%h${COLOR_RESET} | ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_RESET} | ${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} : ${COLOR_p_slash}%~${COLOR_RESET}%E
 	${COLOR_p_hash}%#${COLOR_REAL_RESET} "
 	unset RPROMPT
 	LATEST_PROMPT="twolineprompt"
 }
 
-cuttwolineprompt()
-{
-	export PS1="${COLOR_MY_DATE}${MY_DATE}${COLOR_RESET} ${COLOR_MY_TIME}${MY_TIME}${COLOR_RESET} ${COLOR_p_slash}%/${COLOR_RESET}
+cuttwolineprompt() {
+	export PS1="${COLOR_MY_DATE}${MY_DATE}${COLOR_RESET} ${COLOR_MY_TIME}${MY_TIME}${COLOR_RESET} ${COLOR_p_slash}%~${COLOR_RESET}
 ${COLOR_p_h}%h${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
 	export RPROMPT="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_REAL_RESET}"
 	LATEST_PROMPT="cuttwolineprompt"
 }
-
-defaultprompt()
-{
-	cuttwolineprompt
-}
-
-defaultprompt
-
-case `uname -s` in
-    *SunOS*)
-
-    export PS1="%B%n@%m | ${MY_DATE} ${MY_TIME}%E | %h
-%/
-%S%#%s%b "
-    unset RPROMPT
-    ;;
-
-    *)
-    :
-esac
-
 # }}}
-
-#Completion {{{
+# }}}
+# Completion {{{
+# Command completions {{{
+compctl -a {,un}alias
+compctl -/ {c,push,pop}d
+compctl -c exec
+compctl -c man
+compctl -c {where,which}
+compctl -o {,un}setopt
+compctl -E {,un}setenv
+compctl -E printenv
+compctl -b bindkey
+compctl -j fg
+compctl -j kill
+compctl -u chown
+compctl -g '*.(ps|eps)' gv
+# }}}
+# Colored file lists in completion {{{
+if [ -n "$LS_COLORS" ]; then
+	ZLS_COLORS="$LS_COLORS"
+	export ZLS_COLORS
+	zmodload zsh/complist 2> /dev/null
+fi
+# }}}
+# Autocomplete for current dir on filetypes {{{
+compctl -g '*.Z *.gz *.tgz' + -g '*' zcat gunzip
+compctl -g '*.tar.Z *.tar.gz *.tgz *.tar.bz2' + -g '*' tar
+compctl -g '*.zip *.ZIP' + -g '*' unzip zip
+compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
+# }}}
 
 # Rmdir only real directories
 compctl -g '*(D/)' rmdir
@@ -399,9 +340,19 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*' word true
 
 compdef _gnu_generic qiv
-
 # }}}
-
+# Prompt selection {{{
+# Date and Time format used by cuttwolineprompt
+MY_DATE="%D{%Y-%m-%d}"
+MY_TIME="%D{%H:%M:%S}"
+cuttwolineprompt
+colorize # uncolorize
+# }}}
+# Misc {{{
+bindkey -v # Vi-style bindings
+bindkey '^L' clear-screen
+autoload run-help
+# }}}
 # Display fortune {{{
 if which fortune >/dev/null 2>&1 && [ ! -f ~/.no_fortune_motd ]; then
 	echo
