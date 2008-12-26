@@ -4,6 +4,13 @@ if [ -d $HOME/bin ]; then
 fi
 # }}}
 
+# Python
+if [ -z "$PYTHONPATH" ]; then
+	export PYTHONPATH=$HOME/lib/python
+else
+	export PYTHONPATH=$PYTHONPATH:$HOME/lib/python
+fi
+
 saneGrep() {
   grep $@ | grep -v grep
 }
