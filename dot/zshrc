@@ -352,6 +352,11 @@ colorize # uncolorize
 # }}}
 # Misc {{{
 bindkey -v # Vi-style bindings
+# Compose {{{
+autoload insert-composed-char
+zle -N insert-composed-char
+bindkey '^K' insert-composed-char
+# }}}
 bindkey '^L' clear-screen
 autoload run-help
 # }}}
