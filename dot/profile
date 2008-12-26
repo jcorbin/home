@@ -17,9 +17,6 @@ if [ -d $HOME/lib/python ]; then
 	fi
 fi
 
-# Man
-export MANOPT="--html=w3m:lynx"
-
 # Pager
 if which less>/dev/null; then
 	export PAGER=$(which less)
