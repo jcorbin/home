@@ -1,3 +1,5 @@
+[ -f ~/.profile ] && . ~/.profile
+
 # Aliases {{{
 # Globals {{{
 saneGrep() {
