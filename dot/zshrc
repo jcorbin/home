@@ -122,7 +122,36 @@ setup-terminal-titles() {
 	}
 
 	preexec() {
-		set-terminal-title $PREEXECTITLE $1
+		local -a cmd
+		local resumejob=
+		cmd=(${(z)1})
+
+		case $cmd[1] in
+			fg)
+				if (( $#cmd == 1 )); then
+					resumejob='%+'
+				else
+					resumejob=$cmd[2]
+				fi
+				;;
+			%*)
+				resumejob=$cmd[1]
+				;;
+		esac
+
+		if [ -n "$resumejob" ]; then
+			resumecmd=$(jobs $resumejob)
+			if (( $? != 0 )); then
+				return
+			fi
+			resumedir=$(jobs -d $resumejob)
+			resumecmd=${${resumecmd#*  }#*  }
+			resumedir=${${resumedir#*pwd : }%)*}
+
+			set-terminal-title "$PREEXECTITLE:$resumedir%#" $resumecmd
+		else
+			set-terminal-title $PREEXECTITLE $cmd
+		fi
 	}
 }
 setup-terminal-titles
