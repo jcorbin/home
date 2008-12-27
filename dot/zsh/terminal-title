@@ -1,26 +1,30 @@
 # Terminal title setting
+HARDSTATUS="%n@%m:%~%#"
+WINDOWTITLE="%~%#"
 
 setup-terminal-titles() {
 	case "$TERM" in
 		# Standalone terminal emulator
 		*xterm*|rxvt*|putty*|gnome-terminal|*onsole|zvt|(dt|k|E|z)term)
 			set-terminal-title() {
-				print -Pn "\e]0;$@\a"
+				print -Pn "\e]0;$1\a"
 			}
 			;;
 		# Fucked up osx vt100
 		vt100)
 			if test "$TERM_PROGRAM" = "Apple_Terminal"; then
 				set-terminal-title() {
-					print -Pn "\e]0;$@\a"
+					print -Pn "\e]0;$1\a"
 				}
 			fi
 			;;
 		# Screen
 		screen|screen-w|screen-16color*|screen-256color*)
 			set-terminal-title() {
-				print -Pn "\e]0;$@\a"
-				print -Pn "\ek$@\e\\"
+				# The usual hardstatus (screen %h)
+				print -Pn "\e]0;$1\a"
+				# The screen window title (screen %t)
+				print -Pn "\ek$2\e\\"
 			}
 			;;
 		*)
@@ -29,7 +33,7 @@ setup-terminal-titles() {
 	esac
 
 	precmd() {
-		set-terminal-title $PRECMDTITLE
+		set-terminal-title $HARDSTATUS $WINDOWTITLE
 	}
 
 	preexec() {
@@ -59,9 +63,11 @@ setup-terminal-titles() {
 			resumecmd=${${resumecmd#*  }#*  }
 			resumedir=${${resumedir#*pwd : }%)*}
 
-			set-terminal-title "$PREEXECTITLE:$resumedir%#" $resumecmd
+			set-terminal-title \
+				"${HARDSTATUS/'%~'/$resumedir} $resumecmd" \
+				"${WINDOWTITLE/'%~'/$resumedir} $resumecmd"
 		else
-			set-terminal-title $PREEXECTITLE $cmd
+			set-terminal-title "$HARDSTATUS $cmd" "$WINDOWTITLE $cmd"
 		fi
 	}
 }

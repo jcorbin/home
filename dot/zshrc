@@ -51,10 +51,8 @@ setopt cdablevars
 # Terminal titles {{{
 . ~/.zsh/terminal-title
 
-# PRECMDTITLE is the terminal title set for an idle prompt, all expansions as in $PS1 work
-PRECMDTITLE="%n@%m:%~%#"
-# PREXECTITLE is prefixed to a command before it's about to be executed and set as the terminal title
-PREEXECTITLE="%n@%m"
+#HARDSTATUS="%n@%m:%~%#"
+#WINDOWTITLE="%~%#"
 
 setup-terminal-titles
 # }}}
