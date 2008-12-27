@@ -76,29 +76,11 @@ termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 #
 termcapinfo xterm ti@:te@
 
-# turn sending of screen messages to hardstatus on
-hardstatus off
 # Set the hardstatus prop on gui terms to set the titlebar/icon title
 termcapinfo putty*|xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
-# use this for the hard status string
-hardstatus string "%H:%t"
-
-# An alternative hardstatus to display a bar at the bottom listing the
-# windownames and highlighting the current windowname in blue. (This is only
-# enabled if there is no hardstatus setting for your terminal)
-#
-# hardstatus lastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
-
-# Some shit
-#termcapinfo xterm 'hs:ts=\E2;:fs=\007:ds=\E]0;screen\007'
-#termcapinfo rxvt 'hs:ts=\E2;:fs=\007:ds=\E]0;screen\007'
-
-# Almost works. Just some stupid beeps are heard sometimes
-#termcapinfo rxvt 'hs:ts=\E]0;:fs=\007:ds=\E]0;\007'
 
 # This seems to work for me:
 termcapinfo putty*|*xterm*|rxvt*|gnome-terminal|konsole|zvt|dtterm|kterm|Eterm|zterm 'hs:ti@:te@:ts=\E]0;:fs=\007:ds=\E]0;'
-
 
 # This is included, so I can use scrollbars of terminal-emulator
 # (or just Shift-PageUp):
