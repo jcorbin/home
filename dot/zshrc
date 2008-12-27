@@ -1,4 +1,6 @@
-[ -f ~/.profile ] && . ~/.profile
+if [ -f ~/.profile ]; then
+	. ~/.profile
+fi
 
 # Aliases {{{
 # Globals {{{
