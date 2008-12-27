@@ -1,62 +1,28 @@
 # Terminal title setting
+
 setup-terminal-titles() {
 	case "$TERM" in
-		# Standalone terminal emulator {{{
+		# Standalone terminal emulator
 		*xterm*|rxvt*|putty*|gnome-terminal|*onsole|zvt|(dt|k|E|z)term)
 			set-terminal-title() {
 				print -Pn "\e]0;$@\a"
 			}
 			;;
-		# }}}
-		# Fucked up osx vt100 {{{
+		# Fucked up osx vt100
 		vt100)
-			# This is weird but true:
-
-			# Apple's MacOS X includes a Terminal.app derived from the old NeXT
-			# Terminal.app. It is a partial VT100 emulation with some extensions.
-			#
-			# There are no function keys, at least not in version 41.
-			#
-			# It supports mouse pointer position reporting using xterm-like
-			# sequences (not used in these entries.) When using emacs, the cursor
-			# can be positioned using option-click.
-			#
-			# It provides partial ANSI color support (background colors interact
-			# badly with bold, though.) The monochrome (-m) entries are useful if
-			# you've disabled color support.
-			#
-			# The configurable titlebar is set using xterm-compatible sequences;
-			# it is used as a status bar in these entries.
-			#
-			# The MacRoman character encoding is used for some of the alternate
-			# characters in the "MacRoman" entries; the "ASCII" (-ascii) entries
-			# rely instead on Terminal.app's own buggy VT100 graphics emulation,
-			# which seems to think the character encoding is the old NeXT charset
-			# instead of MacRoman.
-			#
-			# Terminal.app reports "vt100" as the terminal type, but exports
-			# several environment variables which may aid detection in a shell
-			# profile:
-			#
-			# TERM=vt100
-			# TERM_PROGRAM=Apple_Terminal
-			# TERM_PROGRAM_VERSION=41
-
 			if test "$TERM_PROGRAM" = "Apple_Terminal"; then
 				set-terminal-title() {
 					print -Pn "\e]0;$@\a"
 				}
 			fi
 			;;
-		# }}}
-		# Screen {{{
+		# Screen
 		screen|screen-w|screen-16color*|screen-256color*)
 			set-terminal-title() {
 				print -Pn "\e]0;$@\a"
 				print -Pn "\ek$@\e\\"
 			}
 			;;
-		# }}}
 		*)
 			return
 			;;

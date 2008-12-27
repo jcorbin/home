@@ -58,8 +58,7 @@ PREEXECTITLE="%n@%m"
 
 setup-terminal-titles
 # }}}
-# Prompts {{{
-# Colors {{{
+# Prompts Colors {{{
 # Attribute codes:
 #  00 none
 #  01 bold
@@ -147,18 +146,16 @@ uncolorize() {
 
 	COLOR_ROOT="%{"$'\e[39;49;01m'"%}"
 
-	if (( EUID == 0 ))
-	then
-			COLOR_p_hash="%s${COLOR_ROOT}"
-			COLOR_p_slash="%s${COLOR_ROOT}"
+	if (( EUID == 0 )); then
+		COLOR_p_hash="%s${COLOR_ROOT}"
+		COLOR_p_slash="%s${COLOR_ROOT}"
 	else
-			COLOR_p_hash="${COLOR_RESET}"
-			COLOR_p_slash="${COLOR_RESET}"
+		COLOR_p_hash="${COLOR_RESET}"
+		COLOR_p_slash="${COLOR_RESET}"
 	fi
 
 	$LATEST_PROMPT
 }
-# }}}
 # }}}
 # Prompt code {{{
 COLOR_ROOT_BOLD=""
