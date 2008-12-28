@@ -9,8 +9,8 @@ saneGrep() {
 }
 alias -g L='|less'
 alias -g G='| saneGrep'
-alias -g T='|tail'
-alias -g TF='tail -f'
+alias -g T='|stail'
+alias -g TF='stail -f'
 alias -g H='|head'
 # }}}
 alias ls="ls -Fhb --time-style=long-iso --color=auto"
