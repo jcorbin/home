@@ -19,7 +19,7 @@ setup-terminal-titles() {
 			fi
 			;;
 		# Screen
-		screen|screen-w|screen-16color*|screen-256color*)
+		screen*)
 			set-terminal-title() {
 				# The usual hardstatus (screen %h)
 				print -Pn "\e]0;$1\a"
