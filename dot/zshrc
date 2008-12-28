@@ -26,6 +26,16 @@ alias psaux='ps aux G'
 alias mkdir='nocorrect mkdir'
 alias ltail='less +F'
 alias gb='gitback'
+stail() {
+	local delta=1
+	case $TERM in
+		screen*)
+			# Caption line
+			delta=$(($delta + 1))
+			;;
+	esac
+	tail -n $(($LINES - $delta)) $@
+}
 # }}}
 # Options {{{
 setopt correct # Spelling correction
