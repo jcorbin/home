@@ -276,7 +276,7 @@ case $1 in
 
 		# Dot Files
 		for ENT in $(find dot -type f -a -not -name .gitignore); do
-			diffent $ENT $HOME/.$(echo $ENT | sed -e 's/^dot\///')
+			diffent $ENT ~/.${ENT#dot/}
 		done
 		;;
 	*)
