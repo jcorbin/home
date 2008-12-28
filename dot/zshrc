@@ -26,6 +26,7 @@ alias psaux='ps aux G'
 alias mkdir='nocorrect mkdir'
 alias ltail='less +F'
 alias gb='gitback'
+alias dirs='dirs -pv'
 stail() {
 	local delta=1
 	case $TERM in
