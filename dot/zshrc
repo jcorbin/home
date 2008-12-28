@@ -131,7 +131,7 @@ colorize() {
 	COLOR_p_hash="%{"$'\e[01;33;49m'"%}"
 	COLOR_p_slash="%{"$'\e[31;49m'"%}"
 
-	$LATEST_PROMPT
+	setup-prompt
 }
 # }}}
 # uncolorize() {{{
@@ -163,52 +163,12 @@ uncolorize() {
 		COLOR_p_slash="${COLOR_RESET}"
 	fi
 
-	$LATEST_PROMPT
+	setup-prompt
 }
 # }}}
-# Prompt code {{{
 COLOR_ROOT_BOLD=""
 COLOR_RESET="%{"$'\e[39;49;00m'"%}"
 COLOR_REAL_RESET="%{"$'\e[39;49;00m'"%}"
-
-hostprompt() {
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	unset RPROMPT
-	LATEST_PROMPT="hostprompt"
-}
-
-publicprompt() {
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_slash}%~${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	unset RPROMPT
-	LATEST_PROMPT="publicprompt"
-}
-
-pwdcutprompt() {
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%~${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	export RPROMPT="${COLOR_ROOT_BOLD}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET}:${COLOR_p_h}%h${COLOR_RESET}|${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_REAL_RESET}"
-	LATEST_PROMPT="pwdcutprompt"
-}
-
-pwdprompt() {
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_slash}%~${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	unset RPROMPT
-	LATEST_PROMPT="pwdprompt"
-}
-
-twolineprompt() {
-	export PS1="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_h}%h${COLOR_RESET} | ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_RESET} | ${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} : ${COLOR_p_slash}%~${COLOR_RESET}%E
-	${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	unset RPROMPT
-	LATEST_PROMPT="twolineprompt"
-}
-
-cuttwolineprompt() {
-	export PS1="${COLOR_MY_DATE}${MY_DATE}${COLOR_RESET} ${COLOR_MY_TIME}${MY_TIME}${COLOR_RESET} ${COLOR_p_slash}%~${COLOR_RESET}
-${COLOR_p_h}%h${COLOR_RESET} ${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	export RPROMPT="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_REAL_RESET}"
-	LATEST_PROMPT="cuttwolineprompt"
-}
-# }}}
 # }}}
 # Completion {{{
 # Command completions {{{
@@ -280,11 +240,30 @@ zstyle ':completion:*' word true
 compdef _gnu_generic qiv
 # }}}
 # Prompt selection {{{
-# Date and Time format used by cuttwolineprompt
-MY_DATE="%D{%Y-%m-%d}"
-MY_TIME="%D{%H:%M:%S}"
-cuttwolineprompt
-colorize # uncolorize
+select-prompt() {
+	local PROMPT=$1
+	if [ -z "$PROMPT" ]; then
+		PROMPT='default'
+	fi
+
+	if [ ! -f ~/.zsh/prompts/$PROMPT ]; then
+		echo "No such prompt $PROMPT" >&2
+		return 1
+	else
+		. ~/.zsh/prompts/$PROMPT
+		return 0
+	fi
+}
+set-prompt() {
+	if select-prompt $1; then
+		setup-prompt
+		ln -sfv $1 ~/.zsh/prompts/default
+		return 0
+	else
+		return 1
+	fi
+}
+select-prompt && colorize
 # }}}
 # Misc {{{
 bindkey -v # Vi-style bindings
