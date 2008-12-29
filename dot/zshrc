@@ -255,9 +255,24 @@ select-prompt() {
 	fi
 }
 set-prompt() {
-	if select-prompt $1; then
+	if [ -z "$1" ]; then
+		def=$(readlink ~/.zsh/prompts/default)
+		for e in ~/.zsh/prompts/*; do
+			pr=$(basename $e)
+			if [ $pr != 'default' ]; then
+				if [ $pr = $def ]; then
+					echo " * $pr"
+				else
+					echo "   $pr"
+				fi
+			fi
+		done
+		return 1
+	elif select-prompt $1; then
 		setup-prompt
-		ln -sfv $1 ~/.zsh/prompts/default
+		if [ "$1" != 'default' ]; then
+			ln -sfv $1 ~/.zsh/prompts/default
+		fi
 		return 0
 	else
 		return 1
