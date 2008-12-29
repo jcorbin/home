@@ -1,0 +1,6 @@
+setopt transient_rprompt
+
+# autoload promptinit
+# promptinit
+
+# vim:set ft=zsh:

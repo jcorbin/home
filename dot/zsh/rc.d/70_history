@@ -1,0 +1,4 @@
+setopt hist_reduce_blanks
+setopt hist_ignore_dups
+
+# vim:set ft=zsh:

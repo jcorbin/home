@@ -1,0 +1,5 @@
+autoload insert-composed-char
+zle -N insert-composed-char
+bindkey '^K' insert-composed-char
+
+# vim:set ft=zsh:

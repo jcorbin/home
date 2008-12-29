@@ -72,4 +72,6 @@ setup-terminal-titles() {
 	}
 }
 
+setup-terminal-titles
+
 # vim:set ft=zsh:

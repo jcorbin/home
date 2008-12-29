@@ -1,0 +1,69 @@
+# Command completions
+compctl -a {,un}alias
+compctl -/ {c,push,pop}d
+compctl -c exec
+compctl -c man
+compctl -c {where,which}
+compctl -o {,un}setopt
+compctl -E {,un}setenv
+compctl -E printenv
+compctl -b bindkey
+compctl -j fg
+compctl -j kill
+compctl -u chown
+compctl -g '*.(ps|eps)' gv
+
+# Colored file lists in completion
+if [ -n "$LS_COLORS" ]; then
+	ZLS_COLORS="$LS_COLORS"
+	export ZLS_COLORS
+	zmodload zsh/complist 2> /dev/null
+fi
+
+# Autocomplete for current dir on filetypes
+compctl -g '*.Z *.gz *.tgz' + -g '*' zcat gunzip
+compctl -g '*.tar.Z *.tar.gz *.tgz *.tar.bz2' + -g '*' tar
+compctl -g '*.zip *.ZIP' + -g '*' unzip zip
+compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
+
+
+# Rmdir only real directories
+compctl -g '*(D/)' rmdir
+
+# Cd/pushd only directories or symbolic links to directories
+compctl -g '*(D-/)' cd pushd
+
+autoload compinit 2> /dev/null
+autoload -U compinit 2> /dev/null
+compinit 2> /dev/null
+
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' add-space true
+#zstyle ':completion:*' completer _list _oldlist _expand _complete _ignored _match _correct _approximate _prefix
+# Complete first as much as you can. Then show alternatives.
+zstyle ':completion:*' completer _complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
+zstyle ':completion:*' completions 1
+zstyle ':completion:*' file-sort name
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' glob 1
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' ignore-parents pwd
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' max-errors 3 numeric
+zstyle ':completion:*' menu select=long-list select=0
+zstyle ':completion:*' old-menu false
+zstyle ':completion:*' original true
+zstyle ':completion:*' prompt '%e errors>'
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' substitute 1
+zstyle ':completion:*' use-compctl true
+zstyle ':completion:*' verbose true
+zstyle ':completion:*' word true
+
+compdef _gnu_generic qiv
+
+# vim:set ft=zsh:

@@ -1,0 +1,11 @@
+setopt correct # Spelling correction
+setopt dvorak # Spelling correction for dvorak
+setopt pathdirs
+setopt extended_glob
+setopt no_hup
+setopt no_flowcontrol
+setopt noclobber
+setopt notify # Notify of job status immediantely
+setopt transientrprompt
+
+# vim:set ft=zsh:

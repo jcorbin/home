@@ -2,4 +2,5 @@ if [ -f $HOME/.profile ]; then
 	. $HOME/.profile
 fi
 
-fpath=( $HOME/.zsh/func "$fpath[@]" )
+fpath=($fpath $HOME/.zsh/func)
+typeset -U fpath

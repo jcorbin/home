@@ -1,0 +1,6 @@
+export CDPATH=.
+setopt autocd
+setopt pushd_ignoredups
+setopt cdablevars
+
+# vim:set ft=zsh:
