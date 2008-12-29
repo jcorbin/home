@@ -1,7 +1,3 @@
-if [ -f ~/.profile ]; then
-	. ~/.profile
-fi
-
 # Aliases {{{
 # Globals {{{
 saneGrep() {
