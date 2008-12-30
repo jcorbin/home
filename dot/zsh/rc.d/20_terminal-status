@@ -55,11 +55,11 @@ setup-terminal-titles() {
 		esac
 
 		if [ -n "$resumejob" ]; then
-			resumecmd=$(jobs $resumejob)
+			resumecmd=$(jobs $resumejob 2>/dev/null)
 			if (( $? != 0 )); then
 				return
 			fi
-			resumedir=$(jobs -d $resumejob)
+			resumedir=$(jobs -d $resumejob 2>/dev/null)
 			resumecmd=${${resumecmd#*  }#*  }
 			resumedir=${${resumedir#*pwd : }%)*}
 
