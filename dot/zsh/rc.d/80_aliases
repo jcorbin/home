@@ -19,7 +19,6 @@ alias rm='rm -vi'
 alias cl='clear'
 alias psaux='ps aux G'
 alias mkdir='nocorrect mkdir'
-alias ltail='less +F'
 alias gb='gitback'
 alias dirs='dirs -pv'
 

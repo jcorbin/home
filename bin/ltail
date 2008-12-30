@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cmd='less +f'
+case $TERM in
+	screen*)
+		if [ -n "$STY" ]; then
+			exec screen $cmd $@
+		fi
+		;;
+esac
+
+exec $cmd $@
