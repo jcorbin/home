@@ -32,9 +32,11 @@ threads=0
 [alias]
 st=status
 br=branch
+rebr=rewrite-branch
+brb=branch-base
 ci=commit
 co=checkout
 pack=repack -adlf
 doh=commit --amend
-ol=log --pretty=oneline
-vol=log --pretty=oneline --name-status
+clog=change-log
+cp=cherry-pick
