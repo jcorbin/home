@@ -1,0 +1,11 @@
+#!/bin/sh
+
+branch=$1
+[ -n "$1" ] && shift
+
+base=$(git branch-base $branch)
+if [ $? != 0 ]; then
+	exit 1
+fi
+
+git rebase -i $base $branch
