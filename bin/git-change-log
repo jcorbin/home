@@ -27,7 +27,7 @@ incpretty() {
 	esac
 }
 
-GOTEMP=$(getopt -o vs --long stat -- "$@")
+GOTEMP=$(getopt -o vps --long stat,parents -- "$@")
 if [ $? != 0 ]; then exit 1; fi
 eval set -- "$GOTEMP"
 
@@ -39,6 +39,10 @@ while true; do
 			;;
 		-s|--stat)
 			logopt="$logopt --stat"
+			shift
+			;;
+		-p|--parents)
+			logopt="$logopt --parents"
 			shift
 			;;
 		--)
