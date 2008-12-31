@@ -1,0 +1,36 @@
+#!/bin/sh
+
+tip=$1
+[ -n "$1" ] && shift
+
+if [ -z "$tip" ]; then
+	tip=$(git current-branch)
+	if [ $? != 0 ]; then
+		exit 1
+	fi
+fi
+
+if [ -z "$base" ]; then
+	remote=$(git config branch.$tip.remote)
+	if [ $? != 0 ]; then
+		echo "Unable to read branch remote, specify base?" >&2
+		exit 1
+	fi
+	base=$(git config branch.$tip.merge)
+	if [ $? != 0 ]; then
+		echo "Unable to read branch merge base, specify base?" >&2
+		exit 1
+	fi
+
+	if [ $remote != "." ]; then
+		base=$remote/$(basename $base)
+	fi
+fi
+
+if [ -z "$base" ]; then
+	echo "Unable to determine branch base for $tip" >&2
+	exit 1
+else
+	echo $base
+	exit 0
+fi
