@@ -1,0 +1,79 @@
+#!/bin/sh
+
+logopt='--reverse'
+
+if git config --get-colorbool log; then
+	logopt="$logopt --color"
+fi
+
+pretty='oneline'
+incpretty() {
+	case "$pretty" in
+		oneline)
+			pretty='short'
+			;;
+		short)
+			pretty='medium'
+			;;
+		medium)
+			pretty='fuller'
+			;;
+		fuller)
+			pretty='email'
+			;;
+		email)
+			pretty='raw'
+			;;
+	esac
+}
+
+GOTEMP=$(getopt -o vs --long stat -- "$@")
+if [ $? != 0 ]; then exit 1; fi
+eval set -- "$GOTEMP"
+
+while true; do
+	case "$1" in
+		-v)
+			incpretty
+			shift
+			;;
+		-s|--stat)
+			logopt="$logopt --stat"
+			shift
+			;;
+		--)
+			shift
+			break
+			;;
+	esac
+done
+
+tip=$1
+[ -n "$1" ] && shift
+base=$1
+[ -n "$1" ] && shift
+
+if [ -z "$tip" ]; then
+	tip=$(git current-branch)
+	if [ $? != 0 ]; then
+		exit 1
+	fi
+fi
+
+if [ -z "$base" ]; then
+	base=$(git branch-base $tip)
+fi
+
+if [ -n "$base" ]; then
+	what="$base..$tip"
+	sbase=$(git rev-parse --short $base)
+	stip=$(git rev-parse --short $tip)
+	HDR=$(git config --get-color color.status.header "yellow")
+	RST=$(git config --get-color '' "reset")
+	echo "$HDR$sbase..$stip$RST ($base..$tip):"
+else
+	what=$tip
+fi
+
+git log $logopt --pretty=$pretty $what | \
+	git name-rev --always --stdin
