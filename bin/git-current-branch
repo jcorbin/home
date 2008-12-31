@@ -1,0 +1,15 @@
+#!/bin/sh
+
+tip=$(git status | grep '# On branch ' 2>/dev/null)
+if [ $? = 0 ]; then
+	tip=${tip#\# On branch }
+else
+	tip=$(git name-rev --name-only HEAD)
+	if [ $? != 0 ]; then
+		echo "Unable to read HEAD branch, specify branch?" >&2
+		exit 1
+	fi
+fi
+
+echo $tip
+exit 0
