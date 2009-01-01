@@ -1,1 +1,7 @@
+setopt promptsubst
+
+autoload -U promptinit
+promptinit
+prompt wunjo
+
 # vim:set ft=zsh:
