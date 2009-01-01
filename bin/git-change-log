@@ -74,10 +74,11 @@ if [ -n "$base" ]; then
 	stip=$(git rev-parse --short $tip)
 	HDR=$(git config --get-color color.status.header "yellow")
 	RST=$(git config --get-color '' "reset")
-	echo "$HDR$sbase..$stip$RST ($base..$tip):"
+	echo "$HDR$base..$tip ($sbase..$stip)$RST:"
 else
 	what=$tip
 fi
 
 git log $logopt --pretty=$pretty $what | \
-	git name-rev --always --stdin
+	git name-rev --always --stdin | \
+		sed -re 's/([0-9a-fA-F]{7})[0-9a-fA-F]{33} \(([^)]+)\)/\2 (\1)/g'
