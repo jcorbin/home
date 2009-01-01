@@ -1,7 +1,0 @@
-setup-prompt() {
-	export PROMPT="${COLOR_ROOT_BOLD}${COLOR_ROOT}%S%s${COLOR_RESET}${COLOR_p_h}%h${COLOR_RESET} | ${COLOR_p_y}%y${WINDOW:+.${WINDOW}}${COLOR_RESET} | ${COLOR_p_n}%n${COLOR_RESET}${COLOR_at}@${COLOR_RESET}${COLOR_p_m}%m${COLOR_RESET} : ${COLOR_p_slash}%~${COLOR_RESET}%E
-	${COLOR_p_hash}%#${COLOR_REAL_RESET} "
-	unset RPROMPT
-}
-
-# vim:set ft=zsh:
