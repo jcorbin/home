@@ -1,6 +1,10 @@
 # Terminal title setting
 HARDSTATUS="%n@%m:%~%#"
-WINDOWTITLE="%~%#"
+if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
+	WINDOWTITLE="%~%#"
+else
+	WINDOWTITLE=$HARDSTATUS
+fi
 
 setup-terminal-titles() {
 	case "$TERM" in
