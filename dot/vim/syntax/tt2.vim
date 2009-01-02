@@ -1,6 +1,6 @@
 " Vim syntax file
 " Language: TT2 ( Perl Module Template-Toolkit 2.x )
-" Referencis: Template-Toolkit 2 
+" Referencis: Template-Toolkit 2
 "               http://search.cpan.org/~abw/Template-Toolkit/
 "               http://template-toolkit.org/
 " Last Change:  21 Nov 2003
@@ -28,7 +28,7 @@
 "       let b:tt2_syn_tags = '<% %>'
 "       "PHP"
 "       let b:tt2_syn_tags = '<? ?>'
-" 
+"
 "
 " CHANGES
 "    0.1.2  full-directive comment ( start of '[%#' directive )
@@ -121,7 +121,7 @@ syn keyword tt2_directive contained
             \ LAST NEXT BREAK STOP BLOCK
             \ IF IN UNLESS ELSIF FOR FOREACH WHILE SWITCH CASE
             \ USE PLUGIN MACRO META
-            \ TRY FINAL RETURN LAST 
+            \ TRY FINAL RETURN LAST
             \ CLEAR TO STEP AND OR NOT MOD DIV
             \ ELSE PERL RAWPERL END
             \ and or not mod div

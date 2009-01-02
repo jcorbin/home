@@ -23,7 +23,7 @@ if s:moria_style == "black" || s:moria_style == "dark"
 elseif s:moria_style == "light" || s:moria_style == "white"
     set background=light
 else
-    let s:moria_style = &background 
+    let s:moria_style = &background
 endif
 
 hi clear
@@ -64,7 +64,7 @@ if &background == "dark"
             hi Folded guibg=#4e4e4e guifg=#c0c0c0 gui=bold
         else
             hi Folded guibg=#4e4e4e guifg=#c0c0c0 gui=none
-        endif            
+        endif
     else
         hi FoldColumn ctermbg=bg guibg=bg guifg=#9a9fc7 gui=none
         hi LineNr guifg=#9a9fc7 gui=none
@@ -83,7 +83,7 @@ if &background == "dark"
             hi Folded guibg=#4e4e4e guifg=#c2c6de gui=bold
         else
             hi Folded guibg=#4e4e4e guifg=#c2c6de gui=none
-        endif            
+        endif
     endif
     hi Cursor guibg=#ffa500 guifg=bg gui=none
     hi DiffAdd guibg=#008b00 guifg=fg gui=none
@@ -125,7 +125,7 @@ if &background == "dark"
     hi PreProc guibg=bg guifg=#d7a0d7 gui=none
     hi Special guibg=bg guifg=#e8b87e gui=none
     hi Todo guibg=#e0e000 guifg=#000000 gui=none
-    hi Underlined ctermbg=Black ctermfg=White guibg=bg guifg=#00a0ff gui=underline    
+    hi Underlined ctermbg=Black ctermfg=White guibg=bg guifg=#00a0ff gui=underline
 
     if s:moria_fontface == "mixed"
         hi Statement guibg=bg guifg=#7ec0ee gui=bold
@@ -210,7 +210,7 @@ elseif &background == "light"
         hi Visual ctermbg=LightGray ctermfg=Black guibg=#c4c4c4 gui=none
     else
         hi Visual ctermbg=LightGray ctermfg=Black guibg=#c4c4c4 guifg=fg gui=none
-    endif    
+    endif
     hi VisualNOS ctermbg=DarkGray ctermfg=Black guibg=bg guifg=#a0a0a0 gui=bold,underline
     hi WarningMsg guibg=bg guifg=#ee2c2c gui=bold
     hi WildMenu guibg=#ffff00 guifg=fg gui=bold
