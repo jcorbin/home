@@ -36,6 +36,7 @@ rebr=rewrite-branch
 brb=branch-base
 ci=commit
 co=checkout
+coi=checkout-index
 pack=repack -adlf
 doh=commit --amend
 clog=change-log
