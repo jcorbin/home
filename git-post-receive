@@ -1,0 +1,4 @@
+#!/bin/sh
+
+git reset --hard
+$HOME/dotdata/control pull
