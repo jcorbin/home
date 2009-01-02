@@ -41,3 +41,6 @@ pack=repack -adlf
 doh=commit --amend
 clog=change-log
 cp=cherry-pick
+rc=rebase --continue
+ra=rebase --abort
+rs=rebase --skip
