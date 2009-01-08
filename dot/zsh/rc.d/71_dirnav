@@ -4,4 +4,8 @@ setopt autopushd
 setopt pushd_ignoredups
 setopt cdablevars
 
+chpwd() {
+	dirs -v
+}
+
 # vim:set ft=zsh:
