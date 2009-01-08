@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Browser
+if [ -n "$DISPLAY" ]; then
+	export BROWSER="konqueror:firefox:opera:w3m:lynx"
+else
+	export BROWSER="w3m:lynx"
+fi

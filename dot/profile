@@ -1,43 +1,5 @@
 #!/bin/sh
 
-# Editor
-export EDITOR=vim
-
-# Path
-if [ -d $HOME/bin ]; then
-	export PATH=$HOME/bin:$PATH
-fi
-
-# Python
-if [ -d $HOME/lib/python ]; then
-	if [ -z "$PYTHONPATH" ]; then
-		export PYTHONPATH=$HOME/lib/python
-	else
-		export PYTHONPATH=$PYTHONPATH:$HOME/lib/python
-	fi
-fi
-
-# Pager
-if which less>/dev/null; then
-	export PAGER=$(which less)
-	export LESS='-MRci'
-	export LESS_TERMCAP_mb=$'\E[01;31m'
-	export LESS_TERMCAP_md=$'\E[01;31m'
-	export LESS_TERMCAP_me=$'\E[0m'
-	export LESS_TERMCAP_se=$'\E[0m'
-	export LESS_TERMCAP_so=$'\E[01;44;33m'
-	export LESS_TERMCAP_ue=$'\E[0m'
-	export LESS_TERMCAP_us=$'\E[01;32m'
-fi
-
-# Browser
-if [ -n "$DISPLAY" ]; then
-	export BROWSER="konqueror:firefox:opera:w3m:lynx"
-else
-	export BROWSER="w3m:lynx"
-fi
-
-if which dircolors >/dev/null 2>&1; then
-	eval $(dircolors)
-	export LS_COLORS
-fi
+for part in $HOME/.profile.d/??_*; do
+	. $part
+done

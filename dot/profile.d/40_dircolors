@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Dir Colors
+if which dircolors >/dev/null 2>&1; then
+	eval $(dircolors)
+	export LS_COLORS
+fi
