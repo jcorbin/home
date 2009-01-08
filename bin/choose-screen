@@ -1,16 +1,20 @@
 #!/bin/sh
 
-screen -q -ls
-if [ $? -ge 11 ]; then
-    screen -ls
-fi
+if [ -z "$1" ]; then
+	screen -q -ls
+	if [ $? -ge 11 ]; then
+			screen -ls
+	fi
 
-echo "Specify screen, format is: <session-name>[:pid[.tty[.host]]] or //[user@]host[:port]"
-read line
+	echo "Specify screen, format is: <session-name>[:pid[.tty[.host]]] or //[user@]host[:port]"
+	read line
 
-BINDIR=$(dirname $0)
-if ! echo $PATH | grep $BINDIR >/dev/null; then
-	export PATH=$PATH:$BINDIR
+	BINDIR=$(dirname $0)
+	if ! echo $PATH | grep $BINDIR >/dev/null; then
+		export PATH=$PATH:$BINDIR
+	fi
+else
+	line=$1
 fi
 
 case "$line" in
