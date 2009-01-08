@@ -10,6 +10,10 @@ if [ -z $ATTIC ]; then
 	while [ -z $ATTIC ] && [ $D != "/" ]; do
 		if [ -d $D/attic ]; then
 			ATTIC=$D/attic
+			REMOTEATTIC=
+		elif [ -f $D/.attic ]; then
+			ATTIC=$D/.attic-tmp-$$
+			REMOTEATTIC=$(cat $D/.attic)
 		fi
 		D=$(dirname $D)
 	done
@@ -82,6 +86,13 @@ while [ -n "$1" ]; do
 	else
 		die "Don't know how to pack $CRAP"
 	fi
+	if [ -n "$REMOTEATTIC" ]; then
+		REMOTEBOX=$REMOTEATTIC/$(basename $BOXNAME)
+		scp $BOXNAME $REMOTEBOX
+		echo "Packed $CRAP into $REMOTEBOX"
+		rm -rf $ATTIC
+	else
+		echo "Packed $CRAP into $BOXNAME"
+	fi
 	rm -rf $CRAP
-	echo "Packed $CRAP into $BOXNAME"
 done
