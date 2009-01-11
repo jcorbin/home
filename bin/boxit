@@ -88,7 +88,11 @@ while [ -n "$1" ]; do
 	fi
 	if [ -n "$REMOTEATTIC" ]; then
 		REMOTEBOX=$REMOTEATTIC/$(basename $BOXNAME)
-		scp $BOXNAME $REMOTEBOX
+		if ! scp -r $BOXNAME $REMOTEBOX; then
+			echo "Failed to upload box" >&2
+			rm -rf $ATTIC
+			exit 1
+		fi
 		echo "Packed $CRAP into $REMOTEBOX"
 		rm -rf $ATTIC
 	else
