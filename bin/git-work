@@ -177,6 +177,105 @@ merge_topic() {
 	fi
 }
 
+cmd_list() {
+	git branch -v
+}
+
+cmd_setup() {
+	if git rev-parse --verify -q $local >/dev/null; then
+		if [ "$cmd" = "resetup" ]; then
+			git checkout -f master
+			git branch -D local
+		else
+			echo "local working branch ($local) already setup"
+			exit 0
+		fi
+	fi
+	setup_local_branch
+}
+
+cmd_on() {
+	topic=$1
+	if [ -z $1 ]; then
+		echo "Missing topic argument" >&2
+		usage
+	fi
+	require_local_branch
+	require_clean_tree
+	if ! git rev-parse --verify -q $topic >/dev/null; then
+		setup_topic $topic $local
+	fi
+	git checkout $topic
+	if [ -x $GIT_DIR/hooks/work-topic-change ]; then
+		if ! $GIT_DIR/hooks/work-topic-change $topic; then
+			echo "git work: work-topic-change hook failed, oh well" >&2
+		fi
+	fi
+}
+
+cmd_merge() {
+	merge_topic $1
+	git checkout master
+	git merge $merge
+	git branch -D $merge
+}
+
+cmd_squash() {
+	merge_topic $1
+	if [ -f $SQUASH_MSG ]; then
+		rm -f $SQUASH_MSG;
+	fi
+	make_squash_message $local $tip $tip_name > $SQUASH_MSG
+	git checkout master
+	git merge --squash $merge
+	git branch -D $merge
+	git commit -e -F $SQUASH_MSG
+	rm -f $SQUASH_MSG
+}
+
+cmd_log() {
+	require_local_branch
+	tip=$1
+	if [ -z "$tip" ]; then
+		tip=HEAD
+	fi
+	git log --pretty=oneline $local..$tip
+}
+
+cmd_update() {
+	rebase_check
+	[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
+
+	old_head=$(git symbolic-ref HEAD 2>/dev/null || true)
+	if [ -n "$old_head" ]; then
+		old_head=${old_head##*/}
+	else
+		old_head=$( git rev-parse HEAD || true)
+		[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
+	fi
+
+	if [ -n $1 ]; then
+		git checkout $1
+	fi
+
+	if ! git diff --quiet || ! git diff --cached --quiet; then
+		stash_mess=work-update-stash-$(git rev-parse $old_head)
+		git stash save "$stash_mess"
+		stashed=$(git stash list | grep "$stash_mess" | cut -d: -f1)
+		[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
+	fi
+
+	git checkout $local
+	git pull
+
+	git checkout $old_head
+	git pull
+
+	if [ -n "$stashed" ]; then
+		git stash pop --index $stashed
+	fi
+}
+
 nth_string () {
 	case "$1" in
 	*1[0-9]|*[04-9]) echo "$1"th;;
@@ -216,96 +315,25 @@ fi
 
 case "$cmd" in
 	list)
-		git branch -v
+		cmd_list $@
 		;;
 	resetup|setup)
-		if git rev-parse --verify -q $local >/dev/null; then
-			if [ "$cmd" = "resetup" ]; then
-				git checkout -f master
-				git branch -D local
-			else
-				echo "local working branch ($local) already setup"
-				exit 0
-			fi
-		fi
-		setup_local_branch
+		cmd_setup $@
 		;;
 	on)
-		topic=$1
-		if [ -z $1 ]; then
-			echo "Missing topic argument" >&2
-			usage
-		fi
-		require_local_branch
-		require_clean_tree
-		if ! git rev-parse --verify -q $topic >/dev/null; then
-			setup_topic $topic $local
-		fi
-		git checkout $topic
-		if [ -x $GIT_DIR/hooks/work-topic-change ]; then
-			if ! $GIT_DIR/hooks/work-topic-change $topic; then
-				echo "git work: work-topic-change hook failed, oh well" >&2
-			fi
-		fi
+		cmd_on $@
 		;;
 	merge)
-		merge_topic $1
-		git checkout master
-		git merge $merge
-		git branch -D $merge
+		cmd_merge $@
 		;;
 	squash)
-		merge_topic $1
-		if [ -f $SQUASH_MSG ]; then
-			rm -f $SQUASH_MSG;
-		fi
-		make_squash_message $local $tip $tip_name > $SQUASH_MSG
-		git checkout master
-		git merge --squash $merge
-		git branch -D $merge
-		git commit -e -F $SQUASH_MSG
-		rm -f $SQUASH_MSG
+		cmd_squash $@
 		;;
 	log)
-		require_local_branch
-		tip=$1
-		if [ -z "$tip" ]; then
-			tip=HEAD
-		fi
-		git log --pretty=oneline $local..$tip
+		cmd_log $@
 		;;
 	up|update)
-		rebase_check
-		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
-
-		old_head=$(git symbolic-ref HEAD 2>/dev/null || true)
-		if [ -n "$old_head" ]; then
-			old_head=${old_head##*/}
-		else
-			old_head=$( git rev-parse HEAD || true)
-			[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
-		fi
-
-		if [ -n $1 ]; then
-			git checkout $1
-		fi
-
-		if ! git diff --quiet || ! git diff --cached --quiet; then
-			stash_mess=work-update-stash-$(git rev-parse $old_head)
-			git stash save "$stash_mess"
-			stashed=$(git stash list | grep "$stash_mess" | cut -d: -f1)
-			[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
-		fi
-
-		git checkout $local
-		git pull
-
-		git checkout $old_head
-		git pull
-
-		if [ -n "$stashed" ]; then
-			git stash pop --index $stashed
-		fi
+		cmd_update $@
 		;;
 	*)
 		usage
