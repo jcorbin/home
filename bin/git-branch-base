@@ -32,7 +32,7 @@ if [ -z "$base" ]; then
 	exit 1
 fi
 
-ancestor=$(git rev-list local..work --reverse --parents --first-parent | head -n1 | cut -d ' ' -f2)
+ancestor=$(git rev-list $base..work --reverse --parents --first-parent | head -n1 | cut -d ' ' -f2)
 if [ $? = 0 ] && [ -n "$ancestor" ]; then
 	git name-rev --name-only --always $ancestor
 else
