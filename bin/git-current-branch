@@ -1,8 +1,8 @@
 #!/bin/sh
 
-tip=$(git status | grep '# On branch ' 2>/dev/null)
+tip=$(git symbolic-ref HEAD 2>/dev/null)
 if [ $? = 0 ]; then
-	tip=${tip#\# On branch }
+	tip=$(basename $tip)
 else
 	tip=$(git name-rev --name-only HEAD)
 	if [ $? != 0 ]; then
