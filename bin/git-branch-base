@@ -30,7 +30,13 @@ fi
 if [ -z "$base" ]; then
 	echo "Unable to determine branch base for $tip" >&2
 	exit 1
+fi
+
+ancestor=$(git rev-list local..work --reverse --parents --first-parent | head -n1 | cut -d ' ' -f2)
+if [ $? = 0 ] && [ -n "$ancestor" ]; then
+	git name-rev --name-only --always $ancestor
 else
 	echo $base
-	exit 0
 fi
+
+exit 0
