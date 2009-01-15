@@ -1,11 +1,11 @@
 #!/bin/sh
 
 tip=$(git symbolic-ref HEAD 2>/dev/null)
-if [ $? = 0 ]; then
+if [ $? -eq 0 ]; then
 	tip=$(basename $tip)
 else
 	tip=$(git name-rev --name-only HEAD)
-	if [ $? != 0 ]; then
+	if [ $? -ne 0 ]; then
 		echo "Unable to read HEAD branch, specify branch?" >&2
 		exit 1
 	fi
