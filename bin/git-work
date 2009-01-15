@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# TODO configurable
+local=local
+work=$(git current-branch)
+
+case "$1" in
+	pull)
+		if [ -n "$2" ]; then
+			work=$2
+		fi
+		git checkout $local
+		git pull
+		if ! git branch | grep $work >/dev/null 2>&1; then
+			git checkout -b $work $local
+		else
+			git checkout $work
+			git pull
+		fi
+		;;
+	merge)
+		tmp="$work-merge"
+
+		git checkout -b $tmp $work
+		git rebase --onto master $local $tmp
+		git checkout master
+		git merge $tmp
+		git branch -d $tmp
+		;;
+esac
