@@ -220,7 +220,7 @@ case $1 in
 			[ -d $TMPDIR ] && rm -rf $TMPDIR >/dev/null 2>&1
 			exit 1
 		fi
-		rsync -a -q $TMPDIR/ $HOME
+		rsync --keep-dirlinks -r -E -v $TMPDIR/ $HOME
 		;;
 	receive-tar)
 		TMPDIR=$HOME/.dotdata_update_$$
