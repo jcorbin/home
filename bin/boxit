@@ -30,25 +30,25 @@ while [ -n "$1" ]; do
 	shift
 
 	BOXNAME=$ATTIC/$CRAP
-	BOXDIR=$(dirname $BOXNAME)
+	BOXDIR=$(dirname "$BOXNAME")
 	[ -d $BOXDIR ] || mkdir -p $BOXDIR || die "Failed to mkdir $BOXDIR"
 
-	if [ -f $CRAP ]; then
-		case $CRAP in
+	if [ -f "$CRAP" ]; then
+		case "$CRAP" in
 			*.gz)
-				BOXNAME=$BOXDIR/$(basename $BOXNAME .gz).bz2
-				cat $CRAP | gzip -d | bzip2 -c9 > $BOXNAME
+				BOXNAME=$BOXDIR/$(basename "$BOXNAME .gz").bz2
+				cat "$CRAP" | gzip -d | bzip2 -c9 > "$BOXNAME"
 				;;
 			*.zip)
-				BOXNAME=$BOXDIR/$(basename $BOXNAME .zip).tar.bz2
+				BOXNAME=$BOXDIR/$(basename "$BOXNAME .zip").tar.bz2
 				BOXTEMP=$(tempfile)
 				rm -f $BOXTEMP
 				mkdir $BOXTEMP
 				OLD=$(pwd)
 				cd $BOXTEMP
 
-				unzip $OLD/$CRAP && \
-				tar -c * | bzip2 -c9 > $BOXNAME
+				unzip "$OLD/$CRAP" && \
+				tar -c * | bzip2 -c9 > "$BOXNAME"
 				[ $? -eq 0 ] || die "Failed to repack zip to tar"
 
 				cd $OLD
@@ -58,13 +58,13 @@ while [ -n "$1" ]; do
 				;;
 			*)
 				BOXNAME="$BOXNAME.bz2"
-				bzip2 -c9 $CRAP > $BOXNAME
+				bzip2 -c9 "$CRAP" > "$BOXNAME"
 				;;
 		esac
-	elif [ -d $CRAP ]; then
-		if [ -d $CRAP/.git ]; then
-			export GIT_DIR=$CRAP/.git
-			export GIT_WORK_TREE=$CRAP
+	elif [ -d "$CRAP" ]; then
+		if [ -d "$CRAP/.git" ]; then
+			export GIT_DIR="$CRAP/.git"
+			export GIT_WORK_TREE="$CRAP"
 
 			git status | grep 'nothing to commit.*working directory clean' >/dev/null 2>&1 ||
 				die "Git working tree in $CRAP is dirty, clean it up"
@@ -72,23 +72,23 @@ while [ -n "$1" ]; do
 			git prune
 			git repack -adlf
 
-			mkdir $CRAP/.boxit-temp
+			mkdir "$CRAP/.boxit-temp"
 			BOXNAME="$BOXNAME.git"
-			cp -a $GIT_DIR $BOXNAME
-			rm -rf $CRAP/.boxit-temp
+			cp -a $GIT_DIR "$BOXNAME"
+			rm -rf "$CRAP/.boxit-temp"
 
 			export GIT_WORK_TREE=
 			export GIT_DIR=
 		else
 			BOXNAME="$BOXNAME.tar.bz2"
-			tar -c $CRAP | bzip2 -c9 > $BOXNAME
+			tar -c "$CRAP" | bzip2 -c9 > "$BOXNAME"
 		fi
 	else
 		die "Don't know how to pack $CRAP"
 	fi
 	if [ -n "$REMOTEATTIC" ]; then
-		REMOTEBOX=$REMOTEATTIC/$(basename $BOXNAME)
-		if ! scp -r $BOXNAME $REMOTEBOX; then
+		REMOTEBOX=$REMOTEATTIC/$(basename "$BOXNAME")
+		if ! scp -r "$BOXNAME" "$REMOTEBOX"; then
 			echo "Failed to upload box" >&2
 			rm -rf $ATTIC
 			exit 1
@@ -98,5 +98,5 @@ while [ -n "$1" ]; do
 	else
 		echo "Packed $CRAP into $BOXNAME"
 	fi
-	rm -rf $CRAP
+	rm -rf "$CRAP"
 done
