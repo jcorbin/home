@@ -246,6 +246,7 @@ cmd_update() {
 	rebase_check
 	[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
 
+	stack=$state/update_rebase
 	old_head=$(git symbolic-ref HEAD 2>/dev/null || true)
 	if [ -n "$old_head" ]; then
 		old_head=${old_head##*/}
@@ -265,11 +266,19 @@ cmd_update() {
 		[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
 	fi
 
-	git checkout $local
-	git pull
+	echo "master $local" >> $stack
+	echo "$local $old_head" >> $stack
 
-	git checkout $old_head
-	git pull
+	while [ -f $stack ]; do
+		line=$(head -n1 $stack)
+		if [ -z "$line" ]; then
+			rm -f $stack
+		else
+			tail -n+2 $stack > $stack.new
+			mv $stack.new $stack
+			git rebase $line
+		fi
+	done
 
 	if [ -n "$stashed" ]; then
 		git stash pop --index $stashed
