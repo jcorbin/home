@@ -145,6 +145,15 @@ setup_topic() {
 	fi
 }
 
+rebase_check() {
+	rebase_state=
+	for d in "$GIT_DIR"/rebase-merge "$GIT_DIR"/rebase-apply; do
+		if [ -z "$rebase_state" ] && [ -d $d ]; then
+			rebase_state=$d
+		fi
+	done
+}
+
 nth_string () {
 	case "$1" in
 	*1[0-9]|*[04-9]) echo "$1"th;;
@@ -217,6 +226,9 @@ case "$cmd" in
 		fi
 		;;
 	merge)
+		rebase_check
+		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
+
 		tip=$1
 		if [ -z "$tip" ]; then
 			tip=$(git rev-parse HEAD)
@@ -232,6 +244,9 @@ case "$cmd" in
 		git branch -D $merge
 		;;
 	squash)
+		rebase_check
+		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
+
 		tip=$1
 		if [ -z "$tip" ]; then
 			tip=$(git rev-parse HEAD)
@@ -266,6 +281,9 @@ case "$cmd" in
 		git log --pretty=oneline $local..$tip
 		;;
 	up|update)
+		rebase_check
+		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
+
 		old_head=$(git symbolic-ref HEAD 2>/dev/null || true)
 		if [ -n "$old_head" ]; then
 			old_head=${old_head##*/}
