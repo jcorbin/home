@@ -79,15 +79,17 @@ USAGE="[list]
    or: git work update [<topic>]
    or: git work on <topic>
    or: git work log [<topic>]
-   or: git work merge|squash [<commitsh>]"
+   or: git work merge|squash [<commitsh>]
+   or: git work continue"
 LONG_USAGE="Commands
-    list    without a command or when command is 'list', shortcut for branch -v currently
-    setup   sets up the local working environment
-    update  merges changes from mater through local into the topic
-    on      switches to and possibly creates a topic work branch
-    log     shows changes between local and the topic branch
-    merge   merges changes back to master from a topic branch
-    squash  same as above, except flattens all topic branch commits into one commit on master"
+    list      without a command or when command is 'list', shortcut for branch -v currently
+    setup     sets up the local working environment
+    update    merges changes from mater through local into the topic
+    on        switches to and possibly creates a topic work branch
+    log       shows changes between local and the topic branch
+    merge     merges changes back to master from a topic branch
+    squash    same as above, except flattens all topic branch commits into one commit on master
+    continue  continues the last merge or update, likely due to a dicey rebase"
 
 . "$(git --exec-path)/git-sh-setup"
 
@@ -213,6 +215,17 @@ cmd_on() {
 	fi
 }
 
+cmd_continue() {
+	if ! [ -d $state ] || ! [ -f $state/command ]; then
+		die "git work $cmd: can't continue"
+	fi
+	old_cmd=$cmd
+	continue_cmd=$(cat $state/command || true)
+	do_cmd $continue_cmd $@ || \
+		die "git work $old_cmd: bogus state command"
+	exit 0
+}
+
 cmd_merge() {
 	merge_topic $1
 	git checkout master
@@ -289,9 +302,18 @@ do_cmd() {
 	cmd=$1
 	shift
 
+	case "$cmd" in
+		cont*)
+			cmd_continue $@
+			;;
+	esac
+
+	[ -z "$continue_cmd" ] && [ -d $state ] && \
+		die "git work $cmd: pre-existing state, abort or continue first"
 	[ -d $state ] || mkdir $state || \
 		die "git work $cmd: unable to create $state"
 
+	echo $cmd > $state/command
 	case "$cmd" in
 		list)
 			cmd_list $@
