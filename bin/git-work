@@ -274,6 +274,10 @@ case "$cmd" in
 			[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
 		fi
 
+		if [ -n $1 ]; then
+			git checkout $1
+		fi
+
 		if ! git diff --quiet || ! git diff --cached --quiet; then
 			stash_mess=work-update-stash-$(git rev-parse $old_head)
 			git stash save "$stash_mess"
