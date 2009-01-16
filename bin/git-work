@@ -285,9 +285,6 @@ case "$cmd" in
 			[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
 		fi
 
-		git checkout master
-		git pull
-
 		git checkout $local
 		git pull
 
