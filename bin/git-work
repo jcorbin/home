@@ -276,6 +276,40 @@ cmd_update() {
 	fi
 }
 
+do_cmd() {
+	cmd=$1
+	shift
+
+	case "$cmd" in
+		list)
+			cmd_list $@
+			;;
+		resetup|setup)
+			cmd_setup $@
+			;;
+		on)
+			cmd_on $@
+			;;
+		merge)
+			cmd_merge $@
+			;;
+		squash)
+			cmd_squash $@
+			;;
+		log)
+			cmd_log $@
+			;;
+		up|update)
+			cmd_update $@
+			;;
+		*)
+			return 1
+			;;
+	esac
+
+	return 0
+}
+
 nth_string () {
 	case "$1" in
 	*1[0-9]|*[04-9]) echo "$1"th;;
@@ -313,29 +347,4 @@ else
 	cmd='list'
 fi
 
-case "$cmd" in
-	list)
-		cmd_list $@
-		;;
-	resetup|setup)
-		cmd_setup $@
-		;;
-	on)
-		cmd_on $@
-		;;
-	merge)
-		cmd_merge $@
-		;;
-	squash)
-		cmd_squash $@
-		;;
-	log)
-		cmd_log $@
-		;;
-	up|update)
-		cmd_update $@
-		;;
-	*)
-		usage
-		;;
-esac
+do_cmd $cmd $@ || usage
