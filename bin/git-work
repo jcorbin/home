@@ -262,14 +262,14 @@ case "$cmd" in
 		if git rev-parse --verify -q $merge > /dev/null; then
 			die "git work $cmd: branch ($merge) already exists, finish with that first"
 		fi
-		if [ -f $SQUASH_MSG ]; then
-			rm -f $SQUASH_MSG;
-		fi
-		make_squash_message $local $tip $tip_name > $SQUASH_MSG
 		git checkout --no-track -b $merge $tip
 		if ! git rebase --onto master $local $merge; then
 			die "git work $cmd: rebase failed, you get to keep both pieces"
 		fi
+		if [ -f $SQUASH_MSG ]; then
+			rm -f $SQUASH_MSG;
+		fi
+		make_squash_message $local $tip $tip_name > $SQUASH_MSG
 		git checkout master
 		git merge --squash $merge
 		git branch -D $merge
