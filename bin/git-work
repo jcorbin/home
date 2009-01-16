@@ -295,27 +295,41 @@ cmd_update() {
 	[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
 
 	stack=$state/update_rebase
-	old_head=$(git symbolic-ref HEAD 2>/dev/null || true)
-	if [ -n "$old_head" ]; then
-		old_head=${old_head##*/}
+	if [ -f $state/update_old_head ]; then
+		if [ -n "$rebase_state" ]; then
+			if ! git rebase --continue; then
+				die "git work $cmd: failed to continue rebase"
+			fi
+		fi
+		old_head=$(cat $state/update_old_head)
+		stashed=$(cat $state/update_stashed)
 	else
-		old_head=$( git rev-parse HEAD || true)
-		[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
-	fi
+		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
 
-	if [ -n $1 ]; then
-		git checkout $1
-	fi
+		if [ -n $1 ]; then
+			git checkout $1
+		fi
 
-	if ! git diff --quiet || ! git diff --cached --quiet; then
-		stash_mess=work-update-stash-$(git rev-parse $old_head)
-		git stash save "$stash_mess"
-		stashed=$(git stash list | grep "$stash_mess" | cut -d: -f1)
-		[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
-	fi
+		old_head=$(git symbolic-ref HEAD 2>/dev/null || true)
+		if [ -n "$old_head" ]; then
+			old_head=${old_head##*/}
+		else
+			old_head=$( git rev-parse HEAD || true)
+			[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
+		fi
+		echo $old_head > $state/old_head
 
-	echo "master $local" >> $stack
-	echo "$local $old_head" >> $stack
+		if ! git diff --quiet || ! git diff --cached --quiet; then
+			stash_mess=work-update-stash-$(git rev-parse $old_head)
+			git stash save "$stash_mess"
+			stashed=$(git stash list | grep "$stash_mess" | cut -d: -f1)
+			[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
+		fi
+		echo $stashed > $state/update_stashed
+
+		echo "master $local" >> $stack
+		echo "$local $old_head" >> $stack
+	fi
 
 	while [ -f $stack ]; do
 		line=$(head -n1 $stack)
@@ -324,7 +338,16 @@ cmd_update() {
 		else
 			tail -n+2 $stack > $stack.new
 			mv $stack.new $stack
-			git rebase $line
+			if ! git rebase $line; then
+				rebase_check
+				[ -n "$rebase_state" ] || die "git work $cmd: rebase $line failed"
+			else
+				rebase_check
+			fi
+			if [ -n "$rebase_state" ]; then
+				echo "Non-automatic rebase, fix then run git work continue"
+				suspend 0
+			fi
 		fi
 	done
 
