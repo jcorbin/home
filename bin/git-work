@@ -271,7 +271,7 @@ case "$cmd" in
 			old_head=${old_head##*/}
 		else
 			old_head=$( git rev-parse HEAD || true)
-			[ -z "$old_head" ] && die "git work: wtf is HEAD"
+			[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
 		fi
 
 		if ! git diff --quiet || ! git diff --cached --quiet; then
