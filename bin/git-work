@@ -80,7 +80,7 @@ USAGE="[list]
    or: git work on <topic>
    or: git work log [<topic>]
    or: git work merge|squash [<commitsh>]
-   or: git work continue"
+   or: git work continue|abort"
 LONG_USAGE="Commands
     list      without a command or when command is 'list', shortcut for branch -v currently
     setup     sets up the local working environment
@@ -89,7 +89,8 @@ LONG_USAGE="Commands
     log       shows changes between local and the topic branch
     merge     merges changes back to master from a topic branch
     squash    same as above, except flattens all topic branch commits into one commit on master
-    continue  continues the last merge or update, likely due to a dicey rebase"
+    continue  continues the last merge or update, likely due to a dicey rebase
+    abort     abort what continue would carry on"
 
 . "$(git --exec-path)/git-sh-setup"
 
@@ -226,6 +227,11 @@ cmd_continue() {
 	exit 0
 }
 
+cmd_abort() {
+	rm -rf $state
+	exit 0
+}
+
 cmd_merge() {
 	merge_topic $1
 	git checkout master
@@ -305,6 +311,9 @@ do_cmd() {
 	case "$cmd" in
 		cont*)
 			cmd_continue $@
+			;;
+		abort)
+			cmd_abort $@
 			;;
 	esac
 
