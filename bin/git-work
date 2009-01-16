@@ -229,7 +229,7 @@ case "$cmd" in
 		git rebase --onto master $local $merge
 		git checkout master
 		git merge $merge
-		git branch -d $merge
+		git branch -D $merge
 		;;
 	squash)
 		tip=$1
