@@ -50,7 +50,7 @@
 #     # back in the end if everything goes ok
 #   git work squash
 #     # this is the same as git work merge except all of topic's commits will be
-#     # flattened into one commit on master, the commit message will be opende
+#     # flattened into one commit on master, the commit message will be opened
 #     # for editing right before the end.
 
 
