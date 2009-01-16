@@ -159,24 +159,53 @@ rebase_check() {
 
 merge_topic() {
 	rebase_check
-	[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
 
-	tip=$1
-	if [ -z "$tip" ]; then
-		tip=$(git rev-parse HEAD)
-		tip_name=$(git symbolic-ref HEAD 2>/dev/null || git name-rev --always --name-only HEAD)
-		tip_name=${tip_name##*/}
+	if [ -f $state/merge_topic_tip ]; then
+		tip=$(cat $state/merge_topic_tip || true)
+		tip_name=$(cat $state/merge_topic_tip_name || true)
+		merge=$(cat $state/merge_work || true)
+		if [ -z "$tip" ] || [ -z "$tip_name" ] || [ -z "$merge" ]; then
+			die "git work $cmd: incomplete merge_topic state"
+		fi
+		if [ -n "$rebase_state" ]; then
+			if ! git rebase --continue; then
+				die "git work $cmd: failed to continue rebase"
+			fi
+		fi
 	else
-		tip_name=$1
-		tip=$(git rev-parse $tip)
-	fi
-	merge=work-merge
-	if git rev-parse --verify -q $merge > /dev/null; then
-		die "git work $cmd: branch ($merge) already exists, finish with that first"
-	fi
-	git checkout --no-track -b $merge $tip
-	if ! git rebase --onto master $local $merge; then
-		die "git work $cmd: rebase failed, you get to keep both pieces"
+		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
+
+		tip=$1
+		if [ -z "$tip" ]; then
+			tip=$(git rev-parse HEAD)
+			tip_name=$(git symbolic-ref HEAD 2>/dev/null || git name-rev --always --name-only HEAD)
+			tip_name=${tip_name##*/}
+		else
+			tip_name=$1
+			tip=$(git rev-parse $tip)
+		fi
+		echo $tip > $state/merge_topic_tip
+		echo $tip_name > $state/merge_topic_tip_name
+
+		merge=work-merge
+		echo $merge > $state/merge_work
+
+		if git rev-parse --verify -q $merge > /dev/null; then
+			die "git work $cmd: branch ($merge) already exists, finish with that first"
+		fi
+
+		git checkout --no-track -b $merge $tip
+		if ! git rebase --onto master $local $merge; then
+			rebase_check
+			[ -n "$rebase_state" ] || die "git work $cmd: rebase failed, you get to keep both pieces"
+		else
+			rebase_check
+		fi
+
+		if [ -n "$rebase_state" ]; then
+			echo "Non-automatic rebase, fix then run git work continue"
+			suspend 0
+		fi
 	fi
 }
 
