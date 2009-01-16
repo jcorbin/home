@@ -289,6 +289,9 @@ do_cmd() {
 	cmd=$1
 	shift
 
+	[ -d $state ] || mkdir $state || \
+		die "git work $cmd: unable to create $state"
+
 	case "$cmd" in
 		list)
 			cmd_list $@
@@ -355,5 +358,20 @@ if [ -n "$1" ]; then
 else
 	cmd='list'
 fi
+
+state="$GIT_DIR"/git-work-state
+keep_state=0
+
+trap cleanup INT TERM EXIT
+cleanup() {
+	if [ $keep_state -eq 0 ]; then
+		[ -d $state ] && rm -rf $state
+	fi
+}
+
+suspend() {
+	keep_state=1
+	exit $1
+}
 
 do_cmd $cmd $@ || usage
