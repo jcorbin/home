@@ -188,7 +188,7 @@ case "$cmd" in
 		;;
 	resetup|setup)
 		if git rev-parse --verify -q $local >/dev/null; then
-			if [ "$1" = "resetup" ]; then
+			if [ "$cmd" = "resetup" ]; then
 				git checkout -f master
 				git branch -D local
 			else
