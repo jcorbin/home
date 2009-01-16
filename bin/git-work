@@ -235,7 +235,7 @@ case "$cmd" in
 		fi
 		merge=work-merge
 		if git rev-parse --verify -q $merge > /dev/null; then
-			die "git work: merge branch ($merge) already exists, finish with that first"
+			die "git work $cmd: branch ($merge) already exists, finish with that first"
 		fi
 		git checkout --no-track -b $merge $tip
 		git rebase --onto master $local $merge
@@ -258,7 +258,7 @@ case "$cmd" in
 		fi
 		merge=work-merge
 		if git rev-parse --verify -q $merge > /dev/null; then
-			die "git work: merge branch ($merge) already exists, finish with that first"
+			die "git work $cmd: branch ($merge) already exists, finish with that first"
 		fi
 		if [ -f $SQUASH_MSG ]; then
 			rm -f $SQUASH_MSG;
