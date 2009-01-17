@@ -51,7 +51,9 @@ def syntax():
 	sys.exit(2)
 
 def main():
-	if len(sys.argv) < 2: syntax()
+	if len(sys.argv) < 2:
+		syntax()
+
 	host=sys.argv[1]
 
 	if len(sys.argv) > 2:
@@ -89,6 +91,7 @@ def main():
 			return 1
 	else:
 		syntax()
+
 	return 0
 
 sys.exit(main())
