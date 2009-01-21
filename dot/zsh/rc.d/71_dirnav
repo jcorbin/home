@@ -4,8 +4,11 @@ setopt autopushd
 setopt pushd_ignoredups
 setopt cdablevars
 
-chpwd() {
+dirnav_chpwd() {
 	dirs -v
 }
+
+typeset -ga chpwd_functions
+chpwd_functions+='dirnav_chpwd'
 
 # vim:set ft=zsh:
