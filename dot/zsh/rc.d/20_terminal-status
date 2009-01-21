@@ -75,6 +75,8 @@ setup-terminal-titles() {
 		fi
 	}
 
+	typeset -ga precmd_functions
+	typeset -ga preexec_functions
 	precmd_functions+='zsh_term_status_precmd'
 	preexec_functions+='zsh_term_status_preexec'
 }
