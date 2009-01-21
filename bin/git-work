@@ -160,7 +160,6 @@ rebase_check() {
 
 merge_topic() {
 	rebase_check
-
 	if [ -f $state/merge_topic_tip ]; then
 		tip=$(cat $state/merge_topic_tip || true)
 		tip_name=$(cat $state/merge_topic_tip_name || true)
