@@ -36,12 +36,10 @@ setup-terminal-titles() {
 			;;
 	esac
 
-	precmd_functions+='zsh_term_status_precmd'
 	zsh_term_status_precmd() {
 		set-terminal-title $HARDSTATUS $WINDOWTITLE
 	}
 
-	preexec_functions+='zsh_term_status_preexec'
 	zsh_term_status_preexec() {
 		local -a cmd
 		local resumejob=
@@ -76,6 +74,9 @@ setup-terminal-titles() {
 			set-terminal-title "$HARDSTATUS $cmd" "$WINDOWTITLE $cmd"
 		fi
 	}
+
+	precmd_functions+='zsh_term_status_precmd'
+	preexec_functions+='zsh_term_status_preexec'
 }
 
 setup-terminal-titles
