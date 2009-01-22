@@ -308,6 +308,14 @@ cmd_update() {
 	else
 		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
 
+		if ! git diff --quiet || ! git diff --cached --quiet; then
+			stash_mess=work-update-stash-$(git rev-parse $old_head)
+			git stash save "$stash_mess"
+			stashed=$(git stash list | grep "$stash_mess" | cut -d: -f1)
+			[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
+		fi
+		echo $stashed > $state/update_stashed
+
 		if [ -n $1 ]; then
 			git checkout $1
 		fi
@@ -320,14 +328,6 @@ cmd_update() {
 			[ -z "$old_head" ] && die "git work $cmd: wtf is HEAD"
 		fi
 		echo $old_head > $state/old_head
-
-		if ! git diff --quiet || ! git diff --cached --quiet; then
-			stash_mess=work-update-stash-$(git rev-parse $old_head)
-			git stash save "$stash_mess"
-			stashed=$(git stash list | grep "$stash_mess" | cut -d: -f1)
-			[ -z "$stashed" ] && die "git work update: unable to stash changes away, scary shit"
-		fi
-		echo $stashed > $state/update_stashed
 
 		echo "master $local" >> $stack
 		echo "$local $old_head" >> $stack
