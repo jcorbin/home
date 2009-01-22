@@ -44,6 +44,20 @@ class Config:
 				r.append(h)
 		return r
 
+	def matchHost(self, name):
+		r=[]
+		for h in self.hosts:
+			if h.match(name):
+				r.append(h)
+		return r
+
+	def hostOption(self, host, opt):
+		hosts=self.matchHost(host)
+		for h in hosts:
+			if opt in h.opt:
+				return h.opt[opt]
+		return None
+
 class ConfigHost:
 	def __init__(self, spec, opt):
 		self.spec = spec
