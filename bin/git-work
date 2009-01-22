@@ -79,7 +79,7 @@ USAGE="[list]
    or: git work update [<topic>]
    or: git work on <topic>
    or: git work log [<topic>]
-   or: git work merge|squash [<commitsh>]
+   or: git work merge|squash [<commitsh=HEAD>]
    or: git work continue|abort"
 LONG_USAGE="Commands
     list      without a command or when command is 'list', shortcut for branch -v currently
