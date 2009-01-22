@@ -3,6 +3,14 @@ from __future__ import with_statement
 import os
 import re
 
+def hostSpecificitySort(a,b):
+	la=len(a.spec)
+	lb=len(b.spec)
+	if lb == la:
+		return cmp(a.name, b.name)
+	else:
+		return cmp(lb, la)
+
 class Config:
 	System = '/etc/ssh/ssh_config'
 	User = os.path.expanduser('~/.ssh/config')
@@ -49,6 +57,7 @@ class Config:
 		for h in self.hosts:
 			if h.match(name):
 				r.append(h)
+		r.sort(hostSpecificitySort)
 		return r
 
 	def hostOption(self, host, opt):
