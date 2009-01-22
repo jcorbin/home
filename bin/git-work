@@ -333,8 +333,17 @@ cmd_update() {
 		fi
 		echo $old_head > $state/old_head
 
-		echo "master $local" >> $stack
-		echo "$local $old_head" >> $stack
+		br=$(git symbolic-ref HEAD);
+		br=${br##*/}
+		while [ $(git config branch.$br.remote) = "." ]; do
+		 base=$(git config branch.$br.merge)
+		 base=${base##*/}
+		 echo $base $br >> $stack
+		 br=$base
+		done
+		tac $stack > $stack.new
+		rm $stack
+		mv $stack.new $stack
 	fi
 
 	while [ -f $stack ]; do
