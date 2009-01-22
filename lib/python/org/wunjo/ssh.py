@@ -66,8 +66,9 @@ class ConfigHost:
 					l=rNotMatch
 				else:
 					l=rMatch
-				rStar.sub('.*', w)
-				rQues.sub('.', w)
+				w=rStar.sub('.*', w)
+				w=rQues.sub('.', w)
+				l.append(w)
 
 			if len(rMatch) > 1:    rMatch='(?:'+')|(?:'.join(rMatch)+')'
 			elif len(rMatch) == 1: rMatch=rMatch[0]
