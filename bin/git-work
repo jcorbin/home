@@ -184,10 +184,11 @@ merge_topic() {
 			tip_name=$1
 			tip=$(git rev-parse $tip)
 		fi
-		echo $tip > $state/merge_topic_tip
-		echo $tip_name > $state/merge_topic_tip_name
 
 		merge=work-merge
+
+		echo $tip > $state/merge_topic_tip
+		echo $tip_name > $state/merge_topic_tip_name
 		echo $merge > $state/merge_work
 
 		if git rev-parse --verify -q $merge > /dev/null; then
@@ -228,10 +229,11 @@ cmd_setup() {
 
 cmd_on() {
 	topic=$1
-	if [ -z $1 ]; then
+	if [ -z "$topic" ]; then
 		echo "Missing topic argument" >&2
 		usage
 	fi
+	shift
 	require_local_branch
 	require_clean_tree
 	if ! git rev-parse --verify -q $topic >/dev/null; then
@@ -262,14 +264,14 @@ cmd_abort() {
 }
 
 cmd_merge() {
-	merge_topic $1
+	merge_topic $@
 	git checkout master
 	git merge $merge
 	git branch -D $merge
 }
 
 cmd_squash() {
-	merge_topic $1
+	merge_topic $@
 	if [ -f $SQUASH_MSG ]; then
 		rm -f $SQUASH_MSG;
 	fi
