@@ -23,7 +23,7 @@ if [ -z "$base" ]; then
 	fi
 
 	if [ $remote != "." ]; then
-		base=$remote/$(basename $base)
+		base=$remote/${base##*/}
 	fi
 fi
 
