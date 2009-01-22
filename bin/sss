@@ -96,8 +96,14 @@ def main():
 		if status == RUNNING:
 			print 'Running (pid=%s)' % pid
 		else:
-			print "Not running"
-			return 1
+			cp=cfg.hostOption(host, 'ControlPath')
+			cm=cfg.hostOption(host, 'ControlMaster')
+			if cp is not None and cm in ('auto', 'ask', 'autoask', 'yes'):
+				print "Not running"
+				return 1
+			else:
+				print "Not running or configured"
+				return 2
 	else:
 		syntax()
 
