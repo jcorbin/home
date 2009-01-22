@@ -77,7 +77,7 @@ set -e
 USAGE="[list]
    or: git work setup
    or: git work update [<topic>]
-   or: git work on <topic>
+   or: git work on <topic> [<base=local>]
    or: git work log [<topic>]
    or: git work merge|squash [<commitsh=HEAD>]
    or: git work continue|abort"
@@ -237,7 +237,11 @@ cmd_on() {
 	require_local_branch
 	require_clean_tree
 	if ! git rev-parse --verify -q $topic >/dev/null; then
-		setup_topic $topic $local
+		if [ -n "$1" ]; then
+			setup_topic $topic $1
+		else
+			setup_topic $topic $local
+		fi
 	fi
 	git checkout $topic
 	if [ -x $GIT_DIR/hooks/work-topic-change ]; then
