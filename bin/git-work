@@ -80,6 +80,7 @@ USAGE="[list]
    or: git work on <topic> [<base=local>]
    or: git work log [<topic>]
    or: git work merge|squash [<commitsh=HEAD>]
+   or: git work merge|squash <from> <to>
    or: git work continue|abort"
 LONG_USAGE="Commands
     list      without a command or when command is 'list', shortcut for branch -v currently
@@ -164,6 +165,7 @@ merge_topic() {
 		tip=$(cat $state/merge_topic_tip || true)
 		tip_name=$(cat $state/merge_topic_tip_name || true)
 		merge=$(cat $state/merge_work || true)
+		upstream=$(cat $state/merge_topic_upstream || true)
 		if [ -z "$tip" ] || [ -z "$tip_name" ] || [ -z "$merge" ]; then
 			die "git work $cmd: incomplete merge_topic state"
 		fi
@@ -175,7 +177,13 @@ merge_topic() {
 	else
 		[ -n "$rebase_state" ] && die "git work $cmd: rebase in progress"
 
-		tip=$1
+		if [ -z "$2" ]; then
+			tip=$1
+		else
+			upstream=$1
+			tip=$2
+		fi
+
 		if [ -z "$tip" ]; then
 			tip=$(git rev-parse HEAD)
 			tip_name=$(git symbolic-ref HEAD 2>/dev/null || git name-rev --always --name-only HEAD)
@@ -185,10 +193,18 @@ merge_topic() {
 			tip=$(git rev-parse $tip)
 		fi
 
+		if [ -z "$upstream" ]; then
+			upstream=$(git config branch.$tip_name.merge 2>/dev/null)
+			if [ $? -ne 0 ] || [ -z "$upstream" ]; then
+				upstream=$local
+			fi
+		fi
+
 		merge=work-merge
 
 		echo $tip > $state/merge_topic_tip
 		echo $tip_name > $state/merge_topic_tip_name
+		echo $upstream > $state/merge_topic_upstream
 		echo $merge > $state/merge_work
 
 		if git rev-parse --verify -q $merge > /dev/null; then
@@ -196,7 +212,7 @@ merge_topic() {
 		fi
 
 		git checkout --no-track -b $merge $tip
-		if ! git rebase --onto master $local $merge; then
+		if ! git rebase --onto master $upstream $merge; then
 			rebase_check
 			[ -n "$rebase_state" ] || die "git work $cmd: rebase failed, you get to keep both pieces"
 		else
