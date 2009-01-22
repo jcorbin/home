@@ -23,6 +23,20 @@ case $REMOTE in *:*)
 	;;
 esac
 
+sss=$(which sss 2>/dev/null)
+if [ -n "$sss" ] && [ $? -eq 0 ]; then
+	$sss $REMOTE status >/dev/null
+	if [ $? -eq 1 ]; then
+		echo -n "Opening master channel to $REMOTE..."
+		sss $REMOTE start
+		if [ $? -ne 0 ]; then
+			echo "failed."
+			exit 1
+		fi
+		echo "done."
+	fi
+fi
+
 CMD="ssh -t $REMOTE"
 [ ! -z "$USERNAME" ] && CMD="$CMD -l $USERNAME"
 [ ! -z "$PORT" ] && CMD="$CMD -p $PORT"
