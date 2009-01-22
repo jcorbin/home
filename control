@@ -266,12 +266,8 @@ case $1 in
 		}
 
 		# Dirs
-		for dir in lib bin; do
-			for ENT in $dir/*; do
-				if [ -f $ENT ]; then
-					diffent $ENT $HOME/$ENT
-				fi
-			done
+		for ENT in $(find lib bin -type f); do
+			diffent $ENT $HOME/$ENT
 		done
 
 		# Dot Files
