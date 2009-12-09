@@ -64,8 +64,8 @@ map ; ::
 set virtualedit=all
 
 set expandtab
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 
 set foldmethod=indent
 set swapsync=
