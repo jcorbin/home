@@ -63,7 +63,7 @@ map ; ::
 
 set virtualedit=all
 
-set noexpandtab
+set expandtab
 set tabstop=2
 set shiftwidth=2
 
