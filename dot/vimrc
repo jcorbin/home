@@ -41,7 +41,10 @@ if has("gui_running")
 	"   r - right scroll always
 	set guioptions=aceimgr
 	set guiheadroom=0
-	colorscheme moria
+endif
+
+if has("gui_running") || $TERM =~ '256'
+	colorscheme inkpot
 else
 	colorscheme desert
 endif
