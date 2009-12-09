@@ -25,13 +25,14 @@ zgit_precmd_hook() {
 zgit_info_update() {
 	zgit_info=()
 
-	local gitdir=$(git rev-parse --git-dir 2>/dev/null)
+	local gitdir="$(git rev-parse --git-dir 2>/dev/null)"
 	if [ $? -ne 0 ] || [ -z "$gitdir" ]; then
 		return
 	fi
 
 	zgit_info[dir]=$gitdir
 	zgit_info[bare]=$(git rev-parse --is-bare-repository)
+	zgit_info[inwork]=$(git rev-parse --is-inside-work-tree)
 }
 
 zgit_isgit() {
@@ -39,6 +40,15 @@ zgit_isgit() {
 		return 1
 	else
 		return 0
+	fi
+}
+
+zgit_inworktree() {
+	zgit_isgit || return
+	if [ "$zgit_info[inwork]" = "true" ]; then
+		return 0
+	else
+		return 1
 	fi
 }
 
@@ -199,19 +209,20 @@ zgit_svnhead() {
 
 zgit_rebaseinfo() {
 	zgit_isgit || return 1
-	dotest=$zgit_info[dir]/.dotest-merge
-
-	if ! [ -d $dotest ]; then
-		if [ -d .dotest ]; then
-			dotest=.dotest
-		else
-			return 1
-		fi
+	if [ -d $zgit_info[dir]/rebase-merge ]; then
+		dotest=$zgit_info[dir]/rebase-merge
+	elif [ -d $zgit_info[dir]/.dotest-merge ]; then
+		dotest=$zgit_info[dir]/.dotest-merge
+	elif [ -d .dotest ]; then
+		dotest=.dotest
+	else
+		return 1
 	fi
 
 	zgit_info[dotest]=$dotest
 
 	zgit_info[rb_onto]=$(cat "$dotest/onto")
+	zgit_info[rb_upstream]=$(cat "$dotest/upstream")
 	if [ -f "$dotest/orig-head" ]; then
 		zgit_info[rb_head]=$(cat "$dotest/orig-head")
 	elif [ -f "$dotest/head" ]; then

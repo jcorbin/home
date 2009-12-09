@@ -1,7 +1,5 @@
 # wunjo prompt theme
 
-setopt promptsubst
-
 autoload -U zgitinit
 zgitinit
 
@@ -13,42 +11,10 @@ prompt_wunjo_help () {
 EOF
 }
 
-
-typeset -A colorcode
-colorcode[black]=0
-colorcode[red]=1
-colorcode[green]=2
-colorcode[yellow]=3
-colorcode[blue]=4
-colorcode[magenta]=5
-colorcode[cyan]=6
-colorcode[white]=7
-colorcode[default]=9
-colorcode[k]=$colorcode[black]
-colorcode[r]=$colorcode[red]
-colorcode[g]=$colorcode[green]
-colorcode[y]=$colorcode[yellow]
-colorcode[b]=$colorcode[blue]
-colorcode[m]=$colorcode[magenta]
-colorcode[c]=$colorcode[cyan]
-colorcode[w]=$colorcode[white]
-colorcode[.]=$colorcode[default]
-
-typeset -A attcode
-attcode[none]=00
-attcode[bold]=01
-attcode[faint]=02
-attcode[standout]=03
-attcode[underline]=04
-attcode[blink]=05
-attcode[reverse]=07
-attcode[conceal]=08
-attcode[normal]=22
-attcode[no-standout]=23
-attcode[no-underline]=24
-attcode[no-blink]=25
-attcode[no-reverse]=27
-attcode[no-conceal]=28
+revstring() {
+	git describe --always $1 2>/dev/null ||
+	git rev-parse --short $1 2>/dev/null
+}
 
 coloratom() {
 	local off=$1 atom=$2
@@ -81,6 +47,42 @@ prompt_wunjo_setup() {
 	else
 		verbose=1
 	fi
+
+	typeset -A colorcode
+	colorcode[black]=0
+	colorcode[red]=1
+	colorcode[green]=2
+	colorcode[yellow]=3
+	colorcode[blue]=4
+	colorcode[magenta]=5
+	colorcode[cyan]=6
+	colorcode[white]=7
+	colorcode[default]=9
+	colorcode[k]=$colorcode[black]
+	colorcode[r]=$colorcode[red]
+	colorcode[g]=$colorcode[green]
+	colorcode[y]=$colorcode[yellow]
+	colorcode[b]=$colorcode[blue]
+	colorcode[m]=$colorcode[magenta]
+	colorcode[c]=$colorcode[cyan]
+	colorcode[w]=$colorcode[white]
+	colorcode[.]=$colorcode[default]
+
+	typeset -A attcode
+	attcode[none]=00
+	attcode[bold]=01
+	attcode[faint]=02
+	attcode[standout]=03
+	attcode[underline]=04
+	attcode[blink]=05
+	attcode[reverse]=07
+	attcode[conceal]=08
+	attcode[normal]=22
+	attcode[no-standout]=23
+	attcode[no-underline]=24
+	attcode[no-blink]=25
+	attcode[no-reverse]=27
+	attcode[no-conceal]=28
 
 	local -A pc
 	pc[default]='default'
@@ -156,25 +158,31 @@ prompt_wunjo_scm_status() {
 	pc=(${(kv)wunjo_prompt_colors})
 
 	head=$(zgit_head)
-	gitcommit=$(git rev-parse --short $head 2>/dev/null)
+	gitcommit=$(revstring $head)
 
 	local -a commits
 
 	if zgit_rebaseinfo; then
-		onto_commit=$(git rev-parse --short $zgit_info[rb_onto])
-		onto_name=$(git name-rev --name-only $zgit_info[rb_onto])
+		orig_commit=$(revstring $zgit_info[rb_head])
 		orig_name=$(git name-rev --name-only $zgit_info[rb_head])
-		orig_commit=$(git rev-parse --short $zgit_info[rb_head])
 		orig="$pc[scm_branch]$orig_name$pc[punc]($pc[scm_commitid]$orig_commit$pc[punc])"
+		onto_commit=$(revstring $zgit_info[rb_onto])
+		onto_name=$(git name-rev --name-only $zgit_info[rb_onto])
 		onto="$pc[scm_branch]$onto_name$pc[punc]($pc[scm_commitid]$onto_commit$pc[punc])"
 
-		commits+="rebasing $orig$pc[reset]"
-		commits+="onto $onto$pc[reset]"
+		if [ -n "$zgit_info[rb_upstream]" ] && [ $zgit_info[rb_upstream] != $zgit_info[rb_onto] ]; then
+			upstream_commit=$(revstring $zgit_info[rb_upstream])
+			upstream_name=$(git name-rev --name-only $zgit_info[rb_upstream])
+			upstream="$pc[scm_branch]$upstream_name$pc[punc]($pc[scm_commitid]$upstream_commit$pc[punc])"
+			commits+="rebasing $upstream$pc[reset]..$orig$pc[reset] onto $onto$pc[reset]"
+		else
+			commits+="rebasing $onto$pc[reset]..$orig$pc[reset]"
+		fi
 
 		local -a revs
 		revs=($(git rev-list $zgit_info[rb_onto]..HEAD))
 		if [ $#revs -gt 0 ]; then
-			commits+="$#revs commits in"
+			commits+="\n$#revs commits in"
 		fi
 
 		if [ -f $zgit_info[dotest]/message ]; then
@@ -185,41 +193,43 @@ prompt_wunjo_scm_status() {
 		commits+="on $pc[scm_branch]$head$pc[punc]($pc[scm_commitid]$gitcommit$pc[punc])$pc[reset]"
 		local track_merge=$(zgit_tracking_merge)
 		if [ -n "$track_merge" ]; then
-			local track_remote=$(zgit_tracking_remote)
-			local tracked=$(git rev-parse $track_merge)
+			if git rev-parse --verify -q $track_merge >/dev/null; then
+				local track_remote=$(zgit_tracking_remote)
+				local tracked=$(revstring $track_merge 2>/dev/null)
 
-			local -a revs
-			revs=($(git rev-list --reverse $track_merge..HEAD))
-			if [ $#revs -gt 0 ]; then
-				local base=$(git rev-parse $revs[1]~1)
-				local base_name=$(git name-rev --name-only $base)
-				local base_short=$(git rev-parse --short $base)
-				local word_commits
-				if [ $#revs -gt 1 ]; then
-					word_commits='commits'
-				else
-					word_commits='commit'
+				local -a revs
+				revs=($(git rev-list --reverse $track_merge..HEAD))
+				if [ $#revs -gt 0 ]; then
+					local base=$(revstring $revs[1]~1)
+					local base_name=$(git name-rev --name-only $base)
+					local base_short=$(revstring $base)
+					local word_commits
+					if [ $#revs -gt 1 ]; then
+						word_commits='commits'
+					else
+						word_commits='commit'
+					fi
+
+					local conj="since"
+					if [[ "$base" == "$tracked" ]]; then
+						conj+=" tracked"
+						tracked=
+					fi
+					commits+="$#revs $word_commits $conj $pc[scm_branch]$base_name$pc[punc]($pc[scm_commitid]$base_short$pc[punc])$pc[reset]"
 				fi
 
-				local conj="since"
-				if [[ "$base" == "$tracked" ]]; then
-					conj+=" tracked"
-					tracked=
+				if [ -n "$tracked" ]; then
+					local track_name=$track_merge
+					if [[ $track_remote == "." ]]; then
+						track_name=${track_name##*/}
+					fi
+					tracked=$(revstring $tracked)
+					commits+="tracking $pc[scm_branch]$track_name$pc[punc]"
+					if [[ "$tracked" != "$gitcommit" ]]; then
+						commits[$#commits]+="($pc[scm_commitid]$tracked$pc[punc])"
+					fi
+					commits[$#commits]+="$pc[reset]"
 				fi
-				commits+="$#revs $word_commits $conj $pc[scm_branch]$base_name$pc[punc]($pc[scm_commitid]$base_short$pc[punc])$pc[reset]"
-			fi
-
-			if [ -n "$tracked" ]; then
-				local track_name=$track_merge
-				if [[ $track_remote == "." ]]; then
-					track_name=${track_name##*/}
-				fi
-				tracked=$(git rev-parse --short $tracked)
-				commits+="tracking $pc[scm_branch]$track_name$pc[punc]"
-				if [[ "$tracked" != "$gitcommit" ]]; then
-					commits[$#commits]+="($pc[scm_commitid]$tracked$pc[punc])"
-				fi
-				commits[$#commits]+="$pc[reset]"
 			fi
 		fi
 	fi
@@ -227,6 +237,7 @@ prompt_wunjo_scm_status() {
 	gitsvn=$(git rev-parse --verify -q --short git-svn)
 	if [ $? -eq 0 ]; then
 		gitsvnrev=$(zgit_svnhead $gitsvn)
+		gitsvn=$(revstring $gitsvn)
 		if [ -n "$gitsvnrev" ]; then
 			local svninfo=''
 			local -a revs
@@ -252,7 +263,7 @@ prompt_wunjo_scm_branch() {
 
 	echo -n "$pc[punc]:$pc[scm_branch]$(zgit_head)"
 
-	if ! zgit_isbare; then
+	if zgit_inworktree; then
 		if ! zgit_isindexclean; then
 			echo -n "$pc[scm_status_staged]+"
 		fi
