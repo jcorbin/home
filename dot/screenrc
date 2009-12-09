@@ -22,6 +22,8 @@
 # SCREEN SETTINGS
 # ---------------------------------------------------------------------------
 
+escape ^uu
+
 startup_message off
 nethack on
 
@@ -103,7 +105,7 @@ defutf8 on
 # Set caption in the last line of screen:
 caption always "%{Gk}%H %{w.}%-Lw%{Y.}%50>%n%f* %t%{-}%{w.}%+Lw %>%= %{c.}%Y-%m-%d %{B.}%0c %{R.}%l%{c.}"
 
-term screen
+term "screen-256color"
 
 # term screen-256color
 
