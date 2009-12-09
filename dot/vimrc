@@ -39,7 +39,7 @@ if has("gui_running")
 	"   m - menubar
 	"   g - grey out menu items
 	"   r - right scroll always
-	set guioptions=aceimgr
+	set guioptions=acgit
 	set guiheadroom=0
 endif
 
