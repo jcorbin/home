@@ -32,6 +32,7 @@ threads=0
 [alias]
 st=status
 br=branch
+brav=branch -av
 rebr=rewrite-branch
 brb=branch-base
 ci=commit
@@ -45,8 +46,26 @@ pack=repack -adlf
 doh=commit --amend
 clog=change-log
 cp=cherry-pick
+rb=rebase
+rbch=rebase-chain
 rc=rebase --continue
 ra=rebase --abort
 rs=rebase --skip
 sub=submodule
 fp=format-patch -n -M -C --find-copies-harder
+cn=clean -n
+cf=clean -f
+rem=remote
+remv=remote -v
+shbr=show-branch
+ch=cherry -v
+nrs=name-rev --stdin
+ol=log --pretty=oneline
+olg=log --pretty=oneline --graph
+olga=log --pretty=oneline --graph --all
+dc=diff --cached
+redo=reset HEAD^ --mixed
+cfp=cat-file -p
+rst=reset --hard
+[push]
+	default = tracking
