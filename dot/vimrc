@@ -1,8 +1,9 @@
 syntax on
 
-" Have Vim load indentation rules according to the detected filetype.
 if has("autocmd")
-  filetype indent on
+	" Have Vim load indentation rules according to the detected filetype.
+	filetype indent on
+	filetype plugin on
 endif
 
 set showcmd    " Show (partial) command in status line.
