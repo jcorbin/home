@@ -30,7 +30,7 @@ set list listchars=tab:^-,trail:_,extends:+,nbsp:.
 set background=dark
 
 if has("gui_running")
-	set guifont=DejaVu\ Sans\ Mono\ 6,Bitstream\ Vera\ Sans\ Mono\ 6
+	set guifont=Inconsolata\ Medium\ 9,Droid\ Sans\ Mono\ 9,DejaVu\ Sans\ Mono\ 9,Bitstream\ Vera\ Sans\ Mono\ 9
 	" guioptions:
 	"   a - autoselect
 	"   c - console dialogs
