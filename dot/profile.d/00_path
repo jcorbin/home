@@ -7,5 +7,6 @@ add_path_component()
     export PATH=$PATH:$1
 }
 
-for dir in $HOME/bin
+for dir in $HOME/bin \
+           /var/lib/gems/*/bin
 add_path_component $dir
