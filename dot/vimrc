@@ -75,5 +75,6 @@ set laststatus=2
 map <C-T> <Esc>:tabnew<CR>
 
 let xml_use_xhtml=1
+let g:tex_flavor='latex'
 
 " vim:set ts=2 sw=2 noexpandtab:
