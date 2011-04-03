@@ -75,10 +75,8 @@ setup-terminal-titles() {
 		fi
 	}
 
-	typeset -ga precmd_functions
-	typeset -ga preexec_functions
-	precmd_functions+='zsh_term_status_precmd'
-	preexec_functions+='zsh_term_status_preexec'
+	add-zsh-hook precmd zsh_term_status_precmd
+	add-zsh-hook preexec zsh_term_status_preexec
 }
 
 setup-terminal-titles
