@@ -67,5 +67,7 @@ dc=diff --cached
 redo=reset HEAD^ --mixed
 cfp=cat-file -p
 rst=reset --hard
+au=add --update
+
 [push]
 	default = tracking
