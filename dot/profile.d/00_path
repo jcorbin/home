@@ -1,6 +1,11 @@
 #!/bin/sh
 
-# Path
-if [ -d $HOME/bin ]; then
-	export PATH=$HOME/bin:$PATH
-fi
+add_path_component()
+{
+    [ -d $1 ] || return
+    echo $PATH | grep -Fq "$1" && return
+    export PATH=$PATH:$1
+}
+
+for dir in $HOME/bin
+add_path_component $dir
