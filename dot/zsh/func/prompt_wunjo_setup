@@ -12,7 +12,7 @@ EOF
 }
 
 revstring() {
-	git describe --always $1 2>/dev/null ||
+	git describe --tags --always $1 2>/dev/null ||
 	git rev-parse --short $1 2>/dev/null
 }
 
@@ -137,7 +137,7 @@ prompt_wunjo_setup() {
 	RPROMPT+=" $p_line"
 
 	export PROMPT RPROMPT
-	precmd_functions+='prompt_wunjo_precmd'
+	add-zsh-hook precmd prompt_wunjo_precmd
 }
 
 prompt_wunjo_precmd() {
