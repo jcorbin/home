@@ -18,9 +18,9 @@ set nobackup   " Don't keep a backup file
 set nohls      " no highlight while searching
 set ruler
 
-" Paste Toggling with <F11>
-map <F11> setenvpastemap
-set pastetoggle=<F11>
+" Paste Toggling with <F12>
+map <F12> setenvpastemap
+set pastetoggle=<F12>
 
 " Bind , to repeat last macro
 map , @@
