@@ -9,5 +9,5 @@ add_path_component()
 
 for dir in $HOME/bin \
            /var/lib/gems/*/bin \
-           /opt/mit-scheme/bin
-add_path_component $dir
+           /opt/mit-scheme/bin \
+; do add_path_component $dir; done
