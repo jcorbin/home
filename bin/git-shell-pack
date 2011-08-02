@@ -1,0 +1,55 @@
+#!/bin/bash
+set -e
+
+USAGE='<remote> [<branch> [<branch> [...]]]'
+LONG_USAGE='Builds a self-extracting pack file for the remote.
+
+If no branches are given, then all matching branches for the remote are exported.
+
+The shell script is output on stdout.'
+
+. "$(git --exec-path)/git-sh-setup"
+
+[ $# -lt 1 ] && usage
+
+remote=$1
+shift
+
+make_pack() {
+    cat <<EOSCRIPT
+#!/bin/bash
+set -x
+
+if [ \$# -lt 1 ]; then
+    echo "Usage \$0 <remote>"
+    echo
+    echo "Imports the encapsulated packed objects and updates the shipped refs"
+    echo "under the given remote."
+    exit 1
+fi
+
+remote=\$1
+
+base64 -d <<EOPACK | xz -d | git unpack-objects
+EOSCRIPT
+
+    git pack-objects --revs --stdout --all-progress | xz -c | base64
+
+    echo EOPACK
+    echo
+}
+
+if [ $# -eq 0 ]; then
+    branches=$(ls .git/refs/remotes/$remote)
+else
+    branches=$@
+fi
+
+for branch in $branches; do
+    git rev-list $remote/$branch..$branch
+done | sort | uniq | make_pack
+
+for branch in $branches; do
+    obj=$(git rev-parse $branch)
+    echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$branch $obj"
+done
