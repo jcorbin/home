@@ -43,7 +43,9 @@ if has("gui_running")
 	set guiheadroom=0
 endif
 
-if has("gui_running") || $TERM =~ '256'
+if has("gui_running")
+	colorscheme moria
+elseif $TERM =~ '256'
 	colorscheme inkpot
 else
 	colorscheme desert
