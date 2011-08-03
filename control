@@ -54,7 +54,7 @@ checkout() {
 			die "Invalid dot profile '$PROFILE'."
 		MANIFEST=$(cat profiles/$PROFILE)
 	else
-		MANIFEST=$(find dot lib bin -maxdepth 1 -mindepth 1)
+		MANIFEST=$(find dot bin -maxdepth 1 -mindepth 1)
 	fi
 
 	mkdir -p $TODIR || return 1
@@ -266,7 +266,7 @@ case $1 in
 		}
 
 		# Dirs
-		for ENT in $(find lib bin -type f); do
+		for ENT in $(find bin -type f); do
 			diffent $ENT $HOME/$ENT
 		done
 
