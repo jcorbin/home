@@ -7,7 +7,6 @@ add_path_component()
     export PATH=$PATH:$1
 }
 
-for dir in $HOME/bin \
-           /var/lib/gems/*/bin \
-           /opt/mit-scheme/bin \
-; do add_path_component $dir; done
+add_path_component $HOME/bin
+add_path_component /var/lib/gems/*/bin
+add_path_component /opt/mit-scheme/bin
