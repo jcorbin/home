@@ -56,8 +56,6 @@ let perl_extended_vars = 1
 " au BufWritePre * :normal mz:%s/ *$//:normal 'z
 " augroup END
 
-map ; ::
-
 set virtualedit=all
 
 set expandtab
