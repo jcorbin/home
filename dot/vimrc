@@ -65,7 +65,7 @@ set shiftwidth=4
 set foldmethod=indent
 set swapsync=
 set modeline
-set nu
+set number
 set laststatus=2
 
 " C-t for new tab
