@@ -22,9 +22,6 @@ set ruler
 map <F12> setenvpastemap
 set pastetoggle=<F12>
 
-" Bind , to repeat last macro
-map , @@
-
 " Show tabs, trailing spaces, and line wraps
 set list listchars=tab:^-,trail:_,extends:+,nbsp:.
 set background=dark
