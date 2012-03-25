@@ -3,6 +3,8 @@ set -e
 set -x
 
 if [ "$1" = "inner" ]; then
+    session=${2:-awesome}
+
     # Launch dbus if not started
     if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
        eval $(dbus-launch --sh-syntax --exit-with-session)
@@ -20,7 +22,7 @@ if [ "$1" = "inner" ]; then
 
     xterm&
 
-    exec awesome
+    exec $session
 fi
 
 exec ck-launch-session ssh-agent $0 inner "$@"
