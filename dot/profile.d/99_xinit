@@ -5,5 +5,12 @@ if [ -z "$DISPLAY" ]; then
         /dev/tty1)
             exec xinit
             ;;
+        /dev/tty?)
+            echo -n "Launch X Session [Y/n]? "
+            read yn
+            if [ -z "$yn" ] || [[ "$yn" = Y* ]] || [[ "$yn" = y* ]]; then
+                exec xinit
+            fi
+            ;;
     esac
 fi
