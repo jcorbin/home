@@ -1,6 +1,0 @@
-#!/bin/sh
-
-# SSH
-if [ -e /usr/lib/openssh/gnome-ssh-askpass ]; then
-	export SSH_ASKPASS=/usr/lib/openssh/gnome-ssh-askpass
-fi
