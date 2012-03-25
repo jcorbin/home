@@ -23,4 +23,4 @@ if [ "$1" = "inner" ]; then
     exec awesome
 fi
 
-exec ck-launch-session ssh-agent $0 inner
+exec ck-launch-session ssh-agent $0 inner "$@"
