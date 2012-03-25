@@ -65,8 +65,14 @@ set shiftwidth=4
 set foldmethod=indent
 set swapsync=
 set modeline
-set number
 set laststatus=2
+
+" Vim 7.3 introduced relativenumber
+if version >= 703
+  set relativenumber
+else
+  set number
+endif
 
 " C-t for new tab
 map <C-T> <Esc>:tabnew<CR>
