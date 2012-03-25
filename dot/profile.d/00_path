@@ -8,6 +8,7 @@ add_path_component()
 }
 
 add_path_component $HOME/bin
+add_path_component $HOME/.local/bin
 if [ -d /var/lib/gems ]; then
     add_path_component /var/lib/gems/*/bin
 fi
