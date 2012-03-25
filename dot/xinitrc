@@ -10,6 +10,9 @@ if [ "$1" = "inner" ]; then
        eval $(dbus-launch --sh-syntax --exit-with-session)
     fi
 
+    $session&
+    sessionpid=$!
+
     [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
     setxkbmap dvorak -option ctrl:nocaps
 
@@ -22,7 +25,7 @@ if [ "$1" = "inner" ]; then
 
     xterm&
 
-    exec $session
+    wait $sessionpid
 fi
 
 exec ck-launch-session ssh-agent $0 inner "$@"
