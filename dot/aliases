@@ -9,4 +9,7 @@ alias rm="rm -vi"
 alias mv="mv -vi"
 alias cp="cp -vi"
 
+alias chmod="chmod -c"
+alias chown="chown -c"
+
 alias ps="ps --forest -w"
