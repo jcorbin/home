@@ -23,8 +23,6 @@ if [ "$1" = "inner" ]; then
 
     nm-applet&
 
-    xterm&
-
     wait $sessionpid
 fi
 
