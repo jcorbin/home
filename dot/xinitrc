@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+set -x
+
+if [ "$1" = "inner" ]; then
+    [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+    setxkbmap dvorak -option ctrl:nocaps
+
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1&
+
+    #/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh&
+    /usr/bin/gnome-keyring-daemon --start --components=secrets,ssh&
+
+    nm-applet&
+
+    xterm&
+
+    exec awesome
+fi
+
+exec ck-launch-session dbus-launch ssh-agent $0 inner
