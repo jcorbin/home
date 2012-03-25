@@ -3,6 +3,11 @@ set -e
 set -x
 
 if [ "$1" = "inner" ]; then
+    # Launch dbus if not started
+    if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+       eval $(dbus-launch --sh-syntax --exit-with-session)
+    fi
+
     [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
     setxkbmap dvorak -option ctrl:nocaps
 
@@ -18,4 +23,4 @@ if [ "$1" = "inner" ]; then
     exec awesome
 fi
 
-exec ck-launch-session dbus-launch ssh-agent $0 inner
+exec ck-launch-session ssh-agent $0 inner
