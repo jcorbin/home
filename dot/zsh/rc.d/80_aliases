@@ -8,16 +8,8 @@ alias -g L='|less'
 alias -g G='| saneGrep'
 alias -g H='|head'
 
-alias ls="ls -Fhb --time-style=long-iso --color=auto"
-alias l=ls
-alias ll='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias mv='nocorrect mv -vi'
-alias cp='nocorrect cp -vi'
-alias rm='rm -vi'
-alias cl='clear'
-alias psaux='ps aux G'
+. ~/.aliases
+
 alias mkdir='nocorrect mkdir'
 alias gb='gitback'
 alias dirs='dirs -pv'

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+alias ls='ls -Fhb --time-style=long-iso --color=auto'
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+
+alias rm="rm -vi"
+alias mv="mv -vi"
+alias cp="cp -vi"
+
+alias cl='clear'
+alias psaux='ps aux | grep'
+alias ltail='less +F'
