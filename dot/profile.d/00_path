@@ -7,6 +7,8 @@ add_path_component()
     export PATH=$PATH:$1
 }
 
+add_path_component /sbin
+add_path_component /usr/sbin
 add_path_component $HOME/bin
 add_path_component $HOME/.local/bin
 if [ -d /var/lib/gems ]; then
