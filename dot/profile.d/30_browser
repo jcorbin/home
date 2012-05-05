@@ -2,7 +2,7 @@
 
 # Browser
 if [ -n "$DISPLAY" ]; then
-	export BROWSER="chromium-browser:firefox:opera:w3m:lynx"
+	export BROWSER="chromium:chromium-browser:firefox:opera:w3m:lynx"
 else
 	export BROWSER="w3m:lynx"
 fi
