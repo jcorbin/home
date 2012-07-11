@@ -51,10 +51,6 @@ if has("gui_running")
 endif
 
 
-let perl_include_pod = 1
-let perl_want_scope_in_variables = 1
-let perl_extended_vars = 1
-
 " augroup cleanup
 " au BufWritePre * :normal mz:%s/ *$//:normal 'z
 " augroup END
@@ -91,5 +87,9 @@ endif
 
 let xml_use_xhtml=1
 let g:tex_flavor='latex'
+
+let perl_include_pod = 1
+let perl_want_scope_in_variables = 1
+let perl_extended_vars = 1
 
 " vim:set ts=2 sw=2 noexpandtab:
