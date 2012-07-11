@@ -1,10 +1,6 @@
 syntax on
 
-if has("autocmd")
-	" Have Vim load indentation rules according to the detected filetype.
-	filetype indent on
-	filetype plugin on
-endif
+filetype plugin indent on
 
 set showcmd    " Show (partial) command in status line.
 set showmatch  " Show matching brackets.
