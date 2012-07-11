@@ -1,1 +1,12 @@
-.*.swp
+.*.sw?
+
+/*
+
+!bin/
+
+!.vim/
+.vim/undo
+
+!.zsh/
+
+!.profile.d
