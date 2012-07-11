@@ -14,6 +14,12 @@ set nobackup   " Don't keep a backup file
 set nohls      " no highlight while searching
 set ruler
 
+" persistent undo data
+set undodir=~/.vim/undo
+set undofile
+set undolevels=1000
+set undoreload=10000
+
 " Paste Toggling with <F12>
 map <F12> setenvpastemap
 set pastetoggle=<F12>
