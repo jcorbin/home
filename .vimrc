@@ -10,6 +10,7 @@ let mapleader=","
 set showcmd     " Show (partial) command in status line.
 set showmatch   " Show matching brackets.
 set mouse=a     " Enable mouse usage (all modes) in terminals
+set scrolloff=3 " Try to keep 3 lines after cursor
 set ruler
 
 " searching
