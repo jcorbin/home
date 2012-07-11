@@ -35,6 +35,7 @@ set list listchars=tab:^-,trail:_,extends:+,nbsp:.
 set background=dark
 
 if has("gui_running")
+	set cursorline " highlight the cursor's line
 	set guifont=Inconsolata\ Medium\ 9,Droid\ Sans\ Mono\ 9,DejaVu\ Sans\ Mono\ 9,Bitstream\ Vera\ Sans\ Mono\ 9
 	" guioptions:
 	"   a - autoselect
