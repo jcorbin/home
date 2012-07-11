@@ -50,6 +50,10 @@ if has("gui_running")
 	set guiheadroom=0
 endif
 
+if $TERM =~ 'xterm' || $TERM =~ 'screen'
+	set ttyfast
+endif
+
 set virtualedit=all
 
 set expandtab
