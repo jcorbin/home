@@ -49,13 +49,6 @@ if has("gui_running")
 	set guiheadroom=0
 endif
 
-if has("gui_running")
-	colorscheme moria
-elseif $TERM =~ '256'
-	colorscheme inkpot
-else
-	colorscheme desert
-endif
 
 let perl_include_pod = 1
 let perl_want_scope_in_variables = 1
@@ -85,6 +78,15 @@ endif
 
 " C-t for new tab
 map <C-T> <Esc>:tabnew<CR>
+
+" Determine colorscheme
+if has("gui_running")
+	colorscheme moria
+elseif $TERM =~ '256'
+	colorscheme inkpot
+else
+	colorscheme desert
+endif
 
 let xml_use_xhtml=1
 let g:tex_flavor='latex'
