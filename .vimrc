@@ -2,6 +2,9 @@ syntax on
 
 filetype plugin indent on
 
+" Really, who cares about Vi compat anymore...
+set nocompatible
+
 set showcmd    " Show (partial) command in status line.
 set showmatch  " Show matching brackets.
 set ignorecase " Do case insensitive matching
