@@ -14,6 +14,7 @@ set scrolloff=3 " Try to keep 3 lines after cursor
 set ruler
 
 " searching
+nnoremap <leader><space> :nohlsearch<cr>
 set ignorecase " Do case insensitive matching
 set smartcase  " Do smart case matching
 set incsearch  " Incremental search
