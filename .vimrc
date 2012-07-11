@@ -17,7 +17,7 @@ set ruler
 set ignorecase " Do case insensitive matching
 set smartcase  " Do smart case matching
 set incsearch  " Incremental search
-set nohls      " no highlight while searching
+set hlsearch   " highlight while searching
 
 " persistent undo data
 set undodir=~/.vim/undo
