@@ -1,3 +1,0 @@
-[submodule "zsh-git"]
-	path = zsh-git
-	url = git://github.com/jcorbin/zsh-git.git
