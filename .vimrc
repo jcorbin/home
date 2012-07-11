@@ -50,11 +50,6 @@ if has("gui_running")
 	set guiheadroom=0
 endif
 
-
-" augroup cleanup
-" au BufWritePre * :normal mz:%s/ *$//:normal 'z
-" augroup END
-
 set virtualedit=all
 
 set expandtab
