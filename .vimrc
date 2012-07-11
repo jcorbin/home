@@ -12,6 +12,7 @@ set showmatch   " Show matching brackets.
 set mouse=a     " Enable mouse usage (all modes) in terminals
 set scrolloff=3 " Try to keep 3 lines after cursor
 set ruler
+set nospell
 
 " searching
 nnoremap <leader><space> :nohlsearch<cr>
@@ -90,7 +91,5 @@ endif
 
 let xml_use_xhtml=1
 let g:tex_flavor='latex'
-
-set nospell
 
 " vim:set ts=2 sw=2 noexpandtab:
