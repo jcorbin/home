@@ -67,6 +67,8 @@ set swapsync=
 set modeline
 set laststatus=2
 
+nnoremap <F5> :GundoToggle<CR>
+
 " Vim 7.3 introduced relativenumber
 if version >= 703
   set relativenumber
