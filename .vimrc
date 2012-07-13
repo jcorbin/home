@@ -37,6 +37,9 @@ set pastetoggle=<F12>
 set list listchars=tab:^-,trail:_,extends:+,nbsp:.
 set background=dark
 
+" completion
+set wildmode=longest,list:longest
+
 if has("gui_running")
 	set cursorline " highlight the cursor's line
 	set guifont=Inconsolata\ Medium\ 9,Droid\ Sans\ Mono\ 9,DejaVu\ Sans\ Mono\ 9,Bitstream\ Vera\ Sans\ Mono\ 9
