@@ -23,4 +23,4 @@ if which tput &>/dev/null; then while true; do
 done; fi
 
 # prompt
-export PS1='\u@\h \w\$ '
+export PS1='\u@\h \w$(__git_ps1 " (%s)")\$ '
