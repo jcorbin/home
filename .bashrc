@@ -21,3 +21,6 @@ if which tput &>/dev/null; then while true; do
     # finally, fallback on vt100
     export TERM=vt100
 done; fi
+
+# prompt
+export PS1='\u@\h \w\$ '
