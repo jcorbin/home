@@ -1,5 +1,3 @@
-if [ -f ~/.profile ]; then
-	. ~/.profile
-fi
-
-. ~/.aliases
+[ -f /etc/bashrc ] && . /etc/bashrc
+[ -f ~/.profile ] && . ~/.profile
+[ -f ~/.aliases ] && . ~/.aliases
