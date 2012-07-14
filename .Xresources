@@ -1,4 +1,5 @@
 XTerm*termName: xterm-256color
+XTerm*scrollBar: false
 
 *background: #111111
 *foreground: #babdb6
