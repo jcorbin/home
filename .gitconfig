@@ -60,9 +60,6 @@ remv=remote -v
 shbr=show-branch
 ch=cherry -v
 nrs=name-rev --stdin
-ol=log --pretty=oneline
-olg=log --pretty=oneline --graph
-olga=log --pretty=oneline --graph --all
 dc=diff --cached
 redo=reset HEAD^ --mixed
 cfp=cat-file -p
