@@ -44,7 +44,6 @@ co=checkout
 coi=checkout-index
 pack=repack -Ad
 doh=commit --amend
-clog=change-log
 cp=cherry-pick
 rb=rebase
 rbi=rebase --autosquash -i
