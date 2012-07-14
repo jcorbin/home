@@ -3,6 +3,8 @@ set -e
 set -x
 
 if [ "$1" = "inner" ]; then
+    [ -z "$SSH_AUTH_SOCK" ] && exec ssh-agent $0 inner "$@"
+
     session=${2:-awesome}
 
     # Launch dbus if not started
@@ -27,7 +29,7 @@ if [ "$1" = "inner" ]; then
 fi
 
 if which ck-launch-session &>/dev/null; then
-    exec ck-launch-session ssh-agent $0 inner "$@"
+    exec ck-launch-session $0 inner "$@"
 else
-    exec ssh-agent $0 inner "$@"
+    exec $0 inner "$@"
 fi
