@@ -26,4 +26,8 @@ if [ "$1" = "inner" ]; then
     wait $sessionpid
 fi
 
-exec ck-launch-session ssh-agent $0 inner "$@"
+if which ck-launch-session &>/dev/null; then
+    exec ck-launch-session ssh-agent $0 inner "$@"
+else
+    exec ssh-agent $0 inner "$@"
+fi
