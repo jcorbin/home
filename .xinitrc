@@ -32,4 +32,6 @@ setxkbmap dvorak -option ctrl:nocaps
 
 nm-applet&
 
+xterm -e atmux&
+
 wait $sessionpid
