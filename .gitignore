@@ -11,3 +11,6 @@
 
 !.profile.d
 .vim/.netrwhist
+
+!.xinitrc
+!.xsession
