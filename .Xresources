@@ -1,4 +1,4 @@
-xterm.termName: xterm-256color
+XTerm*termName: xterm-256color
 
 *background: #111111
 *foreground: #babdb6
