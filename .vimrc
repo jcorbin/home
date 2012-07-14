@@ -91,6 +91,9 @@ else
 	colorscheme desert
 endif
 
+" autocompile coffee script files on write
+au BufWritePost *.coffee silent CoffeeMake!
+
 let xml_use_xhtml=1
 let g:tex_flavor='latex'
 
