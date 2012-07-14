@@ -47,7 +47,6 @@ doh=commit --amend
 cp=cherry-pick
 rb=rebase
 rbi=rebase --autosquash -i
-rbch=rebase-chain
 rc=rebase --continue
 ra=rebase --abort
 rs=rebase --skip
