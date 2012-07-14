@@ -69,6 +69,7 @@ cfp=cat-file -p
 rst=reset --hard
 au=add --update
 lg=log --graph --pretty=format:'%C(red)%h%Creset %C(green)%cd %Creset-%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset'
+rlg=reflog --pretty=format:'%C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold blue)<%gn>%Creset'
 
 [push]
 	default = tracking
