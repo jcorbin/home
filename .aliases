@@ -13,4 +13,3 @@ alias chmod="chmod -c"
 alias chown="chown -c"
 
 alias ps="ps --forest -w"
-alias dg="dotgit"
