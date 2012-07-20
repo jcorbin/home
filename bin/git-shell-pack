@@ -49,7 +49,11 @@ fi
 
 for ref in $refs; do
     rev=$(git rev-parse $ref)
-    git rev-list $remote/$ref..$rev
+    if git rev-parse --verify --quiet $remote/$ref; then
+        git rev-list $remote/$ref..$rev
+    else
+        git rev-list $rev
+    fi
 done | sort | uniq | make_pack
 
 for ref in $refs; do
