@@ -54,6 +54,7 @@ for ref in $refs; do
     else
         git rev-list $rev
     fi
+    git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $rev
 done | sort | uniq | make_pack
 
 for ref in $refs; do
