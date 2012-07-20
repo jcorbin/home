@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-USAGE='<remote> [<branch> [<branch> [...]]]'
+USAGE='<remote> [<ref> [<ref> [...]]]'
 LONG_USAGE='Builds a self-extracting pack file for the remote.
 
-If no branches are given, then all matching branches for the remote are exported.
+If no refs are given, then all matching refs for the remote are exported.
 
 The shell script is output on stdout.'
 
@@ -42,16 +42,16 @@ EOSCRIPT
 }
 
 if [ $# -eq 0 ]; then
-    branches=$(ls .git/refs/remotes/$remote)
+    refs=$(ls .git/refs/remotes/$remote)
 else
-    branches=$@
+    refs=$@
 fi
 
-for branch in $branches; do
-    git rev-list $remote/$branch..$branch
+for ref in $refs; do
+    git rev-list $remote/$ref..$ref
 done | sort | uniq | make_pack
 
-for branch in $branches; do
-    obj=$(git rev-parse $branch)
-    echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$branch $obj"
+for ref in $refs; do
+    obj=$(git rev-parse $ref)
+    echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $obj"
 done
