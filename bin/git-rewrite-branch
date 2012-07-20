@@ -8,4 +8,4 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
-git rebase -i $base $branch
+git rebase --autosquash -i $base $branch
