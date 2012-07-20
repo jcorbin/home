@@ -30,6 +30,9 @@ if has("persistent_undo")
 	set undodir=~/.vim/undo
 	set undofile
 	set undoreload=10000
+	if !isdirectory(&undodir) && exists("*mkdir")
+		call mkdir(&undodir, "p", 0700)
+	endif
 endif
 
 " Paste Toggling with <F12>
