@@ -7,11 +7,11 @@
 !.vim/
 .vim/undo
 .vim/doc/*
+.vim/.netrwhist
 
 !.zsh/
 
 !.profile.d
-.vim/.netrwhist
 
 !.xinitrc
 !.xsession
