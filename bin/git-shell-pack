@@ -15,8 +15,6 @@ The shell script is output on stdout.'
 remote=$1
 shift
 
-compress_prog=xz
-
 make_pack() {
     cat <<EOSCRIPT
 #!/bin/sh
@@ -32,10 +30,10 @@ fi
 
 remote=\$1
 
-base64 -d <<EOPACK | $compress_prog -d | git unpack-objects
+base64 -d <<EOPACK | git unpack-objects
 EOSCRIPT
 
-    git pack-objects --revs --stdout --all-progress | $compress_prog -c | base64
+    git pack-objects --revs --stdout --all-progress | base64
 
     echo EOPACK
     echo
