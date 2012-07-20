@@ -19,7 +19,7 @@ compress_prog=xz
 
 make_pack() {
     cat <<EOSCRIPT
-#!/bin/bash
+#!/bin/sh
 set -x
 
 if [ \$# -lt 1 ]; then
