@@ -24,11 +24,13 @@ set incsearch  " Incremental search
 set hlsearch   " highlight while searching
 set formatoptions=croq2lj
 
-" persistent undo data
-set undodir=~/.vim/undo
-set undofile
 set undolevels=1000
-set undoreload=10000
+" Persistent undo (vim 7.3+)
+if has("persistent_undo")
+	set undodir=~/.vim/undo
+	set undofile
+	set undoreload=10000
+endif
 
 " Paste Toggling with <F12>
 map <F12> setenvpastemap
