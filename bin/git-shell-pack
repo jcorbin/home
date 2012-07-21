@@ -45,6 +45,7 @@ make_pack()
         git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $src
 
         footer+="git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $src\n"
+        footer+="echo Imported $src to \$remote/$ref\n"
     done
 
     cat <<EOSCRIPT
