@@ -15,6 +15,7 @@ set mouse=a     " Enable mouse usage (all modes) in terminals
 set scrolloff=3 " Try to keep 3 lines after cursor
 set ruler
 set nospell
+set cursorline
 
 " searching
 nnoremap <leader><space> :nohlsearch<cr>
@@ -66,7 +67,6 @@ set background=dark
 set wildmode=longest,list:longest
 
 if has("gui_running")
-	set cursorline " highlight the cursor's line
 	set guifont=Inconsolata\ Medium\ 9,Droid\ Sans\ Mono\ 9,DejaVu\ Sans\ Mono\ 9,Bitstream\ Vera\ Sans\ Mono\ 9
 	" guioptions:
 	"   a - autoselect
