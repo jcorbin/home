@@ -71,12 +71,12 @@ EOSCRIPT
 command=$1
 shift
 
+[ $# -eq 0 ] && die 'Missing remote argument'
+remote=$1
+shift
+
 case "$command" in
 make)
-    [ $# -eq 0 ] && die 'Missing remote argument'
-    remote=$1
-    shift
-
     if [ $# -eq 0 ]; then
         refs=$(ls .git/refs/remotes/$remote)
     else
