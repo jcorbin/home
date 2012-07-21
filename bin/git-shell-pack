@@ -51,13 +51,13 @@ base64 -d <<EOPACK | git unpack-objects
 EOSCRIPT
 
     for ref in $refs; do
-        rev=$(git rev-parse $ref)
+        src=$(git rev-parse $ref)
         if from=$(git rev-parse $remote/$ref 2>/dev/null); then
-            git rev-list $from..$rev
+            git rev-list $from..$src
         else
-            git rev-list $rev
+            git rev-list $src
         fi
-        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $rev
+        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $src
     done | sort -u \
     | git pack-objects --revs --stdout --all-progress | base64
 
