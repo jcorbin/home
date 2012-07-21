@@ -15,8 +15,6 @@ The shell script is output on stdout.
 h,help        show the help
 "
 
-set -e
-
 . "$(git --exec-path)/git-sh-setup"
 
 while [ $# -gt 0 ]; do
@@ -27,6 +25,8 @@ while [ $# -gt 0 ]; do
         *) die "Unexpected option: $opt" ;;
     esac
 done
+
+set -e
 
 make_pack()
 {
