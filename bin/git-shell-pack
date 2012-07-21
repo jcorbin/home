@@ -34,7 +34,6 @@ set -e
 make_pack()
 {
     footer=$(mktemp)
-    revlist=$(mktemp)
     commits=""
 
     for ref in $refs; do
@@ -47,8 +46,6 @@ make_pack()
 
         echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $src" >> $footer
     done
-
-    git rev-list $commits >$revlist
 
     cat <<EOSCRIPT
 #!/bin/sh
@@ -65,13 +62,13 @@ fi
 remote=\$1
 
 base64 -d <<EOPACK | git unpack-objects
-$(sort -u $revlist | git pack-objects --revs --stdout --all-progress | base64)
+$(git rev-list $commits | git pack-objects --revs --stdout --all-progress | base64)
 EOPACK
 
 $(cat $footer)
 EOSCRIPT
 
-    rm $footer $revlist
+    rm $footer
 }
 
 [ $# -eq 0 ] && die 'Missing command argument'
