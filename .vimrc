@@ -22,6 +22,7 @@ set ignorecase " Do case insensitive matching
 set smartcase  " Do smart case matching
 set incsearch  " Incremental search
 set hlsearch   " highlight while searching
+nohlsearch
 set formatoptions=croq2lj
 
 set undolevels=1000
