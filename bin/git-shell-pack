@@ -3,7 +3,7 @@
 if [ $# -eq 0 ]; then
     set -- -h
 fi
-OPTS_SPEC="\
+OPTIONS_SPEC="\
 git shell-pack make <remote> [<ref> [<ref> [...]]]
 
 Builds a self-extracting pack file for the remote.
@@ -14,7 +14,6 @@ The shell script is output on stdout.
 --
 h,help        show the help
 "
-eval "$(echo "$OPTS_SPEC" | git rev-parse --parseopt -- "$@" || echo exit $?)"
 
 set -e
 
