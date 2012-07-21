@@ -35,15 +35,12 @@ pack_template="cat <<EOSCRIPT
 #!/bin/sh
 set -e
 
-if [ \\\$# -lt 1 ]; then
-    echo \"Usage \\\$0 <remote>\"
-    echo
-    echo 'Imports the encapsulated packed objects and updates the shipped refs'
-    echo 'under the given remote.'
+if [ \\\$# -ge 1 ]; then
+    remote=\\\$1
+elif ! remote=\\\$(git config shell-pack.remote); then
+    echo \"Must pass a remote to \\\$0, or set shell-pack.remote\" >&2
     exit 1
 fi
-
-remote=\\\$1
 
 base64 -d <<EOPACK | git unpack-objects
 \$pack_data
