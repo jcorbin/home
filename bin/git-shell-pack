@@ -33,6 +33,7 @@ set -e
 
 pack_template="cat <<EOSCRIPT
 #!/bin/sh
+set -e
 
 if [ \\\$# -lt 1 ]; then
     echo \"Usage \\\$0 <remote>\"
