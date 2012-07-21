@@ -63,7 +63,7 @@ for ref in $refs; do
         git rev-list $rev
     fi
     git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $rev
-done | sort | uniq \
+done | sort -u \
 | git pack-objects --revs --stdout --all-progress | base64
 
 echo EOPACK
