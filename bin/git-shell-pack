@@ -33,6 +33,21 @@ set -e
 
 make_pack()
 {
+    footer=$(mktemp)
+    revlist=$(mktemp)
+
+    for ref in $refs; do
+        src=$(git rev-parse $ref) || die "Invalid rev $ref"
+        if from=$(git rev-parse $remote/$ref 2>/dev/null); then
+            git rev-list $from..$src >>$revlist
+        else
+            git rev-list $src >>$revlist
+        fi
+        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $src
+
+        echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $src" >> $footer
+    done
+
     cat <<EOSCRIPT
 #!/bin/sh
 set -x
@@ -48,26 +63,13 @@ fi
 remote=\$1
 
 base64 -d <<EOPACK | git unpack-objects
+$(sort -u $revlist | git pack-objects --revs --stdout --all-progress | base64)
+EOPACK
+
+$(cat $footer)
 EOSCRIPT
 
-    for ref in $refs; do
-        src=$(git rev-parse $ref) || die "Invalid rev $ref"
-        if from=$(git rev-parse $remote/$ref 2>/dev/null); then
-            git rev-list $from..$src
-        else
-            git rev-list $src
-        fi
-        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $src
-    done | sort -u \
-    | git pack-objects --revs --stdout --all-progress | base64
-
-    echo EOPACK
-    echo
-
-    for ref in $refs; do
-        rev=$(git rev-parse $ref)
-        echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $rev"
-    done
+    rm $footer $revlist
 }
 
 [ $# -eq 0 ] && die 'Missing command argument'
