@@ -21,12 +21,12 @@ set -e
 . "$(git --exec-path)/git-sh-setup"
 
 while [ $# -gt 0 ]; do
-	opt="$1"
-	shift
-	case "$opt" in
-		--) break ;;
-		*) die "Unexpected option: $opt" ;;
-	esac
+    opt="$1"
+    shift
+    case "$opt" in
+        --) break ;;
+        *) die "Unexpected option: $opt" ;;
+    esac
 done
 
 remote=$1
