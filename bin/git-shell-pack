@@ -38,8 +38,7 @@ else
     refs=$@
 fi
 
-make_pack() {
-    cat <<EOSCRIPT
+cat <<EOSCRIPT
 #!/bin/sh
 set -x
 
@@ -56,12 +55,6 @@ remote=\$1
 base64 -d <<EOPACK | git unpack-objects
 EOSCRIPT
 
-    git pack-objects --revs --stdout --all-progress | base64
-
-    echo EOPACK
-    echo
-}
-
 for ref in $refs; do
     rev=$(git rev-parse $ref)
     if from=$(git rev-parse $remote/$ref 2>/dev/null); then
@@ -70,7 +63,11 @@ for ref in $refs; do
         git rev-list $rev
     fi
     git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $rev
-done | sort | uniq | make_pack
+done | sort | uniq \
+| git pack-objects --revs --stdout --all-progress | base64
+
+echo EOPACK
+echo
 
 for ref in $refs; do
     rev=$(git rev-parse $ref)
