@@ -43,7 +43,7 @@ fun! <SID>X(a)
 endfun
 
 if ! exists("g:inkpot_black_background")
-    let g:inkpot_black_background = 1
+    let g:inkpot_black_background = 0
 endif
 
 if has("gui_running")
@@ -56,18 +56,18 @@ if has("gui_running")
     hi CursorLine         guibg=#2e2e37
 
     hi IncSearch      gui=BOLD   guifg=#303030   guibg=#cd8b60
-    hi Search         gui=NONE   guifg=#303030   guibg=#cd8b60
+    hi Search         gui=NONE   guifg=#303030   guibg=#ad7b57
     hi ErrorMsg       gui=BOLD   guifg=#ffffff   guibg=#ce4e4e
     hi WarningMsg     gui=BOLD   guifg=#ffffff   guibg=#ce8e4e
     hi ModeMsg        gui=BOLD   guifg=#7e7eae   guibg=NONE
     hi MoreMsg        gui=BOLD   guifg=#7e7eae   guibg=NONE
     hi Question       gui=BOLD   guifg=#ffcd00   guibg=NONE
 
-    hi StatusLine     gui=BOLD   guifg=#b9b9b9   guibg=#202028
-    hi User1          gui=BOLD   guifg=#00ff8b   guibg=#202028
-    hi User2          gui=BOLD   guifg=#7070a0   guibg=#202028
-    hi StatusLineNC   gui=NONE   guifg=#b9b9b9   guibg=#202028
-    hi VertSplit      gui=NONE   guifg=#b9b9b9   guibg=#202028
+    hi StatusLine     gui=BOLD   guifg=#b9b9b9   guibg=#3e3e5e
+    hi User1          gui=BOLD   guifg=#00ff8b   guibg=#3e3e5e
+    hi User2          gui=BOLD   guifg=#7070a0   guibg=#3e3e5e
+    hi StatusLineNC   gui=NONE   guifg=#b9b9b9   guibg=#3e3e5e
+    hi VertSplit      gui=NONE   guifg=#b9b9b9   guibg=#3e3e5e
 
     hi WildMenu       gui=BOLD   guifg=#eeeeee   guibg=#6e6eaf
 
@@ -85,11 +85,11 @@ if has("gui_running")
     hi lCursor        gui=NONE   guifg=#404040   guibg=#8fff8b
     hi CursorIM       gui=NONE   guifg=#404040   guibg=#8b8bff
 
-    hi Folded         gui=NONE   guifg=#cfcfcd   guibg=NONE
-    hi FoldColumn     gui=NONE   guifg=#8b8bcd   guibg=#101018
+    hi Folded         gui=NONE   guifg=#cfcfcd   guibg=#4b208f
+    hi FoldColumn     gui=NONE   guifg=#8b8bcd   guibg=#2e2e2e
 
     hi Directory      gui=NONE   guifg=#00ff8b   guibg=NONE
-    hi LineNr         gui=NONE   guifg=#8b8bcd   guibg=#101018
+    hi LineNr         gui=NONE   guifg=#8b8bcd   guibg=#2e2e2e
     hi NonText        gui=BOLD   guifg=#8b8bcd   guibg=NONE
     hi SpecialKey     gui=BOLD   guifg=#ab60ed   guibg=NONE
     hi Title          gui=BOLD   guifg=#af4f4b   guibg=NONE
@@ -97,7 +97,7 @@ if has("gui_running")
 
     hi Comment        gui=NONE   guifg=#cd8b00   guibg=NONE
     hi Constant       gui=NONE   guifg=#ffcd8b   guibg=NONE
-    hi String         gui=NONE   guifg=#ffcd8b   guibg=NONE
+    hi String         gui=NONE   guifg=#ffcd8b   guibg=#404040
     hi Error          gui=NONE   guifg=#ffffff   guibg=#6e2e2e
     hi Identifier     gui=NONE   guifg=#ff8bff   guibg=NONE
     hi Ignore         gui=NONE
@@ -142,13 +142,13 @@ if has("gui_running")
     endif
 else
     if ! g:inkpot_black_background
-        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . "NONE"
+        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(80)
     else
-        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . "NONE"
+        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(16)
     endif
 
     exec "hi IncSearch      cterm=BOLD   ctermfg=" . <SID>X(80) . " ctermbg=" . <SID>X(73)
-    exec "hi Search         cterm=NONE   ctermfg=" . <SID>X(80) . " ctermbg=" . <SID>X(73)
+    exec "hi Search         cterm=NONE   ctermfg=" . <SID>X(80) . " ctermbg=" . <SID>X(52)
     exec "hi ErrorMsg       cterm=BOLD   ctermfg=" . <SID>X(16) . " ctermbg=" . <SID>X(48)
     exec "hi WarningMsg     cterm=BOLD   ctermfg=" . <SID>X(16) . " ctermbg=" . <SID>X(68)
     exec "hi ModeMsg        cterm=BOLD   ctermfg=" . <SID>X(38) . " ctermbg=" . "NONE"
@@ -173,7 +173,7 @@ else
     exec "hi DiffDelete     cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(32)
     exec "hi DiffAdd        cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(20)
 
-    exec "hi Folded         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . "NONE"
+    exec "hi Folded         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(35)
     exec "hi FoldColumn     cterm=NONE   ctermfg=" . <SID>X(39) . " ctermbg=" . <SID>X(80)
 
     exec "hi Directory      cterm=NONE   ctermfg=" . <SID>X(28) . " ctermbg=" . "NONE"
@@ -185,7 +185,7 @@ else
 
     exec "hi Comment        cterm=NONE   ctermfg=" . <SID>X(52) . " ctermbg=" . "NONE"
     exec "hi Constant       cterm=NONE   ctermfg=" . <SID>X(73) . " ctermbg=" . "NONE"
-    exec "hi String         cterm=NONE   ctermfg=" . <SID>X(73) . " ctermbg=" . "NONE"
+    exec "hi String         cterm=NONE   ctermfg=" . <SID>X(73) . " ctermbg=" . <SID>X(81)
     exec "hi Error          cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(32)
     exec "hi Identifier     cterm=NONE   ctermfg=" . <SID>X(53) . " ctermbg=" . "NONE"
     exec "hi Ignore         cterm=NONE"
