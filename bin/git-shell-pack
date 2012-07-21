@@ -5,11 +5,15 @@ if [ $# -eq 0 ]; then
 fi
 OPTIONS_SPEC="\
 git shell-pack make <remote> [<ref> [<ref> [...]]]
+git shell-pack ack  <remote>
 
 'make' builds a self-extracting pack file for the remote.  If no refs are
        given, then all matching refs for the remote are exported.  The shell
        script is output on stdout.  The refs packed are recorded in
-       refs/remotes/for/<remote>/*.
+       refs/remotes/for/<remote>/* for:
+
+'ack' acknowledges reception of a pack by updating refs/remotes/* with the
+      revisions recorded by 'make' in refs/remotes/for/<remote>/*.
 --
 h,help        show the help
 "
@@ -83,6 +87,14 @@ make)
     fi
 
     make_pack
+    ;;
+ack)
+    git for-each-ref "refs/remotes/for/$remote/*" | while read rev type forref; do
+        ref=${forref##*/}
+        git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
+        git update-ref -d $forref $rev
+        echo "Acked $remote/$ref $rev"
+    done
     ;;
 *) die "Invalid command: $command" ;;
 esac
