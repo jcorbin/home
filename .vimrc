@@ -25,6 +25,18 @@ set hlsearch   " highlight while searching
 nohlsearch
 set formatoptions=croq2lj
 
+" fugitive bindings
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <Leader>gd :Gdiff<cr>
+nnoremap <Leader>g: :Git 
+nnoremap <Leader>g! :Gsplit! 
+nnoremap <Leader>gD :Gsplit! diff<cr>
+nnoremap <Leader>ga :Git add %<cr>
+nnoremap <Leader>gp :Git add --patch %<cr>
+nnoremap <Leader>gr :Git reset %<cr>
+
 set undolevels=1000
 " Persistent undo (vim 7.3+)
 if has("persistent_undo")
