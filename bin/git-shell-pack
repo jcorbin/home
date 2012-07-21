@@ -47,8 +47,8 @@ fi
 
 for ref in $refs; do
     rev=$(git rev-parse $ref)
-    if git rev-parse --verify --quiet $remote/$ref; then
-        git rev-list $remote/$ref..$rev
+    if from=$(git rev-parse $remote/$ref 2>/dev/null); then
+        git rev-list $from..$rev
     else
         git rev-list $rev
     fi
