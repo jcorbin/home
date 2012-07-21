@@ -56,6 +56,6 @@ for ref in $refs; do
 done | sort | uniq | make_pack
 
 for ref in $refs; do
-    obj=$(git rev-parse $ref)
-    echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $obj"
+    rev=$(git rev-parse $ref)
+    echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $rev"
 done
