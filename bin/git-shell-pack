@@ -4,7 +4,7 @@ if [ $# -eq 0 ]; then
     set -- -h
 fi
 OPTS_SPEC="\
-git shell-pack <remote> [<ref> [<ref> [...]]]
+git shell-pack make <remote> [<ref> [<ref> [...]]]
 
 Builds a self-extracting pack file for the remote.
 
@@ -68,14 +68,23 @@ EOSCRIPT
     done
 }
 
-[ $# -eq 0 ] && die 'Missing remote argument'
-remote=$1
+[ $# -eq 0 ] && die 'Missing command argument'
+command=$1
 shift
 
-if [ $# -eq 0 ]; then
-    refs=$(ls .git/refs/remotes/$remote)
-else
-    refs=$@
-fi
+case "$command" in
+make)
+    [ $# -eq 0 ] && die 'Missing remote argument'
+    remote=$1
+    shift
 
-make_pack
+    if [ $# -eq 0 ]; then
+        refs=$(ls .git/refs/remotes/$remote)
+    else
+        refs=$@
+    fi
+
+    make_pack
+    ;;
+*) die "Invalid command: $command" ;;
+esac
