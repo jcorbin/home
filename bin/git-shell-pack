@@ -35,18 +35,20 @@ make_pack()
 {
     footer=$(mktemp)
     revlist=$(mktemp)
+    commits=""
 
     for ref in $refs; do
         src=$(git rev-parse $ref) || die "Invalid rev $ref"
         if from=$(git rev-parse $remote/$ref 2>/dev/null); then
-            git rev-list $from..$src >>$revlist
-        else
-            git rev-list $src >>$revlist
+            commits+=" ^$from"
         fi
+        commits+=" $src"
         git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $src
 
         echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $src" >> $footer
     done
+
+    git rev-list $commits >$revlist
 
     cat <<EOSCRIPT
 #!/bin/sh
