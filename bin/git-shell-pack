@@ -32,6 +32,12 @@ done
 remote=$1
 shift
 
+if [ $# -eq 0 ]; then
+    refs=$(ls .git/refs/remotes/$remote)
+else
+    refs=$@
+fi
+
 make_pack() {
     cat <<EOSCRIPT
 #!/bin/sh
@@ -55,12 +61,6 @@ EOSCRIPT
     echo EOPACK
     echo
 }
-
-if [ $# -eq 0 ]; then
-    refs=$(ls .git/refs/remotes/$remote)
-else
-    refs=$@
-fi
 
 for ref in $refs; do
     rev=$(git rev-parse $ref)
