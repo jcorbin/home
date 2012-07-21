@@ -62,7 +62,8 @@ fi
 remote=\$1
 
 base64 -d <<EOPACK | git unpack-objects
-$(git rev-list $commits | git pack-objects --revs --stdout --all-progress | base64)
+$(git rev-list --objects $commits | cut -d\  -f1 \
+  | git pack-objects --stdout --all-progress | base64)
 EOPACK
 
 $(echo -ne $footer)
