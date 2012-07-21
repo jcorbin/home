@@ -31,6 +31,26 @@ done
 
 set -e
 
+pack_template="cat <<EOSCRIPT
+#!/bin/sh
+
+if [ \\\$# -lt 1 ]; then
+    echo \"Usage \\\$0 <remote>\"
+    echo
+    echo 'Imports the encapsulated packed objects and updates the shipped refs'
+    echo 'under the given remote.'
+    exit 1
+fi
+
+remote=\\\$1
+
+base64 -d <<EOPACK | git unpack-objects
+\$pack_data
+EOPACK
+
+\$(echo -ne \$footer)
+EOSCRIPT"
+
 make_pack()
 {
     footer=""
@@ -48,26 +68,10 @@ make_pack()
         footer+="echo Imported $src to \$remote/$ref\n"
     done
 
-    cat <<EOSCRIPT
-#!/bin/sh
+    pack_data=$(git rev-list --objects $commits | cut -d\  -f1 \
+      | git pack-objects --stdout --all-progress | base64)
 
-if [ \$# -lt 1 ]; then
-    echo "Usage \$0 <remote>"
-    echo
-    echo "Imports the encapsulated packed objects and updates the shipped refs"
-    echo "under the given remote."
-    exit 1
-fi
-
-remote=\$1
-
-base64 -d <<EOPACK | git unpack-objects
-$(git rev-list --objects $commits | cut -d\  -f1 \
-  | git pack-objects --stdout --all-progress | base64)
-EOPACK
-
-$(echo -ne $footer)
-EOSCRIPT
+    eval "$pack_template"
 }
 
 [ $# -eq 0 ] && die 'Missing command argument'
