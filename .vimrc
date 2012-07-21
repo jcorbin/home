@@ -35,6 +35,12 @@ if has("persistent_undo")
 	endif
 endif
 
+" save swap files in one place
+set directory=$HOME/.vim/swap/$HOSTNAME//
+if exists("*mkdir") && !isdirectory($HOME . "/.vim/swap/" . $HOSTNAME)
+	call mkdir($HOME . "/.vim/swap/" . $HOSTNAME, "p", 0700)
+endif
+
 " Paste Toggling with <F12>
 map <F12> setenvpastemap
 set pastetoggle=<F12>
