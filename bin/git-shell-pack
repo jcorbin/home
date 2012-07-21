@@ -29,16 +29,9 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-remote=$1
-shift
-
-if [ $# -eq 0 ]; then
-    refs=$(ls .git/refs/remotes/$remote)
-else
-    refs=$@
-fi
-
-cat <<EOSCRIPT
+make_pack()
+{
+    cat <<EOSCRIPT
 #!/bin/sh
 set -x
 
@@ -55,21 +48,33 @@ remote=\$1
 base64 -d <<EOPACK | git unpack-objects
 EOSCRIPT
 
-for ref in $refs; do
-    rev=$(git rev-parse $ref)
-    if from=$(git rev-parse $remote/$ref 2>/dev/null); then
-        git rev-list $from..$rev
-    else
-        git rev-list $rev
-    fi
-    git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $rev
-done | sort -u \
-| git pack-objects --revs --stdout --all-progress | base64
+    for ref in $refs; do
+        rev=$(git rev-parse $ref)
+        if from=$(git rev-parse $remote/$ref 2>/dev/null); then
+            git rev-list $from..$rev
+        else
+            git rev-list $rev
+        fi
+        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $rev
+    done | sort -u \
+    | git pack-objects --revs --stdout --all-progress | base64
 
-echo EOPACK
-echo
+    echo EOPACK
+    echo
 
-for ref in $refs; do
-    rev=$(git rev-parse $ref)
-    echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $rev"
-done
+    for ref in $refs; do
+        rev=$(git rev-parse $ref)
+        echo "git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $rev"
+    done
+}
+
+remote=$1
+shift
+
+if [ $# -eq 0 ]; then
+    refs=$(ls .git/refs/remotes/$remote)
+else
+    refs=$@
+fi
+
+make_pack
