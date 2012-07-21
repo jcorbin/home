@@ -6,11 +6,10 @@ fi
 OPTIONS_SPEC="\
 git shell-pack make <remote> [<ref> [<ref> [...]]]
 
-Builds a self-extracting pack file for the remote.
-
-If no refs are given, then all matching refs for the remote are exported.
-
-The shell script is output on stdout.
+'make' builds a self-extracting pack file for the remote.  If no refs are
+       given, then all matching refs for the remote are exported.  The shell
+       script is output on stdout.  The refs packed are recorded in
+       refs/remotes/for/<remote>/*.
 --
 h,help        show the help
 "
