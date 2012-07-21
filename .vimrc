@@ -26,6 +26,8 @@ set hlsearch   " highlight while searching
 nohlsearch
 set formatoptions=croq2lj
 
+nnoremap du :diffupdate<cr>
+
 " fugitive bindings
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
