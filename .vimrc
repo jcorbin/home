@@ -30,13 +30,13 @@ set formatoptions=croq2lj
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gs :Gstatus<cr>
-nnoremap <Leader>gd :Gdiff<cr>
-nnoremap <Leader>g: :Git 
-nnoremap <Leader>g! :Gsplit! 
-nnoremap <Leader>gD :Gsplit! diff<cr>
-nnoremap <Leader>ga :Git add %<cr>
-nnoremap <Leader>gp :Git add --patch %<cr>
-nnoremap <Leader>gr :Git reset %<cr>
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>g: :Git 
+nnoremap <leader>g! :Gsplit! 
+nnoremap <leader>gD :Gsplit! diff<cr>
+nnoremap <leader>ga :Git add %<cr>
+nnoremap <leader>gp :Git add --patch %<cr>
+nnoremap <leader>gr :Git reset %<cr>
 
 set undolevels=1000
 " Persistent undo (vim 7.3+)
