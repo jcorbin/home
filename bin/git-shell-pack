@@ -68,6 +68,7 @@ EOSCRIPT
     done
 }
 
+[ $# -eq 0 ] && die 'Missing remote argument'
 remote=$1
 shift
 
