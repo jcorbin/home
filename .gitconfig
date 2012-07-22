@@ -48,7 +48,6 @@ pack=repack -Ad
 doh=commit --amend
 cp=cherry-pick
 rb=rebase
-rbi=rebase -i
 rc=rebase --continue
 ra=rebase --abort
 rs=rebase --skip
