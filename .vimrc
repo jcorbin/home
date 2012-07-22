@@ -129,7 +129,7 @@ map <C-T> <Esc>:tabnew<CR>
 " Determine colorscheme
 "
 " NOTE: jellybeans also great choice, toss up for gui in lieu of moria and 256
-"       term in lieu of xoria; it's simila, but more subdued, at the cost of
+"       term in lieu of xoria; it's similar, but more subdued, at the cost of
 "       contrast in a few points.
 if has("gui_running")
 	colorscheme moria
