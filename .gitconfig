@@ -70,3 +70,5 @@ rlg=reflog --pretty=format:'%C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold b
 	date = relative
 [diff]
 	renames = copies
+[rebase]
+	stat = true
