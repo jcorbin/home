@@ -55,15 +55,16 @@ make_pack()
     commits=""
 
     for ref in $refs; do
+        refname=${ref##*/}
         src=$(git rev-parse $ref) || die "Invalid rev $ref"
-        if from=$(git rev-parse $remote/$ref 2>/dev/null); then
+        if from=$(git rev-parse $remote/$refname 2>/dev/null); then
             commits+=" ^$from"
         fi
         commits+=" $src"
-        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$ref $src
+        git update-ref -m 'Prepared Pack' refs/remotes/for/$remote/$refname $src
 
-        footer+="git update-ref -m 'Pack import' refs/remotes/\$remote/$ref $src\n"
-        footer+="echo Imported $src to \$remote/$ref\n"
+        footer+="git update-ref -m 'Pack import' refs/remotes/\$remote/$refname $src\n"
+        footer+="echo Imported $src to \$remote/$refname\n"
     done
 
     packsha=$(git rev-list --objects $commits | cut -d' '  -f1 \
