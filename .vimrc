@@ -88,6 +88,22 @@ endif
 
 set virtualedit=all
 
+function! ToggleNumbering()
+	if &number == 1
+		set nonumber
+		let s:lastnumber = "number"
+	elseif &relativenumber == 1
+		set norelativenumber
+		let s:lastnumber = "relativenumber"
+	elseif s:lastnumber == "number"
+		set number
+	else
+		set relativenumber
+	endif
+endfunction
+
+nnoremap <leader># :call ToggleNumbering()<cr>
+
 set autoindent
 set expandtab
 set tabstop=4
