@@ -35,6 +35,7 @@ nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>g: :Git 
 nnoremap <leader>g! :Gsplit! 
+nnoremap <leader>g\| :Gvsplit! 
 nnoremap <leader>gD :Gsplit! diff<cr>
 nnoremap <leader>ga :Git add %<cr>
 nnoremap <leader>gp :Git add --patch %<cr>
