@@ -86,7 +86,8 @@ shift
 case "$command" in
 make)
     if [ $# -eq 0 ]; then
-        refs=$(ls .git/refs/remotes/$remote)
+        refs=$(git for-each-ref --format='%(refname)' "refs/remotes/$remote/*" \
+            | sed -e "s~^refs/remotes/$remote~refs/heads~")
     else
         refs=$@
     fi
