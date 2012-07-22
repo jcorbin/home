@@ -31,24 +31,6 @@ done
 
 set -e
 
-pack_template="cat <<EOSCRIPT
-#!/bin/sh
-set -e
-
-if [ \\\$# -ge 1 ]; then
-    remote=\\\$1
-elif ! remote=\\\$(git config shell-pack.remote); then
-    echo \"Must pass a remote to \\\$0, or set shell-pack.remote\" >&2
-    exit 1
-fi
-
-base64 -d <<EOPACK | tar -xzC .git/objects
-\$pack_data
-EOPACK
-
-\$(echo -ne \$footer)
-EOSCRIPT"
-
 make_pack()
 {
     footer=""
@@ -72,7 +54,23 @@ make_pack()
     pack_data=$(tar -czC .git/objects pack/pack-$packsha.{idx,pack} | base64)
     rm -f .git/objects/pack/pack-$packsha.{idx,pack}
 
-    eval "$pack_template"
+    cat <<EOSCRIPT
+#!/bin/sh
+set -e
+
+if [ \$# -ge 1 ]; then
+    remote=\$1
+elif ! remote=\$(git config shell-pack.remote); then
+    echo "Must pass a remote to \$0, or set shell-pack.remote" >&2
+    exit 1
+fi
+
+base64 -d <<EOPACK | tar -xzC .git/objects
+$pack_data
+EOPACK
+
+$(echo -ne $footer)
+EOSCRIPT
 }
 
 [ $# -eq 0 ] && die 'Missing command argument'
