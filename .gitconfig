@@ -48,7 +48,7 @@ pack=repack -Ad
 doh=commit --amend
 cp=cherry-pick
 rb=rebase
-rbi=rebase --autosquash -i
+rbi=rebase -i
 rc=rebase --continue
 ra=rebase --abort
 rs=rebase --skip
@@ -77,3 +77,4 @@ rlg=reflog --pretty=briefreflog
 	renames = copies
 [rebase]
 	stat = true
+	autosquash=true
