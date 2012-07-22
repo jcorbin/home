@@ -94,7 +94,8 @@ make)
     make_pack
     ;;
 ack)
-    git for-each-ref "refs/remotes/for/$remote/*" | while read rev type forref; do
+    git for-each-ref --format='%(objectname) %(refname)' "refs/remotes/for/$remote/*" \
+    | while read rev forref; do
         ref=${forref##*/}
         git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
         git update-ref -d $forref $rev
