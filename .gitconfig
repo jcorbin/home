@@ -3,9 +3,6 @@
 email=jcorbin@wunjo.org
 name=Joshua T Corbin
 
-[help]
-format=html
-
 [core]
 # Use less as our pager, turn off the -c option if it was specified in $LESS,
 # also don't use -S as per git default
