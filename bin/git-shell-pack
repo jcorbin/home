@@ -4,8 +4,13 @@ if [ $# -eq 0 ]; then
     set -- -h
 fi
 OPTIONS_SPEC="\
+git shell-pack seed <remote> [<ref> [<ref> [...]]]
 git shell-pack make <remote> [<ref> [<ref> [...]]]
 git shell-pack ack  <remote>
+
+'seed' builds a self-extracting seed file for the remote.  A seed file is just
+       like a pack file, except it includes logic to run git-init and otherwise
+       sets things up.  If no refs are given, all refs/heads/* are used.
 
 'make' builds a self-extracting pack file for the remote.  If no refs are
        given, then all matching refs for the remote are exported.  The shell
@@ -76,6 +81,30 @@ $trailer
 EOSCRIPT
 }
 
+make_seed()
+{
+    head_branch=$(git symbolic-ref HEAD)
+    head_branch=${head_branch##*/}
+    their_remote=origin
+    header="\
+remote=$their_remote
+
+if [ \$# -gt 0 ]; then
+    [ -d \$1 ] || mkdir -p \$1
+    cd \$1
+fi
+
+git init
+git remote add \$remote null://shell-pack
+git config shell-pack.remote \$remote
+[ \$(git symbolic-ref HEAD) != refs/heads/$head_branch ] && git symbolic-ref HEAD refs/heads/$head_branch"
+
+    trailer="
+git update-ref -m 'Seed shell-pack import' refs/heads/$head_branch \$remote/$head_branch
+git checkout"
+    make_pack
+}
+
 [ $# -eq 0 ] && die 'Missing command argument'
 command=$1
 shift
@@ -85,6 +114,15 @@ remote=$1
 shift
 
 case "$command" in
+seed)
+    if [ $# -eq 0 ]; then
+        refs=$(git for-each-ref --format='%(refname)' 'refs/heads/*')
+    else
+        refs=$@
+    fi
+
+    make_seed
+    ;;
 make)
     if [ $# -eq 0 ]; then
         refs=$(git for-each-ref --format='%(refname)' "refs/remotes/$remote/*" \
