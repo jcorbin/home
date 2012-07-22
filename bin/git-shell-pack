@@ -33,6 +33,13 @@ set -e
 
 make_pack()
 {
+    [ -z "$header" ] && header="\
+if [ \$# -ge 1 ]; then
+    remote=\$1
+elif ! remote=\$(git config shell-pack.remote); then
+    echo \"Must pass a remote to \$0, or set shell-pack.remote\" >&2
+    exit 1
+fi"
     footer=""
     commits=""
 
@@ -58,12 +65,7 @@ make_pack()
 #!/bin/sh
 set -e
 
-if [ \$# -ge 1 ]; then
-    remote=\$1
-elif ! remote=\$(git config shell-pack.remote); then
-    echo "Must pass a remote to \$0, or set shell-pack.remote" >&2
-    exit 1
-fi
+$header
 
 base64 -d <<EOPACK | tar -xzC .git/objects
 $pack_data
