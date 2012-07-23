@@ -59,10 +59,8 @@ fi"
         footer+="echo Imported $src to \$remote/$refname\n"
     done
 
-    packsha=$(git rev-list --objects $commits | cut -d' '  -f1 \
-        | git pack-objects --all-progress .git/objects/pack/pack)
-    pack_data=$(tar -czC .git/objects pack/pack-$packsha.{idx,pack} | base64)
-    rm -f .git/objects/pack/pack-$packsha.{idx,pack}
+    pack_data=$(git rev-list --objects $commits | cut -d' '  -f1 \
+        | git pack-objects --all-progress --stdout | gzip -c | base64)
 
     cat <<EOSCRIPT
 #!/bin/sh
@@ -70,7 +68,7 @@ set -e
 
 $header
 
-base64 -d <<EOPACK | tar -xzC .git/objects
+base64 -d <<EOPACK | gzip -dc | git index-pack --stdin >/dev/null
 $pack_data
 EOPACK
 
