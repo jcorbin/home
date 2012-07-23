@@ -1,8 +1,6 @@
 #!/bin/bash
+[ $# -eq 0 ] && set -- -h
 
-if [ $# -eq 0 ]; then
-    set -- -h
-fi
 OPTIONS_SPEC="\
 git shell-pack seed <remote> [<ref> [<ref> [...]]]
 git shell-pack make <remote> [<ref> [<ref> [...]]]
