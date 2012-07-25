@@ -86,6 +86,11 @@ make_seed()
 {
     head_branch=$(git symbolic-ref HEAD)
     head_branch=${head_branch##*/}
+    for ref in $refs; do
+        [[ $ref == *:* ]] && ref=${ref#*:}
+        head_branch=${ref##*/}
+        break
+    done
     their_remote=origin
     header="\
 remote=$their_remote
