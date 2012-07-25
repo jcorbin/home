@@ -89,6 +89,7 @@ endif
 
 set virtualedit=all
 
+" line numbering
 function! ToggleNumbering()
 	if &number == 1
 		set nonumber
@@ -102,8 +103,12 @@ function! ToggleNumbering()
 		set relativenumber
 	endif
 endfunction
-
 nnoremap <leader># :call ToggleNumbering()<cr>
+if version >= 703
+  set relativenumber
+else
+  set number
+endif
 
 set autoindent
 set expandtab
@@ -116,13 +121,6 @@ set modeline
 set laststatus=2
 
 nnoremap <F5> :GundoToggle<CR>
-
-" Vim 7.3 introduced relativenumber
-if version >= 703
-  set relativenumber
-else
-  set number
-endif
 
 " C-t for new tab
 map <C-T> <Esc>:tabnew<CR>
