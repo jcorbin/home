@@ -24,7 +24,7 @@ set smartcase  " Do smart case matching
 set incsearch  " Incremental search
 set hlsearch   " highlight while searching
 nohlsearch
-set formatoptions=croq2lj
+"set formatoptions=croq2lj
 
 nnoremap du :diffupdate<cr>
 
