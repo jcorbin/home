@@ -47,8 +47,9 @@ fi"
     commits=""
 
     for ref in $refs; do
+        src=$ref
         refname=${ref##*/}
-        src=$(git rev-parse $ref) || die "Invalid rev $ref"
+        src=$(git rev-parse $src) || die "Invalid rev $src"
         if from=$(git rev-parse $remote/$refname 2>/dev/null); then
             commits+=" ^$from"
         fi
