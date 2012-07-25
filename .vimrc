@@ -11,7 +11,6 @@ let mapleader=","
 
 set showcmd     " Show (partial) command in status line.
 set showmatch   " Show matching brackets.
-set mouse=a     " Enable mouse usage (all modes) in terminals
 set scrolloff=3 " Try to keep 3 lines after cursor
 set ruler
 set nospell
@@ -88,6 +87,17 @@ if $TERM =~ 'xterm' || $TERM =~ 'screen'
 endif
 
 set virtualedit=all
+
+" mouse usage
+function! ToggleMouse()
+	if &mouse == ""
+		set mouse=a
+	else
+		set mouse=
+	endif
+endfunction
+nnoremap <leader>m :call ToggleMouse()<cr>
+set mouse=a " Enable mouse usage (all modes) in terminals
 
 " line numbering
 function! ToggleNumbering()
