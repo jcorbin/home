@@ -65,7 +65,7 @@ fi"
     done
 
     pack_data=$(git rev-list --objects $commits | cut -d' '  -f1 \
-        | git pack-objects --all-progress --stdout | gzip -c | base64)
+        | git pack-objects --all-progress --stdout | base64)
 
     cat <<EOSCRIPT
 #!/bin/sh
@@ -73,7 +73,7 @@ set -e
 
 $header
 
-base64 -d <<EOPACK | gzip -dc | git index-pack --stdin >/dev/null
+base64 -d <<EOPACK | git index-pack --stdin >/dev/null
 $pack_data
 EOPACK
 
