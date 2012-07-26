@@ -25,7 +25,12 @@ sessionpid=$!
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 setxkbmap dvorak -option ctrl:nocaps
 
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1&
+for d in /usr/lib/polkit-gnome /usr/libexec; do
+    if [ -x $d/polkit-gnome-authentication-agent-1 ]; then
+        $d/polkit-gnome-authentication-agent-1&
+        break
+    fi
+done
 
 #/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh&
 /usr/bin/gnome-keyring-daemon --start --components=secrets,ssh&
