@@ -73,7 +73,7 @@ set -e
 
 $header
 
-base64 -d <<EOPACK | git index-pack --stdin >/dev/null
+base64 -di <<EOPACK | git index-pack --stdin >/dev/null
 $pack_data
 EOPACK
 
