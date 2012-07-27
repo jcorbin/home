@@ -16,6 +16,8 @@
 !.profile
 !.profile.d
 
+!.inputrc
+
 !.bash_profile
 !.bashrc
 
