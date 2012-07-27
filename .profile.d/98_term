@@ -3,19 +3,23 @@
 # Try to fix broken $TERM
 if which tput &>/dev/null; then while true; do
     tput longname &>/dev/null && break
+    echo -n "TERM=$TERM didn't work out..." >&2
 
     # if -256color, try lower coler version
     if [[ $TERM = *-256color ]] && tput -T${TERM%-256color} longname &>/dev/null; then
         export TERM=${TERM%-256color}
+        echo "using TERM=$TERM instead." >&2
         break
     fi
 
     # hmm, well if it's not linux, try that
     if [ $TERM != linux ] && tput -Tlinux longname &>/dev/null; then
         export TERM=linux
+        echo "using TERM=$TERM instead." >&2
         break
     fi
 
     # finally, fallback on vt100
     export TERM=vt100
+    echo "falling back to TERM=$TERM instead." >&2
 done; fi
