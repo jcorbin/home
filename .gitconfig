@@ -35,6 +35,7 @@ threads=0
 st=status
 br=branch
 brav=branch -av
+brv=branch -v
 rebr=rewrite-branch
 ci=commit
 cim=commit -m
