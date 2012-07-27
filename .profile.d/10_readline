@@ -1,0 +1,3 @@
+#!/bin/sh
+
+[ -f $HOME/.inputrc ] && export INPUTRC=$HOME/.inputrc
