@@ -13,6 +13,8 @@
 .vim/doc/*
 .vim/.netrwhist
 
+!.aliases
+
 !.profile
 !.profile.d
 
