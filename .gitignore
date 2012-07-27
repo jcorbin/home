@@ -15,6 +15,7 @@
 
 !.zsh/
 
+!.profile
 !.profile.d
 
 !.xinitrc
