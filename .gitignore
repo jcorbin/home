@@ -16,6 +16,9 @@
 !.profile
 !.profile.d
 
+!.bash_profile
+!.bashrc
+
 !.zshenv
 !.zshrc
 !.zsh/
