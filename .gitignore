@@ -6,6 +6,7 @@
 
 !bin/
 
+!.vimrc
 !.vim/
 .vim/undo
 .vim/swap
