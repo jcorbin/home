@@ -5,6 +5,15 @@ if which tput &>/dev/null; then while true; do
     tput longname &>/dev/null && break
     echo -n "TERM=$TERM didn't work out..." >&2
 
+    # if we ship a source for $TERM, and it's compiled yet, compile it and try again
+    if [ -f $HOME/.terminfo.src/$TERM.terminfo ] && ! [ -f $HOME/.terminfo/${TERM:0:1}/$TERM ]; then
+        tic $HOME/.terminfo.src/$TERM.terminfo
+        if tput longname &>/dev/null; then
+            echo "compiled ~/.terminfo worked!" >&2
+            break
+        fi
+    fi
+
     # if -256color, try lower coler version
     if [[ $TERM = *-256color ]] && tput -T${TERM%-256color} longname &>/dev/null; then
         export TERM=${TERM%-256color}
