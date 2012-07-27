@@ -13,10 +13,12 @@
 .vim/doc/*
 .vim/.netrwhist
 
-!.zsh/
-
 !.profile
 !.profile.d
+
+!.zshenv
+!.zshrc
+!.zsh/
 
 !.xinitrc
 !.xsession
