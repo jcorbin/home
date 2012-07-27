@@ -103,6 +103,7 @@ fi
 git init
 git remote add \$remote null://shell-pack
 git config shell-pack.remote \$remote
+git branch --set-upstream $head_branch \$remote/$head_branch
 [ \$(git symbolic-ref HEAD) != refs/heads/$head_branch ] && git symbolic-ref HEAD refs/heads/$head_branch"
 
     trailer="
