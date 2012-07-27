@@ -35,3 +35,5 @@
 
 !.screenrc
 !.tmux.conf
+
+!.terminfo.src/
