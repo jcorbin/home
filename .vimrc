@@ -142,7 +142,7 @@ map <C-T> <Esc>:tabnew<CR>
 "       contrast in a few points.
 if has("gui_running")
 	colorscheme moria
-elseif $TERM =~ '256'
+elseif &t_Co == 256
 	colorscheme xoria256
 else
 	colorscheme desert
