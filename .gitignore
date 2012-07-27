@@ -26,3 +26,6 @@
 !.xinitrc
 !.xsession
 !.Xresources
+
+!.screenrc
+!.tmux.conf
