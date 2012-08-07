@@ -8,6 +8,11 @@
     # also don't use -S as per git default
     pager = "less -+c -FRX"
 
+[advice]
+    detachedHead = false
+    pushNonFastForward = false
+    statusHints = false
+
 [color]
     # Color all commands automatically
     ui = auto
