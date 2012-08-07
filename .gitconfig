@@ -77,7 +77,9 @@
     default = tracking
 
 [log]
+    abbrevCommit = true
     date = relative
+    decorate = true
 
 [diff]
     renames = copies
