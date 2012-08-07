@@ -1,75 +1,78 @@
 # Commiter identity
 [user]
-email=jcorbin@wunjo.org
-name=Joshua T Corbin
+    email = jcorbin@wunjo.org
+    name = Joshua T Corbin
 
 [core]
-# Use less as our pager, turn off the -c option if it was specified in $LESS,
-# also don't use -S as per git default
-pager="less -+c -FRX"
+    # Use less as our pager, turn off the -c option if it was specified in $LESS,
+    # also don't use -S as per git default
+    pager = "less -+c -FRX"
 
 [color]
-# Color all commands automatically
-ui=auto
+    # Color all commands automatically
+    ui = auto
 
 [apply]
-# Fix all whitespace sins when applying patches
-whitespace=fix
+    # Fix all whitespace sins when applying patches
+    whitespace = fix
 
 [branch]
-# Track when branching and rebase by default
-autosetupmerge=always
-autosetuprebase=always
+    # Track when branching and rebase by default
+    autosetupmerge = always
+    autosetuprebase = always
 
 [pack]
-# Use one thread per processor core for pac king
-threads=0
+    # Use one thread per processor core for pac king
+    threads = 0
 
 # log formats
 [pretty]
-	brief=%C(red)%h%Creset %C(green)%cd %Creset-%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset
-	briefreflog=%C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold blue)<%gn>%Creset
+    brief = %C(red)%h%Creset %C(green)%cd %Creset-%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset
+    briefreflog = %C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold blue)<%gn>%Creset
 
 # Command aliases
 [alias]
-st=status
-br=branch
-brav=branch -av
-brv=branch -v
-rebr=rewrite-branch
-ci=commit
-cim=commit -m
-cic=commit -c
-cia=commit -a
-ciam=commit -a -m
-co=checkout
-pack=repack -Ad
-doh=commit --amend
-cp=cherry-pick
-rb=rebase
-rc=rebase --continue
-ra=rebase --abort
-rs=rebase --skip
-fp=format-patch -n -M -C --find-copies-harder
-cn=clean -n
-cf=clean -f
-rem=remote
-remv=remote -v
-shbr=show-branch
-ch=cherry -v
-dc=diff --cached
-redo=reset HEAD^ --mixed
-rst=reset --hard
-au=add --update
-lg=log --graph --pretty=brief
-rlg=reflog --pretty=briefreflog
+    st = status
+    br = branch
+    brav = branch -av
+    brv = branch -v
+    rebr = rewrite-branch
+    ci = commit
+    cim = commit -m
+    cic = commit -c
+    cia = commit -a
+    ciam = commit -a -m
+    co = checkout
+    pack = repack -Ad
+    doh = commit --amend
+    cp = cherry-pick
+    rb = rebase
+    rc = rebase --continue
+    ra = rebase --abort
+    rs = rebase --skip
+    fp = format-patch -n -M -C --find-copies-harder
+    cn = clean -n
+    cf = clean -f
+    rem = remote
+    remv = remote -v
+    shbr = show-branch
+    ch = cherry -v
+    dc = diff --cached
+    redo = reset HEAD^ --mixed
+    rst = reset --hard
+    au = add --update
+    lg = log --graph --pretty=brief
+    rlg = reflog --pretty=briefreflog
 
 [push]
-	default = tracking
+    default = tracking
+
 [log]
-	date = relative
+    date = relative
+
 [diff]
-	renames = copies
+    renames = copies
+
 [rebase]
-	stat = true
-	autosquash=true
+    stat = true
+    autosquash = true
