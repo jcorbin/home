@@ -50,6 +50,7 @@
     doh = commit --amend
     fp = format-patch -n -M -C --find-copies-harder
     lg = log --graph --pretty=brief
+    mt = mergetool
     pack = repack -Ad
     ra = rebase --abort
     rb = rebase
