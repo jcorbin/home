@@ -1,3 +1,12 @@
-measure
-sample
-pypy
+*
+.gitignore
+atmux
+choose-screen
+dotgit
+git-branch-base
+git-current-branch
+git-rewrite-branch
+git-shell-pack
+git-subtree
+git-work
+sshscreen
