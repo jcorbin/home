@@ -35,6 +35,9 @@
     brief = %C(red)%h%Creset %C(green)%cd %Creset-%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset
     briefreflog = %C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold blue)<%gn>%Creset
 
+[grep]
+    extendedRegexp = true
+
 # Command aliases
 [alias]
     au = add --update
