@@ -76,3 +76,7 @@
 [rebase]
     stat = true
     autosquash = true
+
+[rerere]
+    autoupdate = true
+    enabled = true
