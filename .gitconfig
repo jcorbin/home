@@ -32,37 +32,37 @@
 
 # Command aliases
 [alias]
-    st = status
+    au = add --update
     br = branch
     brav = branch -av
     brv = branch -v
-    rebr = rewrite-branch
+    cf = clean -f
+    ch = cherry -v
     ci = commit
-    cim = commit -m
-    cic = commit -c
     cia = commit -a
     ciam = commit -a -m
+    cic = commit -c
+    cim = commit -m
+    cn = clean -n
     co = checkout
-    pack = repack -Ad
-    doh = commit --amend
     cp = cherry-pick
+    dc = diff --cached
+    doh = commit --amend
+    fp = format-patch -n -M -C --find-copies-harder
+    lg = log --graph --pretty=brief
+    pack = repack -Ad
+    ra = rebase --abort
     rb = rebase
     rc = rebase --continue
-    ra = rebase --abort
-    rs = rebase --skip
-    fp = format-patch -n -M -C --find-copies-harder
-    cn = clean -n
-    cf = clean -f
+    rebr = rewrite-branch
+    redo = reset HEAD^ --mixed
     rem = remote
     remv = remote -v
-    shbr = show-branch
-    ch = cherry -v
-    dc = diff --cached
-    redo = reset HEAD^ --mixed
-    rst = reset --hard
-    au = add --update
-    lg = log --graph --pretty=brief
     rlg = reflog --pretty=briefreflog
+    rs = rebase --skip
+    rst = reset --hard
+    shbr = show-branch
+    st = status
 
 [push]
     default = tracking
