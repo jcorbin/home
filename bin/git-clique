@@ -26,14 +26,14 @@ class repo(namedtuple('repo', 'host path')):
         if self.islocal():
             oldcwd = os.getcwd()
             os.chdir(self.path)
-            cmd = ['git', 'peer', '--add-only', remote]
+            cmd = ['git', 'clique', '--add-only', remote]
             cmd.extend(urls)
             check_call(cmd)
             os.chdir(oldcwd)
 
         else:
             cmd = ['ssh', self.host, 'bash', '-c',
-                   'cd "$1" && shift && git peer --add-noly "$@"', 'bash', remote]
+                   'cd "$1" && shift && git clique --add-noly "$@"', 'bash', remote]
             cmd.extend(urls)
             check_call(cmd)
 

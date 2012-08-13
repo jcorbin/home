@@ -9,7 +9,7 @@
 !git-shell-pack
 !git-subtree
 !git-work
-!git-peer
+!git-clique
 !sshscreen
 !git-setup-worktree-push
 !githook-update-worktree-*
