@@ -106,16 +106,15 @@ for url in args:
     urls.add(url)
     added.add(url)
 
-if not added: sys.exit(0)
+if not added or opts.addonly: sys.exit(0)
 
-if not opts.addonly:
-    for url in added:
-        r = repo.parse(url)
-        if r.islocal():
-            thisurl = thispath
-        else:
-            thisurl = socket.getfqdn() + ':' + thispath
-        r.sync_peers(remote, thisurl, *urls)
+for url in added:
+    r = repo.parse(url)
+    if r.islocal():
+        thisurl = thispath
+    else:
+        thisurl = socket.getfqdn() + ':' + thispath
+    r.sync_peers(remote, thisurl, *urls)
 
-    for url in urls - added:
-        repo.parse(url).sync_peers(remote, *added)
+for url in urls - added:
+    repo.parse(url).sync_peers(remote, *added)
