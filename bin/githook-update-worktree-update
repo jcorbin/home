@@ -1,0 +1,26 @@
+#!/bin/bash
+
+refname=$1
+old=$2
+new=$3
+
+SUBDIRECTORY_OK=true
+. $(git --exec-path)/git-sh-setup
+
+require_work_tree_exists
+
+head_ref=$(git symbolic-ref HEAD)
+
+if [ $refname == $head_ref ] && git show-ref --verify --quiet $head_ref; then
+    worktree=$(git rev-parse --show-toplevel)
+    if [ -n "$worktree" ]; then
+        [[ "$worktree" = */.git ]] && cd "$worktree/.." || cd "$worktree"
+    elif [[ "$GIT_DIR" = */.git ]]; then
+        cd "$GIT_DIR/.."
+    else
+        die "Unable to determine GIT_WORK_TREE from GIT_DIR=$GIT_DIR, set core.worktree"
+    fi
+
+    require_clean_work_tree receive-pack "Please commit or stash them."
+
+fi

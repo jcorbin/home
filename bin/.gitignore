@@ -11,3 +11,5 @@
 !git-work
 !git-peer
 !sshscreen
+!git-setup-worktree-push
+!githook-update-worktree-*

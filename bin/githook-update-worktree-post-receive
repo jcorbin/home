@@ -1,0 +1,25 @@
+#!/bin/bash
+
+SUBDIRECTORY_OK=true
+. $(git --exec-path)/git-sh-setup
+
+require_work_tree_exists
+
+head_ref=$(git symbolic-ref HEAD)
+
+while read oldrev newrev refname; do
+    if [ $refname == $head_ref ]; then
+        worktree=$(git rev-parse --show-toplevel)
+        if [ -n "$worktree" ]; then
+            [[ "$worktree" = */.git ]] && cd "$worktree/.." || cd "$worktree"
+        elif [[ "$GIT_DIR" = */.git ]]; then
+            cd "$GIT_DIR/.."
+        else
+            die "Unable to determine GIT_WORK_TREE from GIT_DIR=$GIT_DIR, set core.worktree"
+        fi
+        # TODO: config for --force
+        # TODO: --quiet?
+        git checkout
+        cd "$GIT_DIR"
+    fi
+done

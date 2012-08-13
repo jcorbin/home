@@ -1,0 +1,18 @@
+#!/bin/bash
+
+SUBDIRECTORY_OK=true
+. $(git --exec-path)/git-sh-setup
+
+require_work_tree_exists
+
+cp $(dirname $(readlink -f $0))/githook-update-worktree-post-receive \
+   $GIT_DIR/hooks/post-receive \
+   || die "Cannot find githook-update-worktree-post-receive"
+
+cp $(dirname $(readlink -f $0))/githook-update-worktree-update \
+   $GIT_DIR/hooks/update \
+   || die "Cannot find githook-update-worktree-update"
+
+chmod +x $GIT_DIR/hooks/{update,post-receive}
+
+git config receive.denyCurrentBranch ignore
