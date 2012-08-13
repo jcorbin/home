@@ -111,10 +111,11 @@ def add_repo(r):
         repos.add(r)
         return True
 
-def buildout_repo(r):
-    if opts.notthis:
+if opts.notthis:
+    def buildout_repo(r):
         r.add_repos(remote, *repos)
-    else:
+else:
+    def buildout_repo(r):
         if r.islocal():
             thisurl = thispath
         else:
