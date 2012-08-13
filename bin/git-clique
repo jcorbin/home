@@ -102,16 +102,20 @@ remote = args.pop(0)
 changed = set()
 repos = set(repo.parse(url) for url in get_remote_urls(remote))
 
+def add_repo(r):
+    if r not in repos:
+        if not repos:
+            check_call(('git', 'remote', 'add', remote, str(r)))
+        else:
+            check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
+        repos.add(r)
+        return True
+
 for url in args:
     r = repo.parse(url)
     if r.islocal() and os.path.realpath(r.path) == thispath: continue
-    if r in repos: continue
-    if not repos:
-        check_call(('git', 'remote', 'add', remote, str(r)))
-    else:
-        check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
-    repos.add(r)
-    changed.add(r)
+    if add_repo(r):
+        changed.add(r)
 
 if not changed or opts.changeonly: sys.exit(0)
 
