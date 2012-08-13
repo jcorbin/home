@@ -52,7 +52,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
             self.host == socket.gethostname() or \
             self.host == socket.getfqdn()
 
-    def sync_peers(self, remote, *repos):
+    def add_repos(self, remote, *repos):
         if self.islocal():
             oldcwd = os.getcwd()
             os.chdir(self.path)
@@ -121,13 +121,13 @@ if not changed or opts.changeonly: sys.exit(0)
 
 for r in changed:
     if opts.notthis:
-        r.sync_peers(remote, *repos)
+        r.add_repos(remote, *repos)
     else:
         if r.islocal():
             thisurl = thispath
         else:
             thisurl = socket.getfqdn() + ':' + thispath
-        r.sync_peers(remote, thisurl, *repos)
+        r.add_repos(remote, thisurl, *repos)
 
 for r in repos - changed:
-    r.sync_peers(remote, *changed)
+    r.add_repos(remote, *changed)
