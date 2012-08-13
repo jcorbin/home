@@ -107,9 +107,9 @@ for url in args:
     if r.islocal() and os.path.realpath(r.path) == thispath: continue
     if url in urls: continue
     if not urls:
-        check_call(('git', 'remote', 'add', remote, url))
+        check_call(('git', 'remote', 'add', remote, str(r)))
     else:
-        check_call(('git', 'remote', 'set-url', '--add', remote, url))
+        check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
     urls.add(url)
     changed.add(url)
 
