@@ -102,7 +102,7 @@ remote = args.pop(0)
 changed = set()
 repos = set(repo.parse(url) for url in get_remote_urls(remote))
 
-def add_repo(r):
+def change(r):
     if r not in repos:
         if not repos:
             check_call(('git', 'remote', 'add', remote, str(r)))
@@ -112,29 +112,29 @@ def add_repo(r):
         return True
 
 if opts.notthis:
-    def buildout_repo(r):
+    def change_changee(r):
         r.add_repos(remote, *repos)
 else:
-    def buildout_repo(r):
+    def change_changee(r):
         if r.islocal():
             thisurl = thispath
         else:
             thisurl = socket.getfqdn() + ':' + thispath
         r.add_repos(remote, thisurl, *repos)
 
-def add_changed(r):
+def propagate(r):
     r.add_repos(remote, *changed)
 
 for url in args:
     r = repo.parse(url)
     if r.islocal() and os.path.realpath(r.path) == thispath: continue
-    if add_repo(r):
+    if change(r):
         changed.add(r)
 
 if not changed or opts.changeonly: sys.exit(0)
 
 for r in changed:
-    buildout_repo(r)
+    change_changee(r)
 
 for r in repos - changed:
-    add_changed(r)
+    propagate(r)
