@@ -56,14 +56,14 @@ class repo(tuple): # namedtuple('repo', 'host path')
         if self.islocal():
             oldcwd = os.getcwd()
             os.chdir(self.path)
-            cmd = ['git', 'clique', '--add-only', remote]
+            cmd = ['git', 'clique', '--change-only', remote]
             cmd.extend(urls)
             check_call(cmd)
             os.chdir(oldcwd)
 
         else:
             cmd = ['ssh', self.host, 'bash', '-c',
-                   'cd "$1" && shift && git clique --add-only "$@"',
+                   'cd "$1" && shift && git clique --change-only "$@"',
                    'bash', self.path, remote]
             cmd.extend(urls)
             check_call(cmd)
@@ -88,14 +88,14 @@ if thispath.endswith('/.git'):
 
 import optparse
 parser = optparse.OptionParser()
-parser.add_option('--add-only', dest='addonly', action='store_true', default=False)
+parser.add_option('--change-only', dest='changeonly', action='store_true', default=False)
 parser.add_option('--not-this', dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
 remote = args.pop(0)
 
 urls = set(get_remote_urls(remote))
 
-added = set()
+changed = set()
 for url in args:
     r = repo.parse(url)
     if r.islocal() and os.path.realpath(r.path) == thispath: continue
@@ -105,11 +105,11 @@ for url in args:
     else:
         check_call(('git', 'remote', 'set-url', '--add', remote, url))
     urls.add(url)
-    added.add(url)
+    changed.add(url)
 
-if not added or opts.addonly: sys.exit(0)
+if not changed or opts.changeonly: sys.exit(0)
 
-for url in added:
+for url in changed:
     r = repo.parse(url)
     if opts.notthis:
         r.sync_peers(remote, *urls)
@@ -120,5 +120,5 @@ for url in added:
             thisurl = socket.getfqdn() + ':' + thispath
         r.sync_peers(remote, thisurl, *urls)
 
-for url in urls - added:
-    repo.parse(url).sync_peers(remote, *added)
+for url in urls - changed:
+    repo.parse(url).sync_peers(remote, *changed)
