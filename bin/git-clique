@@ -89,6 +89,7 @@ if thispath.endswith('/.git'):
 import optparse
 parser = optparse.OptionParser()
 parser.add_option('--add-only', dest='addonly', action='store_true', default=False)
+parser.add_option('--not-this', dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
 remote = args.pop(0)
 
@@ -110,11 +111,14 @@ if not added or opts.addonly: sys.exit(0)
 
 for url in added:
     r = repo.parse(url)
-    if r.islocal():
-        thisurl = thispath
+    if opts.notthis:
+        r.sync_peers(remote, *urls)
     else:
-        thisurl = socket.getfqdn() + ':' + thispath
-    r.sync_peers(remote, thisurl, *urls)
+        if r.islocal():
+            thisurl = thispath
+        else:
+            thisurl = socket.getfqdn() + ':' + thispath
+        r.sync_peers(remote, thisurl, *urls)
 
 for url in urls - added:
     repo.parse(url).sync_peers(remote, *added)
