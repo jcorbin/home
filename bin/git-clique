@@ -84,6 +84,21 @@ class repo(tuple): # namedtuple('repo', 'host path')
             cmd.extend(str(r) for r in repos)
             check_call(cmd)
 
+    def remove_remote(self, remote):
+        if self.islocal():
+            oldcwd = os.getcwd()
+            os.chdir(self.path)
+            cmd = ['git', 'remote', 'rm', remote]
+            cmd.extend(urls)
+            check_call(cmd)
+            os.chdir(oldcwd)
+
+        else:
+            check_call([
+                'ssh', self.host, 'bash', '-c',
+                'cd "$1" && shift && git remote rm "$@"',
+                'bash', self.path, remote])
+
     def __str__(self):
         if self.host is None:
             return self.path
