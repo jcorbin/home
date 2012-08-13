@@ -52,12 +52,12 @@ class repo(tuple): # namedtuple('repo', 'host path')
             self.host == socket.gethostname() or \
             self.host == socket.getfqdn()
 
-    def sync_peers(self, remote, *urls):
+    def sync_peers(self, remote, *repos):
         if self.islocal():
             oldcwd = os.getcwd()
             os.chdir(self.path)
             cmd = ['git', 'clique', '--change-only', remote]
-            cmd.extend(urls)
+            cmd.extend(str(r) for r in repos)
             check_call(cmd)
             os.chdir(oldcwd)
 
@@ -65,7 +65,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
             cmd = ['ssh', self.host, 'bash', '-c',
                    'cd "$1" && shift && git clique --change-only "$@"',
                    'bash', self.path, remote]
-            cmd.extend(urls)
+            cmd.extend(str(r) for r in repos)
             check_call(cmd)
 
     def __str__(self):
@@ -100,31 +100,30 @@ opts, args = parser.parse_args()
 remote = args.pop(0)
 
 changed = set()
-urls = set(get_remote_urls(remote))
+repos = set(repo.parse(url) for url in get_remote_urls(remote))
 
 for url in args:
     r = repo.parse(url)
     if r.islocal() and os.path.realpath(r.path) == thispath: continue
-    if url in urls: continue
-    if not urls:
+    if r in repos: continue
+    if not repos:
         check_call(('git', 'remote', 'add', remote, str(r)))
     else:
         check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
-    urls.add(url)
-    changed.add(url)
+    repos.add(r)
+    changed.add(r)
 
 if not changed or opts.changeonly: sys.exit(0)
 
-for url in changed:
-    r = repo.parse(url)
+for r in changed:
     if opts.notthis:
-        r.sync_peers(remote, *urls)
+        r.sync_peers(remote, *repos)
     else:
         if r.islocal():
             thisurl = thispath
         else:
             thisurl = socket.getfqdn() + ':' + thispath
-        r.sync_peers(remote, thisurl, *urls)
+        r.sync_peers(remote, thisurl, *repos)
 
-for url in urls - changed:
-    repo.parse(url).sync_peers(remote, *changed)
+for r in repos - changed:
+    r.sync_peers(remote, *changed)
