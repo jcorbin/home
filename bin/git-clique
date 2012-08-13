@@ -68,6 +68,22 @@ class repo(tuple): # namedtuple('repo', 'host path')
             cmd.extend(str(r) for r in repos)
             check_call(cmd)
 
+    def remove_repos(self, remote, *repos):
+        if self.islocal():
+            oldcwd = os.getcwd()
+            os.chdir(self.path)
+            cmd = ['git', 'peer', 'rm', '--change-only', remote]
+            cmd.extend(str(r) for r in repos)
+            check_call(cmd)
+            os.chdir(oldcwd)
+
+        else:
+            cmd = ['ssh', self.host, 'bash', '-c',
+                   'cd "$1" && shift && git peer rm --change-only "$@"',
+                   'bash', self.path, remote]
+            cmd.extend(str(r) for r in repos)
+            check_call(cmd)
+
     def __str__(self):
         if self.host is None:
             return self.path
