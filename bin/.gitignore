@@ -9,4 +9,5 @@
 !git-shell-pack
 !git-subtree
 !git-work
+!git-peer
 !sshscreen

@@ -1,0 +1,87 @@
+#!/usr/bin/python
+
+from collections import namedtuple
+import os
+import socket
+from subprocess import check_call, Popen, PIPE
+import sys
+
+class repo(namedtuple('repo', 'host path')):
+    @classmethod
+    def parse(cls, s):
+        try:
+            host, path = s.split(':', 1)
+        except ValueError:
+            host = None
+            path = s
+        return cls(host, path)
+
+    def islocal(self):
+        return \
+            self.host is None or \
+            self.host == socket.gethostname() or \
+            self.host == socket.getfqdn()
+
+    def sync_peers(self, remote, *urls):
+        if self.islocal():
+            oldcwd = os.getcwd()
+            os.chdir(self.path)
+            cmd = ['git', 'peer', '--add-only', remote]
+            cmd.extend(urls)
+            check_call(cmd)
+            os.chdir(oldcwd)
+
+        else:
+            cmd = ['ssh', self.host, 'bash', '-c',
+                   'cd "$1" && shift && git peer --add-noly "$@"', 'bash', remote]
+            cmd.extend(urls)
+            check_call(cmd)
+
+def get_remote_urls(remote):
+    p = Popen(
+        ('git', 'config',  '--get-all', 'remote.' + remote + '.url'),
+        stdout=PIPE)
+    # if p.wait() != 0: return None
+    for line in p.stdout:
+        line = line.strip()
+        if line: yield line
+
+p = Popen(('git', 'rev-parse', '--show-toplevel'), stdout=PIPE)
+if p.wait() != 0:
+    raise RuntimeError(
+        'git rev-parse --show-toplevel exited non-zero: %d' % p.returncode)
+thispath = p.stdout.readline().strip()
+thispath = os.path.realpath(thispath)
+if thispath.endswith('/.git'):
+    thispath = thispath[:-5]
+
+import optparse
+parser = optparse.OptionParser()
+parser.add_option('--add-only', dest='addonly', action='store_true', default=False)
+opts, args = parser.parse_args()
+remote = args.pop(0)
+
+urls = set(get_remote_urls(remote))
+
+added = set()
+for url in args:
+    r = repo.parse(url)
+    if r.islocal() and os.path.realpath(r.path) == thispath: continue
+    if url in urls: continue
+    if not urls:
+        check_call(('git', 'remote', 'add', remote, url))
+    else:
+        check_call(('git', 'remote', 'set-url', '--add', remote, url))
+    urls.add(url)
+    added.add(url)
+
+if not added: sys.exit(0)
+
+if not opts.addonly:
+    for url in added:
+        r = repo.parse(url)
+        thisurl = thispath if r.islocal() else thisfqdn + ':' + thispath
+        r.sync_peers(remote, thisurl, *urls)
+
+    for url in urls - added:
+        repo.parse(url).sync_peers(remote, *added)
