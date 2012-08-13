@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Try to fix broken $TERM
-if which tput &>/dev/null; then while true; do
+if [ -n "$TERM" ]; then if which tput &>/dev/null; then while true; do
     tput longname &>/dev/null && break
     [ -t 2 ] && echo -n "TERM=$TERM didn't work out..." >&2
 
@@ -31,4 +31,4 @@ if which tput &>/dev/null; then while true; do
     # finally, fallback on vt100
     export TERM=vt100
     [ -t 2 ] && echo "falling back to TERM=$TERM instead." >&2
-done; fi
+done; fi; fi
