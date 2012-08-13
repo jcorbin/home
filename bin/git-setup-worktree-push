@@ -3,7 +3,8 @@
 SUBDIRECTORY_OK=true
 . $(git --exec-path)/git-sh-setup
 
-require_work_tree_exists
+[ "$(git rev-parse --is-bare-repository)" == "true" ] && \
+    die "fatal: $0 cannot be used without a working tree"
 
 cp $(dirname $(readlink -f $0))/githook-update-worktree-post-receive \
    $GIT_DIR/hooks/post-receive \

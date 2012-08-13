@@ -7,7 +7,8 @@ new=$3
 SUBDIRECTORY_OK=true
 . $(git --exec-path)/git-sh-setup
 
-require_work_tree_exists
+[ "$(git rev-parse --is-bare-repository)" == "true" ] && \
+    die "fatal: $0 cannot be used without a working tree"
 
 head_ref=$(git symbolic-ref HEAD)
 
