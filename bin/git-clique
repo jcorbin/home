@@ -56,14 +56,14 @@ class repo(tuple): # namedtuple('repo', 'host path')
         if self.islocal():
             oldcwd = os.getcwd()
             os.chdir(self.path)
-            cmd = ['git', 'clique', '--change-only', remote]
+            cmd = ['git', 'clique', 'add', '--change-only', remote]
             cmd.extend(str(r) for r in repos)
             check_call(cmd)
             os.chdir(oldcwd)
 
         else:
             cmd = ['ssh', self.host, 'bash', '-c',
-                   'cd "$1" && shift && git clique --change-only "$@"',
+                   'cd "$1" && shift && git clique add --change-only "$@"',
                    'bash', self.path, remote]
             cmd.extend(str(r) for r in repos)
             check_call(cmd)
@@ -97,33 +97,40 @@ parser = optparse.OptionParser()
 parser.add_option('--change-only', dest='changeonly', action='store_true', default=False)
 parser.add_option('--not-this', dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
+action = args.pop(0)
 remote = args.pop(0)
 
 changed = set()
 repos = set(repo.parse(url) for url in get_remote_urls(remote))
 
-def change(r):
-    if r not in repos:
-        if not repos:
-            check_call(('git', 'remote', 'add', remote, str(r)))
-        else:
-            check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
-        repos.add(r)
-        return True
+if action == 'add':
+    def change(r):
+        if r not in repos:
+            if not repos:
+                check_call(('git', 'remote', 'add', remote, str(r)))
+            else:
+                check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
+            repos.add(r)
+            return True
 
-if opts.notthis:
-    def change_changee(r):
-        r.add_repos(remote, *repos)
+    if opts.notthis:
+        def change_changee(r):
+            r.add_repos(remote, *repos)
+    else:
+        def change_changee(r):
+            if r.islocal():
+                thisurl = thispath
+            else:
+                thisurl = thisfqdn + ':' + thispath
+                thisurl = socket.getfqdn() + ':' + thispath
+            r.add_repos(remote, thisurl, *repos)
+
+    def propagate(r):
+        r.add_repos(remote, *changed)
+
 else:
-    def change_changee(r):
-        if r.islocal():
-            thisurl = thispath
-        else:
-            thisurl = socket.getfqdn() + ':' + thispath
-        r.add_repos(remote, thisurl, *repos)
-
-def propagate(r):
-    r.add_repos(remote, *changed)
+    print >>sys.stderr, "Invaild action", repr(action)
+    sys.exit(1)
 
 for url in args:
     r = repo.parse(url)
