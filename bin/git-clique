@@ -130,7 +130,10 @@ parser.add_option('--change-only',
     help='Only make changes to the local repository;'
          ' don\'t propagate changes to other repositories.',
     dest='changeonly', action='store_true', default=False)
-parser.add_option('--not-this', dest='notthis', action='store_true', default=False)
+parser.add_option('--not-this',
+    help='Don\'t include this repository when propagating to other'
+         ' repositories; useful for repositories external to the clique.',
+    dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
 if not len(args): parser.error('missing action')
 action = args.pop(0)
