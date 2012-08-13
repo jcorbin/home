@@ -159,6 +159,19 @@ if action == 'add':
     def propagate(r):
         r.add_repos(remote, *changed)
 
+elif action == 'rm':
+    def change(r):
+        if r not in repos:
+            check_call(('git', 'remote', 'set-url', '--delete', remote, str(r)))
+            repos.remove(r)
+            return True
+
+    def change_changee(r):
+        r.remove_remote(remote)
+
+    def propagate(r):
+        r.remove_repos(remote, *changed)
+
 else:
     print >>sys.stderr, "Invaild action", repr(action)
     sys.exit(1)
