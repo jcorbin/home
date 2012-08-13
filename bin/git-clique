@@ -124,7 +124,8 @@ if thispath.endswith('/.git'):
     thispath = thispath[:-5]
 
 import optparse
-parser = optparse.OptionParser()
+parser = optparse.OptionParser(
+    usage='%prog add|rm <remote> <url> [<url> [...]]')
 parser.add_option('--change-only', dest='changeonly', action='store_true', default=False)
 parser.add_option('--not-this', dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
