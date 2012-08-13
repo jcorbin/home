@@ -93,9 +93,9 @@ parser.add_option('--not-this', dest='notthis', action='store_true', default=Fal
 opts, args = parser.parse_args()
 remote = args.pop(0)
 
+changed = set()
 urls = set(get_remote_urls(remote))
 
-changed = set()
 for url in args:
     r = repo.parse(url)
     if r.islocal() and os.path.realpath(r.path) == thispath: continue
