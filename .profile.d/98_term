@@ -14,7 +14,7 @@ if [ -n "$TERM" ]; then if which tput &>/dev/null; then while true; do
         fi
     fi
 
-    # if -256color, try lower coler version
+    # if -256color, try lower color version
     if [[ $TERM = *-256color ]] && tput -T${TERM%-256color} longname &>/dev/null; then
         export TERM=${TERM%-256color}
         [ -t 2 ] && echo "using TERM=$TERM instead." >&2
