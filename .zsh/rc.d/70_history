@@ -1,4 +1,5 @@
 setopt hist_reduce_blanks
 setopt hist_ignore_dups
+bindkey '^r' history-incremental-search-backward
 
 # vim:set ft=zsh:
