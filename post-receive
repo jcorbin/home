@@ -45,10 +45,16 @@ def shortrevs(*rs):
     for rev in revs(*rs):
         yield rev[:7]
 
+def path_sha(rev, path):
+    if rev == '0' * 40: return None
+    try:
+        return revs(rev + ':' + repopath)
+    except CalledProcessError:
+        return None
+
 def update_file(old, new, repopath, target):
-    oldob, newob = revs(
-        old + ':' + repopath,
-        new + ':' + repopath)
+    oldob = path_sha(old, repopath)
+    newob = path_sha(new, repopath)
     if oldob == newob: return False
     with open(target, 'w') as f:
         show = run(
