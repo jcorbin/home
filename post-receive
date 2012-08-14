@@ -33,9 +33,13 @@ run_line = lambda cmd, **kwargs: run(
     cmd, stdout=PIPE, **kwargs).stdout.readline().strip()
 
 def revs(*revs):
+    if not len(revs): return None
     cmd = ('git', 'rev-parse') + revs
-    for rev in run(cmd, stdout=PIPE).stdout:
-        yield rev.strip()
+    p = run(cmd, stdout=PIPE)
+    if len(revs) == 1:
+        return p.stdout.readline().strip()
+    else:
+        return (rev.strip() for rev in p.stdout)
 
 def shortrevs(*rs):
     for rev in revs(*rs):
