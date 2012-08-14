@@ -8,8 +8,8 @@ from subprocess import CalledProcessError, list2cmdline, PIPE, Popen
 import sys
 
 notify_to = 'jcorbin@wunjo.org'
-puburl = 'http://www.wunjo.org/~jcorbin/forwork'
-pubdir = '~/public_html/forwork'
+puburl = 'http://www.wunjo.org/~jcorbin/drop'
+pubdir = '~/public_html/drop'
 pubdir = os.path.expanduser(pubdir)
 
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
@@ -113,12 +113,12 @@ if __name__ == '__main__':
     for old, new, refname in updates:
         if refname != head_ref: continue
 
-        work, forwork = shortrevs('work/master', 'for/work/master')
+        drop, fordrop = shortrevs('drop/master', 'for/drop/master')
 
-        thepack = '{0}-{1}-{2}.sh.gz'.format(branch, work, forwork)
+        thepack = '{0}-{1}-{2}.sh.gz'.format(branch, drop, fordrop)
 
         with gzip.GzipFile(os.path.join(pubdir, thepack), 'w') as f:
-            pack = run('git shell-pack make work', stdout=PIPE).stdout
+            pack = run('git shell-pack make drop', stdout=PIPE).stdout
             shutil.copyfileobj(pack, f)
 
         with open(os.path.join(pubdir, 'index.html'), 'w') as f:
