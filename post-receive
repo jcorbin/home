@@ -116,9 +116,8 @@ if __name__ == '__main__':
         work, forwork = shortrevs('work/master', 'for/work/master')
 
         thepack = '{0}-{1}-{2}.sh.gz'.format(branch, work, forwork)
-        thepack = os.path.join(pubdir, thepack)
 
-        with gzip.GzipFile(thepack, 'w') as f:
+        with gzip.GzipFile(os.path.join(pubdir, thepack), 'w') as f:
             pack = run('git shell-pack make work', stdout=PIPE).stdout
             shutil.copyfileobj(pack, f)
 
@@ -128,7 +127,7 @@ if __name__ == '__main__':
 
         if notify_to:
             # TODO: use python module
-            subject = os.path.basename(thepack) + ' available'
+            subject = thepack + ' available'
             mail = run(('mail',
                 '--to', notify_to,
                 '--subject', subject
