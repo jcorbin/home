@@ -80,12 +80,23 @@ def index_contents():
 if __name__ == '__main__':
     updates = [line.strip().split(None, 2) for line in sys.stdin]
 
+    def upgrade_self(target):
+        if '--dejavu' in sys.argv: return
+        if os.path.realpath(target) != os.path.realpath(sys.argv[0]): return
+        r, w = os.pipe()
+        os.write(w, ''.join(' '.join(t)+'\n' for t in updates))
+        os.close(w)
+        os.dup2(r, sys.stdin.fileno())
+        os.close(r)
+        os.execl(os.path.realpath(sys.argv[0]), sys.argv[0], '--dejavu')
+
     meta_ref = 'refs/heads/meta'
 
     for old, new, refname in updates:
         if refname != meta_ref: continue
         for repopath, target in read_checkouts(meta_ref):
-            update_file(old, new, repopath, target)
+            if update_file(old, new, repopath, target):
+                upgrade_self(target)
 
     run('git repack -Ad')
     run('git gc')
