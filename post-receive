@@ -53,15 +53,16 @@ def update_file(old, new, repopath, target):
             stdout=PIPE).stdout
         shutil.copyfileobj(show, f)
 
-def checkouts():
-    # TODO: read from file
-    s = """
-    post-receive /home/jcorbin/home.git/hooks/post-receive
-    """
-    for line in s.strip().splitlines():
+def read_checkouts(meta_ref):
+    path = meta_ref + ':checkouts'
+    for i, line in enumerate(run_output(('git', 'show', path))):
         line = line.strip()
         if not line: continue
-        repopath, target = line.split(None, 1)
+        try:
+            repopath, target = line.split(None, 1)
+        except ValueError:
+            print >>sys.stderr, \
+                'bogus checkouts:{0}: {1}'.format(i+1, line)
         yield repopath, target
 
 def index_contents():
@@ -88,7 +89,7 @@ if __name__ == '__main__':
         old, new, refname = line.strip().split(None, 2)
 
         if refname == meta_ref:
-            for repopath, target in checkouts():
+            for repopath, target in read_checkouts(meta_ref):
                 update_file(old, new, repopath, target)
             continue
 
