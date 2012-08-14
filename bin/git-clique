@@ -2,7 +2,7 @@
 
 import os
 import socket
-from subprocess import Popen, PIPE
+from subprocess import list2cmdline, Popen, PIPE
 import sys
 
 try:
@@ -28,6 +28,23 @@ except ImportError:
             raise CalledProcessError(retcode, cmd)
         return 0
 
+def repo_command_runner(f):
+    def wrapper(self, *args):
+        cmd = f(self, *args)
+
+        if self.islocal():
+            oldcwd = os.getcwd()
+            os.chdir(self.path)
+            check_call(cmd)
+            os.chdir(oldcwd)
+
+        else:
+            cmd = list2cmdline(cmd).replace("'", "\\'")
+            cmd = ['ssh', self.host, '--',
+                   'bash', '-c', '\'cd "$1" && ' + cmd + '\'', self.path]
+            check_call(cmd)
+    return wrapper
+
 # from collections import namedtuple
 from operator import itemgetter
 class repo(tuple): # namedtuple('repo', 'host path')
@@ -52,52 +69,21 @@ class repo(tuple): # namedtuple('repo', 'host path')
             self.host == socket.gethostname() or \
             self.host == socket.getfqdn()
 
+    @repo_command_runner
     def add_repos(self, remote, *repos):
-        if self.islocal():
-            oldcwd = os.getcwd()
-            os.chdir(self.path)
-            cmd = ['git', 'clique', 'add', '--change-only', remote]
-            cmd.extend(str(r) for r in repos)
-            check_call(cmd)
-            os.chdir(oldcwd)
+        cmd = ['git', 'clique', 'add', '--change-only', remote]
+        cmd.extend(str(r) for r in repos)
+        return cmd
 
-        else:
-            cmd = ['ssh', self.host, 'bash', '-c',
-                   'cd "$1" && shift && git clique add --change-only "$@"',
-                   'bash', self.path, remote]
-            cmd.extend(str(r) for r in repos)
-            check_call(cmd)
-
+    @repo_command_runner
     def remove_repos(self, remote, *repos):
-        if self.islocal():
-            oldcwd = os.getcwd()
-            os.chdir(self.path)
-            cmd = ['git', 'peer', 'rm', '--change-only', remote]
-            cmd.extend(str(r) for r in repos)
-            check_call(cmd)
-            os.chdir(oldcwd)
+        cmd = ['git', 'peer', 'rm', '--change-only', remote]
+        cmd.extend(str(r) for r in repos)
+        return cmd
 
-        else:
-            cmd = ['ssh', self.host, 'bash', '-c',
-                   'cd "$1" && shift && git peer rm --change-only "$@"',
-                   'bash', self.path, remote]
-            cmd.extend(str(r) for r in repos)
-            check_call(cmd)
-
+    @repo_command_runner
     def remove_remote(self, remote):
-        if self.islocal():
-            oldcwd = os.getcwd()
-            os.chdir(self.path)
-            cmd = ['git', 'remote', 'rm', remote]
-            cmd.extend(urls)
-            check_call(cmd)
-            os.chdir(oldcwd)
-
-        else:
-            check_call([
-                'ssh', self.host, 'bash', '-c',
-                'cd "$1" && shift && git remote rm "$@"',
-                'bash', self.path, remote])
+        return ['git', 'remote', 'rm', remote]
 
     def __str__(self):
         if self.host is None:
