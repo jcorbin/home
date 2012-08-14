@@ -1,12 +1,19 @@
 #!/usr/bin/python
 
-from collections import namedtuple
 import os
 import socket
 from subprocess import check_call, Popen, PIPE
 import sys
 
-class repo(namedtuple('repo', 'host path')):
+# from collections import namedtuple
+from operator import itemgetter
+class repo(tuple): # namedtuple('repo', 'host path')
+    def __new__(cls, host, path):
+        return tuple.__new__(cls, (host, path))
+
+    host = property(itemgetter(0))
+    path = property(itemgetter(1))
+
     @classmethod
     def parse(cls, s):
         try:
