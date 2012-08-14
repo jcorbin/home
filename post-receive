@@ -135,6 +135,11 @@ if __name__ == '__main__':
             pack = run('git shell-pack make drop', stdout=PIPE).stdout
             shutil.copyfileobj(pack, f)
 
+        for ent in os.listdir(pubdir):
+            if ent == thepack: continue
+            if not ent.startswith(branch + '-'): continue
+            os.unlink(os.path.join(pubdir, ent))
+
         with open(os.path.join(pubdir, 'index.html'), 'w') as f:
             for s in index_contents():
                 f.write(s)
