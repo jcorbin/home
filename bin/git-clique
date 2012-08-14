@@ -2,8 +2,31 @@
 
 import os
 import socket
-from subprocess import check_call, Popen, PIPE
+from subprocess import Popen, PIPE
 import sys
+
+try:
+    from subprocess import check_call
+except ImportError:
+    from subprocess import call
+
+    # rips from python 2.7 subprocess.py
+    class CalledProcessError(Exception):
+        def __init__(self, returncode, cmd, output=None):
+            self.returncode = returncode
+            self.cmd = cmd
+            self.output = output
+        def __str__(self):
+            return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
+
+    def check_call(*popenargs, **kwargs):
+        retcode = call(*popenargs, **kwargs)
+        if retcode:
+            cmd = kwargs.get("args")
+            if cmd is None:
+                cmd = popenargs[0]
+            raise CalledProcessError(retcode, cmd)
+        return 0
 
 # from collections import namedtuple
 from operator import itemgetter
