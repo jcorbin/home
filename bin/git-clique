@@ -69,16 +69,26 @@ class repo(tuple): # namedtuple('repo', 'host path')
             self.host == socket.gethostname() or \
             self.host == socket.getfqdn()
 
+    def relativize_repos(self, repos):
+        for r in repos:
+            if r.host is None and self.host is not None:
+                # TODO: option for fqdn instead
+                yield socket.gethostname() + ':' + r.path
+            elif r.host == self.host:
+                yield r.path
+            else:
+                yield str(r)
+
     @repo_command_runner
     def add_repos(self, remote, *repos):
         cmd = ['git', 'clique', 'add', '--change-only', remote]
-        cmd.extend(str(r) for r in repos)
+        cmd.extend(self.relativize_repos(repos))
         return cmd
 
     @repo_command_runner
     def remove_repos(self, remote, *repos):
         cmd = ['git', 'peer', 'rm', '--change-only', remote]
-        cmd.extend(str(r) for r in repos)
+        cmd.extend(self.relativize_repos(repos))
         return cmd
 
     @repo_command_runner
