@@ -4,7 +4,7 @@
 OPTIONS_SPEC="\
 git shell-pack seed <remote> [<ref> [<ref> [...]]]
 git shell-pack make <remote> [<ref> [<ref> [...]]]
-git shell-pack ack  <remote>
+git shell-pack ack  <remote> [<rev>]
 
 'seed' builds a self-extracting seed file for the remote.  A seed file is just
        like a pack file, except it includes logic to run git-init and otherwise
@@ -141,13 +141,26 @@ make)
     make_pack
     ;;
 ack)
-    git for-each-ref --format='%(objectname) %(refname)' "refs/remotes/for/$remote/*" \
-    | while read rev forref; do
-        ref=${forref##*/}
+    if [ $# -gt 0 ]; then
+        revarg=$1
+        shift
+        rev=$(git rev-parse --verify $revarg)
+        git rev-list work/master..for/work/master | grep -Fxq $rev \
+            || die "Invalid revision $revarg"
         git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
-        git update-ref -d $forref $rev
+        if [ $rev == $(git rev-parse $forref) ]; then
+            git update-ref -d $forref $rev
+        fi
         echo "Acked $remote/$ref $rev"
-    done
+    else
+        git for-each-ref --format='%(objectname) %(refname)' "refs/remotes/for/$remote/*" \
+        | while read rev forref; do
+            ref=${forref##*/}
+            git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
+            git update-ref -d $forref $rev
+            echo "Acked $remote/$ref $rev"
+        done
+    fi
     ;;
 *) die "Invalid command: $command" ;;
 esac
