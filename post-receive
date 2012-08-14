@@ -45,12 +45,13 @@ def update_file(old, new, repopath, target):
     oldob, newob = revs(
         old + ':' + repopath,
         new + ':' + repopath)
-    if oldob == newob: return
+    if oldob == newob: return False
     with open(target, 'w') as f:
         show = run(
             ('git', 'show', new + ':' + repopath),
             stdout=PIPE).stdout
         shutil.copyfileobj(show, f)
+        return True
 
 def read_checkouts(meta_ref):
     path = meta_ref + ':checkouts'
