@@ -81,7 +81,10 @@ if not added: sys.exit(0)
 if not opts.addonly:
     for url in added:
         r = repo.parse(url)
-        thisurl = thispath if r.islocal() else thisfqdn + ':' + thispath
+        if r.islocal():
+            thisurl = thispath
+        else:
+            thisurl = thisfqdn + ':' + thispath
         r.sync_peers(remote, thisurl, *urls)
 
     for url in urls - added:
