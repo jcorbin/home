@@ -127,7 +127,9 @@ if __name__ == '__main__':
 
         if notify_to:
             # TODO: use python module
-            subject = thepack + ' available'
+            with open('description') as f:
+                desc = f.readline().strip()
+            subject = '{0}: {1} available'.format(desc, thepack)
             mail = run(('mail',
                 '--to', notify_to,
                 '--subject', subject
