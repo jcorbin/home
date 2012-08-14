@@ -128,9 +128,10 @@ if __name__ == '__main__':
 
         if notify_to:
             # TODO: use python module
+            subject = os.path.basename(thepack) + ' available'
             mail = run(('mail',
                 '--to', notify_to,
-                '--subject', os.path.basename(thepack) + ' available'
+                '--subject', subject
             ), wait=False, stdin=PIPE)
             mail.stdin.write(puburl + '/' + thepack + '\n')
             mail.stdin.close()
