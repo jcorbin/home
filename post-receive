@@ -11,7 +11,6 @@ notify_to = 'jcorbin@wunjo.org'
 puburl = 'http://www.wunjo.org/~jcorbin/forwork'
 pubdir = '~/public_html/forwork'
 pubdir = os.path.expanduser(pubdir)
-pack_template = os.path.join(pubdir, 'pack-{0}-{1}.sh.gz')
 
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
     if isinstance(cmd, unicode):
@@ -72,7 +71,7 @@ def index_contents():
     yield "<body>"
     yield "<ul>"
     for ent in os.listdir(pubdir):
-        if not ent.startswith('pack-'): continue
+        if not ent.endswith('.sh.gz'): continue
         yield "<li><a href=\"{0}\">{0}</a></li>".format(ent)
     yield "</ul>"
     yield "</body></html>\n"
@@ -96,7 +95,9 @@ if __name__ == '__main__':
 
         work, forwork = shortrevs('work/master', 'for/work/master')
 
-        thepack = pack_template.format(work, forwork)
+        branch = head_ref.rsplit('/', 1)[1]
+        thepack = '{0}-{1}-{2}.sh.gz'.format(branch, work, forwork)
+        thepack = os.path.join(pubdir, thepack)
 
         with gzip.GzipFile(thepack, 'w') as f:
             pack = run('git shell-pack make work', stdout=PIPE).stdout
