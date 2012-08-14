@@ -90,6 +90,7 @@ if __name__ == '__main__':
         os.dup2(r, sys.stdin.fileno())
         os.close(r)
         print 'updated', os.path.realpath(sys.argv[0]), 're-execing'
+        sys.stdout.flush()
         os.execl(os.path.realpath(sys.argv[0]), sys.argv[0], '--dejavu')
 
     meta_ref = 'refs/heads/meta'
