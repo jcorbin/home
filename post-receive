@@ -57,6 +57,9 @@ def update_file(old, new, repopath, target):
     newob = path_sha(new, repopath)
     if oldob == newob: return False
     target = os.path.realpath(target)
+    if newob is None:
+        os.unlink(target)
+        return True
     with open(target, 'w') as f:
         show = run(
             ('git', 'show', new + ':' + repopath),
