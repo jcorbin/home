@@ -77,25 +77,25 @@ def index_contents():
     yield "</body></html>\n"
 
 if __name__ == '__main__':
+    updates = [line.strip().split(None, 2) for line in sys.stdin]
+
+    meta_ref = 'refs/heads/meta'
+
+    for old, new, refname in updates:
+        if refname != meta_ref: continue
+        for repopath, target in read_checkouts(meta_ref):
+            update_file(old, new, repopath, target)
+
     run('git repack -Ad')
     run('git gc')
 
-    meta_ref = 'refs/heads/meta'
     head_ref = run_line('git symbolic-ref HEAD')
-
-    for line in sys.stdin:
-        old, new, refname = line.strip().split(None, 2)
-
-        if refname == meta_ref:
-            for repopath, target in read_checkouts(meta_ref):
-                update_file(old, new, repopath, target)
-            continue
-
+    branch = head_ref.rsplit('/', 1)[1]
+    for old, new, refname in updates:
         if refname != head_ref: continue
 
         work, forwork = shortrevs('work/master', 'for/work/master')
 
-        branch = head_ref.rsplit('/', 1)[1]
         thepack = '{0}-{1}-{2}.sh.gz'.format(branch, work, forwork)
         thepack = os.path.join(pubdir, thepack)
 
