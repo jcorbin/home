@@ -81,9 +81,13 @@ def index_contents():
 if __name__ == '__main__':
     updates = [line.strip().split(None, 2) for line in sys.stdin]
 
+    self_files = (
+        os.path.realpath(sys.argv[0]),
+    )
+
     def upgrade_self(target):
         if '--dejavu' in sys.argv: return
-        if os.path.realpath(target) != os.path.realpath(sys.argv[0]): return
+        if os.path.realpath(target) not in self_files: return
         r, w = os.pipe()
         os.write(w, ''.join(' '.join(t)+'\n' for t in updates))
         os.close(w)
