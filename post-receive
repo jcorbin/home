@@ -73,8 +73,7 @@ def index_contents():
     yield "<ul>"
     for ent in os.listdir(pubdir):
         if not ent.startswith('pack-'): continue
-        name = ent.split('.', 1)[0].split('-', 1)[1]
-        yield "<li><a href=\"{0}\">{1}</a></li>".format(ent, name)
+        yield "<li><a href=\"{0}\">{0}</a></li>".format(ent)
     yield "</ul>"
     yield "</body></html>\n"
 
