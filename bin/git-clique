@@ -33,7 +33,8 @@ class repo(namedtuple('repo', 'host path')):
 
         else:
             cmd = ['ssh', self.host, 'bash', '-c',
-                   'cd "$1" && shift && git clique --add-noly "$@"', 'bash', remote]
+                   'cd "$1" && shift && git clique --add-noly "$@"',
+                   'bash', self.path, remote]
             cmd.extend(urls)
             check_call(cmd)
 
