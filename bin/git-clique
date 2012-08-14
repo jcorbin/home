@@ -84,7 +84,7 @@ if not opts.addonly:
         if r.islocal():
             thisurl = thispath
         else:
-            thisurl = thisfqdn + ':' + thispath
+            thisurl = socket.getfqdn() + ':' + thispath
         r.sync_peers(remote, thisurl, *urls)
 
     for url in urls - added:
