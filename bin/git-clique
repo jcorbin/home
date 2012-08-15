@@ -40,8 +40,9 @@ def repo_command_runner(f):
 
         else:
             cmd = list2cmdline(cmd).replace("'", "\\'")
-            cmd = ['ssh', self.host, '--',
-                   'bash', '-c', '\'cd "$1" && ' + cmd + '\'', self.path]
+            cmd = list2cmdline(['cd', self.path]) + ' && ' + cmd
+            cmd = "'" + cmd.replace("'", "\\'") + "'"
+            cmd = ['ssh', self.host, '--', 'bash', '-c', cmd]
             check_call(cmd)
     return wrapper
 
