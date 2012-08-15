@@ -28,6 +28,9 @@ except ImportError:
             raise CalledProcessError(retcode, cmd)
         return 0
 
+def run(cmd):
+    check_call(cmd)
+
 def repo_command_runner(f):
     def wrapper(self, *args):
         cmd = f(self, *args)
@@ -35,7 +38,7 @@ def repo_command_runner(f):
         if self.islocal():
             oldcwd = os.getcwd()
             os.chdir(self.path)
-            check_call(cmd)
+            run(cmd)
             os.chdir(oldcwd)
 
         else:
@@ -43,7 +46,7 @@ def repo_command_runner(f):
             cmd = list2cmdline(['cd', self.path]) + ' && ' + cmd
             cmd = "'" + cmd.replace("'", "\\'") + "'"
             cmd = ['ssh', self.host, '--', 'bash', '-c', cmd]
-            check_call(cmd)
+            run(cmd)
     return wrapper
 
 # from collections import namedtuple
@@ -145,9 +148,9 @@ if action == 'add':
     def change(r):
         if r not in repos:
             if not repos:
-                check_call(('git', 'remote', 'add', remote, str(r)))
+                run(('git', 'remote', 'add', remote, str(r)))
             else:
-                check_call(('git', 'remote', 'set-url', '--add', remote, str(r)))
+                run(('git', 'remote', 'set-url', '--add', remote, str(r)))
             repos.add(r)
             return True
 
@@ -169,7 +172,7 @@ if action == 'add':
 elif action == 'rm':
     def change(r):
         if r not in repos:
-            check_call(('git', 'remote', 'set-url', '--delete', remote, str(r)))
+            run(('git', 'remote', 'set-url', '--delete', remote, str(r)))
             repos.remove(r)
             return True
 
