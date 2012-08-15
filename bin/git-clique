@@ -173,7 +173,7 @@ if action == 'add':
 
 elif action == 'rm':
     def change(r):
-        if r not in repos:
+        if r in repos:
             run(('git', 'remote', 'set-url', '--delete', remote, str(r)))
             repos.remove(r)
             return True
