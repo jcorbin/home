@@ -141,23 +141,24 @@ class Command:
         self.repos = set(repo.parse(url)
             for url in get_remote_urls(self.remote))
 
-    def repopath(self):
+    def repo(self):
         p = Popen(('git', 'rev-parse', '--show-toplevel'), stdout=PIPE)
         if p.wait() != 0:
             raise RuntimeError(
                 'git rev-parse --show-toplevel exited non-zero: %d' % p.returncode)
-        thispath = p.stdout.readline().strip()
-        thispath = os.path.realpath(thispath)
-        if thispath.endswith('/.git'):
-            thispath = thispath[:-5]
-        return thispath
+        path = p.stdout.readline().strip()
+        path = os.path.realpath(path)
+        if path.endswith('/.git'):
+            path = path[:-5]
+
+        return repo(None, path)
 
     def __call__(self):
-        thispath = self.repopath()
+        thisrepo = self.repo()
 
         for url in self.args:
             r = repo.parse(url)
-            if r.islocal() and r.path == thispath: continue
+            if r == thisrepo: continue
             if self.change(r):
                 self.changed.add(r)
 
@@ -183,11 +184,7 @@ class AddCommand(Command):
         if self.opts.notthis:
             r.add_repos(self.remote, *self.repos)
         else:
-            if r.islocal():
-                thisurl = self.repopath()
-            else:
-                thisurl = socket.getfqdn() + ':' + self.repopath()
-            r.add_repos(self.remote, thisurl, *self.repos)
+            r.add_repos(self.remote, self.repo(), *self.repos)
 
     def propagate(self, r):
         r.add_repos(self.remote, *self.changed)
