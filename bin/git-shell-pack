@@ -4,7 +4,7 @@
 OPTIONS_SPEC="\
 git shell-pack seed <remote> [<ref> [<ref> [...]]]
 git shell-pack make <remote> [<ref> [<ref> [...]]]
-git shell-pack ack  <remote> [<rev>]
+git shell-pack ack  <remote> [<ref> <rev>]
 
 'seed' builds a self-extracting seed file for the remote.  A seed file is just
        like a pack file, except it includes logic to run git-init and otherwise
@@ -142,8 +142,10 @@ make)
     ;;
 ack)
     if [ $# -gt 0 ]; then
-        revarg=$1
-        shift
+        ref=$1
+        revarg=$2
+        shift 2
+
         rev=$(git rev-parse --verify $revarg)
         git rev-list $remote/$ref..for/$remote/$ref | grep -Fxq $rev \
             || die "Invalid revision $revarg"
