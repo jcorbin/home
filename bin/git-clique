@@ -43,9 +43,13 @@ def repo_command_runner(f):
 
         if self.islocal():
             oldcwd = os.getcwd()
-            os.chdir(self.path)
+            if oldcwd == self.path:
+                oldcwd = None
+            else:
+                os.chdir(self.path)
             run(cmd)
-            os.chdir(oldcwd)
+            if oldcwd:
+                os.chdir(oldcwd)
 
         else:
             cmd = list2cmdline(cmd).replace("'", "\\'")
