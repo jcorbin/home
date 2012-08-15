@@ -28,7 +28,13 @@ except ImportError:
             raise CalledProcessError(retcode, cmd)
         return 0
 
+VerboseRun = False
+
 def run(cmd):
+    if VerboseRun:
+        host = socket.gethostname()
+        path = os.getcwd()
+        print host + ':' + path, '+', list2cmdline(cmd)
     check_call(cmd)
 
 def repo_command_runner(f):
@@ -86,6 +92,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
     @repo_command_runner
     def add_repos(self, remote, *repos):
         cmd = ['git', 'clique']
+        if VerboseRun: cmd.append('--verbose')
         cmd += ['add', '--change-only', remote]
         cmd.extend(self.relativize_repos(repos))
         return cmd
@@ -93,6 +100,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
     @repo_command_runner
     def remove_repos(self, remote, *repos):
         cmd = ['git', 'clique']
+        if VerboseRun: cmd.append('--verbose')
         cmd += ['rm', '--change-only', remote]
         cmd.extend(self.relativize_repos(repos))
         return cmd
@@ -128,6 +136,9 @@ if thispath.endswith('/.git'):
 import optparse
 parser = optparse.OptionParser(
     usage='%prog add|rm <remote> <url> [<url> [...]]')
+parser.add_option('-v', '--verbose',
+    help='Print verbose output (command run)',
+    dest='verbose', action='store_true', default=False)
 parser.add_option('--change-only',
     help='Only make changes to the local repository;'
          ' don\'t propagate changes to other repositories.',
@@ -142,6 +153,9 @@ action = args.pop(0)
 if not len(args): parser.error('missing remote')
 remote = args.pop(0)
 if not len(args): parser.error('missing urls')
+
+if opts.verbose:
+    VerboseRun = True
 
 changed = set()
 repos = set(repo.parse(url) for url in get_remote_urls(remote))
