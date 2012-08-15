@@ -63,6 +63,8 @@ def repo_command_runner(f):
 from operator import itemgetter
 class repo(tuple): # namedtuple('repo', 'host path')
     def __new__(cls, host, path):
+        if host in (socket.gethostname(), socket.getfqdn()):
+            host = None
         return tuple.__new__(cls, (host, path))
 
     host = property(itemgetter(0))
@@ -78,10 +80,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
         return cls(host, path)
 
     def islocal(self):
-        return \
-            self.host is None or \
-            self.host == socket.gethostname() or \
-            self.host == socket.getfqdn()
+        return self.host is None
 
     def relativize_repos(self, repos):
         for r in repos:
