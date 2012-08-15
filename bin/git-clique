@@ -85,13 +85,15 @@ class repo(tuple): # namedtuple('repo', 'host path')
 
     @repo_command_runner
     def add_repos(self, remote, *repos):
-        cmd = ['git', 'clique', 'add', '--change-only', remote]
+        cmd = ['git', 'clique']
+        cmd += ['add', '--change-only', remote]
         cmd.extend(self.relativize_repos(repos))
         return cmd
 
     @repo_command_runner
     def remove_repos(self, remote, *repos):
-        cmd = ['git', 'clique', 'rm', '--change-only', remote]
+        cmd = ['git', 'clique']
+        cmd += ['rm', '--change-only', remote]
         cmd.extend(self.relativize_repos(repos))
         return cmd
 
