@@ -202,9 +202,26 @@ class RmCommand(Command):
     def propagate(self, r):
         r.remove_repos(self.remote, *self.changed)
 
+class TeardownCommand(Command):
+    def __init__(self, opts, args):
+        self.opts = opts
+        self.args = args
+
+        if not len(args): parser.error('missing remote')
+        self.remote = args.pop(0)
+
+        self.changed = set()
+
+    def __call__(self):
+        for url in get_remote_urls(self.remote):
+            r = repo.parse(url)
+            r.remove_remote(self.remote)
+        run(('git', 'remote', 'rm', self.remote))
+
 import optparse
 parser = optparse.OptionParser(
-    usage='%prog add|rm <remote> <url> [<url> [...]]')
+    usage='%prog add|rm <remote> <url> [<url> [...]]\n'
+    '       %prog teardown <remote>')
 parser.add_option('-v', '--verbose',
     help='Print verbose output (command run)',
     dest='verbose', action='store_true', default=False)
@@ -224,6 +241,7 @@ action = args.pop(0)
 commands = {
     'add': AddCommand,
     'rm': RmCommand,
+    'teardown': TeardownCommand,
 }
 
 try:
