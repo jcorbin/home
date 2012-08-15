@@ -145,7 +145,7 @@ ack)
         revarg=$1
         shift
         rev=$(git rev-parse --verify $revarg)
-        git rev-list work/master..for/work/master | grep -Fxq $rev \
+        git rev-list $remote/$ref..for/$remote/$ref | grep -Fxq $rev \
             || die "Invalid revision $revarg"
         git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
         if [ $rev == $(git rev-parse $forref) ]; then
