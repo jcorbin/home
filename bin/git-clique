@@ -124,14 +124,83 @@ def get_remote_urls(remote):
         line = line.strip()
         if line: yield line
 
-p = Popen(('git', 'rev-parse', '--show-toplevel'), stdout=PIPE)
-if p.wait() != 0:
-    raise RuntimeError(
-        'git rev-parse --show-toplevel exited non-zero: %d' % p.returncode)
-thispath = p.stdout.readline().strip()
-thispath = os.path.realpath(thispath)
-if thispath.endswith('/.git'):
-    thispath = thispath[:-5]
+class Command:
+    def __init__(self, opts, args):
+        self.opts = opts
+        self.args = args
+
+        if not len(args): parser.error('missing remote')
+        self.remote = args.pop(0)
+
+        if not len(args): parser.error('missing urls')
+
+        self.changed = set()
+        self.repos = set(repo.parse(url)
+            for url in get_remote_urls(self.remote))
+
+    def repopath(self):
+        p = Popen(('git', 'rev-parse', '--show-toplevel'), stdout=PIPE)
+        if p.wait() != 0:
+            raise RuntimeError(
+                'git rev-parse --show-toplevel exited non-zero: %d' % p.returncode)
+        thispath = p.stdout.readline().strip()
+        thispath = os.path.realpath(thispath)
+        if thispath.endswith('/.git'):
+            thispath = thispath[:-5]
+        return thispath
+
+    def __call__(self):
+        thispath = self.repopath()
+
+        for url in self.args:
+            r = repo.parse(url)
+            if r.islocal() and os.path.realpath(r.path) == thispath: continue
+            if self.change(r):
+                self.changed.add(r)
+
+        if not self.changed or self.opts.changeonly: sys.exit(0)
+
+        for r in self.changed:
+            self.change_changee(r)
+
+        for r in self.repos - self.changed:
+            self.propagate(r)
+
+class AddCommand(Command):
+    def change(self, r):
+        if r not in self.repos:
+            if not self.repos:
+                run(('git', 'remote', 'add', self.remote, str(r)))
+            else:
+                run(('git', 'remote', 'set-url', '--add', self.remote, str(r)))
+            self.repos.add(r)
+            return True
+
+    def change_changee(self, r):
+        if self.opts.notthis:
+            r.add_repos(self.remote, *self.repos)
+        else:
+            if r.islocal():
+                thisurl = self.repopath()
+            else:
+                thisurl = socket.getfqdn() + ':' + self.repopath()
+            r.add_repos(self.remote, thisurl, *self.repos)
+
+    def propagate(self, r):
+        r.add_repos(self.remote, *self.changed)
+
+class RmCommand(Command):
+    def change(self, r):
+        if r in self.repos:
+            run(('git', 'remote', 'set-url', '--delete', self.remote, str(r)))
+            self.repos.remove(r)
+            return True
+
+    def change_changee(self, r):
+        r.remove_remote(self.remote)
+
+    def propagate(self, r):
+        r.remove_repos(self.remote, *self.changed)
 
 import optparse
 parser = optparse.OptionParser(
@@ -148,69 +217,23 @@ parser.add_option('--not-this',
          ' repositories; useful for repositories external to the clique.',
     dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
+
 if not len(args): parser.error('missing action')
 action = args.pop(0)
-if not len(args): parser.error('missing remote')
-remote = args.pop(0)
-if not len(args): parser.error('missing urls')
+
+commands = {
+    'add': AddCommand,
+    'rm': RmCommand,
+}
+
+try:
+    cmd = commands[action]
+except KeyError:
+    print >>sys.stderr, "Invaild action", repr(action)
+    sys.exit(1)
 
 if opts.verbose:
     VerboseRun = True
 
-changed = set()
-repos = set(repo.parse(url) for url in get_remote_urls(remote))
-
-if action == 'add':
-    def change(r):
-        if r not in repos:
-            if not repos:
-                run(('git', 'remote', 'add', remote, str(r)))
-            else:
-                run(('git', 'remote', 'set-url', '--add', remote, str(r)))
-            repos.add(r)
-            return True
-
-    if opts.notthis:
-        def change_changee(r):
-            r.add_repos(remote, *repos)
-    else:
-        def change_changee(r):
-            if r.islocal():
-                thisurl = thispath
-            else:
-                thisurl = socket.getfqdn() + ':' + thispath
-            r.add_repos(remote, thisurl, *repos)
-
-    def propagate(r):
-        r.add_repos(remote, *changed)
-
-elif action == 'rm':
-    def change(r):
-        if r in repos:
-            run(('git', 'remote', 'set-url', '--delete', remote, str(r)))
-            repos.remove(r)
-            return True
-
-    def change_changee(r):
-        r.remove_remote(remote)
-
-    def propagate(r):
-        r.remove_repos(remote, *changed)
-
-else:
-    print >>sys.stderr, "Invaild action", repr(action)
-    sys.exit(1)
-
-for url in args:
-    r = repo.parse(url)
-    if r.islocal() and os.path.realpath(r.path) == thispath: continue
-    if change(r):
-        changed.add(r)
-
-if not changed or opts.changeonly: sys.exit(0)
-
-for r in changed:
-    change_changee(r)
-
-for r in repos - changed:
-    propagate(r)
+cmd = cmd(opts, args)
+cmd()
