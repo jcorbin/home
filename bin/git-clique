@@ -157,7 +157,7 @@ class Command:
 
         for url in self.args:
             r = repo.parse(url)
-            if r.islocal() and os.path.realpath(r.path) == thispath: continue
+            if r.islocal() and r.path == thispath: continue
             if self.change(r):
                 self.changed.add(r)
 
