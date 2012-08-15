@@ -178,7 +178,6 @@ if action == 'add':
             if r.islocal():
                 thisurl = thispath
             else:
-                thisurl = thisfqdn + ':' + thispath
                 thisurl = socket.getfqdn() + ':' + thispath
             r.add_repos(remote, thisurl, *repos)
 
