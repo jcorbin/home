@@ -127,12 +127,12 @@ if __name__ == '__main__':
     for old, new, refname in updates:
         if refname != head_ref: continue
 
+        pack = run('git shell-pack make drop', stdout=PIPE).stdout
         drop, fordrop = shortrevs('drop/master', 'for/drop/master')
 
         thepack = '{0}-{1}-{2}.sh.gz'.format(branch, drop, fordrop)
 
         with gzip.GzipFile(os.path.join(pubdir, thepack), 'w') as f:
-            pack = run('git shell-pack make drop', stdout=PIPE).stdout
             shutil.copyfileobj(pack, f)
 
         for ent in os.listdir(pubdir):
