@@ -40,13 +40,6 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
             raise CalledProcessError(retcode, p.cmdstr)
     return p
 
-# TODO: push down
-def repo_command_runner(f):
-    def wrapper(self, *args):
-        cmd = f(self, *args)
-        self.runcmd(cmd)
-    return wrapper
-
 # from collections import namedtuple
 from operator import itemgetter
 class repo(tuple): # namedtuple('repo', 'host path')
@@ -100,25 +93,22 @@ class repo(tuple): # namedtuple('repo', 'host path')
             else:
                 yield str(r)
 
-    @repo_command_runner
     def add_repos(self, remote, *repos):
         cmd = ['git', 'clique']
         if VerboseRun: cmd.append('--verbose')
         cmd += ['add', '--change-only', remote]
         cmd.extend(self.relativize_repos(repos))
-        return cmd
+        self.runcmd(cmd)
 
-    @repo_command_runner
     def remove_repos(self, remote, *repos):
         cmd = ['git', 'clique']
         if VerboseRun: cmd.append('--verbose')
         cmd += ['rm', '--change-only', remote]
         cmd.extend(self.relativize_repos(repos))
-        return cmd
+        self.runcmd(cmd)
 
-    @repo_command_runner
     def remove_remote(self, remote):
-        return ['git', 'remote', 'rm', remote]
+        self.runcmd(('git', 'remote', 'rm', remote))
 
     def __str__(self):
         if self.host is None:
