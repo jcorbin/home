@@ -40,26 +40,11 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
             raise CalledProcessError(retcode, p.cmdstr)
     return p
 
+# TODO: push down
 def repo_command_runner(f):
     def wrapper(self, *args):
         cmd = f(self, *args)
-
-        if self.islocal():
-            oldcwd = os.getcwd()
-            if oldcwd == self.path:
-                oldcwd = None
-            else:
-                os.chdir(self.path)
-            run(cmd)
-            if oldcwd:
-                os.chdir(oldcwd)
-
-        else:
-            cmd = list2cmdline(cmd).replace("'", "\\'")
-            cmd = list2cmdline(['cd', self.path]) + ' && ' + cmd
-            cmd = "'" + cmd.replace("'", "\\'") + "'"
-            cmd = ['ssh', self.host, '--', 'bash', '-c', cmd]
-            run(cmd)
+        self.runcmd(cmd)
     return wrapper
 
 # from collections import namedtuple
@@ -72,6 +57,26 @@ class repo(tuple): # namedtuple('repo', 'host path')
 
     host = property(itemgetter(0))
     path = property(itemgetter(1))
+
+    def runcmd(self, cmd, **kwargs):
+        if self.islocal():
+            oldcwd = os.getcwd()
+            if oldcwd == self.path:
+                oldcwd = None
+            else:
+                os.chdir(self.path)
+            proc = run(cmd, **kwargs)
+            if oldcwd:
+                os.chdir(oldcwd)
+
+        else:
+            cmd = list2cmdline(cmd).replace("'", "\\'")
+            cmd = list2cmdline(['cd', self.path]) + ' && ' + cmd
+            cmd = "'" + cmd.replace("'", "\\'") + "'"
+            cmd = ['ssh', self.host, '--', 'bash', '-c', cmd]
+            proc = run(cmd, **kwargs)
+
+        return proc
 
     @classmethod
     def parse(cls, s):
