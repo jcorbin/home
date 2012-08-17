@@ -149,7 +149,13 @@ class Command:
         self.repos = set(repo.parse(url)
             for url in get_remote_urls(self.remote))
 
+    @property
     def repo(self):
+        try:
+            return self._repo
+        except AttributeError:
+            pass
+
         p = Popen(('git', 'rev-parse', '--show-toplevel'), stdout=PIPE)
         if p.wait() != 0:
             raise RuntimeError(
@@ -158,15 +164,13 @@ class Command:
         path = os.path.realpath(path)
         if path.endswith('/.git'):
             path = path[:-5]
-
-        return repo(None, path)
+        self._repo = repo(None, path)
+        return self._repo
 
     def __call__(self):
-        thisrepo = self.repo()
-
         for url in self.args:
             r = repo.parse(url)
-            if r == thisrepo: continue
+            if r == self.repo: continue
             if self.change(r):
                 self.changed.add(r)
 
@@ -192,7 +196,7 @@ class AddCommand(Command):
         if self.opts.notthis:
             r.add_repos(self.remote, *self.repos)
         else:
-            r.add_repos(self.remote, self.repo(), *self.repos)
+            r.add_repos(self.remote, self.repo, *self.repos)
 
     def propagate(self, r):
         r.add_repos(self.remote, *self.changed)
