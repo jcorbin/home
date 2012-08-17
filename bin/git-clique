@@ -213,8 +213,6 @@ class TeardownCommand(Command):
         if not len(args): parser.error('missing remote')
         self.remote = args.pop(0)
 
-        self.changed = set()
-
     def __call__(self):
         for url in get_remote_urls(self.remote):
             r = repo.parse(url)
