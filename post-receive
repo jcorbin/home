@@ -127,6 +127,13 @@ if __name__ == '__main__':
     for old, new, refname in updates:
         if refname != head_ref: continue
 
+        try:
+            run('git show-ref --verify --quiet for/drop/master')
+        except CalledProcessError:
+            pass
+        else:
+            run(os.path.join(os.getcwd(), 'ack'))
+
         pack = run('git shell-pack make drop', stdout=PIPE).stdout
         drop, fordrop = shortrevs('drop/master', 'for/drop/master')
 
