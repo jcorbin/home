@@ -110,6 +110,16 @@ class repo(tuple): # namedtuple('repo', 'host path')
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
 
+    def get_remote_urls(self, remote):
+        try:
+            urls = self.runcmd((
+                'git', 'config',  '--get-all', 'remote.' + remote + '.url'
+            ), stdout=PIPE)
+        except CalledProcessError:
+            return ()
+        else:
+            return (line.rstrip('\r\n') for line in urls.stdout)
+
     def __str__(self):
         if self.host is None:
             return self.path
