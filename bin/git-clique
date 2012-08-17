@@ -126,15 +126,6 @@ class repo(tuple): # namedtuple('repo', 'host path')
         else:
             return self.host + ':' + self.path
 
-def get_remote_urls(remote):
-    p = Popen(
-        ('git', 'config',  '--get-all', 'remote.' + remote + '.url'),
-        stdout=PIPE)
-    # if p.wait() != 0: return None
-    for line in p.stdout:
-        line = line.strip()
-        if line: yield line
-
 class Command:
     def __init__(self, opts, args):
         self.opts = opts
@@ -147,7 +138,7 @@ class Command:
 
         self.changed = set()
         self.repos = set(repo.parse(url)
-            for url in get_remote_urls(self.remote))
+            for url in self.repo.get_remote_urls(self.remote))
 
     @property
     def repo(self):
