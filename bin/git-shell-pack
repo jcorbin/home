@@ -12,8 +12,8 @@ git shell-pack ack  <remote> [<ref> <rev>]
 
 'make' builds a self-extracting pack file for the remote.  If no refs are
        given, then all matching refs for the remote are exported.  The shell
-       script is output on stdout.  The refs packed are recorded in
-       refs/remotes/for/<remote>/*.
+       script is written to shell-pack-<packid>.sh, whose name is echoed on
+       stdout.  The refs packed are recorded in refs/remotes/for/<remote>/*.
 
 'ack' acknowledges reception of a pack by updating refs/remotes/* with the
       revisions recorded by 'make' in refs/remotes/for/<remote>/*.
@@ -36,6 +36,8 @@ set -e
 
 make_pack()
 {
+    name="shell-pack"
+
     [ -z "$header" ] && header="\
 if [ \$# -ge 1 ]; then
     remote=\$1
@@ -64,24 +66,28 @@ fi"
         footer+="echo Imported $src to \$remote/$refname\n"
     done
 
-    pack_data=$(
+    packid=$(
         git rev-list --objects $commits \
         | cut -d' '  -f1 \
-        | git pack-objects --all-progress --stdout | base64)
+        | git pack-objects --all-progress $name)
+    name+="-$packid"
+    rm -f $name.idx
 
-    cat <<EOSCRIPT
+    cat >$name.sh <<EOSCRIPT
 #!/bin/sh
 set -e
 
 $header
 
 base64 -di <<EOPACK | git index-pack --stdin >/dev/null
-$pack_data
+$(base64 $name.pack)
 EOPACK
 
 $(echo -ne $footer)
 $trailer
 EOSCRIPT
+    rm -f $name.pack
+    echo $name.sh
 }
 
 make_seed()
