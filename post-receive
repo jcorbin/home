@@ -48,7 +48,7 @@ def shortrevs(*rs):
 def path_sha(rev, path):
     if rev == '0' * 40: return None
     try:
-        return revs(rev + ':' + repopath)
+        return revs(rev + ':' + path)
     except CalledProcessError:
         return None
 
