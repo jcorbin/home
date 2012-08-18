@@ -75,6 +75,7 @@ def read_checkouts(meta_ref):
         except ValueError:
             print >>sys.stderr, \
                 'bogus checkouts:{0}: {1}'.format(i+1, line)
+        target = os.path.expanduser(target)
         target = os.path.realpath(target)
         yield repopath, target
 
