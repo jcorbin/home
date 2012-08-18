@@ -107,7 +107,8 @@ if __name__ == '__main__':
 
     def upgrade_self(target):
         r, w = os.pipe()
-        os.write(w, ''.join(' '.join(t)+'\n' for t in updates))
+        os.write(w, ''.join('{0} {1} {2}\n'.format(old, new, ref)
+            for ref, (old, new) in updates.iteritems()))
         os.close(w)
         os.dup2(r, sys.stdin.fileno())
         os.close(r)
@@ -119,12 +120,14 @@ if __name__ == '__main__':
         os.execv(myself, args)
 
     updates = [line.strip().split(None, 2) for line in sys.stdin]
+    updates = dict((refname, (old, new)) for old, new, refname in updates)
+
     meta_ref = 'refs/heads/meta'
 
-    for old, new, refname in updates:
-        if refname != meta_ref: continue
+    if meta_ref in updates:
+        old_rev, new_rev = updates[meta_ref]
         for repopath, target in read_checkouts(meta_ref):
-            if update_file(old, new, repopath, target):
+            if update_file(old_rev, new_rev, repopath, target):
                 if target not in updated_self and target in self_files:
                     print 'updated', target, 're-execing'
                     upgrade_self(target)
@@ -134,41 +137,40 @@ if __name__ == '__main__':
 
     head_ref = run_line('git symbolic-ref HEAD')
     branch = head_ref.rsplit('/', 1)[1]
-    for old, new, refname in updates:
-        if refname != head_ref: continue
+    if head_ref not in updates: sys.exit(0)
 
-        try:
-            run('git show-ref --verify --quiet for/drop/master')
-        except CalledProcessError:
-            pass
-        else:
-            run(os.path.join(os.getcwd(), 'ack'))
+    try:
+        run('git show-ref --verify --quiet for/drop/master')
+    except CalledProcessError:
+        pass
+    else:
+        run(os.path.join(os.getcwd(), 'ack'))
 
-        thepack = run_line('git shell-pack make drop')
-        pubpack = os.path.join(pubdir, thepack) + '.gz'
-        with open(thepack, 'r') as src, \
-             gzip.GzipFile(pubpack, 'w') as dst:
-            shutil.copyfileobj(src, dst)
-        os.unlink(thepack)
+    thepack = run_line('git shell-pack make drop')
+    pubpack = os.path.join(pubdir, thepack) + '.gz'
+    with open(thepack, 'r') as src, \
+         gzip.GzipFile(pubpack, 'w') as dst:
+        shutil.copyfileobj(src, dst)
+    os.unlink(thepack)
 
-        for ent in os.listdir(pubdir):
-            if ent == thepack: continue
-            if not ent.startswith(branch + '-'): continue
-            os.unlink(os.path.join(pubdir, ent))
+    for ent in os.listdir(pubdir):
+        if ent == thepack: continue
+        if not ent.startswith(branch + '-'): continue
+        os.unlink(os.path.join(pubdir, ent))
 
-        with open(os.path.join(pubdir, 'index.html'), 'w') as f:
-            for s in index_contents():
-                f.write(s)
+    with open(os.path.join(pubdir, 'index.html'), 'w') as f:
+        for s in index_contents():
+            f.write(s)
 
-        if notify_to:
-            # TODO: use python module
-            with open('description') as f:
-                desc = f.readline().strip()
-            subject = '{0}: {1} available'.format(desc, thepack)
-            mail = run(('mail',
-                '--to', notify_to,
-                '--subject', subject
-            ), wait=False, stdin=PIPE)
-            mail.stdin.write(puburl + '/' + thepack + '\n')
-            mail.stdin.close()
-            mail.wait()
+    if notify_to:
+        # TODO: use python module
+        with open('description') as f:
+            desc = f.readline().strip()
+        subject = '{0}: {1} available'.format(desc, thepack)
+        mail = run(('mail',
+            '--to', notify_to,
+            '--subject', subject
+        ), wait=False, stdin=PIPE)
+        mail.stdin.write(puburl + '/' + thepack + '\n')
+        mail.stdin.close()
+        mail.wait()
