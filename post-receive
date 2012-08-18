@@ -63,6 +63,7 @@ def update_file(old, new, repopath, target):
         show = run_output(('git', 'show', new + ':' + repopath))
         shutil.copyfileobj(show, f)
         print 'updated', target
+        sys.stdout.flush()
         return True
 
 def read_checkouts(meta_ref):
