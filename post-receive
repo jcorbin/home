@@ -93,10 +93,11 @@ def index_contents():
     yield "</body></html>\n"
 
 if __name__ == '__main__':
+    myself = os.path.realpath(sys.argv[0])
     updates = [line.strip().split(None, 2) for line in sys.stdin]
 
     self_files = (
-        os.path.realpath(sys.argv[0]),
+        myself,
     )
 
     def upgrade_self(target):
@@ -107,9 +108,9 @@ if __name__ == '__main__':
         os.close(w)
         os.dup2(r, sys.stdin.fileno())
         os.close(r)
-        print 'updated', os.path.realpath(sys.argv[0]), 're-execing'
+        print 'updated', myself, 're-execing'
         sys.stdout.flush()
-        os.execl(os.path.realpath(sys.argv[0]), sys.argv[0], '--dejavu')
+        os.execl(myself, sys.argv[0], '--dejavu')
 
     meta_ref = 'refs/heads/meta'
 
