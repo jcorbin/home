@@ -64,7 +64,9 @@ fi"
         footer+="echo Imported $src to \$remote/$refname\n"
     done
 
-    pack_data=$(git rev-list --objects $commits | cut -d' '  -f1 \
+    pack_data=$(
+        git rev-list --objects $commits \
+        | cut -d' '  -f1 \
         | git pack-objects --all-progress --stdout | base64)
 
     cat <<EOSCRIPT
