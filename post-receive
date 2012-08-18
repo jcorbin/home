@@ -105,7 +105,15 @@ if __name__ == '__main__':
     opts, args = parser.parse_args()
     updated_self = set(opts.updated_self)
 
-    def upgrade_self(target):
+    def upgrade_self(old_rev, new_rev):
+        upgraded = False
+        for repopath, target in read_checkouts():
+            if target in updated_self or target not in self_files: continue
+            if update_file(old_rev, new_rev, repopath, target):
+                updated_self.add(target)
+                upgraded = True
+        if not upgraded: return
+
         r, w = os.pipe()
         os.write(w, ''.join('{0} {1} {2}\n'.format(old, new, ref)
             for ref, (old, new) in updates.iteritems()))
@@ -113,10 +121,11 @@ if __name__ == '__main__':
         os.dup2(r, sys.stdin.fileno())
         os.close(r)
         sys.stdout.flush()
-        updated_self.add(target)
         args = [sys.argv[0]]
         for path in sorted(updated_self):
             args += ['--updated-self', path]
+        print 'reexecing', myself
+        sys.stdout.flush()
         os.execv(myself, args)
 
     updates = [line.strip().split(None, 2) for line in sys.stdin]
@@ -126,11 +135,10 @@ if __name__ == '__main__':
 
     if meta_ref in updates:
         old_rev, new_rev = updates[meta_ref]
+        upgrade_self(old_rev, new_rev)
         for repopath, target in read_checkouts(meta_ref):
-            if update_file(old_rev, new_rev, repopath, target):
-                if target not in updated_self and target in self_files:
-                    print 'updated', target, 're-execing'
-                    upgrade_self(target)
+            if target in self_files: continue
+            update_file(old_rev, new_rev, repopath, target)
 
     run('git repack -Ad')
     run('git gc')
