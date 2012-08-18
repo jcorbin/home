@@ -98,8 +98,15 @@ if __name__ == '__main__':
         myself,
     )
 
+    import optparse
+    parser = optparse.OptionParser()
+    parser.add_option('--dejavu', action='store_true', default=False)
+    parser.add_option('--updated-self', action='append', default=[])
+    opts, args = parser.parse_args()
+    updated_self = set(opts.updated_self)
+
     def upgrade_self(target):
-        if '--dejavu' in sys.argv: return
+        if target in updated_self: return
         if target not in self_files: return
         r, w = os.pipe()
         os.write(w, ''.join(' '.join(t)+'\n' for t in updates))
@@ -108,7 +115,11 @@ if __name__ == '__main__':
         os.close(r)
         print 'updated', target, 're-execing'
         sys.stdout.flush()
-        os.execl(myself, sys.argv[0], '--dejavu')
+        updated_self.add(target)
+        args = [sys.argv[0]]
+        for path in sorted(updated_self):
+            args += ['--updated-self', path]
+        os.execv(myself, args)
 
     updates = [line.strip().split(None, 2) for line in sys.stdin]
     meta_ref = 'refs/heads/meta'
