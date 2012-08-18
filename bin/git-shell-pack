@@ -13,7 +13,7 @@ git shell-pack ack  <remote> [<ref> <rev>]
 'make' builds a self-extracting pack file for the remote.  If no refs are
        given, then all matching refs for the remote are exported.  The shell
        script is output on stdout.  The refs packed are recorded in
-       refs/remotes/for/<remote>/* for:
+       refs/remotes/for/<remote>/*.
 
 'ack' acknowledges reception of a pack by updating refs/remotes/* with the
       revisions recorded by 'make' in refs/remotes/for/<remote>/*.
