@@ -12,6 +12,7 @@ puburl = 'http://www.wunjo.org/~jcorbin/drop'
 pubdir = '~/public_html/drop'
 pubdir = os.path.expanduser(pubdir)
 
+VerboseRun = False
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
     if isinstance(cmd, unicode):
         cmd = cmd.encode('ascii')
@@ -20,6 +21,9 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
         cmd = shlex.split(cmd)
     else:
         cmdstr = list2cmdline(cmd)
+    if VerboseRun:
+        print '+', cmdstr
+        sys.stdout.flush()
     p = Popen(cmd, **kwargs)
     p.cmdstr = cmdstr
     p.cmd = cmd
@@ -124,7 +128,10 @@ if __name__ == '__main__':
         args = [sys.argv[0]]
         for path in sorted(updated_self):
             args += ['--updated-self', path]
-        print 'reexecing', myself
+        if VerboseRun:
+            print '+', '(execv)', myself, ' '.join(args)
+        else:
+            print 'reexecing', myself
         sys.stdout.flush()
         os.execv(myself, args)
 
