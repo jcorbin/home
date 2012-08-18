@@ -56,7 +56,6 @@ def update_file(old, new, repopath, target):
     oldob = path_sha(old, repopath)
     newob = path_sha(new, repopath)
     if oldob == newob: return False
-    target = os.path.realpath(target)
     if newob is None:
         os.unlink(target)
         return True
@@ -76,6 +75,7 @@ def read_checkouts(meta_ref):
         except ValueError:
             print >>sys.stderr, \
                 'bogus checkouts:{0}: {1}'.format(i+1, line)
+        target = os.path.realpath(target)
         yield repopath, target
 
 def index_contents():
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
     def upgrade_self(target):
         if '--dejavu' in sys.argv: return
-        if os.path.realpath(target) not in self_files: return
+        if target not in self_files: return
         r, w = os.pipe()
         os.write(w, ''.join(' '.join(t)+'\n' for t in updates))
         os.close(w)
