@@ -94,8 +94,6 @@ def index_contents():
 
 if __name__ == '__main__':
     myself = os.path.realpath(sys.argv[0])
-    updates = [line.strip().split(None, 2) for line in sys.stdin]
-
     self_files = (
         myself,
     )
@@ -112,6 +110,7 @@ if __name__ == '__main__':
         sys.stdout.flush()
         os.execl(myself, sys.argv[0], '--dejavu')
 
+    updates = [line.strip().split(None, 2) for line in sys.stdin]
     meta_ref = 'refs/heads/meta'
 
     for old, new, refname in updates:
