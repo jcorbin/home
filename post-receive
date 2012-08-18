@@ -106,7 +106,7 @@ if __name__ == '__main__':
         os.close(w)
         os.dup2(r, sys.stdin.fileno())
         os.close(r)
-        print 'updated', myself, 're-execing'
+        print 'updated', target, 're-execing'
         sys.stdout.flush()
         os.execl(myself, sys.argv[0], '--dejavu')
 
