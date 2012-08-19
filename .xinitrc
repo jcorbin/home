@@ -36,6 +36,8 @@ done
 /usr/bin/gnome-keyring-daemon --start --components=secrets,ssh&
 
 nm-applet&
+blueman-applet&
+pasystray&
 
 xterm -e atmux&
 
