@@ -156,10 +156,11 @@ ack)
 
         rev=$(git rev-parse --verify $revarg)
         forref="refs/remotes/for/$remote/$ref"
+        forrev=$(git rev-parse $forref)
         git rev-list $remote/$ref..$forref | grep -Fxq $rev \
             || die "Invalid revision $revarg"
         git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
-        if [ $rev == $(git rev-parse $forref) ]; then
+        if [ $rev == "$forrev" ]; then
             git update-ref -d $forref $rev
         fi
         echo "Acked $remote/$ref $rev"
