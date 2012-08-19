@@ -7,7 +7,6 @@ import shutil
 from subprocess import CalledProcessError, list2cmdline, PIPE, Popen
 import sys
 
-notify_to = 'jcorbin@wunjo.org'
 puburl = 'http://www.wunjo.org/~jcorbin/drop'
 pubdir = '~/public_html/drop'
 pubdir = os.path.expanduser(pubdir)
@@ -69,6 +68,10 @@ def update_file(old, new, repopath, target):
         print 'updated', target
         sys.stdout.flush()
         return True
+
+def read_watchers(ref):
+    for line in run_output('git show ' + ref + ':drop-watchers'):
+        yield line.strip()
 
 def read_checkouts(meta_ref):
     path = meta_ref + ':checkouts'
@@ -177,12 +180,15 @@ if __name__ == '__main__':
         for s in index_contents():
             f.write(s)
 
-    if notify_to:
+    watchers = list(read_watchers(meta_ref))
+    if watchers:
         # TODO: use python module
         with open('description') as f:
             desc = f.readline().strip()
         subject = '{0}: {1} available'.format(desc, thepack)
-        cmd = ['mail', '--subject', subject, '--to', notify_to]
+        cmd = ['mail', '--subject', subject]
+        for watcher in watchers:
+            cmd += ['--to', watcher]
         mail = run(cmd, wait=False, stdin=PIPE)
         mail.stdin.write(puburl + '/' + thepack + '\n')
         mail.stdin.close()
