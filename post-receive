@@ -108,9 +108,71 @@ def index_contents(packdir):
     desc = open('description', 'r').readline().strip()
     return html_doc(desc + ' shell-pack stage', s)
 
-if __name__ == '__main__':
-    from bisect import bisect
+from bisect import bisect
 
+def make_pack(meta_ref, remote, branch, rev):
+    packdir = os.path.join(pubdir, remote)
+    packdirurl = puburl + '/' + remote
+    ship_ref = 'refs/heads/' + branch
+    pack_refspec = rev + ':' + ship_ref
+
+    # TODO: run ack once it's updated
+    # run(os.path.join(os.getcwd(), 'ack'))
+
+    thepack = run_line(('git', 'shell-pack', 'make', remote, pack_refspec))
+    packid = thepack.rpartition('-')[2].partition('.')[0]
+
+    pack_history = []
+    if os.path.exists('pack_history'):
+        with open('pack_history', 'r') as f:
+            pack_history = [line.strip().split(None, 1) for line in f]
+
+    packids, refs = [], []
+    if pack_history:
+        packids, refs = zip(*pack_history)
+        packids = list(packids)
+        refs = list(refs)
+    i = bisect(packids, packid)
+    packids.insert(i, packid)
+    refs.insert(i, rev)
+    pack_history = zip(packids, refs)
+    del i, packids, refs
+
+    with open('pack_history', 'w') as f:
+        f.writelines(' '.join(h)+'\n' for h in pack_history)
+
+    pubpack = os.path.join(packdir, thepack) + '.gz'
+    with open(thepack, 'r') as src, \
+         gzip.GzipFile(pubpack, 'w') as dst:
+        shutil.copyfileobj(src, dst)
+    os.unlink(thepack)
+    thepack += '.gz'
+
+    # TODO: old pack cleanup
+
+    with open(os.path.join(packdir, 'index.html'), 'w') as f:
+        if showindex:
+            f.write(index_contents(packdir))
+        else:
+            desc = open('description', 'r').readline().strip()
+            f.write(html_doc(desc + ' shell-pack stage', ''))
+
+    watchers = list(read_watchers(meta_ref, remote))
+    if watchers:
+        # TODO: use python module
+        with open('description') as f:
+            desc = f.readline().strip()
+        subject = '{0}: {1} available'.format(desc, thepack)
+        packurl = packdirurl + '/' + thepack
+        cmd = ['mail', '--subject', subject]
+        for watcher in watchers:
+            cmd += ['--to', watcher]
+        mail = run(cmd, wait=False, stdin=PIPE)
+        mail.stdin.write(packurl + '\n')
+        mail.stdin.close()
+        mail.wait()
+
+if __name__ == '__main__':
     myself = os.path.realpath(sys.argv[0])
     self_files = (
         myself,
@@ -125,7 +187,7 @@ if __name__ == '__main__':
 
     def upgrade_self(old_rev, new_rev):
         upgraded = False
-        for repopath, target in read_checkouts():
+        for repopath, target in read_checkouts(meta_ref):
             if target in updated_self or target not in self_files: continue
             if update_file(old_rev, new_rev, repopath, target):
                 updated_self.add(target)
@@ -165,68 +227,6 @@ if __name__ == '__main__':
     run('git gc')
 
     head_ref = run_line('git symbolic-ref HEAD')
-    branch = 'master'
-    basename = 'drop'
-    packdir = os.path.join(pubdir, basename)
-    packdirurl = puburl + '/' + basename
-    ship_ref = 'refs/heads/' + branch
-    for_ref = 'for/{0}/{1}'.format(basename, branch)
-    pack_refspec = ship_ref
-    if head_ref not in updates: sys.exit(0)
-
-    # TODO: run ack once it's updated
-    # run(os.path.join(os.getcwd(), 'ack'))
-
-    thepack = run_line(('git', 'shell-pack', 'make', basename, pack_refspec))
-    packid = thepack.rpartition('-')[2].partition('.')[0]
-    ref = run_line('git rev-parse ' + ship_ref)
-
-    pack_history = []
-    if os.path.exists('pack_history'):
-        with open('pack_history', 'r') as f:
-            pack_history = [line.strip().split(None, 1) for line in f]
-
-    packids, refs = [], []
-    if pack_history:
-        packids, refs = zip(*pack_history)
-        packids = list(packids)
-        refs = list(refs)
-    i = bisect(packids, packid)
-    packids.insert(i, packid)
-    refs.insert(i, ref)
-    pack_history = zip(packids, refs)
-    del i, packids, refs
-
-    with open('pack_history', 'w') as f:
-        f.writelines(' '.join(h)+'\n' for h in pack_history)
-
-    pubpack = os.path.join(packdir, thepack) + '.gz'
-    with open(thepack, 'r') as src, \
-         gzip.GzipFile(pubpack, 'w') as dst:
-        shutil.copyfileobj(src, dst)
-    os.unlink(thepack)
-    thepack += '.gz'
-
-    # TODO: old pack cleanup
-
-    with open(os.path.join(packdir, 'index.html'), 'w') as f:
-        if showindex:
-            f.write(index_contents(packdir))
-        else:
-            desc = open('description', 'r').readline().strip()
-            f.write(html_doc(desc + ' shell-pack stage', ''))
-
-    watchers = list(read_watchers(meta_ref, basename))
-    if watchers:
-        # TODO: use python module
-        with open('description') as f:
-            desc = f.readline().strip()
-        subject = '{0}: {1} available'.format(desc, thepack)
-        packurl = packdirurl + '/' + thepack
-        cmd = ['mail', '--subject', subject]
-        for watcher in watchers:
-            cmd += ['--to', watcher]
-        mail = run(cmd, wait=False, stdin=PIPE)
-        mail.stdin.write(packurl + '\n')
-        mail.stdin.close()
-        mail.wait()
+    if head_ref in updates:
+        old_head, new_head = updates[head_ref]
+        make_pack(meta_ref, 'drop', 'master', new_head)
