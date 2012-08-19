@@ -182,10 +182,8 @@ if __name__ == '__main__':
         with open('description') as f:
             desc = f.readline().strip()
         subject = '{0}: {1} available'.format(desc, thepack)
-        mail = run(('mail',
-            '--to', notify_to,
-            '--subject', subject
-        ), wait=False, stdin=PIPE)
+        cmd = ['mail', '--subject', subject, '--to', notify_to]
+        mail = run(cmd, wait=False, stdin=PIPE)
         mail.stdin.write(puburl + '/' + thepack + '\n')
         mail.stdin.close()
         mail.wait()
