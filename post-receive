@@ -186,10 +186,11 @@ if __name__ == '__main__':
         with open('description') as f:
             desc = f.readline().strip()
         subject = '{0}: {1} available'.format(desc, thepack)
+        packurl = puburl + '/' + thepack
         cmd = ['mail', '--subject', subject]
         for watcher in watchers:
             cmd += ['--to', watcher]
         mail = run(cmd, wait=False, stdin=PIPE)
-        mail.stdin.write(puburl + '/' + thepack + '\n')
+        mail.stdin.write(packurl + '\n')
         mail.stdin.close()
         mail.wait()
