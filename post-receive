@@ -165,7 +165,6 @@ if __name__ == '__main__':
     run('git gc')
 
     head_ref = run_line('git symbolic-ref HEAD')
-    branch = head_ref.rsplit('/', 1)[1]
     branch = 'master'
     basename = 'drop'
     packdir = os.path.join(pubdir, basename)
