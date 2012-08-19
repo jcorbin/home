@@ -166,12 +166,12 @@ if __name__ == '__main__':
 
     head_ref = run_line('git symbolic-ref HEAD')
     branch = head_ref.rsplit('/', 1)[1]
+    branch = 'master'
     basename = 'drop'
     packdir = os.path.join(pubdir, basename)
     packdirurl = puburl + '/' + basename
-    ship_ref = 'refs/heads/master'
-    ship_branch = ship_ref.rpartition('/')[2]
-    for_ref = 'for/{0}/{1}'.format(basename, ship_branch)
+    ship_ref = 'refs/heads/' + branch
+    for_ref = 'for/{0}/{1}'.format(basename, branch)
     pack_refspec = ship_ref
     if head_ref not in updates: sys.exit(0)
 
