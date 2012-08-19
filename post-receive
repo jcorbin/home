@@ -72,8 +72,11 @@ def update_file(old, new, repopath, target):
         return True
 
 def read_watchers(ref, name):
-    for line in run_output('git show ' + ref + ':' + name  + '-watchers'):
-        yield line.strip()
+    try:
+        for line in run_output('git show ' + ref + ':' + name  + '-watchers'):
+            yield line.strip()
+    except CalledProcessError:
+        pass
 
 def read_checkouts(meta_ref):
     path = meta_ref + ':checkouts'
