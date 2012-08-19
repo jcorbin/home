@@ -134,7 +134,7 @@ def make_pack(meta_ref, remote, branch, rev):
         refs = list(refs)
     i = bisect(packids, packid)
     packids.insert(i, packid)
-    refs.insert(i, rev)
+    refs.insert(i, remote + ' ' + pack_refspec)
     pack_history = zip(packids, refs)
     del i, packids, refs
 
