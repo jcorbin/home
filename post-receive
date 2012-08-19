@@ -104,6 +104,8 @@ if __name__ == '__main__':
     self_files = (
         myself,
     )
+    packdir = pubdir
+    packdirurl = puburl
 
     import optparse
     parser = optparse.OptionParser()
@@ -165,19 +167,19 @@ if __name__ == '__main__':
         run(os.path.join(os.getcwd(), 'ack'))
 
     thepack = run_line('git shell-pack make drop')
-    pubpack = os.path.join(pubdir, thepack) + '.gz'
+    pubpack = os.path.join(packdir, thepack) + '.gz'
     with open(thepack, 'r') as src, \
          gzip.GzipFile(pubpack, 'w') as dst:
         shutil.copyfileobj(src, dst)
     os.unlink(thepack)
 
-    for ent in os.listdir(pubdir):
+    for ent in os.listdir(packdir):
         if ent == thepack: continue
         if not ent.startswith(branch + '-'): continue
-        os.unlink(os.path.join(pubdir, ent))
+        os.unlink(os.path.join(packdir, ent))
 
-    with open(os.path.join(pubdir, 'index.html'), 'w') as f:
-        for s in index_contents(pubdir):
+    with open(os.path.join(packdir, 'index.html'), 'w') as f:
+        for s in index_contents(packdir):
             f.write(s)
 
     watchers = list(read_watchers(meta_ref))
@@ -186,7 +188,7 @@ if __name__ == '__main__':
         with open('description') as f:
             desc = f.readline().strip()
         subject = '{0}: {1} available'.format(desc, thepack)
-        packurl = puburl + '/' + thepack
+        packurl = packdirurl + '/' + thepack
         cmd = ['mail', '--subject', subject]
         for watcher in watchers:
             cmd += ['--to', watcher]
