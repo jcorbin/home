@@ -170,10 +170,11 @@ if __name__ == '__main__':
     packdir = os.path.join(pubdir, basename)
     packdirurl = puburl + '/' + basename
     ship_ref = 'refs/heads/master'
+    ship_branch = ship_ref.rpartition('/')[2]
     if head_ref not in updates: sys.exit(0)
 
     try:
-        run('git show-ref --verify --quiet for/{0}/master'.format(basename))
+        run('git show-ref --verify --quiet for/{0}/{1}'.format(basename, ship_branch))
     except CalledProcessError:
         pass
     else:
