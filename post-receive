@@ -153,7 +153,7 @@ def make_pack(meta_ref, remote, branch, rev):
     # TODO: old pack cleanup
 
     desc = open('description', 'r').readline().strip()
-    title = desc + ' shell-pack stage'
+    title = '{0}: {1} shell-pack staging'.format(desc, remote)
     with open(os.path.join(packdir, 'index.html'), 'w') as f:
         if showindex:
             f.write(index_contents(title, packdir))
