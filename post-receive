@@ -11,7 +11,6 @@ puburl = 'http://www.wunjo.org/~jcorbin'
 pubdir = '~/public_html'
 pubdir = os.path.expanduser(pubdir)
 
-basename = 'drop'
 showindex = False
 
 VerboseRun = False
@@ -167,6 +166,7 @@ if __name__ == '__main__':
 
     head_ref = run_line('git symbolic-ref HEAD')
     branch = head_ref.rsplit('/', 1)[1]
+    basename = 'drop'
     packdir = os.path.join(pubdir, basename)
     packdirurl = puburl + '/' + basename
     ship_ref = 'refs/heads/master'
