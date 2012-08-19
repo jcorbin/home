@@ -174,12 +174,8 @@ if __name__ == '__main__':
     for_ref = 'for/{0}/{1}'.format(basename, ship_branch)
     if head_ref not in updates: sys.exit(0)
 
-    try:
-        run('git show-ref --verify --quiet ' + for_ref)
-    except CalledProcessError:
-        pass
-    else:
-        run(os.path.join(os.getcwd(), 'ack'))
+    # TODO: run ack once it's updated
+    # run(os.path.join(os.getcwd(), 'ack'))
 
     thepack = run_line('git shell-pack make ' + basename)
     packid = thepack.rpartition('-')[2].partition('.')[0]
