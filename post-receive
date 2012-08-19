@@ -99,14 +99,13 @@ def html_doc(title, contents):
     s += "</body></html>\n"
     return s
 
-def index_contents(packdir):
+def index_contents(title, packdir):
     s = "<ul>"
     for ent in os.listdir(packdir):
         if not ent.endswith('.sh.gz'): continue
         s += "<li><a href=\"{0}\">{0}</a></li>".format(ent)
     s += "</ul>"
-    desc = open('description', 'r').readline().strip()
-    return html_doc(desc + ' shell-pack stage', s)
+    return html_doc(title, s)
 
 from bisect import bisect
 
@@ -153,12 +152,13 @@ def make_pack(meta_ref, remote, branch, rev):
 
     # TODO: old pack cleanup
 
+    desc = open('description', 'r').readline().strip()
+    title = desc + ' shell-pack stage'
     with open(os.path.join(packdir, 'index.html'), 'w') as f:
         if showindex:
-            f.write(index_contents(packdir))
+            f.write(index_contents(title, packdir))
         else:
-            desc = open('description', 'r').readline().strip()
-            f.write(html_doc(desc + ' shell-pack stage', ''))
+            f.write(html_doc(title, ''))
 
     watchers = list(read_watchers(meta_ref, remote))
     if watchers:
