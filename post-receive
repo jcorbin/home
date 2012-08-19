@@ -90,16 +90,17 @@ def read_checkouts(meta_ref):
         yield repopath, target
 
 def index_contents(packdir):
-    yield "<!doctype html>\n"
-    yield "<html>"
-    yield "<head><title>jcorbin home.git shell-pack stage</title></head>"
-    yield "<body>"
-    yield "<ul>"
+    s = "<!doctype html>\n"
+    s += "<html>"
+    s += "<head><title>jcorbin home.git shell-pack stage</title></head>"
+    s += "<body>"
+    s += "<ul>"
     for ent in os.listdir(packdir):
         if not ent.endswith('.sh.gz'): continue
-        yield "<li><a href=\"{0}\">{0}</a></li>".format(ent)
-    yield "</ul>"
-    yield "</body></html>\n"
+        s += "<li><a href=\"{0}\">{0}</a></li>".format(ent)
+    s += "</ul>"
+    s += "</body></html>\n"
+    return s
 
 if __name__ == '__main__':
     myself = os.path.realpath(sys.argv[0])
@@ -181,8 +182,7 @@ if __name__ == '__main__':
         os.unlink(os.path.join(packdir, ent))
 
     with open(os.path.join(packdir, 'index.html'), 'w') as f:
-        for s in index_contents(packdir):
-            f.write(s)
+        f.write(index_contents(packdir))
 
     watchers = list(read_watchers(meta_ref))
     if watchers:
