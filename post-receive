@@ -236,4 +236,19 @@ if __name__ == '__main__':
         match = for_ref.match(ref)
         if not match: continue
         remote, branch = match.groups()
-        make_pack(meta_ref, remote, branch, new_rev)
+
+        if new_rev == '0' * 40:
+            tracking_ref = 'refs/remotes/{0}/{1}'.format(remote, branch)
+            tracking_ref = 'refs/remotes/' + remote + '/' + branch
+            try:
+                run(('git', 'show-ref', tracking_ref, '--verify', '--quiet'))
+            except CalledProcessError:
+                pass
+            else:
+                run(('git', 'update-ref', '-d', tracking_ref))
+            packdir = os.path.join(pubdir, remote)
+            if os.path.exists(packdir):
+                shutil.rmtree(packdir)
+
+        else:
+            make_pack(meta_ref, remote, branch, new_rev)
