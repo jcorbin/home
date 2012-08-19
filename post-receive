@@ -172,12 +172,13 @@ if __name__ == '__main__':
     ship_ref = 'refs/heads/master'
     ship_branch = ship_ref.rpartition('/')[2]
     for_ref = 'for/{0}/{1}'.format(basename, ship_branch)
+    pack_refspec = ship_ref
     if head_ref not in updates: sys.exit(0)
 
     # TODO: run ack once it's updated
     # run(os.path.join(os.getcwd(), 'ack'))
 
-    thepack = run_line(('git', 'shell-pack', 'make', basename))
+    thepack = run_line(('git', 'shell-pack', 'make', basename, pack_refspec))
     packid = thepack.rpartition('-')[2].partition('.')[0]
     ref = run_line('git rev-parse ' + ship_ref)
 
