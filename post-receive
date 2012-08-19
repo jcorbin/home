@@ -89,18 +89,23 @@ def read_checkouts(meta_ref):
         target = os.path.realpath(target)
         yield repopath, target
 
-def index_contents(packdir):
+import cgi
+def html_doc(title, contents):
     s = "<!doctype html>\n"
     s += "<html>"
-    s += "<head><title>jcorbin home.git shell-pack stage</title></head>"
+    s += "<head><title>" + cgi.escape(title) + "</title></head>"
     s += "<body>"
-    s += "<ul>"
+    s += contents
+    s += "</body></html>\n"
+    return s
+
+def index_contents(packdir):
+    s = "<ul>"
     for ent in os.listdir(packdir):
         if not ent.endswith('.sh.gz'): continue
         s += "<li><a href=\"{0}\">{0}</a></li>".format(ent)
     s += "</ul>"
-    s += "</body></html>\n"
-    return s
+    return html_doc('jcorbin home.git shell-pack stage', s)
 
 if __name__ == '__main__':
     myself = os.path.realpath(sys.argv[0])
