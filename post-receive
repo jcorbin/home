@@ -87,13 +87,13 @@ def read_checkouts(meta_ref):
         target = os.path.realpath(target)
         yield repopath, target
 
-def index_contents():
+def index_contents(packdir):
     yield "<!doctype html>\n"
     yield "<html>"
     yield "<head><title>jcorbin home.git shell-pack stage</title></head>"
     yield "<body>"
     yield "<ul>"
-    for ent in os.listdir(pubdir):
+    for ent in os.listdir(packdir):
         if not ent.endswith('.sh.gz'): continue
         yield "<li><a href=\"{0}\">{0}</a></li>".format(ent)
     yield "</ul>"
@@ -177,7 +177,7 @@ if __name__ == '__main__':
         os.unlink(os.path.join(pubdir, ent))
 
     with open(os.path.join(pubdir, 'index.html'), 'w') as f:
-        for s in index_contents():
+        for s in index_contents(pubdir):
             f.write(s)
 
     watchers = list(read_watchers(meta_ref))
