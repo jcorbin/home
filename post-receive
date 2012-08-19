@@ -116,8 +116,6 @@ if __name__ == '__main__':
     self_files = (
         myself,
     )
-    packdir = os.path.join(pubdir, basename)
-    packdirurl = puburl + '/' + basename
 
     import optparse
     parser = optparse.OptionParser()
@@ -169,6 +167,8 @@ if __name__ == '__main__':
 
     head_ref = run_line('git symbolic-ref HEAD')
     branch = head_ref.rsplit('/', 1)[1]
+    packdir = os.path.join(pubdir, basename)
+    packdirurl = puburl + '/' + basename
     if head_ref not in updates: sys.exit(0)
 
     try:
