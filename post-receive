@@ -7,9 +7,11 @@ import shutil
 from subprocess import CalledProcessError, list2cmdline, PIPE, Popen
 import sys
 
-puburl = 'http://www.wunjo.org/~jcorbin/drop'
-pubdir = '~/public_html/drop'
+puburl = 'http://www.wunjo.org/~jcorbin'
+pubdir = '~/public_html'
 pubdir = os.path.expanduser(pubdir)
+
+basename = 'drop'
 
 VerboseRun = False
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
@@ -70,7 +72,7 @@ def update_file(old, new, repopath, target):
         return True
 
 def read_watchers(ref):
-    for line in run_output('git show ' + ref + ':drop-watchers'):
+    for line in run_output('git show ' + ref + ':' + basename  + '-watchers'):
         yield line.strip()
 
 def read_checkouts(meta_ref):
@@ -104,8 +106,8 @@ if __name__ == '__main__':
     self_files = (
         myself,
     )
-    packdir = pubdir
-    packdirurl = puburl
+    packdir = os.path.join(pubdir, basename)
+    packdirurl = puburl + '/' + basename
 
     import optparse
     parser = optparse.OptionParser()
@@ -160,13 +162,13 @@ if __name__ == '__main__':
     if head_ref not in updates: sys.exit(0)
 
     try:
-        run('git show-ref --verify --quiet for/drop/master')
+        run('git show-ref --verify --quiet for/{0}/master'.format(basename))
     except CalledProcessError:
         pass
     else:
         run(os.path.join(os.getcwd(), 'ack'))
 
-    thepack = run_line('git shell-pack make drop')
+    thepack = run_line('git shell-pack make ' + basename)
     pubpack = os.path.join(packdir, thepack) + '.gz'
     with open(thepack, 'r') as src, \
          gzip.GzipFile(pubpack, 'w') as dst:
