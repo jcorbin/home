@@ -105,7 +105,8 @@ def index_contents(packdir):
         if not ent.endswith('.sh.gz'): continue
         s += "<li><a href=\"{0}\">{0}</a></li>".format(ent)
     s += "</ul>"
-    return html_doc('jcorbin home.git shell-pack stage', s)
+    desc = open('description', 'r').readline().strip()
+    return html_doc(desc + ' shell-pack stage', s)
 
 if __name__ == '__main__':
     myself = os.path.realpath(sys.argv[0])
