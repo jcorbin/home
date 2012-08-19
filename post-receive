@@ -206,10 +206,7 @@ if __name__ == '__main__':
         shutil.copyfileobj(src, dst)
     os.unlink(thepack)
 
-    for ent in os.listdir(packdir):
-        if ent == thepack: continue
-        if not ent.startswith(branch + '-'): continue
-        os.unlink(os.path.join(packdir, ent))
+    # TODO: old pack cleanup
 
     with open(os.path.join(packdir, 'index.html'), 'w') as f:
         if showindex:
