@@ -119,6 +119,9 @@ def make_pack(meta_ref, remote, branch, rev):
     # TODO: run ack once it's updated
     # run(os.path.join(os.getcwd(), 'ack'))
 
+    if not os.path.exists(packdir):
+        os.makedirs(packdir)
+
     thepack = run_line(('git', 'shell-pack', 'make', remote, pack_refspec))
     packid = thepack.rpartition('-')[2].partition('.')[0]
 
