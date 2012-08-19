@@ -110,6 +110,8 @@ def index_contents(packdir):
     return html_doc(desc + ' shell-pack stage', s)
 
 if __name__ == '__main__':
+    from bisect import bisect
+
     myself = os.path.realpath(sys.argv[0])
     self_files = (
         myself,
@@ -177,6 +179,28 @@ if __name__ == '__main__':
         run(os.path.join(os.getcwd(), 'ack'))
 
     thepack = run_line('git shell-pack make ' + basename)
+    packid = thepack.rpartition('-')[2].partition('.')[0]
+    ref = run_line('git rev-parse master')
+
+    pack_history = []
+    if os.path.exists('pack_history'):
+        with open('pack_history', 'r') as f:
+            pack_history = [line.strip().split(None, 1) for line in f]
+
+    packids, refs = [], []
+    if pack_history:
+        packids, refs = zip(*pack_history)
+        packids = list(packids)
+        refs = list(refs)
+    i = bisect(packids, packid)
+    packids.insert(i, packid)
+    refs.insert(i, ref)
+    pack_history = zip(packids, refs)
+    del i, packids, refs
+
+    with open('pack_history', 'w') as f:
+        f.writelines(' '.join(h)+'\n' for h in pack_history)
+
     pubpack = os.path.join(packdir, thepack) + '.gz'
     with open(thepack, 'r') as src, \
          gzip.GzipFile(pubpack, 'w') as dst:
