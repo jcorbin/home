@@ -169,6 +169,7 @@ if __name__ == '__main__':
     branch = head_ref.rsplit('/', 1)[1]
     packdir = os.path.join(pubdir, basename)
     packdirurl = puburl + '/' + basename
+    ship_ref = 'refs/heads/master'
     if head_ref not in updates: sys.exit(0)
 
     try:
@@ -180,7 +181,7 @@ if __name__ == '__main__':
 
     thepack = run_line('git shell-pack make ' + basename)
     packid = thepack.rpartition('-')[2].partition('.')[0]
-    ref = run_line('git rev-parse master')
+    ref = run_line('git rev-parse ' + ship_ref)
 
     pack_history = []
     if os.path.exists('pack_history'):
