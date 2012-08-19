@@ -205,6 +205,7 @@ if __name__ == '__main__':
          gzip.GzipFile(pubpack, 'w') as dst:
         shutil.copyfileobj(src, dst)
     os.unlink(thepack)
+    thepack += '.gz'
 
     # TODO: old pack cleanup
 
