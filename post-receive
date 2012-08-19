@@ -177,7 +177,7 @@ if __name__ == '__main__':
     # TODO: run ack once it's updated
     # run(os.path.join(os.getcwd(), 'ack'))
 
-    thepack = run_line('git shell-pack make ' + basename)
+    thepack = run_line(('git', 'shell-pack', 'make', basename))
     packid = thepack.rpartition('-')[2].partition('.')[0]
     ref = run_line('git rev-parse ' + ship_ref)
 
