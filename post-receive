@@ -12,6 +12,7 @@ pubdir = '~/public_html'
 pubdir = os.path.expanduser(pubdir)
 
 basename = 'drop'
+showindex = False
 
 VerboseRun = False
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
@@ -188,7 +189,11 @@ if __name__ == '__main__':
         os.unlink(os.path.join(packdir, ent))
 
     with open(os.path.join(packdir, 'index.html'), 'w') as f:
-        f.write(index_contents(packdir))
+        if showindex:
+            f.write(index_contents(packdir))
+        else:
+            desc = open('description', 'r').readline().strip()
+            f.write(html_doc(desc + ' shell-pack stage', ''))
 
     watchers = list(read_watchers(meta_ref))
     if watchers:
