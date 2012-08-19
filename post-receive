@@ -229,7 +229,11 @@ if __name__ == '__main__':
     run('git repack -Ad')
     run('git gc')
 
-    head_ref = run_line('git symbolic-ref HEAD')
-    if head_ref in updates:
-        old_head, new_head = updates[head_ref]
-        make_pack(meta_ref, 'drop', 'master', new_head)
+    import re
+    for_ref = re.compile(r'refs/remotes/for/([^/]+)/([^/]+)$')
+    # TODO: support multiple branches per pack
+    for ref, (old_rev, new_rev) in updates.iteritems():
+        match = for_ref.match(ref)
+        if not match: continue
+        remote, branch = match.groups()
+        make_pack(meta_ref, remote, branch, new_rev)
