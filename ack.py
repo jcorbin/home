@@ -48,19 +48,27 @@ def match_in_file(regex, f):
             if match:
                 yield match.groups()
 
-regex = r'\[(.+?)\] "GET /~jcorbin/forwork/(\w+)-([0-9a-fA-F]{7})-([0-9a-fA-F]{7})\.sh\.gz'
+import bisect
+def history_entries(packid):
+    with open('pack_history', 'r') as f:
+        for line in f:
+            rec = line.rstrip('\r\n').split()
+            if rec[0] == packid:
+                yield rec[1], tuple(rec[2:])
+
+regex = r'\[(.+?)\] "GET /~jcorbin/(\w+)/shell-pack-([0-9a-fA-F]{40})\.sh\.gz'
 
 import os
 import sys
 os.chdir(os.path.dirname(os.path.realpath(sys.argv[0])))
 
-remote = 'drop'
-
 with open('/var/log/lighttpd/access.log', 'r') as f:
-    for when, ref, a, b in match_in_file(regex, f):
-        if ref == 'pack': ref = 'master'
-        last, sent = shortrevs(
-            remote + '/' + ref,
-            'for/' + remote + '/' + ref)
-        if last == a:
-            run(('git', 'shell-pack', 'ack', remote, ref, b))
+    acked = set()
+    for when, remote, packid in match_in_file(regex, f):
+        for history_remote, refspecs in history_entries(packid):
+            if history_remote != remote: continue
+            for refspec in refspecs:
+                if (remote, refspec) in acked: continue
+                rev, ref = refspec.split(':', 1)
+                run(('git', 'shell-pack', 'ack', remote, ref, rev))
+                acked.add((remote, refspec))
