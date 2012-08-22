@@ -155,16 +155,17 @@ ack)
         shift 2
 
         rev=$(git rev-parse --verify $revarg)
-        forref="refs/remotes/for/$remote/$ref"
+        branch=${ref##*/}
+        forref="refs/remotes/for/$remote/$branch"
         forrev=$(git rev-parse $forref)
         [ $rev == "$forrev" ] \
             || git rev-list $remote/$ref..$forref | grep -Fxq $rev \
             || die "Invalid revision $revarg"
-        git update-ref -m 'Acked pack' refs/remotes/$remote/$ref $rev
+        git update-ref -m 'Acked pack' refs/remotes/$remote/$branch $rev
         if [ $rev == "$forrev" ]; then
             git update-ref -d $forref $rev
         fi
-        echo "Acked $remote/$ref $rev"
+        echo "Acked $remote/$branch $rev"
     else
         git for-each-ref --format='%(objectname) %(refname)' "refs/remotes/for/$remote/*" \
         | while read rev forref; do
