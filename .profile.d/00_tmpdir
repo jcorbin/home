@@ -1,7 +1,20 @@
 #!/bin/bash
 
+export TMPDIR=${TMPDIR:-/tmp}
+
 if [ $(stat ${TMPDIR:-/tmp} -c %u) -ne $(id -u) ]; then
     TMPDIR=${TMPDIR:-/tmp}/$(id -un)
     install --mode 0700 --directory $TMPDIR
     export TMPDIR
 fi
+
+for d in .cache .ccache; do
+    if [ -L "$HOME/$d" ]; then
+        [ "$(readlink $HOME/$d)" = "$TMPDIR/$d" ] && continue
+        rm "$HOME/$d"
+    elif [ -e "$HOME/$d" ]; then
+        rm -rf "$HOME/$d"
+    fi
+    [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
+    ln -s "$TMPDIR/$d" "$HOME/$d"
+done
