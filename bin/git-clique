@@ -244,10 +244,10 @@ class SyncCommand(Command):
         self.remote = args.pop(0)
 
     def __call__(self):
-        relations = set()
-        visited = set()
         stack = sorted(repo.parse(url)
             for url in self.repo.get_remote_urls(self.remote))
+        relations = set()
+        visited = set()
         while stack:
             cur = stack.pop(0)
             visited.add(cur)
