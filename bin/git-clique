@@ -1,9 +1,24 @@
 #!/usr/bin/python
 
+from itertools import groupby
+from operator import itemgetter
+from subprocess import list2cmdline, Popen, PIPE
 import os
 import socket
-from subprocess import list2cmdline, Popen, PIPE
 import sys
+
+try:
+    from itertools import product
+except ImportError:
+    def product(*args, **kwds):
+        # product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
+        # product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
+        pools = map(tuple, args) * kwds.get('repeat', 1)
+        result = [[]]
+        for pool in pools:
+            result = [x+[y] for x in result for y in pool]
+        for prod in result:
+            yield tuple(prod)
 
 try:
     from subprocess import CalledProcessError
@@ -41,7 +56,6 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
     return p
 
 # from collections import namedtuple
-from operator import itemgetter
 class repo(tuple): # namedtuple('repo', 'host path')
     def __new__(cls, host, path):
         if host in (socket.gethostname(), socket.getfqdn()):
@@ -218,22 +232,6 @@ class TeardownCommand(Command):
             r = repo.parse(url)
             r.remove_remote(self.remote)
         run(('git', 'remote', 'rm', self.remote))
-
-from itertools import groupby
-from operator import itemgetter
-
-try:
-    from itertools import product
-except ImportError:
-    def product(*args, **kwds):
-        # product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
-        # product(range(2), repeat=3) --> 000 001 010 011 100 101 110 111
-        pools = map(tuple, args) * kwds.get('repeat', 1)
-        result = [[]]
-        for pool in pools:
-            result = [x+[y] for x in result for y in pool]
-        for prod in result:
-            yield tuple(prod)
 
 class SyncCommand(Command):
     def __init__(self, opts, args):
