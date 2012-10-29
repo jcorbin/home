@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ $(stat ${TMPDIR:-/tmp} -c %u) -ne $(id -u) ]; then
+    TMPDIR=${TMPDIR:-/tmp}/$(id -un)
+    install --mode 0700 --directory $TMPDIR
+    export TMPDIR
+fi
