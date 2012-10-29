@@ -46,6 +46,7 @@
     brv = branch -v
     cf = clean -f
     ch = cherry -v
+    chnrs = !git ch | git nrs
     ci = commit
     cia = commit -a
     ciam = commit -a -m
@@ -59,6 +60,7 @@
     fp = format-patch -n -M -C --find-copies-harder
     lg = log --graph --pretty=brief
     mt = mergetool
+    nrs = name-rev --stdin
     pack = repack -Ad
     ra = rebase --abort
     rb = rebase
