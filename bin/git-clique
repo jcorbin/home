@@ -261,6 +261,8 @@ class SyncCommand(Command):
             if rel not in relations and rel[0] != rel[1])
         for a, rels in groupby(missing, itemgetter(0)):
             repos = tuple(b for _, b in rels)
+            print 'Connecting', a, '->',
+            print '{',  ', '.join(sorted(map(str, repos))), '}'
             a.add_repos(self.remote, *repos)
 
 import optparse
