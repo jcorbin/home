@@ -132,9 +132,6 @@ set laststatus=2
 
 nnoremap <F5> :GundoToggle<CR>
 
-" C-t for new tab
-map <C-T> <Esc>:tabnew<CR>
-
 " Determine colorscheme
 "
 " NOTE: jellybeans also great choice, toss up for gui in lieu of moria and 256
