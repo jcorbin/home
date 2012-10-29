@@ -260,7 +260,8 @@ class SyncCommand(Command):
             for rel in product(set((self.repo,)) | visited, visited)
             if rel not in relations and rel[0] != rel[1])
         for a, rels in groupby(missing, itemgetter(0)):
-            a.add_repos(self.remote, *(b for _, b in rels))
+            repos = tuple(b for _, b in rels)
+            a.add_repos(self.remote, *repos)
 
 import optparse
 parser = optparse.OptionParser(
