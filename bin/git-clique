@@ -257,7 +257,7 @@ class SyncCommand(Command):
                     stack.append(r)
                 relations.add((cur, r))
         missing = (rel
-            for rel in product(visited, repeat=2)
+            for rel in product(visited, visited)
             if rel not in relations and rel[0] != rel[1])
         for a, rels in groupby(missing, itemgetter(0)):
             a.add_repos(self.remote, *(b for _, b in rels))
