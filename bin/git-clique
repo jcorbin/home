@@ -140,7 +140,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
         else:
             return self.host + ':' + self.path
 
-class Command:
+class Command(object):
     def __init__(self, opts, args):
         self.opts = opts
         self.args = args
