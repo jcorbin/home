@@ -8,7 +8,7 @@ if [ $(stat ${TMPDIR:-/tmp} -c %u) -ne $(id -u) ]; then
     export TMPDIR
 fi
 
-for d in .cache .ccache; do
+for d in $(cat ~/.vardirs); do
     if [ -L "$HOME/$d" ]; then
         [ "$(readlink $HOME/$d)" = "$TMPDIR/$d" ] && continue
         rm "$HOME/$d"

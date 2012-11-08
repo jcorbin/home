@@ -1,0 +1,9 @@
+.cache
+.ccache
+.mozilla/firefox/default/thumbnails
+.mozilla/firefox/default/mozilla-media-cache
+.mozilla/firefox/default/Cache
+.mozilla/firefox/default/OfflineCache
+.mozilla/firefox/default/startupCache
+.thumbnails
+Downloads
