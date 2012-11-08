@@ -148,12 +148,6 @@ class Command(object):
         if not len(args): parser.error('missing remote')
         self.remote = args.pop(0)
 
-        if not len(args): parser.error('missing urls')
-
-        self.changed = set()
-        self.repos = set(repo.parse(url)
-            for url in self.repo.get_remote_urls(self.remote))
-
     @property
     def repo(self):
         try:
@@ -172,22 +166,14 @@ class Command(object):
         self._repo = repo(None, path)
         return self._repo
 
-    def __call__(self):
-        for url in self.args:
-            r = repo.parse(url)
-            if r == self.repo: continue
-            if self.change(r):
-                self.changed.add(r)
-
-        if not self.changed or self.opts.changeonly: sys.exit(0)
-
-        for r in self.changed:
-            self.change_changee(r)
-
-        for r in self.repos - self.changed:
-            self.propagate(r)
-
 class AddCommand(Command):
+    def __init__(self, opts, args):
+        super(AddCommand, self).__init__(opts, args)
+        if not len(args): parser.error('missing urls')
+        self.changed = set()
+        self.repos = set(repo.parse(url)
+            for url in self.repo.get_remote_urls(self.remote))
+
     def change(self, r):
         if r not in self.repos:
             if not self.repos:
@@ -206,7 +192,22 @@ class AddCommand(Command):
     def propagate(self, r):
         r.add_repos(self.remote, *self.changed)
 
-class RmCommand(Command):
+    def __call__(self):
+        for url in self.args:
+            r = repo.parse(url)
+            if r == self.repo: continue
+            if self.change(r):
+                self.changed.add(r)
+
+        if not self.changed or self.opts.changeonly: sys.exit(0)
+
+        for r in self.changed:
+            self.change_changee(r)
+
+        for r in self.repos - self.changed:
+            self.propagate(r)
+
+class RmCommand(AddCommand):
     def change(self, r):
         if r in self.repos:
             run(('git', 'remote', 'set-url', '--delete', self.remote, str(r)))
