@@ -9,12 +9,12 @@ if [ $(stat ${TMPDIR:-/tmp} -c %u) -ne $(id -u) ]; then
 fi
 
 for d in $(cat ~/.vardirs); do
+    [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
     if [ -L "$HOME/$d" ]; then
         [ "$(readlink $HOME/$d)" = "$TMPDIR/$d" ] && continue
         rm "$HOME/$d"
     elif [ -e "$HOME/$d" ]; then
         rm -rf "$HOME/$d"
     fi
-    [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
     ln -s "$TMPDIR/$d" "$HOME/$d"
 done
