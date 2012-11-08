@@ -221,13 +221,6 @@ class RmCommand(AddCommand):
         r.remove_repos(self.remote, *self.changed)
 
 class TeardownCommand(Command):
-    def __init__(self, opts, args):
-        self.opts = opts
-        self.args = args
-
-        if not len(args): parser.error('missing remote')
-        self.remote = args.pop(0)
-
     def __call__(self):
         for url in get_remote_urls(self.remote):
             r = repo.parse(url)
@@ -235,13 +228,6 @@ class TeardownCommand(Command):
         run(('git', 'remote', 'rm', self.remote))
 
 class SyncCommand(Command):
-    def __init__(self, opts, args):
-        self.opts = opts
-        self.args = args
-
-        if not len(args): parser.error('missing remote')
-        self.remote = args.pop(0)
-
     def __call__(self):
         stack = sorted(repo.parse(url)
             for url in self.repo.get_remote_urls(self.remote))
