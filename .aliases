@@ -13,3 +13,7 @@ alias chmod="chmod -c"
 alias chown="chown -c"
 
 alias ps="ps --forest -w"
+
+alias tnw="quotecmd -o tmux new-window --"
+alias tsh="quotecmd -o tmux split-window -h --"
+alias tsv="quotecmd -o tmux split-window -v --"
