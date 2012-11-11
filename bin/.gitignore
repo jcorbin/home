@@ -13,3 +13,4 @@
 !sshscreen
 !git-setup-worktree-push
 !githook-update-worktree-*
+!quotecmd

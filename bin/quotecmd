@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+import os
+import sys
+from subprocess import list2cmdline
+
+def usage(mess=None):
+    if mess: print(str(mess) + '\n', file=sys.stderr)
+    progname = os.path.basename(sys.argv[0])
+    print(
+        "Usage: {0} [OPTION...] COMMAND [ARG...] -- [COMMAND OPTION...] ARG...\n"
+        "\nOptions:\n"
+        "  -h,  Show help.\n"
+        "  -o,  Additional arguments are optional.\n"
+        "  -v,  Print command before running it."
+        .format(progname), file=sys.stderr)
+    sys.exit(1)
+
+OptionalCmd = False
+Verbose = False
+
+args = sys.argv[1:]
+while args and args[0].startswith('-'):
+    arg = args.pop(0)
+    if   arg == '-h': usage()
+    elif arg == '-v': Verbose = True
+    elif arg == '-o': OptionalCmd = True
+    else:             usage('invalid option ' + arg)
+
+try:
+    i = args.index('--')
+except ValueError:
+    usage()
+cmd, args = args[:i], args[i+1:]
+if not cmd: usage()
+
+while args and args[0].startswith('-'):
+    cmd.append(args.pop(0))
+
+if not args and not OptionalCmd:
+    print("Missing command argument(s) for {0}"
+          .format(list2cmdline(cmd)), file=sys.stderr)
+    sys.exit(1)
+
+cmd.append(list2cmdline(args))
+if Verbose:
+    print('+', list2cmdline(cmd))
+os.execvp(cmd[0], cmd)
