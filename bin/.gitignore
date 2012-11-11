@@ -5,13 +5,13 @@
 !chroot-system
 !dotgit
 !git-branch-base
+!git-clique
 !git-current-branch
 !git-rewrite-branch
+!git-setup-worktree-push
 !git-shell-pack
 !git-subtree
 !git-work
-!git-clique
-!sshscreen
-!git-setup-worktree-push
 !githook-update-worktree-*
 !quotecmd
+!sshscreen
