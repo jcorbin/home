@@ -2,6 +2,7 @@
 !.gitignore
 !atmux
 !choose-screen
+!chroot-system
 !dotgit
 !git-branch-base
 !git-current-branch

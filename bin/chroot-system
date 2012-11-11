@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+import os
+import pwd
+import re
+from collections import namedtuple
+from subprocess import check_call, list2cmdline, Popen, PIPE
+
+mountrecord = namedtuple('mountrecord', 'what where type options')
+
+def mounts():
+    proc = Popen(('mount',), stdout=PIPE)
+    for line in proc.stdout:
+        line = line.decode()
+        what, on, where, tlabel, typ, options = line.strip().split(None, 5)
+        options = tuple(options.strip('()').split(','))
+        yield mountrecord(what, where, typ, options)
+    assert proc.wait() == 0
+
+mounts_in = lambda path: (m for m in mounts() if m.where.startswith(path))
+
+def unique(iterable, key=None):
+    seen = set()
+    for item in iterable:
+        k = key(item) if key else item
+        if k not in seen:
+            seen.add(k)
+            yield item
+
+def setup_target_commands(target):
+    target_bind = lambda path: (
+        'sudo', 'mount', '--bind', path, target + path)
+    target_chroot = lambda *cmd: \
+        ('sudo', 'chroot', target) + cmd
+    r = re.compile(r'/(dev|proc|sys|home)')
+    for path in unique(m.where for m in mounts() if r.match(m.where)):
+        yield target_bind(path)
+    yield target_bind('/mnt/boot')
+    for path in '/boot', '/tmp', '/var/log', '/var/tmp':
+        yield target_chroot('mount', path)
+    yield target_chroot('/usr/local/bin/create-temppaths')
+
+def teardown_target_commands(target):
+    paths = [m.where for m in mounts_in(target + '/')]
+    for path in unique(reversed(paths)):
+        yield 'sudo', 'umount', path
+
+def commands(action, target):
+    if action in ('setup', 'shell'):
+        for cmd in setup_target_commands(target):
+            yield cmd
+    if action == 'shell':
+        user = pwd.getpwuid(os.getuid()).pw_name
+        yield 'sudo', 'chroot', args.target, 'sudo', '-SiHu', user
+    if action in ('shell', 'teardown'):
+        for cmd in teardown_target_commands(target):
+            yield cmd
+
+def run(commands, verbose=False):
+    for cmd in commands:
+        if verbose:
+            print('+', list2cmdline(cmd))
+        check_call(cmd)
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--verbose', '-v', action='store_true', default=False)
+parser.add_argument('action', choices={'setup', 'shell', 'teardown'})
+parser.add_argument('target')
+args = parser.parse_args()
+run(commands(args.action, args.target), verbose=args.verbose)
