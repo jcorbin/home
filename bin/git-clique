@@ -46,6 +46,8 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
         host = socket.gethostname()
         path = os.getcwd()
         print host + ':' + path, '+', list2cmdline(cmd)
+    if kwargs.get('shell'):
+        cmd = cmdstr
     p = Popen(cmd, **kwargs)
     p.cmdstr = cmdstr
     p.cmd = cmd
