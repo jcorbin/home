@@ -69,14 +69,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
 
     def runcmd(self, cmd, **kwargs):
         if self.islocal():
-            oldcwd = os.getcwd()
-            if oldcwd == self.path:
-                oldcwd = None
-            else:
-                os.chdir(self.path)
-            proc = run(cmd, **kwargs)
-            if oldcwd:
-                os.chdir(oldcwd)
+            proc = run(cmd, cwd=self.path, **kwargs)
 
         else:
             cmd = list2cmdline(cmd).replace("'", "\\'")
