@@ -6,6 +6,7 @@ from subprocess import list2cmdline, Popen, PIPE
 import os
 import socket
 import sys
+import threading
 
 try:
     from itertools import product
@@ -245,11 +246,51 @@ class SyncCommand(Command):
             print '{',  ', '.join(sorted(map(str, repos))), '}'
             a.add_repos(self.remote, *repos)
 
+class RunCommand(Command):
+    def __init__(self, opts, args):
+        super(RunCommand, self).__init__(opts, args)
+        if not len(args): parser.error('missing command')
+        self.command = args
+        self.repos = [] if self.opts.notthis else [self.repo]
+        self.repos.extend(repo.parse(url)
+            for url in self.repo.get_remote_urls(self.remote))
+
+    def shunt_pipe(self, pfx, f):
+        for line in f:
+            line = line.rstrip('\r\n')
+            print pfx, line
+            sys.stdout.flush()
+        f.close()
+
+    def shunt_pipe_thread(self, pfx, f):
+        t = threading.Thread(target=self.shunt_pipe, args=(pfx, f))
+        t.start()
+        return t
+
+    def __call__(self):
+        all_ok = True
+        for i, r in enumerate(self.repos):
+            if i > 0: print
+            print r, '$', list2cmdline(self.command)
+            p = r.runcmd(self.command, shell=True, wait=False,
+                         stdout=PIPE, stderr=PIPE)
+            ts = [
+                self.shunt_pipe_thread('  out>', p.stdout),
+                self.shunt_pipe_thread('  err>', p.stderr)]
+            for t in ts:
+                t.join()
+            retcode = p.wait()
+            if retcode != 0:
+                print '  exited non-zero:', retcode
+                all_ok = False
+        return 0 if all_ok else 1
+
 import optparse
 parser = optparse.OptionParser(
     usage='%prog add|rm <remote> <url> [<url> [...]]\n'
     '       %prog teardown <remote>\n'
-    '       %prog sync <remote>')
+    '       %prog sync <remote>\n'
+    '       %prog run <remote> <command>')
 parser.add_option('-v', '--verbose',
     help='Print verbose output (command run)',
     dest='verbose', action='store_true', default=False)
@@ -258,8 +299,9 @@ parser.add_option('--change-only',
          ' don\'t propagate changes to other repositories.',
     dest='changeonly', action='store_true', default=False)
 parser.add_option('--not-this',
-    help='Don\'t include this repository when propagating to other'
-         ' repositories; useful for repositories external to the clique.',
+    help='Don\'t include this repository when propagating to other '
+         'repositories or when running commands; useful for repositories '
+         'external to the clique.',
     dest='notthis', action='store_true', default=False)
 opts, args = parser.parse_args()
 
@@ -271,6 +313,7 @@ commands = {
     'rm': RmCommand,
     'teardown': TeardownCommand,
     'sync': SyncCommand,
+    'run': RunCommand,
 }
 
 try:
