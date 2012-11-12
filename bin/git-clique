@@ -288,4 +288,5 @@ if opts.verbose:
     VerboseRun = True
 
 cmd = cmd(opts, args)
-cmd()
+retcode = cmd()
+sys.exit(0 if retcode is None else retcode)
