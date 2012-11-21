@@ -140,7 +140,9 @@ class repo(tuple): # namedtuple('repo', 'host path')
     def __new__(cls, host, path):
         if host in (socket.gethostname(), socket.getfqdn()):
             host = None
-        return tuple.__new__(cls, (host, path))
+        self = tuple.__new__(cls, (host, path))
+        self._remote_repos_cache = {}
+        return self
 
     host = property(itemgetter(0))
     path = property(itemgetter(1))
@@ -191,6 +193,9 @@ class repo(tuple): # namedtuple('repo', 'host path')
         cmd.extend(self.relativize_repos(repos))
         self.runcmd(cmd)
 
+        if remote in self._remote_repos_cache:
+            self._remote_repos_cache[remote] += repos
+
     def remove_repos(self, remote, *repos):
         cmd = ['git', 'clique']
         if VerboseRun: cmd.append('--verbose')
@@ -198,10 +203,20 @@ class repo(tuple): # namedtuple('repo', 'host path')
         cmd.extend(self.relativize_repos(repos))
         self.runcmd(cmd)
 
+        if remote in self._remote_repos_cache:
+            # TODO: worth it to use a set?
+            self._remote_repos_cache[remote] = tuple(r
+                for r in self._remote_repos_cache[remote]
+                if r not in repos)
+
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
 
     def get_remote_repos(self, remote):
+        try:
+            return self._remote_repos_cache[remote]
+        except KeyError:
+            pass
         try:
             urls = self.runcmd((
                 'git', 'config',  '--get-all', 'remote.' + remote + '.url'
@@ -209,9 +224,10 @@ class repo(tuple): # namedtuple('repo', 'host path')
         except CalledProcessError:
             return ()
         else:
-            return (
+            self._remote_repos_cache[remote] = repos = tuple(
                 self.parse(line.rstrip('\r\n'))
                 for line in urls.stdout)
+            return repos
 
     def __str__(self):
         if self.host is None:
