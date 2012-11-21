@@ -104,11 +104,14 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
     p = Popen(cmd, **kwargs)
     p.cmdstr = cmdstr
     p.cmd = cmd
-    if wait:
-        retcode = p.wait()
-        if retcode not in ok_retcodes:
-            raise CalledProcessError(retcode, p.cmdstr)
+    if wait: wait_check(p, ok_retcodes)
     return p
+
+def wait_check(proc, ok_retcodes=(0,)):
+    retcode = proc.wait()
+    if retcode not in ok_retcodes:
+        raise CalledProcessError(retcode, proc.cmdstr)
+    return proc
 
 def prun_repo_cmds(repo_cmd_kwargs):
     # TODO: thread pipe shunts?
