@@ -243,6 +243,7 @@ class SyncCommand(Command):
         missing = (rel
             for rel in product(set((self.repo,)) | visited, visited)
             if rel not in relations and rel[0] != rel[1])
+        missing = sorted(missing, key=itemgetter(0))
         for a, rels in groupby(missing, itemgetter(0)):
             repos = tuple(b for _, b in rels)
             print 'Connecting', a, '->',
