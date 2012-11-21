@@ -2,9 +2,12 @@
 
 from itertools import groupby
 from operator import itemgetter
-from subprocess import list2cmdline, Popen, PIPE
+from subprocess import list2cmdline, PIPE
+import errno
 import os
+import signal
 import socket
+import subprocess
 import sys
 import threading
 
@@ -46,6 +49,42 @@ def shunt_pipe_thread(pfx, f):
     t = threading.Thread(target=shunt_pipe, args=(pfx, f))
     t.start()
     return t
+
+class Popen(subprocess.Popen):
+    Dangling = {}
+    Processes = {}
+
+    @classmethod
+    def handle_sigchld(cls, signum, frame):
+        try:
+            while True:
+                pid, status = os.waitpid(-1, os.WNOHANG)
+                if pid == 0: break
+                try:
+                    self = cls.Processes.pop(pid)
+                except KeyError:
+                    cls.Dangling[pid] = status
+                    continue
+                self._handle_exitstatus(status)
+        except OSError as err:
+            if err.errno != errno.ECHILD: raise
+
+    def _execute_child(self, *args):
+        super(Popen, self)._execute_child(*args)
+        self.Processes[self.pid] = self
+        try:
+            status = self.Dangling.pop(self.pid)
+        except KeyError:
+            pass
+        else:
+            self._handle_exitstatus(status)
+
+    def wait(self):
+        while self.returncode is None:
+            signal.pause()
+        return self.returncode
+
+signal.signal(signal.SIGCHLD, Popen.handle_sigchld)
 
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
     verbose = kwargs.pop('verbose', VerboseRun)
