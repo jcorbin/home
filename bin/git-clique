@@ -211,17 +211,20 @@ class repo(tuple): # namedtuple('repo', 'host path')
             self._remote_repos_cache[remote] = current_repos + added
 
     def remove_repos(self, remote, *repos):
-        cmd = ['git', 'clique']
-        if VerboseRun: cmd.append('--verbose')
-        cmd += ['rm', '--change-only', remote]
-        cmd.extend(self.relativize_repos(repos))
-        self.runcmd(cmd)
+        current_repos = self.remote_repos(remote)
 
-        if remote in self._remote_repos_cache:
-            # TODO: worth it to use a set?
-            self._remote_repos_cache[remote] = tuple(r
-                for r in self._remote_repos_cache[remote]
-                if r not in repos)
+        # TODO: worth it to use a set?
+        repos = tuple(r for r in repos if r in current_repos)
+        if repos:
+            current_repos = tuple(r for r in current_repos if r not in repos)
+
+            cmd = ['git', 'clique']
+            if VerboseRun: cmd.append('--verbose')
+            cmd += ['rm', '--change-only', remote]
+            cmd.extend(self.relativize_repos(repos))
+            self.runcmd(cmd)
+
+            self._remote_repos_cache[remote] = current_repos
 
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
