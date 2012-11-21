@@ -150,6 +150,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
             proc = run(cmd, cwd=self.path, **kwargs)
 
         else:
+            kwargs['shell'] = False
             cmd = list2cmdline(cmd).replace("'", "\\'")
             cmd = list2cmdline(['cd', self.path]) + ' && ' + cmd
             cmd = "'" + cmd.replace("'", "\\'") + "'"
