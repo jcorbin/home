@@ -173,13 +173,16 @@ class repo(tuple): # namedtuple('repo', 'host path')
 
     def relativize_repos(self, repos):
         for r in repos:
-            if r.host is None and self.host is not None:
-                # TODO: option for fqdn instead
-                yield socket.gethostname() + ':' + r.path
-            elif r.host == self.host:
-                yield r.path
-            else:
-                yield str(r)
+            yield self.relativize_repo(r)
+
+    def relativize_repo(self, r):
+        if r.host is None and self.host is not None:
+            # TODO: option for fqdn instead
+            return socket.gethostname() + ':' + r.path
+        elif r.host == self.host:
+            return r.path
+        else:
+            return str(r)
 
     def add_repos(self, remote, *repos):
         cmd = ['git', 'clique']
