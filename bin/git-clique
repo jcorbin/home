@@ -218,11 +218,16 @@ class repo(tuple): # namedtuple('repo', 'host path')
         if repos:
             current_repos = tuple(r for r in current_repos if r not in repos)
 
-            cmd = ['git', 'clique']
-            if VerboseRun: cmd.append('--verbose')
-            cmd += ['rm', '--change-only', remote]
-            cmd.extend(self.relativize_repos(repos))
-            self.runcmd(cmd)
+            if not current_repos:
+                self.runcmd(('git', 'remote', 'remove', remote))
+            else:
+                p = self.runcmd((
+                    'xargs', '-0', '-n1',
+                    'git', 'remote', 'set-url', remote, '--delete'
+                ), stdin=PIPE, wait=False)
+                p.stdin.write('\0'.join(self.relativize_repos(repos)))
+                p.stdin.close()
+                wait_check(p)
 
             self._remote_repos_cache[remote] = current_repos
 
