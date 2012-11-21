@@ -232,12 +232,15 @@ class SyncCommand(Command):
             for url in self.repo.get_remote_urls(self.remote))
         relations = set((self.repo, r) for r in stack)
         visited = set()
+        tovisit = set(stack)
         while stack:
             cur = stack.pop(0)
             visited.add(cur)
+            tovisit.remove(cur)
             for url in cur.get_remote_urls(self.remote):
                 r = repo.parse(url)
-                if r not in visited:
+                if r not in visited and r not in tovisit:
+                    tovisit.add(r)
                     stack.append(r)
                 relations.add((cur, r))
         missing = (rel
