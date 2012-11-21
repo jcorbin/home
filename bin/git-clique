@@ -35,6 +35,18 @@ except ImportError:
 
 VerboseRun = False
 
+def shunt_pipe(pfx, f):
+    for line in f:
+        line = line.rstrip('\r\n')
+        print pfx, line
+        sys.stdout.flush()
+    f.close()
+
+def shunt_pipe_thread(pfx, f):
+    t = threading.Thread(target=shunt_pipe, args=(pfx, f))
+    t.start()
+    return t
+
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
     verbose = kwargs.pop('verbose', VerboseRun)
     if isinstance(cmd, unicode):
@@ -260,18 +272,6 @@ class RunCommand(Command):
         self.repos = [] if self.opts.notthis else [self.repo]
         self.repos.extend(self.repo.get_remote_repos(self.remote))
 
-    def shunt_pipe(self, pfx, f):
-        for line in f:
-            line = line.rstrip('\r\n')
-            print pfx, line
-            sys.stdout.flush()
-        f.close()
-
-    def shunt_pipe_thread(self, pfx, f):
-        t = threading.Thread(target=self.shunt_pipe, args=(pfx, f))
-        t.start()
-        return t
-
     def __call__(self):
         all_ok = True
         for i, r in enumerate(self.repos):
@@ -280,8 +280,8 @@ class RunCommand(Command):
             p = r.runcmd(self.command, shell=True, wait=False,
                          stdout=PIPE, stderr=PIPE)
             ts = [
-                self.shunt_pipe_thread('  out>', p.stdout),
-                self.shunt_pipe_thread('  err>', p.stderr)]
+                shunt_pipe_thread('  out>', p.stdout),
+                shunt_pipe_thread('  err>', p.stderr)]
             for t in ts:
                 t.join()
             retcode = p.wait()
