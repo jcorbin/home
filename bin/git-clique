@@ -187,7 +187,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
             return str(r)
 
     def add_repos(self, remote, *repos):
-        current_repos = self.get_remote_repos(remote)
+        current_repos = self.remote_repos(remote)
 
         # TODO: worth it to use a set?
         repos = tuple(r for r in repos
@@ -226,7 +226,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
 
-    def get_remote_repos(self, remote):
+    def remote_repos(self, remote):
         try:
             return self._remote_repos_cache[remote]
         except KeyError:
@@ -280,7 +280,7 @@ class AddCommand(Command):
         super(AddCommand, self).__init__(opts, args)
         if not len(args): parser.error('missing urls')
         self.changed = set()
-        self.repos = set(self.repo.get_remote_repos(self.remote))
+        self.repos = set(self.repo.remote_repos(self.remote))
 
     def change(self, r):
         if r not in self.repos:
@@ -333,18 +333,18 @@ class RmCommand(AddCommand):
 
 class TeardownCommand(Command):
     def __call__(self):
-        for r in get_remote_repos(self.remote):
+        for r in remote_repos(self.remote):
             r.remove_remote(self.remote)
         run(('git', 'remote', 'rm', self.remote))
 
 class SyncCommand(Command):
     def __call__(self):
-        stack = sorted(self.repo.get_remote_repos(self.remote))
+        stack = sorted(self.repo.remote_repos(self.remote))
         relations = set((self.repo, r) for r in stack)
         visited = set(stack)
         while stack:
             a = stack.pop(0)
-            for b in a.get_remote_repos(self.remote):
+            for b in a.remote_repos(self.remote):
                 if b not in visited:
                     visited.add(b)
                     stack.append(b)
@@ -365,7 +365,7 @@ class RunCommand(Command):
         if not len(args): parser.error('missing command')
         self.command = args
         self.repos = [] if self.opts.notthis else [self.repo]
-        self.repos.extend(self.repo.get_remote_repos(self.remote))
+        self.repos.extend(self.repo.remote_repos(self.remote))
 
     def __call__(self):
         return prun_repo_cmds(
@@ -384,7 +384,7 @@ class PushCommand(Command):
             cmd = lambda u: ('git', 'push', u, self.argspec)
         else:
             cmd = lambda u: ('git', 'push', u)
-        repos = self.repo.get_remote_repos(self.remote)
+        repos = self.repo.remote_repos(self.remote)
         prun_repo_cmds(
             (self.repo, cmd(url), {})
             for url in self.repo.relativize_repos(repos))
