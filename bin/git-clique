@@ -299,12 +299,30 @@ class RunCommand(Command):
             (r, self.command, {'shell': True})
             for r in self.repos)
 
+class PushCommand(Command):
+    # TODO: support topologies other than star (binary tree would be nice)
+
+    def __init__(self, opts, args):
+        super(PushCommand, self).__init__(opts, args)
+        self.argspec = args.pop(0) if args else None
+
+    def __call__(self):
+        if self.argspec:
+            cmd = lambda u: ('git', 'push', u, self.argspec)
+        else:
+            cmd = lambda u: ('git', 'push', u)
+        repos = self.repo.get_remote_repos(self.remote)
+        prun_repo_cmds(
+            (self.repo, cmd(url), {})
+            for url in self.repo.relativize_repos(repos))
+
 import optparse
 parser = optparse.OptionParser(
     usage='%prog add|rm <remote> <url> [<url> [...]]\n'
     '       %prog teardown <remote>\n'
     '       %prog sync <remote>\n'
-    '       %prog run <remote> <command>')
+    '       %prog run <remote> <command>\n'
+    '       %prog push <remote>')
 parser.add_option('-v', '--verbose',
     help='Print verbose output (command run)',
     dest='verbose', action='store_true', default=False)
@@ -328,6 +346,7 @@ commands = {
     'teardown': TeardownCommand,
     'sync': SyncCommand,
     'run': RunCommand,
+    'push': PushCommand,
 }
 
 try:
