@@ -187,14 +187,19 @@ class repo(tuple): # namedtuple('repo', 'host path')
             return str(r)
 
     def add_repos(self, remote, *repos):
-        cmd = ['git', 'clique']
-        if VerboseRun: cmd.append('--verbose')
-        cmd += ['add', '--change-only', remote]
-        cmd.extend(self.relativize_repos(repos))
-        self.runcmd(cmd)
+        current_repos = self.get_remote_repos(remote)
 
-        if remote in self._remote_repos_cache:
-            self._remote_repos_cache[remote] += repos
+        # TODO: worth it to use a set?
+        repos = tuple(r for r in repos
+            if r not in current_repos and r != self)
+        if repos:
+            cmd = ['git', 'clique']
+            if VerboseRun: cmd.append('--verbose')
+            cmd += ['add', '--change-only', remote]
+            cmd.extend(self.relativize_repos(repos))
+            self.runcmd(cmd)
+
+            self._remote_repos_cache[remote] = current_repos + repos
 
     def remove_repos(self, remote, *repos):
         cmd = ['git', 'clique']
