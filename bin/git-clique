@@ -120,7 +120,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
 
-    def get_remote_urls(self, remote):
+    def get_remote_repos(self, remote):
         try:
             urls = self.runcmd((
                 'git', 'config',  '--get-all', 'remote.' + remote + '.url'
@@ -128,7 +128,9 @@ class repo(tuple): # namedtuple('repo', 'host path')
         except CalledProcessError:
             return ()
         else:
-            return (line.rstrip('\r\n') for line in urls.stdout)
+            return (
+                self.parse(line.rstrip('\r\n'))
+                for line in urls.stdout)
 
     def __str__(self):
         if self.host is None:
@@ -167,8 +169,7 @@ class AddCommand(Command):
         super(AddCommand, self).__init__(opts, args)
         if not len(args): parser.error('missing urls')
         self.changed = set()
-        self.repos = set(repo.parse(url)
-            for url in self.repo.get_remote_urls(self.remote))
+        self.repos = set(self.repo.get_remote_repos(self.remote))
 
     def change(self, r):
         if r not in self.repos:
@@ -221,15 +222,13 @@ class RmCommand(AddCommand):
 
 class TeardownCommand(Command):
     def __call__(self):
-        for url in get_remote_urls(self.remote):
-            r = repo.parse(url)
+        for r in get_remote_repos(self.remote):
             r.remove_remote(self.remote)
         run(('git', 'remote', 'rm', self.remote))
 
 class SyncCommand(Command):
     def __call__(self):
-        stack = sorted(repo.parse(url)
-            for url in self.repo.get_remote_urls(self.remote))
+        stack = sorted(self.repo.get_remote_repos(self.remote))
         relations = set((self.repo, r) for r in stack)
         visited = set()
         tovisit = set(stack)
@@ -237,8 +236,7 @@ class SyncCommand(Command):
             cur = stack.pop(0)
             visited.add(cur)
             tovisit.remove(cur)
-            for url in cur.get_remote_urls(self.remote):
-                r = repo.parse(url)
+            for r in cur.get_remote_repos(self.remote):
                 if r not in visited and r not in tovisit:
                     tovisit.add(r)
                     stack.append(r)
@@ -259,8 +257,7 @@ class RunCommand(Command):
         if not len(args): parser.error('missing command')
         self.command = args
         self.repos = [] if self.opts.notthis else [self.repo]
-        self.repos.extend(repo.parse(url)
-            for url in self.repo.get_remote_urls(self.remote))
+        self.repos.extend(self.repo.get_remote_repos(self.remote))
 
     def shunt_pipe(self, pfx, f):
         for line in f:
