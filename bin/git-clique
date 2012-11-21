@@ -71,6 +71,28 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
             raise CalledProcessError(retcode, p.cmdstr)
     return p
 
+def prun_repo_cmds(repo_cmd_kwargs):
+    # TODO: thread pipe shunts?
+    procs = [
+        (repo, cmd, repo.runcmd(
+            cmd, stdout=PIPE, stderr=PIPE,
+            verbose=False, wait=False, **kwargs))
+        for repo, cmd, kwargs in repo_cmd_kwargs]
+    all_ok = True
+    for i, (repo, cmd, p) in enumerate(procs):
+        if i > 0: print
+        print repo, '$', list2cmdline(cmd)
+        ts = [
+            shunt_pipe_thread('  out>', p.stdout),
+            shunt_pipe_thread('  err>', p.stderr)]
+        retcode = p.wait()
+        for t in ts:
+            t.join()
+        if retcode != 0:
+            print '  exited non-zero:', retcode
+            all_ok = False
+    return 0 if all_ok else 1
+
 # from collections import namedtuple
 class repo(tuple): # namedtuple('repo', 'host path')
     def __new__(cls, host, path):
@@ -273,22 +295,9 @@ class RunCommand(Command):
         self.repos.extend(self.repo.get_remote_repos(self.remote))
 
     def __call__(self):
-        all_ok = True
-        for i, r in enumerate(self.repos):
-            if i > 0: print
-            print r, '$', list2cmdline(self.command)
-            p = r.runcmd(self.command, shell=True, wait=False,
-                         stdout=PIPE, stderr=PIPE)
-            ts = [
-                shunt_pipe_thread('  out>', p.stdout),
-                shunt_pipe_thread('  err>', p.stderr)]
-            for t in ts:
-                t.join()
-            retcode = p.wait()
-            if retcode != 0:
-                print '  exited non-zero:', retcode
-                all_ok = False
-        return 0 if all_ok else 1
+        return prun_repo_cmds(
+            (r, self.command, {'shell': True})
+            for r in self.repos)
 
 import optparse
 parser = optparse.OptionParser(
