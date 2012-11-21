@@ -36,6 +36,7 @@ except ImportError:
 VerboseRun = False
 
 def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
+    verbose = kwargs.pop('verbose', VerboseRun)
     if isinstance(cmd, unicode):
         cmd = cmd.encode('ascii')
     if isinstance(cmd, str):
@@ -43,7 +44,7 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
         cmd = shlex.split(cmd)
     else:
         cmdstr = list2cmdline(cmd)
-    if VerboseRun:
+    if verbose:
         host = socket.gethostname()
         path = kwargs.get('cwd', os.getcwd())
         print host + ':' + path, '+', list2cmdline(cmd)
