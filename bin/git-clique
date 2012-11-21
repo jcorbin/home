@@ -206,7 +206,10 @@ class AddCommand(Command):
 class RmCommand(AddCommand):
     def change(self, r):
         if r in self.repos:
-            run(('git', 'remote', 'set-url', '--delete', self.remote, str(r)))
+            if len(self.repos) == 1:
+                run(('git', 'remote', 'rm', self.remote))
+            else:
+                run(('git', 'remote', 'set-url', '--delete', self.remote, str(r)))
             self.repos.remove(r)
             return True
 
