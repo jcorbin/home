@@ -306,12 +306,12 @@ class SyncCommand(Command):
         relations = set((self.repo, r) for r in stack)
         visited = set(stack)
         while stack:
-            cur = stack.pop(0)
-            for r in cur.get_remote_repos(self.remote):
-                if r not in visited:
-                    visited.add(r)
-                    stack.append(r)
-                relations.add((cur, r))
+            a = stack.pop(0)
+            for b in a.get_remote_repos(self.remote):
+                if b not in visited:
+                    visited.add(b)
+                    stack.append(b)
+                relations.add((a, b))
         missing = (rel
             for rel in product(set((self.repo,)) | visited, visited)
             if rel not in relations and rel[0] != rel[1])
