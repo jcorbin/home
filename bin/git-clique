@@ -355,7 +355,7 @@ class SyncCommand(Command):
                     stack.append(b)
                 relations.add((a, b))
         a = set((self.repo,)) | visited
-        b = visited
+        b = visited if self.opts.notthis else a
         missing = (rel for rel in product(a, b)
             if rel not in relations and rel[0] != rel[1])
         missing = sorted(missing, key=itemgetter(0))
