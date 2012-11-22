@@ -226,6 +226,11 @@ class repo(tuple): # namedtuple('repo', 'host path')
 
             if not current_repos:
                 self.runcmd(('git', 'remote', 'remove', remote))
+            elif len(repos) == 1:
+                self.runcmd((
+                    'git', 'remote', 'set-url', remote, '--delete',
+                    self.relativize_repo(repos[0])
+                ), stdin=PIPE)
             else:
                 p = self.runcmd((
                     'xargs', '-0', '-n1',
