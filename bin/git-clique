@@ -352,8 +352,9 @@ class SyncCommand(Command):
                     visited.add(b)
                     stack.append(b)
                 relations.add((a, b))
-        missing = (rel
-            for rel in product(set((self.repo,)) | visited, visited)
+        a = set((self.repo,)) | visited
+        b = visited
+        missing = (rel for rel in product(a, b)
             if rel not in relations and rel[0] != rel[1])
         missing = sorted(missing, key=itemgetter(0))
         for a, rels in groupby(missing, itemgetter(0)):
