@@ -292,14 +292,8 @@ class AddCommand(Command):
         self.changed = set()
         self.repos = set(self.repo.remote_repos(self.remote))
 
-    def change(self, r):
-        if r not in self.repos:
-            if not self.repos:
-                run(('git', 'remote', 'add', self.remote, str(r)))
-            else:
-                run(('git', 'remote', 'set-url', '--add', self.remote, str(r)))
-            self.repos.add(r)
-            return True
+    def change(self, repos):
+        return self.repo.add_repos(self.remote, *repos)
 
     def change_changee(self, r):
         if self.opts.notthis:
@@ -312,8 +306,7 @@ class AddCommand(Command):
 
     def __call__(self):
         repos = tuple(repo.parse(url) for url in self.args)
-        self.changed.update(r for r in repos
-            if r != self.repo and self.change(r))
+        self.changed.update(self.change(repos))
 
         for r in self.changed:
             self.change_changee(r)
@@ -322,14 +315,8 @@ class AddCommand(Command):
             self.propagate(r)
 
 class RmCommand(AddCommand):
-    def change(self, r):
-        if r in self.repos:
-            if len(self.repos) == 1:
-                run(('git', 'remote', 'rm', self.remote))
-            else:
-                run(('git', 'remote', 'set-url', '--delete', self.remote, str(r)))
-            self.repos.remove(r)
-            return True
+    def change(self, repos):
+        return self.repo.remove_repos(self.remote, *repos)
 
     def change_changee(self, r):
         r.remove_remote(self.remote)
