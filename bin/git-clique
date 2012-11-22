@@ -309,8 +309,8 @@ class AddCommand(Command):
         r.add_repos(self.remote, *self.changed)
 
     def __call__(self):
-        for url in self.args:
-            r = repo.parse(url)
+        repos = tuple(repo.parse(url) for url in self.args)
+        for r in repos:
             if r == self.repo: continue
             if self.change(r):
                 self.changed.add(r)
