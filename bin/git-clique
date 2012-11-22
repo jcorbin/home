@@ -308,12 +308,6 @@ class RmCommand(AddCommand):
     def propagate(self, r):
         r.remove_repos(self.remote, *self.changed)
 
-class TeardownCommand(Command):
-    def __call__(self):
-        for r in remote_repos(self.remote):
-            r.remove_remote(self.remote)
-        run(('git', 'remote', 'rm', self.remote))
-
 class SyncCommand(Command):
     def __call__(self):
         stack = sorted(self.repo.remote_repos(self.remote))
@@ -369,7 +363,6 @@ class PushCommand(Command):
 import optparse
 parser = optparse.OptionParser(
     usage='%prog add|rm <remote> <url> [<url> [...]]\n'
-    '       %prog teardown <remote>\n'
     '       %prog sync <remote>\n'
     '       %prog run <remote> <command>\n'
     '       %prog push <remote>')
@@ -391,7 +384,6 @@ action = args.pop(0)
 commands = {
     'add': AddCommand,
     'rm': RmCommand,
-    'teardown': TeardownCommand,
     'sync': SyncCommand,
     'run': RunCommand,
     'push': PushCommand,
