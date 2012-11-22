@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# TODO: rip out all of the python 2.5 compatability and spin that off into a branch
+
 from itertools import groupby
 from operator import itemgetter
 from subprocess import list2cmdline, PIPE
