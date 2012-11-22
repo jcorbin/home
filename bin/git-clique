@@ -199,7 +199,12 @@ class repo(tuple): # namedtuple('repo', 'host path')
                     self.relativize_repo(added[0])))
                 repos = added[1:]
 
-            if repos:
+            if len(repos) == 1:
+                self.runcmd((
+                    'git', 'remote', 'set-url', remote, '--add',
+                    self.relativize_repo(repos[0])
+                ), stdin=PIPE)
+            elif repos:
                 p = self.runcmd((
                     'xargs', '-0', '-n1',
                     'git', 'remote', 'set-url', remote, '--add'
