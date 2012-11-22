@@ -93,7 +93,6 @@ def wait_check(proc, ok_retcodes=(0,)):
     return proc
 
 def prun_repo_cmds(repo_cmd_kwargs):
-    # TODO: thread pipe shunts?
     procs = [
         (repo, cmd, repo.runcmd(
             cmd, stdout=PIPE, stderr=PIPE,
