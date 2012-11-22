@@ -315,8 +315,6 @@ class AddCommand(Command):
             if self.change(r):
                 self.changed.add(r)
 
-        if not self.changed or self.opts.changeonly: sys.exit(0)
-
         for r in self.changed:
             self.change_changee(r)
 
@@ -407,10 +405,6 @@ parser = optparse.OptionParser(
 parser.add_option('-v', '--verbose',
     help='Print verbose output (command run)',
     dest='verbose', action='store_true', default=False)
-parser.add_option('--change-only',
-    help='Only make changes to the local repository;'
-         ' don\'t propagate changes to other repositories.',
-    dest='changeonly', action='store_true', default=False)
 parser.add_option('--not-this',
     help='Don\'t include this repository when propagating to other '
          'repositories or when running commands; useful for repositories '
