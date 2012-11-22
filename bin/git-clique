@@ -404,6 +404,8 @@ parser = optparse.OptionParser(
 parser.add_option('-v', '--verbose',
     help='Print verbose output (command run)',
     dest='verbose', action='store_true', default=False)
+# TODO: rename this option... what to call a repository which is connected
+#       to all clique members, but NOT vice-versa...
 parser.add_option('--not-this',
     help='Don\'t include this repository when propagating to other '
          'repositories or when running commands; useful for repositories '
