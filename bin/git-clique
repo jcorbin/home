@@ -310,10 +310,8 @@ class AddCommand(Command):
 
     def __call__(self):
         repos = tuple(repo.parse(url) for url in self.args)
-        for r in repos:
-            if r == self.repo: continue
-            if self.change(r):
-                self.changed.add(r)
+        self.changed.update(r for r in repos
+            if r != self.repo and self.change(r))
 
         for r in self.changed:
             self.change_changee(r)
