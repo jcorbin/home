@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # TODO: rip out all of the python 2.5 compatability and spin that off into a branch
+# TODO: parallel run in add/rm/sync
 
 from itertools import groupby
 from operator import itemgetter
