@@ -118,7 +118,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
     def __new__(cls, host, path):
         if host in (socket.gethostname(), socket.getfqdn()):
             host = None
-        self = tuple.__new__(cls, (host, path))
+        self = super(repo, cls).__new__(cls, (host, path))
         self._remote_repos_cache = {}
         return self
 
