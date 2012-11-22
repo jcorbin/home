@@ -348,8 +348,7 @@ class SyncCommand(Command):
         missing = sorted(missing, key=itemgetter(0))
         for a, rels in groupby(missing, itemgetter(0)):
             repos = sorted(b for _, b in rels)
-            print 'Connecting', a, '->',
-            print '{',  ', '.join(sorted(map(str, repos))), '}'
+            print 'Connecting %s -> {%s}' % (a, ', '.join(map(str, repos)))
             a.add_repos(self.remote, *repos)
 
 class RunCommand(Command):
