@@ -269,13 +269,33 @@ class Command(object):
         self._repo = repo(None, path)
         return self._repo
 
-class AddCommand(Command):
+class AddRmCommand(Command):
     def __init__(self, opts, args):
-        super(AddCommand, self).__init__(opts, args)
+        super(AddRmCommand, self).__init__(opts, args)
         if not len(args): parser.error('missing urls')
         self.changed = set()
         self.repos = set(self.repo.remote_repos(self.remote))
 
+    def __call__(self):
+        repos = tuple(repo.parse(url) for url in self.args)
+        self.changed.update(self.change(repos))
+
+        for r in self.changed:
+            self.change_changee(r)
+
+        for r in self.repos - self.changed:
+            self.propagate(r)
+
+    def change(self, repos):
+        raise NotImplementedError
+
+    def change_changee(self, r):
+        raise NotImplementedError
+
+    def propagate(self, r):
+        raise NotImplementedError
+
+class AddCommand(AddRmCommand):
     def change(self, repos):
         return self.repo.add_repos(self.remote, *repos)
 
@@ -288,17 +308,7 @@ class AddCommand(Command):
     def propagate(self, r):
         r.add_repos(self.remote, *self.changed)
 
-    def __call__(self):
-        repos = tuple(repo.parse(url) for url in self.args)
-        self.changed.update(self.change(repos))
-
-        for r in self.changed:
-            self.change_changee(r)
-
-        for r in self.repos - self.changed:
-            self.propagate(r)
-
-class RmCommand(AddCommand):
+class RmCommand(AddRmCommand):
     def change(self, repos):
         return self.repo.remove_repos(self.remote, *repos)
 
