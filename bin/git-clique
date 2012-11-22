@@ -209,6 +209,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
                 wait_check(p)
 
             self._remote_repos_cache[remote] = current_repos + added
+        return added
 
     def remove_repos(self, remote, *repos):
         current_repos = self.remote_repos(remote)
@@ -230,6 +231,7 @@ class repo(tuple): # namedtuple('repo', 'host path')
                 wait_check(p)
 
             self._remote_repos_cache[remote] = current_repos
+        return repos
 
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
