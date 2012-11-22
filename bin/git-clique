@@ -3,6 +3,7 @@
 # TODO: rip out all of the python 2.5 compatability and spin that off into a branch
 # TODO: parallel run in add/rm/sync
 
+from collections import namedtuple
 from itertools import groupby, product
 from operator import itemgetter
 from subprocess import CalledProcessError, list2cmdline, PIPE
@@ -113,17 +114,13 @@ def prun_repo_cmds(repo_cmd_kwargs):
             all_ok = False
     return 0 if all_ok else 1
 
-# from collections import namedtuple
-class repo(tuple): # namedtuple('repo', 'host path')
+class repo(namedtuple('repo', 'host path')):
     def __new__(cls, host, path):
         if host in (socket.gethostname(), socket.getfqdn()):
             host = None
-        self = super(repo, cls).__new__(cls, (host, path))
+        self = super(repo, cls).__new__(cls, host, path)
         self._remote_repos_cache = {}
         return self
-
-    host = property(itemgetter(0))
-    path = property(itemgetter(1))
 
     def runcmd(self, cmd, **kwargs):
         if self.islocal():
