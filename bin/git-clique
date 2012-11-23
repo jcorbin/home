@@ -78,6 +78,7 @@ def run(cmd, wait=True, ok_retcodes=(0,), **kwargs):
         host = socket.gethostname()
         path = kwargs.get('cwd', os.getcwd())
         print host + ':' + path, '+', list2cmdline(cmd)
+        sys.stdout.flush()
     if kwargs.get('shell'):
         cmd = cmdstr
     p = Popen(cmd, **kwargs)
@@ -102,6 +103,7 @@ def prun_repo_cmds(repo_cmd_kwargs):
     for i, (repo, cmd, p) in enumerate(procs):
         if i > 0: print
         print repo, '$', list2cmdline(cmd)
+        sys.stdout.flush()
         ts = [
             shunt_pipe_thread('  out>', p.stdout),
             shunt_pipe_thread('  err>', p.stderr)]
@@ -110,6 +112,7 @@ def prun_repo_cmds(repo_cmd_kwargs):
             t.join()
         if retcode != 0:
             print '  exited non-zero:', retcode
+            sys.stdout.flush()
             all_ok = False
     return 0 if all_ok else 1
 
