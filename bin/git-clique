@@ -241,17 +241,27 @@ class repo(namedtuple('repo', 'host path')):
             return self._remote_repos_cache[remote]
         except KeyError:
             pass
+        ret = [] # NOTE: nonlocal in py3k
+        self.get_remote_repos(remote, ret.append)
+        while not ret: signal.pause()
+        return ret[0]
+
+    def get_remote_repos(self, remote, cb):
         try:
-            urls = self.runcmd((
-                'git', 'config',  '--get-all', 'remote.' + remote + '.url'
-            ), stdout=PIPE)
-        except CalledProcessError:
-            return ()
+            repos = self._remote_repos_cache[remote]
+        except KeyError:
+            pass
         else:
+            cb(repos)
+            return
+        def cmd_done(urls):
             self._remote_repos_cache[remote] = repos = tuple(
                 self.parse(line.rstrip('\r\n'))
                 for line in urls.stdout)
-            return repos
+            cb(repos)
+        self.runcmd((
+            'git', 'config',  '--get-all', 'remote.' + remote + '.url'
+        ), stdout=PIPE, wait=False, onexit=cmd_done)
 
     def __str__(self):
         if self.host is None:
