@@ -258,6 +258,9 @@ class repo(namedtuple('repo', 'host path')):
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
 
+    def async_remove_remote(self, remote, cb):
+        self.runcmd(('git', 'remote', 'rm', remote), wait=False, onexit=lambda _: cb(self))
+
     def remote_repos(self, remote):
         try:
             return self._remote_repos_cache[remote]
