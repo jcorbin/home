@@ -175,36 +175,49 @@ class repo(namedtuple('repo', 'host path')):
             return str(r)
 
     def add_repos(self, remote, *repos):
-        current_repos = self.remote_repos(remote)
+        ret = [] # TODO: nonlocal in py3k
+        self.async_add_repos(remote, repos, ret.append)
+        while not ret: signal.pause()
+        return ret[0]
 
+    def async_add_repos(self, remote, repos, cb):
+        current_repos = self.remote_repos(remote)
         # TODO: worth it to use a set?
         added = tuple(r for r in repos
             if r not in current_repos and r != self)
         if not added:
-            return added
+            cb(added)
+            return
+        c1 = None
         if not current_repos:
-            self.runcmd(('git', 'remote', 'add', remote,
-                self.relativize_repo(added[0])))
+            c1 = ['git', 'remote', 'add', remote,
+                  self.relativize_repo(added[0])]
             rs = added[1:]
         else:
             rs = added
 
         if len(rs) == 1:
-            self.runcmd((
-                'git', 'remote', 'set-url', remote, '--add',
-                self.relativize_repo(rs[0])
-            ), stdin=PIPE)
+            c2 = ['git', 'remote', 'set-url', remote, '--add',
+                  self.relativize_repo(rs[0])]
         elif rs:
-            p = self.runcmd((
-                'xargs', '-0', '-n1',
-                'git', 'remote', 'set-url', remote, '--add'
-            ), stdin=PIPE, wait=False)
+            c2 = ['xargs', '-0', '-n1',
+                  'git', 'remote', 'set-url', remote, '--add']
+
+        kwargs = {}
+        if c1:
+            cmd = c1 + ['&&'] + c2
+            kwargs['shell'] = True
+        else:
+            cmd = c2
+        if len(rs) > 1:
+            kwargs['stdin'] = PIPE
+        def cmd_done(p):
+            self._remote_repos_cache[remote] = current_repos + added
+            cb(added)
+        p = self.runcmd(cmd, wait=False, onexit=cmd_done, **kwargs)
+        if len(rs) > 1:
             p.stdin.write('\0'.join(self.relativize_repos(rs)))
             p.stdin.close()
-            wait_check(p)
-
-        self._remote_repos_cache[remote] = current_repos + added
-        return added
 
     def remove_repos(self, remote, *repos):
         current_repos = self.remote_repos(remote)
