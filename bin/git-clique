@@ -4,6 +4,7 @@
 # TODO: parallel run in add/rm/sync
 
 from collections import namedtuple
+from functools import partial
 from itertools import groupby, product
 from operator import itemgetter
 from subprocess import CalledProcessError, list2cmdline, PIPE
@@ -359,25 +360,33 @@ class RmCommand(AddRmCommand):
 
 class SyncCommand(Command):
     def __call__(self):
-        stack = sorted(self.repo.remote_repos(self.remote))
-        relations = set((self.repo, r) for r in stack)
-        visited = set(stack)
-        while stack:
-            a = stack.pop(0)
-            for b in a.remote_repos(self.remote):
-                if b not in visited:
+        relations, visited, outstanding = set(), set(), set()
+        def proc(a, bs):
+            for b in bs:
+                if b not in visited and b != self.repo:
                     visited.add(b)
-                    stack.append(b)
+                    outstanding.add(b)
+                    b.get_remote_repos(self.remote, partial(proc, b))
                 relations.add((a, b))
+            outstanding.remove(a)
+        outstanding.add(self.repo)
+        self.repo.get_remote_repos(self.remote, partial(proc, self.repo))
+        while outstanding: signal.pause()
+
         a = set((self.repo,)) | visited
         b = visited if self.opts.notthis else a
         missing = (rel for rel in product(a, b)
             if rel not in relations and rel[0] != rel[1])
+
+        def add_done(r, added):
+            outstanding.remove(r)
         i0 = itemgetter(0)
         for a, rels in groupby(sorted(missing, key=i0), i0):
             repos = sorted(b for _, b in rels)
             print 'Connecting %s -> {%s}' % (a, ', '.join(map(str, repos)))
-            a.add_repos(self.remote, *repos)
+            outstanding.add(a)
+            a.async_add_repos(self.remote, repos, partial(add_done, a))
+        while outstanding: signal.pause()
 
 class RunCommand(Command):
     def __init__(self, opts, args):
