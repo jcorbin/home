@@ -351,7 +351,10 @@ class AddCommand(AddRmCommand):
 
 class RmCommand(AddRmCommand):
     def change(self, repos):
-        return self.repo.remove_repos(self.remote, *repos)
+        if self.opts.notthis:
+            return repos
+        else:
+            return self.repo.remove_repos(self.remote, *repos)
 
     def change_changee(self, r):
         r.remove_remote(self.remote)
