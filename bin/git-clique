@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 # TODO: rip out all of the python 2.5 compatability and spin that off into a branch
-# TODO: parallel run in add/rm/sync
 
 from collections import namedtuple
 from functools import partial
@@ -329,48 +328,57 @@ class AddRmCommand(Command):
 
     def __call__(self):
         repos = tuple(repo.parse(url) for url in self.args)
-        self.changed.update(self.change(repos))
+        def sync_changes(changed_repos):
+            self.changed.update(changed_repos)
 
-        for r in self.changed:
-            self.change_changee(r)
+            outstanding = set()
+            def done(r, _):
+                outstanding.remove(r)
 
-        for r in self.repos - self.changed:
-            self.propagate(r)
+            for r in self.changed:
+                outstanding.add(r)
+                self.change_changee(r, partial(done, r))
+            while outstanding: signal.pause()
 
-    def change(self, repos):
+            for r in self.repos - self.changed:
+                outstanding.add(r)
+                self.propagate(r, repos, partial(done, r))
+            while outstanding: signal.pause()
+        self.change(repos, sync_changes)
+
+    def change(self, repos, cb):
         raise NotImplementedError
 
-    def change_changee(self, r):
+    def change_changee(self, r, cb):
         raise NotImplementedError
 
-    def propagate(self, r):
+    def propagate(self, r, cb):
         raise NotImplementedError
 
 class AddCommand(AddRmCommand):
-    def change(self, repos):
-        return self.repo.add_repos(self.remote, *repos)
+    def change(self, repos, cb):
+        return self.repo.async_add_repos(self.remote, repos, cb)
 
-    def change_changee(self, r):
-        if self.opts.notthis:
-            r.add_repos(self.remote, *self.repos)
-        else:
-            r.add_repos(self.remote, self.repo, *self.repos)
+    def change_changee(self, r, cb):
+        repos = self.repos
+        if not self.opts.notthis: repos.add(self.repo)
+        r.async_add_repos(self.remote, repos, cb)
 
-    def propagate(self, r):
-        r.add_repos(self.remote, *self.changed)
+    def propagate(self, r, repos, cb):
+        r.async_add_repos(self.remote, repos, cb)
 
 class RmCommand(AddRmCommand):
-    def change(self, repos):
+    def change(self, repos, cb):
         if self.opts.notthis:
-            return repos
+            cb(repos)
         else:
-            return self.repo.remove_repos(self.remote, *repos)
+            self.repo.async_remove_repos(self.remote, repos, cb)
 
-    def change_changee(self, r):
-        r.remove_remote(self.remote)
+    def change_changee(self, r, cb):
+        r.async_remove_remote(self.remote, cb)
 
-    def propagate(self, r):
-        r.remove_repos(self.remote, *self.changed)
+    def propagate(self, r, repos, cb):
+        r.async_remove_repos(self.remote, repos, cb)
 
 class SyncCommand(Command):
     def __call__(self):
