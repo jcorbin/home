@@ -292,12 +292,20 @@ class repo(namedtuple('repo', 'host path')):
             return self.host + ':' + self.path
 
 class Command(object):
-    def __init__(self, opts, args):
-        self.opts = opts
-        self.args = args
+    @classmethod
+    def add_subparser(cls, subparsers):
+        name = cls.__name__
+        if name.endswith('Command'): name = name[:-7]
+        name = name.lower()
+        subparser = subparsers.add_parser(name)
+        subparser.set_defaults(cmd=cls)
+        subparser.add_argument('remote', metavar='<name>',
+            help='name of the clique remote')
+        return subparser
 
-        if not len(args): parser.error('missing remote')
-        self.remote = args.pop(0)
+    def __init__(self, args):
+        self.args = args
+        self.remote = args.remote
 
     @property
     def repo(self):
@@ -318,14 +326,20 @@ class Command(object):
         return self._repo
 
 class AddRmCommand(Command):
-    def __init__(self, opts, args):
-        super(AddRmCommand, self).__init__(opts, args)
-        if not len(args): parser.error('missing urls')
+    @classmethod
+    def add_subparser(cls, subparsers):
+        subparser = super(AddRmCommand, cls).add_subparser(subparsers)
+        subparser.add_argument('urls', metavar='<url>', nargs='+',
+            help='url(s) to add/remove')
+        return subparser
+
+    def __init__(self, args):
+        super(AddRmCommand, self).__init__(args)
         self.changed = set()
         self.repos = set(self.repo.remote_repos(self.remote))
 
     def __call__(self):
-        repos = tuple(repo.parse(url) for url in self.args)
+        repos = tuple(repo.parse(url) for url in self.args.urls)
         def sync_changes(changed_repos):
             self.changed.update(changed_repos)
 
@@ -359,7 +373,7 @@ class AddCommand(AddRmCommand):
 
     def change_changee(self, r, cb):
         repos = self.repos
-        if not self.opts.notthis: repos.add(self.repo)
+        if not self.args.notthis: repos.add(self.repo)
         r.async_add_repos(self.remote, repos, cb)
 
     def propagate(self, r, repos, cb):
@@ -367,7 +381,7 @@ class AddCommand(AddRmCommand):
 
 class RmCommand(AddRmCommand):
     def change(self, repos, cb):
-        if self.opts.notthis:
+        if self.args.notthis:
             cb(repos)
         else:
             self.repo.async_remove_repos(self.remote, repos, cb)
@@ -394,7 +408,7 @@ class SyncCommand(Command):
         while outstanding: signal.pause()
 
         a = set((self.repo,)) | visited
-        b = visited if self.opts.notthis else a
+        b = visited if self.args.notthis else a
         missing = (rel for rel in product(a, b)
             if rel not in relations and rel[0] != rel[1])
 
@@ -409,28 +423,37 @@ class SyncCommand(Command):
         while outstanding: signal.pause()
 
 class RunCommand(Command):
-    def __init__(self, opts, args):
-        super(RunCommand, self).__init__(opts, args)
-        if not len(args): parser.error('missing command')
-        self.command = args
-        self.repos = [] if self.opts.notthis else [self.repo]
+    @classmethod
+    def add_subparser(cls, subparsers):
+        subparser = super(RunCommand, cls).add_subparser(subparsers)
+        subparser.add_argument('command', nargs=argparse.REMAINDER,
+            help='the command to run')
+        return subparser
+
+    def __init__(self, args):
+        super(RunCommand, self).__init__(args)
+        if not args.command: parser.error('missing command')
+        self.repos = [] if self.args.notthis else [self.repo]
         self.repos.extend(self.repo.remote_repos(self.remote))
 
     def __call__(self):
         return prun_repo_cmds(
-            (r, self.command, {'shell': True})
+            (r, self.args.command, {'shell': True})
             for r in self.repos)
 
 class PushCommand(Command):
     # TODO: support topologies other than star (binary tree would be nice)
 
-    def __init__(self, opts, args):
-        super(PushCommand, self).__init__(opts, args)
-        self.refspec = args.pop(0) if args else None
+    @classmethod
+    def add_subparser(cls, subparsers):
+        subparser = super(PushCommand, cls).add_subparser(subparsers)
+        subparser.add_argument('refspec', metavar='<refspec>', nargs='?',
+            help='which refs to push')
+        return subparser
 
     def __call__(self):
-        if self.refspec:
-            cmd = lambda u: ('git', 'push', u, self.refspec)
+        if self.args.refspec:
+            cmd = lambda u: ('git', 'push', u, self.args.refspec)
         else:
             cmd = lambda u: ('git', 'push', u)
         repos = self.repo.remote_repos(self.remote)
@@ -438,44 +461,25 @@ class PushCommand(Command):
             (self.repo, cmd(url), {})
             for url in self.repo.relativize_repos(repos))
 
-import optparse
-parser = optparse.OptionParser(
-    usage='%prog add|rm <remote> <url> [<url> [...]]\n'
-    '       %prog sync <remote>\n'
-    '       %prog run <remote> <command>\n'
-    '       %prog push <remote>')
-parser.add_option('-v', '--verbose',
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--verbose', '-v',
     help='Print verbose output (command run)',
     dest='verbose', action='store_true', default=False)
 # TODO: rename this option... what to call a repository which is connected
 #       to all clique members, but NOT vice-versa...
-parser.add_option('--not-this',
+parser.add_argument('--not-this',
     help='Don\'t include this repository when propagating to other '
          'repositories or when running commands; useful for repositories '
          'external to the clique.',
     dest='notthis', action='store_true', default=False)
-opts, args = parser.parse_args()
-
-if not len(args): parser.error('missing action')
-action = args.pop(0)
-
-commands = {
-    'add': AddCommand,
-    'rm': RmCommand,
-    'sync': SyncCommand,
-    'run': RunCommand,
-    'push': PushCommand,
-}
-
-try:
-    cmd = commands[action]
-except KeyError:
-    print >>sys.stderr, "Invaild action", repr(action)
-    sys.exit(1)
-
-if opts.verbose:
+subparsers = parser.add_subparsers()
+for cmd in (AddCommand, RmCommand, SyncCommand,
+            RunCommand, PushCommand):
+    cmd.add_subparser(subparsers)
+args = parser.parse_args()
+if args.verbose:
     VerboseRun = True
-
-cmd = cmd(opts, args)
+cmd = args.cmd(args)
 retcode = cmd()
 sys.exit(0 if retcode is None else retcode)
