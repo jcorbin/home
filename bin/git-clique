@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-# TODO: rip out all of the python 2.5 compatability and spin that off into a branch
-
 from collections import namedtuple
 from functools import partial
 from itertools import groupby, product
