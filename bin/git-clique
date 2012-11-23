@@ -48,6 +48,13 @@ class Popen(subprocess.Popen):
         except OSError as err:
             if err.errno != errno.ECHILD: raise
 
+    def __init__(self, cmd, **kwargs):
+        self.onexit = kwargs.pop('onexit', None)
+        self._ininit = True
+        super(Popen, self).__init__(cmd, **kwargs)
+        if self.returncode is not None and self.onexit: self.onexit(self)
+        self._ininit = False
+
     def _execute_child(self, *args):
         super(Popen, self)._execute_child(*args)
         self.Processes[self.pid] = self
@@ -57,6 +64,10 @@ class Popen(subprocess.Popen):
             pass
         else:
             self._handle_exitstatus(status)
+
+    def _handle_exitstatus(self, status):
+        super(Popen, self)._handle_exitstatus(status)
+        if self.onexit and not self._ininit: self.onexit(self)
 
     def wait(self):
         while self.returncode is None:
