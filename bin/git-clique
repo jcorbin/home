@@ -426,11 +426,11 @@ class PushCommand(Command):
 
     def __init__(self, opts, args):
         super(PushCommand, self).__init__(opts, args)
-        self.argspec = args.pop(0) if args else None
+        self.refspec = args.pop(0) if args else None
 
     def __call__(self):
-        if self.argspec:
-            cmd = lambda u: ('git', 'push', u, self.argspec)
+        if self.refspec:
+            cmd = lambda u: ('git', 'push', u, self.refspec)
         else:
             cmd = lambda u: ('git', 'push', u)
         repos = self.repo.remote_repos(self.remote)
