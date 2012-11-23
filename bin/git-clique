@@ -224,28 +224,29 @@ class repo(namedtuple('repo', 'host path')):
         current_repos = self.remote_repos(remote)
 
         # TODO: worth it to use a set?
-        repos = tuple(r for r in repos if r in current_repos)
-        if repos:
-            current_repos = tuple(r for r in current_repos if r not in repos)
+        removed = tuple(r for r in repos if r in current_repos)
+        if not removed:
+            return removed
+        current_repos = tuple(r for r in current_repos if r not in removed)
 
-            if not current_repos:
-                self.runcmd(('git', 'remote', 'remove', remote))
-            elif len(repos) == 1:
-                self.runcmd((
-                    'git', 'remote', 'set-url', remote, '--delete',
-                    self.relativize_repo(repos[0])
-                ), stdin=PIPE)
-            else:
-                p = self.runcmd((
-                    'xargs', '-0', '-n1',
-                    'git', 'remote', 'set-url', remote, '--delete'
-                ), stdin=PIPE, wait=False)
-                p.stdin.write('\0'.join(self.relativize_repos(repos)))
-                p.stdin.close()
-                wait_check(p)
+        if not current_repos:
+            self.runcmd(('git', 'remote', 'remove', remote))
+        elif len(removed) == 1:
+            self.runcmd((
+                'git', 'remote', 'set-url', remote, '--delete',
+                self.relativize_repo(removed[0])
+            ))
+        else:
+            p = self.runcmd((
+                'xargs', '-0', '-n1',
+                'git', 'remote', 'set-url', remote, '--delete'
+            ), stdin=PIPE, wait=False)
+            p.stdin.write('\0'.join(self.relativize_repos(removed)))
+            p.stdin.close()
+            wait_check(p)
 
-            self._remote_repos_cache[remote] = current_repos
-        return repos
+        self._remote_repos_cache[remote] = current_repos
+        return removed
 
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
