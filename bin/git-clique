@@ -221,32 +221,39 @@ class repo(namedtuple('repo', 'host path')):
             p.stdin.close()
 
     def remove_repos(self, remote, *repos):
-        current_repos = self.remote_repos(remote)
+        ret = [] # TODO: nonlocal in py3k
+        self.async_remove_repos(remote, repos, ret.append)
+        while not ret: signal.pause
+        return ret[0]
 
+    def async_remove_repos(self, remote, repos, cb):
+        current_repos = self.remote_repos(remote)
         # TODO: worth it to use a set?
         removed = tuple(r for r in repos if r in current_repos)
         if not removed:
             return removed
         current_repos = tuple(r for r in current_repos if r not in removed)
 
+        def cmd_done(_):
+            print _.cmdstr, 'done'
+            sys.stdout.flush()
+            self._remote_repos_cache[remote] = current_repos
+            cb(removed)
         if not current_repos:
-            self.runcmd(('git', 'remote', 'remove', remote))
+            self.runcmd(('git', 'remote', 'remove', remote),
+                        wait=False, onexit=cmd_done)
         elif len(removed) == 1:
             self.runcmd((
                 'git', 'remote', 'set-url', remote, '--delete',
                 self.relativize_repo(removed[0])
-            ))
+            ), wait=False, onexit=cmd_done)
         else:
             p = self.runcmd((
                 'xargs', '-0', '-n1',
                 'git', 'remote', 'set-url', remote, '--delete'
-            ), stdin=PIPE, wait=False)
+            ), stdin=PIPE, wait=False, onexit=cmd_done)
             p.stdin.write('\0'.join(self.relativize_repos(removed)))
             p.stdin.close()
-            wait_check(p)
-
-        self._remote_repos_cache[remote] = current_repos
-        return removed
 
     def remove_remote(self, remote):
         self.runcmd(('git', 'remote', 'rm', remote))
