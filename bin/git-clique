@@ -449,9 +449,12 @@ class PushCommand(Command):
         subparser = super(PushCommand, cls).add_subparser(subparsers)
         subparser.add_argument('refspec', metavar='<refspec>', nargs='?',
             help='which refs to push')
+        subparser.add_argument('--topology', '-t', default='star',
+            choices=[attr[9:] for attr in dir(cls)
+            if attr.startswith('topology_')])
         return subparser
 
-    def __call__(self):
+    def topology_star(self):
         if self.args.refspec:
             cmd = lambda u: ('git', 'push', u, self.args.refspec)
         else:
@@ -460,6 +463,9 @@ class PushCommand(Command):
         prun_repo_cmds(
             (self.repo, cmd(url), {})
             for url in self.repo.relativize_repos(repos))
+
+    def __call__(self):
+        getattr(self, 'topology_%s' % self.args.topology)()
 
 import argparse
 parser = argparse.ArgumentParser()
