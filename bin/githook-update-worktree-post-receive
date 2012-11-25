@@ -18,9 +18,7 @@ while read oldrev newrev refname; do
         else
             die "Unable to determine GIT_WORK_TREE from GIT_DIR=$GIT_DIR, set core.worktree"
         fi
-        # TODO: config for --force
-        # TODO: --quiet?
-        git checkout
+        git checkout -f
         cd "$GIT_DIR"
     fi
 done
