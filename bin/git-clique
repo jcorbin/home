@@ -202,11 +202,11 @@ class repo(namedtuple('repo', 'host path')):
                   'git', 'remote', 'set-url', remote, '--add']
 
         kwargs = {}
-        if c1:
+        if c1 and c2:
             cmd = c1 + ['&&'] + c2
             kwargs['shell'] = True
-        else:
-            cmd = c2
+        elif c1: cmd = c1
+        elif c2: cmd = c2
         if len(rs) > 1:
             kwargs['stdin'] = PIPE
         def cmd_done(p):
