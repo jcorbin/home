@@ -125,6 +125,20 @@ def prun_repo_cmds(repo_cmd_kwargs):
             all_ok = False
     return 0 if all_ok else 1
 
+class memoized_property(object):
+    def __init__(self, f, key=None):
+        self.f = f
+        self.key = key or '_' + self.f.__name__
+
+    def __get__(self, instance, owner):
+        try:
+            return getattr(instance, self.key)
+        except AttributeError:
+            pass
+        val = self.f(instance)
+        setattr(instance, self.key, val)
+        return val
+
 class repo(namedtuple('repo', 'host path')):
     def __new__(cls, host, path):
         if host in (socket.gethostname(), socket.getfqdn()):
@@ -146,6 +160,28 @@ class repo(namedtuple('repo', 'host path')):
             proc = run(cmd, **kwargs)
 
         return proc
+
+    @memoized_property
+    def head_ref(self):
+        return self.runcmd([
+            'git', 'symbolic-ref', 'HEAD'
+        ], stdout=PIPE).stdout.readline().strip()
+
+    @property
+    def head_branch(self):
+        return self.head_ref.split('/')[-1]
+
+    @memoized_property
+    def head_remote(self):
+        return self.runcmd([
+            'git', 'config', 'branch.%s.remote' % self.head_branch
+        ], stdout=PIPE).stdout.readline().strip()
+
+    @memoized_property
+    def head_merge(self):
+        return self.runcmd([
+            'git', 'config', 'branch.%s.merge' % self.head_branch
+        ], stdout=PIPE).stdout.readline().strip()
 
     @classmethod
     def parse(cls, s):
