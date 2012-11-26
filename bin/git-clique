@@ -483,6 +483,7 @@ class PushCommand(Command):
     @classmethod
     def add_subparser(cls, subparsers):
         subparser = super(PushCommand, cls).add_subparser(subparsers)
+        subparser._actions[-1].nargs = '?'
         subparser.add_argument('args', nargs=argparse.REMAINDER,
             help='args for git-push')
         subparser.add_argument('--topology', '-t', default='star',
@@ -499,6 +500,9 @@ class PushCommand(Command):
             for url in self.repo.relativize_repos(repos))
 
     def __call__(self):
+        if self.remote is None:
+            self.remote = self.repo.head_remote
+            self.args.args = [self.repo.head_merge.split('/')[-1]]
         getattr(self, 'topology_%s' % self.args.topology)()
 
 import argparse
