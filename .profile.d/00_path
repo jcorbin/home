@@ -7,8 +7,15 @@ add_path_component()
     export PATH=$PATH:$1
 }
 
+if [ -d /opt/local/libexec/gnubin ]; then
+    export PATH=/opt/local/libexec/gnubin:$(
+        echo $PATH | tr : '\n' | grep -Fvx /opt/local/libexec/gnubin | tr '\n' :
+    )
+fi
+
 add_path_component /sbin
 add_path_component /usr/sbin
+add_path_component /opt/local/bin
 add_path_component $HOME/bin
 add_path_component $HOME/.local/bin
 if [ -d /var/lib/gems ]; then
