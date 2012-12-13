@@ -8,13 +8,15 @@ if [ $(stat ${TMPDIR:-/tmp} -c %u) -ne $(id -u) ]; then
     export TMPDIR
 fi
 
-for d in $(cat ~/.vardirs); do
-    [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
-    if [ -L "$HOME/$d" ]; then
-        [ "$(readlink $HOME/$d)" = "$TMPDIR/$d" ] && continue
-        rm "$HOME/$d"
-    elif [ -e "$HOME/$d" ]; then
-        rm -rf "$HOME/$d"
-    fi
-    ln -s "$TMPDIR/$d" "$HOME/$d"
-done
+if [ -f ~/.vardirs ]; then
+	for d in $(cat ~/.vardirs); do
+		[ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
+		if [ -L "$HOME/$d" ]; then
+			[ "$(readlink $HOME/$d)" = "$TMPDIR/$d" ] && continue
+			rm "$HOME/$d"
+		elif [ -e "$HOME/$d" ]; then
+			rm -rf "$HOME/$d"
+		fi
+		ln -s "$TMPDIR/$d" "$HOME/$d"
+	done
+fi
