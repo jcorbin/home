@@ -52,9 +52,9 @@ if has("persistent_undo")
 endif
 
 " save swap files in one place
-set directory=$HOME/.vim/swap/$HOSTNAME//
-if exists("*mkdir") && !isdirectory($HOME . "/.vim/swap/" . $HOSTNAME)
-	call mkdir($HOME . "/.vim/swap/" . $HOSTNAME, "p", 0700)
+set directory=$HOME/.vim/swap
+if exists("*mkdir") && !isdirectory($HOME . "/.vim/swap")
+	call mkdir($HOME . "/.vim/swap", "p", 0700)
 endif
 
 " Paste Toggling with <F12>
