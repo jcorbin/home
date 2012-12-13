@@ -69,7 +69,7 @@ set background=dark
 set wildmode=longest,list:longest
 
 if has("gui_running")
-	set guifont=Inconsolata\ Medium\ 8,Droid\ Sans\ Mono\ 9,DejaVu\ Sans\ Mono\ 9,Bitstream\ Vera\ Sans\ Mono\ 9
+	set guifont=Inconsolata:h12
 	" guioptions:
 	"   a - autoselect
 	"   c - console dialogs
