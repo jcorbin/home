@@ -155,4 +155,8 @@ let perl_include_pod = 1
 let perl_want_scope_in_variables = 1
 let perl_extended_vars = 1
 
+inoremap jk <Esc>
+inoremap <Esc> <nop>
+inoremap <c-c> <nop>
+
 " vim:set ts=2 sw=2 noexpandtab:
