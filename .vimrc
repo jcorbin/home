@@ -32,7 +32,6 @@ set splitright
 
 " Show tabs, trailing spaces, and line wraps
 set list listchars=tab:^-,trail:_,extends:+,nbsp:.
-set background=dark
 
 " completion
 set wildmode=longest,list:longest
