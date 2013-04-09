@@ -12,7 +12,6 @@ set showmatch   " Show matching brackets.
 set scrolloff=3 " Try to keep 3 lines after cursor
 set ruler       " display line/col/percentage on right part of statusline
 set cursorline
-set laststatus=2
 
 set virtualedit=all
 set autoindent
