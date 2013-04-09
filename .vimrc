@@ -183,7 +183,7 @@ nnoremap <leader>gp :Git add --patch %<cr>
 nnoremap <leader>gr :Git reset %<cr>
 " }}}
 
-nnoremap <F5> :GundoToggle<CR>
+nnoremap <leader>u :GundoToggle<CR>
 nnoremap du :diffupdate<cr>
 
 " vimrc editing convenience {{{
