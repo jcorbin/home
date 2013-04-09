@@ -148,8 +148,23 @@ au BufWritePost *.coffee silent CoffeeMake!
 " Mappings {{{
 
 " exiting insert mode {{{
-inoremap jk <Esc>
+
+" enter exits insert mode, but can toggle back to normaly with shift-enter
+function! ToggleEnterMapping()
+  if empty(mapcheck('<CR>', 'i'))
+    inoremap <CR> <Esc>`^
+    inoremap <Esc> <nop>
+    return "\<Esc>"
+  else
+    iunmap <CR>
+    iunmap <Esc>
+    return "\<CR>"
+  endif
+endfunction
+
+inoremap <CR> <Esc>
 inoremap <Esc> <nop>
+inoremap <expr> <S-CR> ToggleEnterMapping()
 inoremap <c-c> <nop>
 " }}}
 
