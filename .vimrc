@@ -87,6 +87,9 @@ if has("gui_running")
   "   r - right scroll always
   set guioptions=acgit
   set guiheadroom=0
+  colorscheme lucius
+  LuciusBlack
+
 " }}}
 " Terminal options {{{
 else
@@ -105,6 +108,14 @@ else
   nnoremap <leader>m :call ToggleMouse()<cr>
   set mouse=a " Enable mouse usage (all modes) in terminals
   " }}}
+
+  set background=dark
+  " Determine colorscheme
+  if &t_Co == 256
+    colorscheme xoria256
+  else
+    colorscheme desert
+  endif
 
 endif
 " }}}
@@ -128,20 +139,6 @@ if version >= 703
   set relativenumber
 else
   set number
-endif
-" }}}
-
-" Determine colorscheme {{{
-"
-" NOTE: jellybeans also great choice, toss up for gui in lieu of moria and 256
-"       term in lieu of xoria; it's similar, but more subdued, at the cost of
-"       contrast in a few points.
-if has("gui_running")
-  colorscheme moria
-elseif &t_Co == 256
-  colorscheme xoria256
-else
-  colorscheme desert
 endif
 " }}}
 
