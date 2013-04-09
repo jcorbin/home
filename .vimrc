@@ -87,12 +87,12 @@ if has("gui_running")
   "   r - right scroll always
   set guioptions=acgit
   set guiheadroom=0
-endif
 " }}}
-
 " Terminal options {{{
-if $TERM =~ 'xterm' || $TERM =~ 'screen'
-  set ttyfast
+else
+  if $TERM =~ 'xterm' || $TERM =~ 'screen'
+    set ttyfast
+  endif
 endif
 " }}}
 
