@@ -93,19 +93,20 @@ else
   if $TERM =~ 'xterm' || $TERM =~ 'screen'
     set ttyfast
   endif
-endif
-" }}}
 
-" togglable mouse usage {{{
-function! ToggleMouse()
-  if &mouse == ""
-    set mouse=a
-  else
-    set mouse=
-  endif
-endfunction
-nnoremap <leader>m :call ToggleMouse()<cr>
-set mouse=a " Enable mouse usage (all modes) in terminals
+  " togglable mouse usage {{{
+  function! ToggleMouse()
+    if &mouse == ""
+      set mouse=a
+    else
+      set mouse=
+    endif
+  endfunction
+  nnoremap <leader>m :call ToggleMouse()<cr>
+  set mouse=a " Enable mouse usage (all modes) in terminals
+  " }}}
+
+endif
 " }}}
 
 " line numbering {{{
