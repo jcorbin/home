@@ -162,6 +162,5 @@ inoremap <c-c> <nop>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-redraw | echo ">^.^<"
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
