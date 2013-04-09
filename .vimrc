@@ -15,6 +15,8 @@ set cursorline
 
 set virtualedit=all
 set autoindent
+set smartindent
+set smarttab
 set foldmethod=indent
 set swapsync=
 
