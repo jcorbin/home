@@ -1,7 +1,8 @@
 call pathogen#infect()
 
-syntax on
+" Options {{{
 
+syntax on
 filetype plugin indent on
 
 " Really, who cares about Vi compat anymore...
@@ -16,13 +17,15 @@ set ruler
 set nospell
 set cursorline
 
-" searching
+" searching {{{
 nnoremap <leader><space> :nohlsearch<cr>
 set ignorecase " Do case insensitive matching
 set smartcase  " Do smart case matching
 set incsearch  " Incremental search
 set hlsearch   " highlight while searching
 nohlsearch
+"}}}
+
 "set formatoptions=croq2lj
 
 nnoremap du :diffupdate<cr>
@@ -41,7 +44,7 @@ nnoremap <leader>gp :Git add --patch %<cr>
 nnoremap <leader>gr :Git reset %<cr>
 
 set undolevels=1000
-" Persistent undo (vim 7.3+)
+" Persistent undo (vim 7.3+) {{{
 if has("persistent_undo")
   set undodir=~/.vim/undo
   set undofile
@@ -50,16 +53,21 @@ if has("persistent_undo")
     call mkdir(&undodir, "p", 0700)
   endif
 endif
+" }}}
 
-" save swap files in one place
+" Save swap files in one place {{{
 set directory=$HOME/.vim/swap
 if exists("*mkdir") && !isdirectory($HOME . "/.vim/swap")
   call mkdir($HOME . "/.vim/swap", "p", 0700)
 endif
+" }}}
 
-" Paste Toggling with <F12>
+"}}}
+
+" Paste Toggling with <F12> {{{
 map <F12> setenvpastemap
 set pastetoggle=<F12>
+" }}}
 
 " Show tabs, trailing spaces, and line wraps
 set list listchars=tab:^-,trail:_,extends:+,nbsp:.
@@ -68,6 +76,7 @@ set background=dark
 " completion
 set wildmode=longest,list:longest
 
+" GUI options {{{
 if has("gui_running")
   set guifont=Inconsolata:h12
   " guioptions:
@@ -81,14 +90,17 @@ if has("gui_running")
   set guioptions=acgit
   set guiheadroom=0
 endif
+" }}}
 
+" Terminal options {{{
 if $TERM =~ 'xterm' || $TERM =~ 'screen'
   set ttyfast
 endif
+" }}}
 
 set virtualedit=all
 
-" mouse usage
+" togglable mouse usage {{{
 function! ToggleMouse()
   if &mouse == ""
     set mouse=a
@@ -98,8 +110,9 @@ function! ToggleMouse()
 endfunction
 nnoremap <leader>m :call ToggleMouse()<cr>
 set mouse=a " Enable mouse usage (all modes) in terminals
+" }}}
 
-" line numbering
+" line numbering {{{
 function! ToggleNumbering()
   if &number == 1
     set nonumber
@@ -119,6 +132,7 @@ if version >= 703
 else
   set number
 endif
+" }}}
 
 set autoindent
 set expandtab
@@ -132,7 +146,7 @@ set laststatus=2
 
 nnoremap <F5> :GundoToggle<CR>
 
-" Determine colorscheme
+" Determine colorscheme {{{
 "
 " NOTE: jellybeans also great choice, toss up for gui in lieu of moria and 256
 "       term in lieu of xoria; it's similar, but more subdued, at the cost of
@@ -144,6 +158,7 @@ elseif &t_Co == 256
 else
   colorscheme desert
 endif
+" }}}
 
 " autocompile coffee script files on write
 au BufWritePost *.coffee silent CoffeeMake!
@@ -155,12 +170,18 @@ let perl_include_pod = 1
 let perl_want_scope_in_variables = 1
 let perl_extended_vars = 1
 
+" Mappings {{{
+
 inoremap jk <Esc>
 inoremap <Esc> <nop>
 inoremap <c-c> <nop>
 
+" vimrc editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+" }}}
+
+" }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
