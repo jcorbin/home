@@ -25,6 +25,8 @@ set tabstop=4
 set shiftwidth=4
 
 set nospell
+set splitbelow
+set splitright
 
 "set formatoptions=croq2lj
 
