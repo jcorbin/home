@@ -166,10 +166,6 @@ au BufWritePost *.coffee silent CoffeeMake!
 let xml_use_xhtml=1
 let g:tex_flavor='latex'
 
-let perl_include_pod = 1
-let perl_want_scope_in_variables = 1
-let perl_extended_vars = 1
-
 " Mappings {{{
 
 inoremap jk <Esc>
