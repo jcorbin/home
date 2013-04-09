@@ -43,18 +43,18 @@ nnoremap <leader>gr :Git reset %<cr>
 set undolevels=1000
 " Persistent undo (vim 7.3+)
 if has("persistent_undo")
-	set undodir=~/.vim/undo
-	set undofile
-	set undoreload=10000
-	if !isdirectory(&undodir) && exists("*mkdir")
-		call mkdir(&undodir, "p", 0700)
-	endif
+  set undodir=~/.vim/undo
+  set undofile
+  set undoreload=10000
+  if !isdirectory(&undodir) && exists("*mkdir")
+    call mkdir(&undodir, "p", 0700)
+  endif
 endif
 
 " save swap files in one place
 set directory=$HOME/.vim/swap
 if exists("*mkdir") && !isdirectory($HOME . "/.vim/swap")
-	call mkdir($HOME . "/.vim/swap", "p", 0700)
+  call mkdir($HOME . "/.vim/swap", "p", 0700)
 endif
 
 " Paste Toggling with <F12>
@@ -69,49 +69,49 @@ set background=dark
 set wildmode=longest,list:longest
 
 if has("gui_running")
-	set guifont=Inconsolata:h12
-	" guioptions:
-	"   a - autoselect
-	"   c - console dialogs
-	"   e - gui tabline
-	"   i - icon hint
-	"   m - menubar
-	"   g - grey out menu items
-	"   r - right scroll always
-	set guioptions=acgit
-	set guiheadroom=0
+  set guifont=Inconsolata:h12
+  " guioptions:
+  "   a - autoselect
+  "   c - console dialogs
+  "   e - gui tabline
+  "   i - icon hint
+  "   m - menubar
+  "   g - grey out menu items
+  "   r - right scroll always
+  set guioptions=acgit
+  set guiheadroom=0
 endif
 
 if $TERM =~ 'xterm' || $TERM =~ 'screen'
-	set ttyfast
+  set ttyfast
 endif
 
 set virtualedit=all
 
 " mouse usage
 function! ToggleMouse()
-	if &mouse == ""
-		set mouse=a
-	else
-		set mouse=
-	endif
+  if &mouse == ""
+    set mouse=a
+  else
+    set mouse=
+  endif
 endfunction
 nnoremap <leader>m :call ToggleMouse()<cr>
 set mouse=a " Enable mouse usage (all modes) in terminals
 
 " line numbering
 function! ToggleNumbering()
-	if &number == 1
-		set nonumber
-		let s:lastnumber = "number"
-	elseif &relativenumber == 1
-		set norelativenumber
-		let s:lastnumber = "relativenumber"
-	elseif s:lastnumber == "number"
-		set number
-	else
-		set relativenumber
-	endif
+  if &number == 1
+    set nonumber
+    let s:lastnumber = "number"
+  elseif &relativenumber == 1
+    set norelativenumber
+    let s:lastnumber = "relativenumber"
+  elseif s:lastnumber == "number"
+    set number
+  else
+    set relativenumber
+  endif
 endfunction
 nnoremap <leader># :call ToggleNumbering()<cr>
 if version >= 703
@@ -138,11 +138,11 @@ nnoremap <F5> :GundoToggle<CR>
 "       term in lieu of xoria; it's similar, but more subdued, at the cost of
 "       contrast in a few points.
 if has("gui_running")
-	colorscheme moria
+  colorscheme moria
 elseif &t_Co == 256
-	colorscheme xoria256
+  colorscheme xoria256
 else
-	colorscheme desert
+  colorscheme desert
 endif
 
 " autocompile coffee script files on write
@@ -164,4 +164,4 @@ inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 redraw | echo ">^.^<"
 
-" vim:set ts=2 sw=2 noexpandtab:
+" vim:set ts=2 sw=2 expandtab:
