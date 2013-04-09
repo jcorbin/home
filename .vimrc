@@ -23,7 +23,6 @@ set swapsync=
 set expandtab
 set tabstop=4
 set shiftwidth=4
-set modeline
 
 set nospell
 
