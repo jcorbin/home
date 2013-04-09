@@ -164,4 +164,4 @@ inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 redraw | echo ">^.^<"
 
-" vim:set ts=2 sw=2 expandtab:
+" vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
