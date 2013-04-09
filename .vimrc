@@ -165,7 +165,6 @@ endfunction
 inoremap <CR> <Esc>
 inoremap <Esc> <nop>
 inoremap <expr> <S-CR> ToggleEnterMapping()
-inoremap <c-c> <nop>
 " }}}
 
 let mapleader=","
