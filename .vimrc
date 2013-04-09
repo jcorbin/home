@@ -5,45 +5,48 @@ call pathogen#infect()
 syntax on
 filetype plugin indent on
 
-" Really, who cares about Vi compat anymore...
-set nocompatible
-
-let mapleader=","
+set nocompatible " This is an "option" apparently...
 
 set showcmd     " Show (partial) command in status line.
 set showmatch   " Show matching brackets.
 set scrolloff=3 " Try to keep 3 lines after cursor
-set ruler
-set nospell
+set ruler       " display line/col/percentage on right part of statusline
 set cursorline
+set laststatus=2
+
+set virtualedit=all
+set autoindent
+set foldmethod=indent
+set swapsync=
+
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set modeline
+
+set nospell
+
+"set formatoptions=croq2lj
+
+" Show tabs, trailing spaces, and line wraps
+set list listchars=tab:^-,trail:_,extends:+,nbsp:.
+set background=dark
+
+" completion
+set wildmode=longest,list:longest
+set undolevels=1000
 
 " searching {{{
-nnoremap <leader><space> :nohlsearch<cr>
-set ignorecase " Do case insensitive matching
-set smartcase  " Do smart case matching
+set ignorecase " Do case insensitive matching...
+set smartcase  " ...but only if the user didn't explicitly case
 set incsearch  " Incremental search
 set hlsearch   " highlight while searching
 nohlsearch
 "}}}
 
-"set formatoptions=croq2lj
+let xml_use_xhtml=1
+let g:tex_flavor='latex'
 
-nnoremap du :diffupdate<cr>
-
-" fugitive bindings
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>g: :Git 
-nnoremap <leader>g! :Gsplit! 
-nnoremap <leader>g\| :Gvsplit! 
-nnoremap <leader>gD :Gsplit! diff<cr>
-nnoremap <leader>ga :Git add %<cr>
-nnoremap <leader>gp :Git add --patch %<cr>
-nnoremap <leader>gr :Git reset %<cr>
-
-set undolevels=1000
 " Persistent undo (vim 7.3+) {{{
 if has("persistent_undo")
   set undodir=~/.vim/undo
@@ -69,13 +72,6 @@ map <F12> setenvpastemap
 set pastetoggle=<F12>
 " }}}
 
-" Show tabs, trailing spaces, and line wraps
-set list listchars=tab:^-,trail:_,extends:+,nbsp:.
-set background=dark
-
-" completion
-set wildmode=longest,list:longest
-
 " GUI options {{{
 if has("gui_running")
   set guifont=Inconsolata:h12
@@ -97,8 +93,6 @@ if $TERM =~ 'xterm' || $TERM =~ 'screen'
   set ttyfast
 endif
 " }}}
-
-set virtualedit=all
 
 " togglable mouse usage {{{
 function! ToggleMouse()
@@ -134,18 +128,6 @@ else
 endif
 " }}}
 
-set autoindent
-set expandtab
-set tabstop=4
-set shiftwidth=4
-
-set foldmethod=indent
-set swapsync=
-set modeline
-set laststatus=2
-
-nnoremap <F5> :GundoToggle<CR>
-
 " Determine colorscheme {{{
 "
 " NOTE: jellybeans also great choice, toss up for gui in lieu of moria and 256
@@ -163,14 +145,32 @@ endif
 " autocompile coffee script files on write
 au BufWritePost *.coffee silent CoffeeMake!
 
-let xml_use_xhtml=1
-let g:tex_flavor='latex'
-
 " Mappings {{{
 
+" exiting insert mode {{{
 inoremap jk <Esc>
 inoremap <Esc> <nop>
 inoremap <c-c> <nop>
+" }}}
+
+let mapleader=","
+
+" fugitive bindings {{{
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>g: :Git
+nnoremap <leader>g! :Gsplit!
+nnoremap <leader>g\| :Gvsplit!
+nnoremap <leader>gD :Gsplit! diff<cr>
+nnoremap <leader>ga :Git add %<cr>
+nnoremap <leader>gp :Git add --patch %<cr>
+nnoremap <leader>gr :Git reset %<cr>
+" }}}
+
+nnoremap <F5> :GundoToggle<CR>
+nnoremap du :diffupdate<cr>
 
 " vimrc editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -178,6 +178,8 @@ inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " }}}
 
+" disable search highlighting until next search
+nnoremap <leader><space> :nohlsearch<cr>
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
