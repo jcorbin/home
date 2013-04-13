@@ -87,7 +87,6 @@ if has("gui_running")
   set guioptions=acgit
   set guiheadroom=0
   colorscheme lucius
-  LuciusBlack
 
 " }}}
 " Terminal options {{{
