@@ -399,6 +399,9 @@ if s:style == "light"
     hi IncSearch    guifg=fg        guibg=#5fd7d7
     hi MatchParen   guifg=NONE      guibg=#5fd7d7
     hi Search       guifg=fg        guibg=#ffaf00
+    hi Match1       guifg=fg        guibg=#00ffaf
+    hi Match2       guifg=fg        guibg=#00cfff
+    hi Match3       guifg=fg        guibg=#ff00af
     hi Visual                       guibg=#afd7ff
     if s:contrast == "low"
         hi Cursor                       guibg=#87afd7
@@ -417,6 +420,9 @@ else
     hi IncSearch    guifg=bg
     hi MatchParen   guifg=bg
     hi Search       guifg=bg
+    hi Match1       guifg=bg
+    hi Match2       guifg=bg
+    hi Match3       guifg=bg
     hi Visual                       guibg=#005f87
     if s:contrast == "low"
         hi Cursor                       guibg=#5f87af
@@ -425,6 +431,9 @@ else
         hi IncSearch                    guibg=#00afaf
         hi MatchParen                   guibg=#87af5f
         hi Search                       guibg=#d78700
+        hi Match1                       guibg=#00d787
+        hi Match2                       guibg=#00a7df
+        hi Match3                       guibg=#d70087
         hi Todo         guifg=#afaf00   guibg=#5f5f00
     elseif s:contrast == "high"
         hi Cursor                       guibg=#afd7ff
@@ -433,6 +442,9 @@ else
         hi IncSearch                    guibg=#87ffff
         hi MatchParen                   guibg=#d7ff87
         hi Search                       guibg=#ffaf5f
+        hi Match1                       guibg=#5fffaf
+        hi Match2                       guibg=#5fcfff
+        hi Match3                       guibg=#ff5faf
         hi Todo         guifg=#ffff87   guibg=#87875f
     else
         hi Cursor                       guibg=#87afd7
@@ -441,6 +453,9 @@ else
         hi IncSearch                    guibg=#5fd7d7
         hi MatchParen                   guibg=#afd75f
         hi Search                       guibg=#d78700
+        hi Match1                       guibg=#00d787
+        hi Match2                       guibg=#00a7df
+        hi Match3                       guibg=#d70087
         hi Todo         guifg=#d7d75f   guibg=#5f5f00
     endif
 endif
