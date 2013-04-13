@@ -162,10 +162,11 @@ nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>u :GundoToggle<CR>
 nnoremap du :diffupdate<cr>
 
-" vimrc editing convenience {{{
+" vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>s% :source %<cr>
 " }}}
 
 " searching and matching {{{
