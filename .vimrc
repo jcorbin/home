@@ -118,28 +118,6 @@ else
 endif
 " }}}
 
-" line numbering {{{
-function! ToggleNumbering()
-  if &number == 1
-    set nonumber
-    let s:lastnumber = "number"
-  elseif &relativenumber == 1
-    set norelativenumber
-    let s:lastnumber = "relativenumber"
-  elseif s:lastnumber == "number"
-    set number
-  else
-    set relativenumber
-  endif
-endfunction
-nnoremap <leader># :call ToggleNumbering()<cr>
-if version >= 703
-  set relativenumber
-else
-  set number
-endif
-" }}}
-
 " autocompile coffee script files on write
 au BufWritePost *.coffee silent CoffeeMake!
 
