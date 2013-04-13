@@ -190,8 +190,12 @@ inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " }}}
 
-" disable search highlighting until next search
+" searching {{{
+nnoremap / /\v
+nnoremap ? ?\v
 nnoremap <leader><space> :nohlsearch<cr>
+" }}}
+
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
