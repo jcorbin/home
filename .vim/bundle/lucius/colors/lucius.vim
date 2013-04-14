@@ -236,6 +236,7 @@ let s:normal_items = [
             \ "IncSearch", "LineNr", "MatchParen", "ModeMsg", "MoreMsg",
             \ "NonText", "Pmenu", "PmenuSbar", "PmenuSel",
             \ "PmenuThumb", "PreProc", "Question", "Search", "SignColumn",
+            \ "Match1", "Match2", "Match3",
             \ "Special", "SpecialKey", "Statement", "StatusLineNC", "TabLine",
             \ "TabLineFill", "Todo", "Type", "VertSplit", "Visual",
             \ "WarningMsg", "WildMenu",
@@ -400,8 +401,8 @@ if s:style == "light"
     hi MatchParen   guifg=NONE      guibg=#5fd7d7
     hi Search       guifg=fg        guibg=#ffaf00
     hi Match1       guifg=fg        guibg=#00ffaf
-    hi Match2       guifg=fg        guibg=#00cfff
-    hi Match3       guifg=fg        guibg=#ff00af
+    hi Match2       guifg=fg        guibg=#00d7ff
+    hi Match3       guifg=fg        guibg=#ff87af
     hi Visual                       guibg=#afd7ff
     if s:contrast == "low"
         hi Cursor                       guibg=#87afd7
@@ -432,7 +433,7 @@ else
         hi MatchParen                   guibg=#87af5f
         hi Search                       guibg=#d78700
         hi Match1                       guibg=#00d787
-        hi Match2                       guibg=#00a7df
+        hi Match2                       guibg=#0087d7
         hi Match3                       guibg=#d70087
         hi Todo         guifg=#afaf00   guibg=#5f5f00
     elseif s:contrast == "high"
@@ -443,7 +444,7 @@ else
         hi MatchParen                   guibg=#d7ff87
         hi Search                       guibg=#ffaf5f
         hi Match1                       guibg=#5fffaf
-        hi Match2                       guibg=#5fcfff
+        hi Match2                       guibg=#5fd7ff
         hi Match3                       guibg=#ff5faf
         hi Todo         guifg=#ffff87   guibg=#87875f
     else
@@ -454,7 +455,7 @@ else
         hi MatchParen                   guibg=#afd75f
         hi Search                       guibg=#d78700
         hi Match1                       guibg=#00d787
-        hi Match2                       guibg=#00a7df
+        hi Match2                       guibg=#0087d7
         hi Match3                       guibg=#d70087
         hi Todo         guifg=#d7d75f   guibg=#5f5f00
     endif
