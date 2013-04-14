@@ -54,7 +54,10 @@ hi Pmenu        ctermfg=0   guifg=#000000 ctermbg=250 guibg=#bcbcbc
 hi PmenuSel     ctermfg=255 guifg=#eeeeee ctermbg=243 guibg=#767676
 hi PmenuSbar                              ctermbg=252 guibg=#d0d0d0
 hi PmenuThumb   ctermfg=243 guifg=#767676
-hi Search       ctermfg=0   guifg=#000000 ctermbg=149 guibg=#afdf5f
+hi Search       ctermfg=0   guifg=#000000 ctermbg=221 guibg=#afdf5f
+hi Match1       ctermfg=0   guifg=#000000 ctermbg=153 guibg=#5fafdf
+hi Match2       ctermfg=0   guifg=#000000 ctermbg=149 guibg=#5fdfaf
+hi Match3       ctermfg=0   guifg=#000000 ctermbg=205 guibg=#df5faf
 hi SignColumn   ctermfg=248 guifg=#a8a8a8
 hi SpecialKey   ctermfg=238 guifg=#5fdf5f
 hi SpellBad     ctermfg=160 guifg=fg      ctermbg=bg                cterm=underline               guisp=#df0000
