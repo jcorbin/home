@@ -21,7 +21,7 @@ else
     " start out with numbering on
     set number
 
-    nnoremap <leader># :setlocal number!
+    nnoremap <leader># :setlocal number!<cr>
 endif
 
 " vim:set ts=2 sw=2 expandtab:
