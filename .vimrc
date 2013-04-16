@@ -169,14 +169,10 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>s% :source %<cr>
 " }}}
 
-" searching and matching {{{
+" searching {{{
 nnoremap / /\v
 nnoremap ? ?\v
-nnoremap <leader>/  :execute  "match Match1 /" . @/ . "/"<cr>
-nnoremap <leader>2/ :execute "2match Match2 /" . @/ . "/"<cr>
-nnoremap <leader>3/ :execute "3match Match3 /" . @/ . "/"<cr>
 nnoremap <leader><space> :nohlsearch<cr>
-nnoremap <leader><s-space> :nohlsearch<cr>:match<cr>:2match<cr>:3match<cr>
 " }}}
 
 " }}}
