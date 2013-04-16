@@ -173,6 +173,7 @@ nnoremap <leader>s% :source %<cr>
 nnoremap / /\v
 nnoremap ? ?\v
 nnoremap <leader><space> :nohlsearch<cr>
+nnoremap <leader>ic :set ignorecase!<cr>
 " }}}
 
 " }}}
