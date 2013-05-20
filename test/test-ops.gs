@@ -61,6 +61,7 @@ abc bitnot     bac
 abc bitlshift  bac
 abc bitrshift  bac
 abc biturshift bac
+(abc biturshift bac)
 
 // inc/dec
 --abc

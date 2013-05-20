@@ -46,7 +46,7 @@ syn match   gorillaOperator /\<typeof\>/ display
 
 " Extended Operators {{{
 syn keyword gorillaExtendedOp    isnt in to til by instanceofsome not xor ownskey delete
-syn keyword gorillaExtendedBitOp bitand bitor bitxor bitnot bitlshift bitrshift biturshift
+syn keyword gorillaExtendedOp    bitand bitor bitxor bitnot bitlshift bitrshift biturshift
 syn match   gorillaExtendedOp    /\<is\>/ display
 syn match   gorillaExtendedOp    /\<\%(and\|or\|min\|max\)\>=\?/ display
 syn keyword gorillaExtendedOp    typeof! allkeys! keys! label! map! mutate-function! set! post-dec! post-inc! is-array! is-boolean! is-function! is-null! is-number! is-object! is-string! is-undefined! is-void!
@@ -224,7 +224,6 @@ if version >= 508 || !exists("did_gorillascript_syntax_inited")
 
   HiLink gorillaDotAccess       gorillaOperator
   HiLink gorillaProtoAccess     gorillaOperator
-  HiLink gorillaExtendedBitOp   gorillaOperator
   HiLink gorillaExtendedOp      gorillaOperator
   HiLink gorillaOperator        Operator
   HiLink gorillaSpecialOp       SpecialChar
