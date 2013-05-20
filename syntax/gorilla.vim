@@ -46,9 +46,9 @@ syn match   gorillaOperator /\<typeof\>/ display
 
 " Extended Operators {{{
 syn keyword gorillaExtendedOp    isnt in to til by instanceofsome not xor ownskey delete
-syn keyword gorillaExtendedOp    bitand bitor bitxor bitnot bitlshift bitrshift biturshift
+
 syn match   gorillaExtendedOp    /\<is\>/ display
-syn match   gorillaExtendedOp    /\<\%(and\|or\|min\|max\)\>=\?/ display
+syn match   gorillaExtendedOp    /\<\%(and\|or\|min\|max\|bit\%(and\|or\|xor\|not\|lshift\|rshift\|urshift\)\)\>=\?/ display
 syn keyword gorillaExtendedOp    typeof! allkeys! keys! label! map! mutate-function! set! post-dec! post-inc! is-array! is-boolean! is-function! is-null! is-number! is-object! is-string! is-undefined! is-void!
 syn match   gorillaExtendedOp    /\<\%(throw\|return\)?/ display
 syn keyword gorillaSpecialOp     as with from promise! to-promise!

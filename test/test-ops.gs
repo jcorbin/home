@@ -24,12 +24,19 @@ abc < bac
      +bac
 
 // assign
-abc ?= bac
-abc := bac
-abc min= bac
-abc max= bac
-abc and= bac
-abc or= bac
+abc ?=          bac
+abc :=          bac
+abc min=        bac
+abc max=        bac
+abc and=        bac
+abc or=         bac
+abc bitand=     bac
+abc bitor=      bac
+abc bitxor=     bac
+abc bitnot=     bac
+abc bitlshift=  bac
+abc bitrshift=  bac
+abc biturshift= bac
 
 // compare
 abc >= bac
