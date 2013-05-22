@@ -137,6 +137,8 @@ f-oo@(obj)
 some@.f
 some.f
 other.f
+some a, #
+  foo()
 
 @ = 100
 let [x, ...y] = [1, 2, 3, 4]
