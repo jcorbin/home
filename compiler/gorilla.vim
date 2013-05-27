@@ -53,7 +53,8 @@ endfunction
 CompilerSet makeprg=gorilla
 call s:SetMakePrg()
 
-CompilerSet errorformat=%-PCompiling\ %f\ ...\ ,%\\w%\\+%trror\ at\ #%l:\ %m,%-G%.%#
+" CompilerSet errorformat=%-PCompiling\ %f\ ...\ ,%\\w%\\+%trror\ at\ #%l:\ %m,%-G%.%#
+CompilerSet errorformat=Compiling\ %.%#.gs\ ...\ %\\w%\\+%trror:\ %m\ at\ %f:%l:%c,%-G%.%#
 
 " Compile the current file.
 command! -bang -bar -nargs=* GorillaMake make<bang> <args>
