@@ -21,11 +21,10 @@ endfunction
 function! SyntaxCheckers_gorilla_gorilla_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'gorilla',
-                \ 'args': '-c',
-                \ 'tail': '> /tmp/gorilla-syntastic-output',
+                \ 'args': '-p',
                 \ 'subchecker': 'gorilla' })
     let errorformat =
-        \ 'Compiling\ %.%#.gs\ ...\ %\\w%\\+%trror:\ %m\ at\ %f:%l:%c,%-G%.%#'
+        \ '%\\w%\\+%trror:\ %m\ at\ %l:%c,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
