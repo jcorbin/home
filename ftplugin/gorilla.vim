@@ -54,7 +54,7 @@ function! s:GorillaCompileUpdate(startline, endline)
   endif
 
   " Compile input.
-  let output = system(g:gorilla_compiler . ' -scpb 2>&1', input)
+  let output = system(g:gorilla_compiler . ' -spb 2>&1', input)
 
   " Be sure we're in the GorillaCompile buffer before overwriting.
   if exists('b:gorilla_compile_buf')
