@@ -224,7 +224,7 @@ your `vimrc`:
 
         $ mkdir -p syntastic/syntax_checkers/gorilla
         $ cd syntastic/syntax_checkers/gorilla
-        $ cp ~/.vim/ftbundle/gorilla/vim-gorilla-script/syntastic_checker/gorilla.vim .
+        $ ln -s ~/.vim/ftbundle/gorilla/vim-gorilla-script/syntastic_checker/gorilla.vim
 
 [NERDCommenter]: https://github.com/scrooloose/nerdcommenter
 [Phrase]: https://github.com/t9md/vim-phrase
