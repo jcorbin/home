@@ -171,7 +171,7 @@ syn region gorillaGeneric matchgroup=gorillaGenericType start=/<\u\w*/ end=/>/ o
 " reserved words from javascript
 syn match gorillaReservedError /\<\%(case\|default\|void\|with\|const\|let\|enum\|export\|import\|native\|package\|private\|protected\|public\|static\|function\|var\|implements\|interface\|volatile\|__proto__\)\>:\@!/ display
 " reserved words from gorillascript's jsprelude
-syn match gorillaReservedError /\<__\%(allkeys\|array\%(-t\|T\)o\%(-i\|I\)ter\|async\|async\%(-i\|I\)ter\|bind\|cmp\|compose\|create\|curry\|def\%(-p\|P\)rop\|floor\|freeze\|freeze\%(-f\|F\)unc\|generic\%(-f\|F\)unc\|get\%(-i\|I\)nstanceof\|import\|in\|index\%(-o\|O\)f\%(-i\|I\)dentical\|instanceofsome\|int\|is\|is\%(-a\|A\)rray\|is\%(-o\|O\)bject\|iter\|keys\|log\|lt\|lte\|name\|new\|nonzero\|num\|once\|owns\|pow\|range\|slice\|slice\%(-s\|S\)tep\|sqrt\|step\|str\|strnum\|to\%(-a\|A\)rray\|typeof\|xor\)\>:\@!/ display
+syn match gorillaReservedError /\<__\%(allkeys\|array\%(-t\|T\)o\%(-i\|I\)ter\|async\|async\%(-i\|I\)ter\|bind\|cmp\|compose\|create\|curry\|def\%(-p\|P\)rop\|floor\|freeze\|freeze\%(-f\|F\)unc\|generic\%(-f\|F\)unc\|get\%(-i\|I\)nstanceof\|in\|index\%(-o\|O\)f\%(-i\|I\)dentical\|instanceofsome\|int\|is\|is\%(-a\|A\)rray\|is\%(-o\|O\)bject\|iter\|keys\|log\|lt\|lte\|name\|new\|nonzero\|num\|once\|owns\|pow\|range\|slice\|slice\%(-s\|S\)tep\|sqrt\|step\|str\|strnum\|to\%(-a\|A\)rray\|typeof\|xor\)\>:\@!/ display
 " === !==
 syn match   gorillaExtendedOpError /===\|!==/ display
 " !x
