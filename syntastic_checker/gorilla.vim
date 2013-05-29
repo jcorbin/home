@@ -22,6 +22,7 @@ function! SyntaxCheckers_gorilla_gorilla_GetLocList()
     let makeprg = syntastic#makeprg#build({
                 \ 'exe': 'gorilla',
                 \ 'args': '-p',
+                \ 'tail': '> /tmp/syntastic-gorilla-output',
                 \ 'subchecker': 'gorilla' })
     let errorformat =
         \ '%\\w%\\+%trror:\ %m\ at\ %l:%c,%-G%.%#'
