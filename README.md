@@ -234,37 +234,38 @@ your `vimrc`:
         $ git clone https://github.com/majutsushi/tagbar.git
 
 2. Add this to your .ctags:
-    --langdef=gorilla
-    --langmap=gorilla:.gs
-    --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*require/\1/e,module,modules/
-    --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*\{/\1/o,object,objects/
-    --regex-gorilla=/^const[ \t]+([A-Z][A-Z0-9_\-]+)[ \t]*=/\1/C,constant,constants/
-    --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*#(\(.*\))?/\1/f,function,functions/
-    --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*\(.*\)/\1/f,function,functions/
-    --regex-gorilla=/^[^\/*]*class[ \t]+([A-Za-z0-9_$\-]+)/\1/c,class,classes/
-    --regex-gorilla=/^[^\/*]*def[ \t]+([A-Za-z0-9_$\-]+)/\1/m,method,methods/
-    --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*\[/\1/a,array,arrays/
-    --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*r'[^']*/\1/r,regex,regexes/
-    --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*r"[^"]*/\1/r,regex,regexes/
-    --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*[^"r]'[^']*/\1/s,string,strings/
-    --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*[^'r]"[^"]*/\1/s,string,strings/
+
+        --langdef=gorilla
+        --langmap=gorilla:.gs
+        --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*require/\1/e,module,modules/
+        --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*\{/\1/o,object,objects/
+        --regex-gorilla=/^const[ \t]+([A-Z][A-Z0-9_\-]+)[ \t]*=/\1/C,constant,constants/
+        --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*#(\(.*\))?/\1/f,function,functions/
+        --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*\(.*\)/\1/f,function,functions/
+        --regex-gorilla=/^[^\/*]*class[ \t]+([A-Za-z0-9_$\-]+)/\1/c,class,classes/
+        --regex-gorilla=/^[^\/*]*def[ \t]+([A-Za-z0-9_$\-]+)/\1/m,method,methods/
+        --regex-gorilla=/^let[ \t]+([A-Za-z0-9_$\-]+)[ \t]*=[ \t]*\[/\1/a,array,arrays/
+        --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*r'[^']*/\1/r,regex,regexes/
+        --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*r"[^"]*/\1/r,regex,regexes/
+        --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*[^"r]'[^']*/\1/s,string,strings/
+        --regex-gorilla=/^let[ \t]+([^= ]+)[ \t]*=[ \t]*[^'r]"[^"]*/\1/s,string,strings/
 
 3. Add this to your .vimrc:
 
-    let g:tagbar_type_gorilla = {
-          \ 'ctagstype' : 'gorilla',
-          \ 'kinds' : [
-          \   'C:constant',
-          \   'e:module',
-          \   'f:function',
-          \   'c:class',
-          \   'a:array',
-          \   'o:object',
-          \   'r:regex',
-          \   's:string'
-          \ ],
-          \ 'sro' : ".",
-          \}
+        let g:tagbar_type_gorilla = {
+              \ 'ctagstype' : 'gorilla',
+              \ 'kinds' : [
+              \   'C:constant',
+              \   'e:module',
+              \   'f:function',
+              \   'c:class',
+              \   'a:array',
+              \   'o:object',
+              \   'r:regex',
+              \   's:string'
+              \ ],
+              \ 'sro' : ".",
+              \}
 
 [NERDCommenter]: https://github.com/scrooloose/nerdcommenter
 [Phrase]: https://github.com/t9md/vim-phrase
