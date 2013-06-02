@@ -25,7 +25,7 @@ function! SyntaxCheckers_gorilla_gorilla_GetLocList()
                 \ 'tail': '> /tmp/syntastic-gorilla-output',
                 \ 'subchecker': 'gorilla' })
     let errorformat =
-        \ '%\\w%\\+%trror:\ %m\ at\ %l:%c,%-G%.%#'
+        \ '%\\w%\\+%trror:\ %m\ at\ %f:%l:%c,%-G%.%#'
 
     return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
 endfunction
