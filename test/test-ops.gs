@@ -28,6 +28,7 @@ abc ?=          bac
 abc :=          bac
 abc min=        bac
 abc max=        bac
+abc ownsor=     bac
 abc and=        bac
 abc or=         bac
 abc bitand=     bac
