@@ -3,7 +3,7 @@
 " URL:         http://github.com/unc0/vim-gorilla-script
 " License:     WTFPL
 
-autocmd BufNewFile,BufRead *.gs,Gorkfile set filetype=gorilla
+autocmd BufNewFile,BufRead *.gs set filetype=gorilla
 
 function! s:DetectGorilla()
     if getline(1) =~ '^#!.*\<gorilla\>'
