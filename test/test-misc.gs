@@ -23,7 +23,7 @@ let foo = r"""
 \name
 [\some-key]
 // interpolate
-"some $foo-bar $(120 |> bar)"
+"someone's $foo-bar $(120 |> bar)"
 // escape
 '\\ \012123 \x1f666 \u10de666 \0 \n \u{10dede}666'
 // heredoc
@@ -41,7 +41,7 @@ r"""
 \b(abc|def)\b$special
 # blahblahblah
 """g
-r'\n'm
+r'"\n'm
 
 // Array
 [1 to 5 by -2]

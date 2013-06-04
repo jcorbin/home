@@ -73,7 +73,7 @@ syn match   gorillaExtendedOp    /[^<>]\s*\zs\%(<<<\|>>>\)/ display
 " , ; ...
 syn match   gorillaSpecialOp     /[,;]\|\%(\.\.\.\ze\S\)/ display
 " .
-syn match   gorillaSpecialOp     /\I\i*\zs!\.\ze\I\i*/ display
+syn match   gorillaSpecialOp     /\I\i*\zs!\?\.\ze\I\i*/ display
 " #-> #() #
 syn match   gorillaSpecialOp     /#->/ display
 syn match   gorillaSpecialOp     /#\ze(\|#$/ display
@@ -136,8 +136,8 @@ syn match gorillaInterpIdent /\$\h\%(\w\|-\)*/ contained
 " An interpolated string
 syn cluster gorillaInterpString contains=@gorillaBasicString,gorillaInterp,gorillaInterpIdent
 " Regular strings
-syn region gorillaString start=/%\?"/ skip=/\\\\\|\\"/ end=/"/ contains=@gorillaInterpString
-syn region gorillaString start=/%\?'/ skip=/\\\\\|\\'/ end=/'/ contains=@gorillaBasicString
+syn region gorillaString start=/%\?"/ skip=/\\\\\|\\"/ end=/"/ contains=@gorillaInterpString keepend
+syn region gorillaString start=/%\?'/ skip=/\\\\\|\\'/ end=/'/ contains=@gorillaBasicString keepend
 " Heredoc strings
 syn region gorillaHereString start=/%\?"""/ end=/"""/ contains=@gorillaInterpString fold
 syn region gorillaHereString start=/%\?'''/ end=/'''/ contains=@gorillaBasicString fold
@@ -147,8 +147,8 @@ syn match gorillaSpecialString /\\\<\%(\w\|-\)\+\>/ display
 
 " Regex {{{
 " Regular expression
-syn region gorillaRegex start=/r"/ end=/"[gimy]\{,4}/ oneline contains=@gorillaInterpString
-syn region gorillaRegex start=/r'/ end=/'[gimy]\{,4}/ oneline contains=@gorillaBasicString
+syn region gorillaRegex start=/r"/ end=/"[gimy]\{,4}/ oneline contains=@gorillaInterpString keepend
+syn region gorillaRegex start=/r'/ end=/'[gimy]\{,4}/ oneline contains=@gorillaBasicString keepend
 " A comment in a heregex
 syn region gorillaHeregexComment start=/#/ end=/\ze\/\/\/\|$/ contained contains=@Spell,gorillaTodo
 " Heredoc Regex
