@@ -25,7 +25,7 @@ let foo = r"""
 // interpolate
 "some $foo-bar $(120 |> bar)"
 // escape
-'\012123 \x1f666 \u10de666 \0 \n \u{10dede}666'
+'\\ \012123 \x1f666 \u10de666 \0 \n \u{10dede}666'
 // heredoc
 """
 some $foo-bar $(f >> g)\tother
