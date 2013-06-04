@@ -112,15 +112,15 @@ syn cluster gorillaAllIdent contains=gorillaSpecialVar,gorillaObject,gorillaCons
 
 " Numbers {{{
 " A integer, including a leading plus or minus
-syn match   gorillaNumber /+\?\<-\?\d[0-9_]*\%([eE][-+]\?\d[0-9_]*\)\?\%(_\+\w*\)\?\>/ display
+syn match   gorillaNumber /+\?-\?\d[0-9_]*\%([eE][-+]\?\d[0-9_]*\)\?\%(_\+\w*\)\?\>/ display
 " A hex, binary, or octal number
-syn match   gorillaNumber /+\?\<-\?0[xX]\x[0-9a-fA-F_]*\>/ display
-syn match   gorillaNumber /+\?\<-\?0[bB][01][01_]*\>/ display
-syn match   gorillaNumber /+\?\<-\?-\?0[oO]\o[0-7_]*\>/ display
+syn match   gorillaNumber /+\?-\?0[xX]\x[0-9a-fA-F_]*\>/ display
+syn match   gorillaNumber /+\?-\?0[bB][01][01_]*\>/ display
+syn match   gorillaNumber /+\?-\?0[oO]\o[0-7_]*\>/ display
 " A redix number
-syn match   gorillaNumber /+\?\<-\?[1-3]\?[0-9][rR]\w\+\>/ display
+syn match   gorillaNumber /+\?-\?[1-3]\?[0-9][rR]\w\+\>/ display
 " float
-syn match   gorillaFloat  /+\?\<-\?\d[0-9_]*\.\d[0-9_]\+\%([eE][-+]\?\d[0-9_]*\)\?\%(_\+\w*\)\?\>/ display
+syn match   gorillaFloat  /+\?-\?\d[0-9_]*\.\d[0-9_]\+\%([eE][-+]\?\d[0-9_]*\)\?\%(_\+\w*\)\?\>/ display
 " others
 syn keyword gorillaNumber Infinity NaN
 syn cluster gorillaNormalNumber contains=gorillaNumber,gorillaFloat
