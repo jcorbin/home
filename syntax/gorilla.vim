@@ -127,7 +127,7 @@ syn cluster gorillaNormalNumber contains=gorillaNumber,gorillaFloat
 "}}}
 
 " Strings {{{
-syn match gorillaEscape /\\\d\d\d\|\\x\x\{2}\|\\u\x\{4}\|\\u{\x\{6}}\|\\[\0-7bfrntv]/ contained display
+syn match gorillaEscape /\\\o\{3}\|\\x\x\{2}\|\\u\x\{4}\|\\u{\x\{6}}\|\\[\0-7bfrntv]/ contained display
 " A non-interpolated string
 syn cluster gorillaBasicString contains=@Spell,gorillaEscape
 " Interpolate
