@@ -125,22 +125,13 @@ au BufWritePost *.coffee silent CoffeeMake!
 
 " exiting insert mode {{{
 
-" enter exits insert mode, but can toggle back to normaly with shift-enter
-function! ToggleEnterMapping()
-  if empty(mapcheck('<CR>', 'i'))
-    inoremap <CR> <Esc>`^
-    inoremap <Esc> <nop>
-    return "\<Esc>"
-  else
-    iunmap <CR>
-    iunmap <Esc>
-    return "\<CR>"
-  endif
-endfunction
-
-inoremap <CR> <Esc>
+" disable escape for retraining
 inoremap <Esc> <nop>
-inoremap <expr> <S-CR> ToggleEnterMapping()
+
+" enter exits insert mode, shift-enter to insert a newline
+inoremap <CR> <Esc>
+inoremap <S-CR> <CR>
+
 " }}}
 
 let mapleader=","
