@@ -119,7 +119,7 @@ endif
 " }}}
 
 " autocompile coffee script files on write
-au BufWritePost *.coffee silent CoffeeMake!
+au BufWritePost *.coffee CoffeeMake
 
 " Mappings {{{
 
