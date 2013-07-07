@@ -75,7 +75,7 @@ set pastetoggle=<F12>
 
 " GUI options {{{
 if has("gui_running")
-  set guifont=Inconsolata:h12
+  set guifont=Inconsolata:h13
   " guioptions:
   "   a - autoselect
   "   c - console dialogs
