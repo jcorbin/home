@@ -1,16 +1,21 @@
 #!/bin/sh
 
+in_path()
+{
+    echo $PATH | grep -Fq "$1"
+}
+
 append_path_component()
 {
     [ -d $1 ] || return
-    echo $PATH | grep -Fq "$1" && return
+    in_path "$1" && return
     export PATH=$PATH:$1
 }
 
 prepend_path_component()
 {
     [ -d $1 ] || return
-    echo $PATH | grep -Fq "$1" && return
+    in_path "$1" && return
     export PATH=$1:$PATH
 }
 
