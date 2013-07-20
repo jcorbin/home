@@ -1,0 +1,64 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2536
+
+There are several options available to customize the color scheme to your own tastes. This is particularly useful when you have to work in different environments at different times (home, work, day, night, etc).
+
+The GUI and 256 color terminal versions of this color scheme are identical.
+
+You can set up the color scheme by manually setting the options you want or by choosing one of the presets defined. These presets are loaded after you first source the color scheme file and are all commands that start with 'Lucius'.
+
+I have also started to create color schemes for different applications. I have been using them for PuTTY, iTerm2, and Visual Studio, but will keep adding more as I go along. You can find the files for these on Github:
+
+https://github.com/jonathanfilip/lucius
+
+You can also clone the following repository if you use Pathogen or something similar. It holds the vim color scheme in a 'colors' directory:
+
+https://github.com/jonathanfilip/vim-lucius
+
+
+Presets:
+
+There are several presets available that will set all the options for you. There are screenshots of each preset below:
+
+* LuciusDark (dark default): http://i.imgur.com/LsZbF.png
+* LuciusDarkHighContrast: http://i.imgur.com/e70i9.png
+* LuciusDarkLowContrast: http://i.imgur.com/Hmw8s.png
+* LuciusBlack: http://i.imgur.com/iD4ri.png
+* LuciusBlackHighContrast: http://i.imgur.com/lHvTJ.png
+* LuciusBlackLowContrast: http://i.imgur.com/oZLkg.png
+
+* LuciusLight (light default): http://i.imgur.com/soYD8.png
+* LuciusLightLowContrast: http://i.imgur.com/95I86.png
+* LuciusWhite: http://i.imgur.com/wDzkz.png
+* LuciusWhiteLowContrast: http://i.imgur.com/jlUf4.png
+
+To use the presets, you just need to set the color scheme first. In your vimrc, you can just do this:
+
+colorscheme lucius
+LuciusBlack
+
+You can still just set the background variable and then set the color scheme. This will default to LuciusDark for 'dark' and LuciusLight for 'light'.
+
+
+Options:
+
+The presets available cover most of the options. You can, however, customize things by setting the following variables yourself:
+
+g:lucius_style  (default: 'dark')
+
+Set this option to either 'light' or 'dark' for your desired color scheme. It has the same effect as setting the background.
+
+g:lucius_contrast  (default: 'normal')
+
+This option determines the contrast to use for text/ui elements. It can be set to 'low', 'normal', or 'high'. At this time there is no 'high' for the light scheme.
+
+g:lucius_contrast_bg  (default: 'normal')
+
+Setting this option makes the background a higher contrast. Current settings are 'normal' and 'high'.
+
+g:lucius_use_bold (default: 1)
+
+Setting this will cause the color scheme to use bold fonts for some items.
+
+g:lucius_use_underline (default: 1)
+
+Setting this will cause the color scheme to use underlined fonts for some items.
