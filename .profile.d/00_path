@@ -2,7 +2,7 @@
 
 in_path()
 {
-    echo $PATH | grep -Fq "$1"
+    echo $PATH | tr ':' '\n' | grep -Fxq "$1"
 }
 
 append_path_component()
