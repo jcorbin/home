@@ -35,7 +35,6 @@
 !.Xresources
 
 !.screenrc
-!.tmux.conf
-!.tmux-old-statusline.conf
+!.tmux*.conf
 
 !.terminfo.src/
