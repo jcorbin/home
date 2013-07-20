@@ -61,8 +61,8 @@ endif
 
 " Save swap files in one place {{{
 set directory=$HOME/.vim/swap
-if exists("*mkdir") && !isdirectory($HOME . "/.vim/swap")
-  call mkdir($HOME . "/.vim/swap", "p", 0700)
+if exists("*mkdir") && !isdirectory(&directory)
+  call mkdir(&directory, "p", 0700)
 endif
 " }}}
 
