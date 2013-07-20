@@ -1,5 +1,7 @@
 call pathogen#infect()
 
+set laststatus=2 " always show the statusline
+
 " Options {{{
 
 syntax on
