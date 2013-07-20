@@ -95,11 +95,13 @@ else
     set ttyfast
   endif
 
-  set background=dark
   " Determine colorscheme
   if &t_Co == 256
-    colorscheme xoria256
+    colorscheme lucius
+    let g:lucius_no_term_bg=1
+    LuciusBlack
   else
+    set background=dark
     colorscheme desert
   endif
 
