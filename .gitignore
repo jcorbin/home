@@ -37,4 +37,6 @@
 !.screenrc
 !.tmux*.conf
 
+!powerline/
+
 !.terminfo.src/
