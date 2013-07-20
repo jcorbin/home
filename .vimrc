@@ -82,7 +82,7 @@ set pastetoggle=<F12>
 
 " GUI options {{{
 if has("gui_running")
-  set guifont=Inconsolata:h13
+  set guifont=Inconsolata\ for\ Powerline:h13
   " guioptions:
   "   a - autoselect
   "   c - console dialogs
@@ -94,6 +94,7 @@ if has("gui_running")
   set guioptions=acgit
   set guiheadroom=0
   colorscheme lucius
+  LuciusBlack
 
 " }}}
 " Terminal options {{{
