@@ -24,7 +24,8 @@ prepend_path_component()
 # fi
 # append_path_component /opt/mit-scheme/bin
 
+export PATH=/opt/local/libexec/gnubin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/Users/jcorbin/bin
+
 cuda_root=/Developer/NVIDIA/CUDA-5.0
 export DYLD_LIBRARY_PATH=$cuda_root/lib
-
-export PATH=/opt/local/libexec/gnubin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/Users/jcorbin/bin:$cuda_root/bin
+append_path_component $cuda_root/bin
