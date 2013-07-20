@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ -d "$HOME/powerline" ]; then
+    export POWERLINE_HOME=$HOME/powerline
+    export POWERLINE_BINDINGS=$POWERLINE_HOME/powerline/bindings
+    append_path_component $POWERLINE_HOME/scripts
+fi
