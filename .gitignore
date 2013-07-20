@@ -36,5 +36,6 @@
 
 !.screenrc
 !.tmux.conf
+!.tmux-old-statusline.conf
 
 !.terminfo.src/
