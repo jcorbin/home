@@ -95,18 +95,6 @@ else
     set ttyfast
   endif
 
-  " togglable mouse usage {{{
-  function! ToggleMouse()
-    if &mouse == ""
-      set mouse=a
-    else
-      set mouse=
-    endif
-  endfunction
-  nnoremap <leader>m :call ToggleMouse()<cr>
-  set mouse=a " Enable mouse usage (all modes) in terminals
-  " }}}
-
   set background=dark
   " Determine colorscheme
   if &t_Co == 256
