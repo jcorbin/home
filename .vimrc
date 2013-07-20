@@ -1,5 +1,10 @@
 call pathogen#infect()
 
+if !empty($POWERLINE_BINDINGS)
+    set runtimepath+=$POWERLINE_BINDINGS/vim
+    set noshowmode " don't show mode below statusline (redundant with powerline)
+endif
+
 set laststatus=2 " always show the statusline
 
 " Options {{{
