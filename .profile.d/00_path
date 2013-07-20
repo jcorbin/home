@@ -1,18 +1,18 @@
 #!/bin/sh
 
-in_path()
+path_without()
 {
-    echo $PATH | tr ':' '\n' | grep -Fxq "$1"
+    echo $PATH | tr ':' '\n' | grep -Fxv "$1" | tr '\n' ':'
 }
 
 append_path_component()
 {
-    [ -d $1 ] && ! in_path "$1" && export PATH=$PATH:$1
+    [ -d $1 ] && export PATH=$(path_without "$1"):$1
 }
 
 prepend_path_component()
 {
-    [ -d $1 ] && ! in_path "$1" && export PATH=$1:$PATH
+    [ -d $1 ] && export PATH=$1:$(path_without "$1")
 }
 
 append_path_component /sbin
