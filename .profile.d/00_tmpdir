@@ -2,10 +2,9 @@
 
 export TMPDIR=${TMPDIR:-/tmp}
 
-if [ $(stat ${TMPDIR:-/tmp} -c %u) -ne $(id -u) ]; then
-    TMPDIR=${TMPDIR:-/tmp}/$(id -un)
+if [ $(stat $TMPDIR -c %u) -ne $(id -u) ]; then
+    export TMPDIR=$TMPDIR/$(id -un)
     install --mode 0700 --directory $TMPDIR
-    export TMPDIR
 fi
 
 if [ -f ~/.vardirs ]; then
