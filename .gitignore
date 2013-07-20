@@ -40,3 +40,5 @@
 !powerline/
 
 !.terminfo.src/
+
+!.ipython/
