@@ -74,12 +74,16 @@
 			{
 				"name": "file_encoding",
 				"exclude_modes": ["nc"],
-				"priority": 60
+				"priority": 60,
+				"before": " ",
+				"draw_soft_divider": false
 			},
 			{
 				"name": "file_type",
 				"exclude_modes": ["nc"],
-				"priority": 60
+				"priority": 60,
+				"before": " ",
+				"draw_soft_divider": false
 			},
 			{
 				"name": "line_percent",
