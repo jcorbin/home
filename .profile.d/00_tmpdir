@@ -7,6 +7,8 @@ if [ $(stat $TMPDIR -c %u) -ne $(id -u) ]; then
     install --mode 0700 --directory $TMPDIR
 fi
 
+ln -sf $TMPDIR $HOME/tmp
+
 if [ -f ~/.vardirs ]; then
 	for d in $(cat ~/.vardirs); do
 		[ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
