@@ -6,6 +6,13 @@
 		}
 	},
 	"segments": {
+		"left": [
+			{
+				"type": "string",
+				"highlight_group": ["session"],
+				"contents": "#S"
+			}
+		],
 		"right": [
 			{
 				"name": "uptime",
