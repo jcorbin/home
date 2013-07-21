@@ -79,6 +79,13 @@
 				"draw_soft_divider": false
 			},
 			{
+				"name": "file_size",
+				"exclude_modes": ["nc"],
+				"priority": 50,
+				"before": " ",
+				"draw_soft_divider": false
+			},
+			{
 				"name": "file_type",
 				"exclude_modes": ["nc"],
 				"priority": 60,
