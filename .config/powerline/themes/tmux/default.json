@@ -8,15 +8,12 @@
 	"segments": {
 		"left": [
 			{
-				"name": "hostname",
-				"draw_soft_divider": false,
-				"draw_hard_divider": false
+				"name": "hostname"
 			},
 			{
 				"type": "string",
 				"highlight_group": ["session"],
-				"contents": "#S",
-				"before": " "
+				"contents": "#S"
 			}
 		],
 		"right": [
