@@ -1,7 +1,10 @@
 {
 	"segment_data": {
 		"branch": {
-			"before": " "
+			"before": " ",
+			"args": {
+				"status_colors": true
+			}
 		},
 		"modified_indicator": {
 			"args": { "text": "+" }
