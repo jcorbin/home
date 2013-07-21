@@ -12,7 +12,7 @@
 			}
 		},
 		"spaces": 1,
-		"log_file": "/tmp/joshuac/powerline.log",
+		"log_file": "~/tmp/powerline.log",
 		"log_level": "INFO"
 	},
 	"ext": {
