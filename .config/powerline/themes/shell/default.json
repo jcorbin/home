@@ -31,7 +31,8 @@
 			{
 				"name": "cwd",
 				"args": {
-					"dir_limit_depth": 3
+					"dir_shorten_len": 2,
+					"dir_limit_depth": 30
 				}
 			}
 		],
