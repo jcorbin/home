@@ -38,6 +38,7 @@
 !.tmux*.conf
 
 !powerline/
+!.config/
 
 !.terminfo.src/
 
