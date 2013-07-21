@@ -20,12 +20,9 @@
 				"priority": 50
 			},
 			{
-				"name": "date"
-			},
-			{
 				"name": "date",
 				"args": {
-					"format": "%H:%M:%S",
+					"format": "%Y-%m-%d %H:%M:%S",
 					"istime": true
 				}
 			},
