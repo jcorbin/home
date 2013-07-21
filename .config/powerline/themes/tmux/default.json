@@ -3,9 +3,6 @@
 	"segment_data": {
 		"uptime": {
 			"before": "⇑  "
-		},
-		"date": {
-			"before": "⌚ "
 		}
 	},
 	"segments": {
