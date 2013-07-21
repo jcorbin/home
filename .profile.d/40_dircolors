@@ -2,5 +2,9 @@
 
 # Dir Colors
 if which dircolors >/dev/null 2>&1; then
-	eval $(dircolors)
+    if [ $(tput colors) -eq 256 ]; then
+        eval $(dircolors ~/.dircolors/solarized/dircolors.256dark)
+    else
+        eval $(dircolors ~/.dircolors/solarized/dircolors.ansi-universal)
+    fi
 fi
