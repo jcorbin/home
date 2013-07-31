@@ -121,13 +121,8 @@ au BufWritePost *.coffee CoffeeMake
 
 " Mappings {{{
 
-" exiting insert mode {{{
-
-" enter exits insert mode, shift-enter to insert a newline
-inoremap <CR> <Esc>
-inoremap <S-CR> <CR>
-
-" }}}
+" exiting insert mode by ctrl-cr
+inoremap <C-CR> <Esc>
 
 let mapleader=","
 
