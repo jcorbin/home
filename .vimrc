@@ -161,4 +161,8 @@ nnoremap <leader>gf :set guifont=*<cr>
 
 " }}}
 
+" Lisp settings {{{
+let g:lisp_rainbow = 1
+" }}}
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
