@@ -123,9 +123,6 @@ au BufWritePost *.coffee CoffeeMake
 
 " exiting insert mode {{{
 
-" disable escape for retraining
-inoremap <Esc> <nop>
-
 " enter exits insert mode, shift-enter to insert a newline
 inoremap <CR> <Esc>
 inoremap <S-CR> <CR>
