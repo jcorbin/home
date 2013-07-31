@@ -76,8 +76,8 @@ endif
 "}}}
 
 " Paste Toggling with <F12> {{{
-map <F12> setenvpastemap
-set pastetoggle=<F12>
+nnoremap <leader><C-p> :set invpaste<cr>
+set pastetoggle=<leader><C-p>
 " }}}
 
 " GUI options {{{
