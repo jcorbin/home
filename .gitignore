@@ -43,3 +43,5 @@
 !.terminfo.src/
 
 !.ipython/
+
+!sparkup/
