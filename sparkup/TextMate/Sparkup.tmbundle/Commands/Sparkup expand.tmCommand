@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+import sys; import os; sys.path.append(os.getenv('TM_BUNDLE_SUPPORT')); import sparkup
+
+# You may change these options to your liking.
+# Those starting with # are comments (disabled).
+options = {
+  'textmate': True,
+  'no-last-newline': True,
+ #'start-guide-format': 'Begin %s',
+ #'end-guide-format': 'End %s',
+}
+
+sparkup.Router().start(options=options)</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^e</string>
+	<key>name</key>
+	<string>Sparkup expand</string>
+	<key>output</key>
+	<string>insertAsSnippet</string>
+	<key>uuid</key>
+	<string>73A48D2B-D843-42A1-A288-0D1A6380043B</string>
+</dict>
+</plist>
