@@ -163,6 +163,9 @@ nnoremap <leader>gf :set guifont=*<cr>
 " }}}
 
 " Lisp settings {{{
+if isdirectory(expand("$HOME/HyperSpec/Body"))
+    let g:slimv_clhs_root=expand("file://$HOME/HyperSpec/Body/")
+endif
 let g:lisp_rainbow = 1
 " }}}
 
