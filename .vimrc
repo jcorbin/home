@@ -1,4 +1,5 @@
 call pathogen#infect()
+call pathogen#helptags()
 
 if !empty($POWERLINE_BINDINGS)
     set runtimepath+=$POWERLINE_BINDINGS/vim
