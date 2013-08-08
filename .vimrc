@@ -6,8 +6,6 @@ if !empty($POWERLINE_BINDINGS)
     set noshowmode " don't show mode below statusline (redundant with powerline)
 endif
 
-set laststatus=2 " always show the statusline
-
 " Options {{{
 
 syntax on
@@ -15,16 +13,11 @@ filetype plugin indent on
 
 set nocompatible " This is an "option" apparently...
 
-set showcmd     " Show (partial) command in status line.
-set showmatch   " Show matching brackets.
 set scrolloff=3 " Try to keep 3 lines after cursor
-set ruler       " display line/col/percentage on right part of statusline
 set cursorline
 
 set virtualedit=all
-set autoindent
 set smartindent
-set smarttab
 set foldmethod=indent
 set swapsync=
 
@@ -38,8 +31,7 @@ set splitright
 
 "set formatoptions=croq2lj
 
-" Show tabs, trailing spaces, and line wraps
-set list listchars=tab:^-,trail:_,extends:+,nbsp:.
+set list
 
 " completion
 set wildmode=longest,list:longest
@@ -48,9 +40,7 @@ set undolevels=1000
 " searching {{{
 set ignorecase " Do case insensitive matching...
 set smartcase  " ...but only if the user didn't explicitly case
-set incsearch  " Incremental search
 set hlsearch   " highlight while searching
-nohlsearch
 "}}}
 
 let xml_use_xhtml=1
@@ -154,7 +144,6 @@ nnoremap <leader>s% :source %<cr>
 " searching {{{
 nnoremap / /\v
 nnoremap ? ?\v
-nnoremap <leader><space> :nohlsearch<cr>
 nnoremap <leader>ic :set ignorecase!<cr>
 " }}}
 
