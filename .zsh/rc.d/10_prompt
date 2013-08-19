@@ -3,10 +3,6 @@ setopt promptsubst
 autoload -U promptinit
 promptinit
 
-if [ -n "$POWERLINE_BINDINGS" ]; then
-    source $POWERLINE_BINDINGS/zsh/powerline.zsh
-else
-    prompt wunjo
-fi
+prompt wunjo
 
 # vim:set ft=zsh:
