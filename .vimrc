@@ -41,6 +41,11 @@ set undolevels=1000
 set ignorecase " Do case insensitive matching...
 set smartcase  " ...but only if the user didn't explicitly case
 set hlsearch   " highlight while searching
+
+augroup hlsearch
+autocmd InsertEnter * :setlocal nohlsearch
+autocmd InsertLeave * :setlocal   hlsearch
+augroup END
 "}}}
 
 let xml_use_xhtml=1
