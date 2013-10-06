@@ -467,6 +467,6 @@ c.InteractiveShellApp.extensions = []
 import os
 import sys
 
-if 'POWERLINE_HOME' in os.environ:
+if False and 'POWERLINE_HOME' in os.environ:
     sys.path.append(os.environ['POWERLINE_HOME'])
     c.InteractiveShellApp.extensions.append('powerline.bindings.ipython.post_0_11')
