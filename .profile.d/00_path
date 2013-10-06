@@ -21,11 +21,6 @@ append_colon_component PATH /usr/sbin
 prepend_colon_component PATH $HOME/.local/bin
 prepend_colon_component PATH $HOME/bin
 
-# if [ -d /var/lib/gems ]; then
-#     append_colon_component PATH /var/lib/gems/*/bin
-# fi
-# append_colon_component PATH /opt/mit-scheme/bin
-
 prepend_colon_component PATH /usr/local/bin
 prepend_colon_component PATH /usr/local/git/bin
 prepend_colon_component PATH /opt/local/bin
