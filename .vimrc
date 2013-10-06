@@ -80,7 +80,9 @@ set pastetoggle=<leader><C-p>
 
 " GUI options {{{
 if has("gui_running")
-  set guifont=Inconsolata\ for\ Powerline:h13
+  "set guifont=Inconsolata\ for\ Powerline:h13
+  "set guifont=Anonymous\ Pro\ for\ Powerline:h13
+  set guifont=Source\ Code\ Pro\ Light\ for\ Powerline:h12
   " guioptions:
   "   a - autoselect
   "   c - console dialogs
