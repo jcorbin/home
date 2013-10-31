@@ -116,8 +116,11 @@ else
 endif
 " }}}
 
-" autocompile coffee script files on write
-au BufWritePost *.coffee CoffeeMake
+" autocompile some files {{{
+augroup autocompile
+autocmd BufWritePost *.coffee CoffeeMake
+augroup END
+" }}}
 
 " Mappings {{{
 
