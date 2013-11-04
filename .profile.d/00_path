@@ -17,6 +17,7 @@ prepend_colon_component()
 
 append_colon_component PATH /sbin
 append_colon_component PATH /usr/sbin
+append_colon_component PATH /usr/local/sbin
 
 prepend_colon_component PATH $HOME/.local/bin
 prepend_colon_component PATH $HOME/bin
