@@ -128,6 +128,10 @@ autocmd BufWritePost *.less call LessMake()
 augroup END
 " }}}
 
+augroup git
+autocmd Filetype gitcommit setlocal spell textwidth=72
+augroup END
+
 " Mappings {{{
 
 " exiting insert mode by ctrl-cr
