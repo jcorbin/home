@@ -1,6 +1,7 @@
 *
 !.gitignore
 !atmux
+!atmux.py
 !choose-screen
 !chroot-system
 !dotgit
