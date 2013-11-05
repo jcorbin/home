@@ -5,6 +5,11 @@ without_colon_component()
     eval "echo \$$1" | tr ':' '\n' | grep -Fxv "$2" | tr '\n' ':'
 }
 
+remove_colon_component()
+{
+    export $1=$(without_colon_component "$1" "$2")
+}
+
 append_colon_component()
 {
     [ -d $2 ] && export $1=$(without_colon_component "$1" "$2"):$2
