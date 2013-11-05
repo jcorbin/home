@@ -39,3 +39,17 @@ export DYLD_LIBRARY_PATH=$cuda_root/lib
 append_colon_component PATH $cuda_root/bin
 
 export PATH=$(echo $PATH | tr -s :)
+
+no_gnu()
+{
+    remove_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
+    remove_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
+    alias ls='ls -Fhb'
+}
+
+re_gnu()
+{
+    prepend_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
+    prepend_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
+    alias ls='ls -Fhb --time-style=long-iso --color=auto'
+}
