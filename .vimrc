@@ -151,6 +151,7 @@ nnoremap <leader>gD :Gsplit! diff<cr>
 nnoremap <leader>ga :Git add %<cr>
 nnoremap <leader>gp :Git add --patch %<cr>
 nnoremap <leader>gr :Git reset %<cr>
+nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
 
 nnoremap <leader>u :GundoToggle<CR>
