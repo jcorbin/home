@@ -181,4 +181,10 @@ endif
 let g:lisp_rainbow = 1
 " }}}
 
+" Markdown {{{
+augroup markdown
+autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
+augroup END
+" }}}
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
