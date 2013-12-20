@@ -38,4 +38,4 @@ endfunction
 nnoremap <leader>/  :call <SID>SetMatch(1, <SID>CasedRegex(@/))<cr>
 nnoremap <leader>2/ :call <SID>SetMatch(2, <SID>CasedRegex(@/))<cr>
 nnoremap <leader>3/ :call <SID>SetMatch(3, <SID>CasedRegex(@/))<cr>
-nnoremap <leader><s-space> :nohlsearch<cr>:call <SID>MatchOff()<cr>
+nnoremap <leader><c-l> :nohlsearch<cr>:call <SID>MatchOff()<cr>
