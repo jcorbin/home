@@ -86,12 +86,12 @@ def choose_session():
         print
         return None
 
+if args.session is None and 'default' not in attached:
+    args.session = 'default'
+
 if args.session is None:
-    if 'default' not in attached:
-        args.session = 'default'
-    else:
-        args.session = choose_session()
-        if args.session is None: sys.exit(0)
+    args.session = choose_session()
+    if args.session is None: sys.exit(0)
 
 if tmux('has-session', '-t', args.session).wait() != 0:
     session_script = os.path.join(tmux_sessiondir, args.session)
