@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if virtualenvwrapper=$(which virtualenvwrapper.sh 2>/dev/null); then
+    source $virtualenvwrapper
+fi
