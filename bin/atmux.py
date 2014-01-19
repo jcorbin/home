@@ -89,6 +89,9 @@ def choose_session():
 if args.session is None and 'default' not in attached:
     args.session = 'default'
 
+if args.session == 'choose':
+    args.session = None
+
 if args.session is None:
     args.session = choose_session()
     if args.session is None: sys.exit(0)
