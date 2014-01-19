@@ -61,32 +61,37 @@ try:
 except CalledProcessError:
     pass
 
+def choose_session():
+    choices = [(0, None)] + list(enumerate(sorted((sessions - attached) | detached), 1))
+    fmt = '%%%dd) %%s' % len(str(choices[-1][0]))
+    default = 0
+    if detached:
+        default = next(i for i, c in choices if c == min(detached))
+    try:
+        while True:
+            for i, c in choices:
+                if c is None: c = '-- specify --'
+                print fmt % (i, c)
+            choice = raw_input('choose session (default %d) >> ' % default) or default
+            try:
+                choice = int(choice)
+                session = choices[choice][1]
+            except (IndexError, ValueError):
+                continue
+            break
+        while not session:
+            session = raw_input('specify name >> ').strip()
+        return session
+    except EOFError:
+        print
+        return None
+
 if args.session is None:
     if 'default' not in attached:
         args.session = 'default'
     else:
-        choices = [(0, None)] + list(enumerate(sorted((sessions - attached) | detached), 1))
-        fmt = '%%%dd) %%s' % len(str(choices[-1][0]))
-        default = 0
-        if detached:
-            default = next(i for i, c in choices if c == min(detached))
-        try:
-            while True:
-                for i, c in choices:
-                    if c is None: c = '-- specify --'
-                    print fmt % (i, c)
-                choice = raw_input('choose session (default %d) >> ' % default) or default
-                try:
-                    choice = int(choice)
-                    args.session = choices[choice][1]
-                except (IndexError, ValueError):
-                    continue
-                break
-            while not args.session:
-                args.session = raw_input('specify name >> ').strip()
-        except EOFError:
-            print
-            sys.exit(0)
+        args.session = choose_session()
+        if args.session is None: sys.exit(0)
 
 if tmux('has-session', '-t', args.session).wait() != 0:
     session_script = os.path.join(tmux_sessiondir, args.session)
