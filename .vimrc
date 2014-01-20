@@ -187,4 +187,9 @@ autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
 augroup END
 " }}}
 
+nnoremap <leader>tt :Tab<cr>
+nnoremap <leader>t= :Tab/=/<cr>
+nnoremap <leader>t, :Tab/,/<cr>
+nnoremap <leader>t: :Tab/:/<cr>
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
