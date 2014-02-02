@@ -187,6 +187,13 @@ autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
 augroup END
 " }}}
 
+" NERDTree {{{
+let NERDTreeMinimalUI=1
+let NERDTreeWinPos="right"
+nnoremap <leader>nt :NERDTreeToggle<cr>
+nnoremap <leader>nf :NERDTreeFind <cr>
+" }}}
+
 nnoremap <leader>tt :Tab<cr>
 nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
