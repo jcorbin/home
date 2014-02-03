@@ -89,7 +89,7 @@ if has("gui_running")
   set guioptions=acgit
   set guiheadroom=0
   colorscheme lucius
-  LuciusBlack
+  LuciusBlackHighContrast
 
 " }}}
 " Terminal options {{{
@@ -102,7 +102,7 @@ else
   if &t_Co == 256
     colorscheme lucius
     let g:lucius_no_term_bg=1
-    LuciusBlack
+    LuciusBlackHighContrast
   else
     set background=dark
     colorscheme desert
