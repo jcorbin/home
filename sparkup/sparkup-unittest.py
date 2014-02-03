@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 import sys
 import sparkup
@@ -45,11 +45,11 @@ class SparkupTest:
             },
         'Shortcut test': {
             'input': 'input:button',
-            'output': '<input type="button" class="button" value="$1" name="$2" />$0'
+            'output': '<input type="button" class="button" value="$1" name="$2">$0'
             },
         'Shortcut synonym test': {
             'input': 'button',
-            'output': '<input type="button" class="button" value="$1" name="$2" />$0'
+            'output': '<button>$1</button>$0',
             },
         'Child test': {
             'input': 'div>ul>li',
@@ -69,7 +69,7 @@ class SparkupTest:
             },
         'Multiplier test 2': {
             'input': 'ul > li.item-$*3',
-            'output': '<ul>\n    <li class="item-1">$1</li>\n    <li class="item-2">$2</li>\n    <li class="item-3">$3</li>\n</ul>$0' 
+            'output': '<ul>\n    <li class="item-1">$1</li>\n    <li class="item-2">$2</li>\n    <li class="item-3">$3</li>\n</ul>$0'
             },
         'Multiplier test 3': {
             'input': 'ul > li.item-$*3 > a',
@@ -99,10 +99,24 @@ class SparkupTest:
             'input': 'p [attrib=text.com]',
             'output': '<p attrib="text.com">$1</p>$0'
             },
+        'PHP tag test': {
+            'input': 'php',
+            'output': '<?php\n    $1\n?>$0',
+            },
+        'Nested curly braces test': {
+            'input': 'p{{{ title }}}',
+            'output': '<p>{{ title }}</p>$0'
+            },
+        'Nested curly braces test (#54)': {
+            'input': 'html>head>title{${title}}',
+            'output': '<html>\n    <head>\n        <title>${title}</title>\n    </head>\n</html>$0'
+            },
         # Add: text test, broken test, multi-attribute tests, indentation test, start and end comments test
         }
+
     def run(self):
         """Run Forrest run!"""
+        failures = 0
 
         print "Test results:"
         for name, case in self.cases.iteritems():
@@ -125,6 +139,7 @@ class SparkupTest:
 
             print " - %-30s [%s]" % (name, result_str)
             if not result:
+                failures += 1
                 print "= %s" % input.replace("\n", "\n= ")
                 print "Actual output (condensed):"
                 print " | '%s'" % output.replace("\n", r"\n").replace('"', '\"')
@@ -133,6 +148,8 @@ class SparkupTest:
                 print "Expected:"
                 print " | %s" % case['output'].replace("\n", "\ n| ")
 
+        return failures
+
 if __name__ == '__main__':
     s = SparkupTest()
-    s.run()
+    sys.exit(s.run())

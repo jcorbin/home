@@ -1,10 +1,21 @@
 Installation
 ------------
 
-   Copy the contents of vim/ftplugin/ to your ~/.vim/ftplugin directory.
+   1. Copy the contents of vim/ftplugin/ to your ~/.vim/ftplugin directory.
 
        (Assuming your current dir is sparkup/vim/)
        $ cp -R ftplugin ~/.vim/
+
+   2. Copy the sparkup.py file to your ~/.vim directory
+
+       (Assuming your current dir is sparkup/vim/)
+       $ cp ../sparkup.py ~/.vim/
+
+Or use tpope's vim-pathogen:
+
+       cd ~/.vim/bundle ; git clone
+       cd sparkup
+       make vim-pathogen
 
 Configuration
 -------------
