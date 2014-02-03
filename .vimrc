@@ -218,7 +218,7 @@ nnoremap <leader>t: :Tab/:/<cr>
 " }}}
 
 " GUndo {{{
-nnoremap <leader>u :GundoToggle<CR>
+nnoremap <leader><C-u> :GundoToggle<CR>
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
