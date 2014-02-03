@@ -3,11 +3,6 @@ call pathogen#helptags()
 
 set noshiftround
 
-if !empty($POWERLINE_BINDINGS)
-    set runtimepath+=$POWERLINE_BINDINGS/vim
-    set noshowmode " don't show mode below statusline (redundant with powerline)
-endif
-
 " Options {{{
 
 syntax on
