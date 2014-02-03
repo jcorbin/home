@@ -1,6 +1,6 @@
 # vim:fileencoding=utf-8:noet
 
-from __future__ import absolute_import, division
+from __future__ import unicode_literals, absolute_import, division
 
 import os
 try:
@@ -8,7 +8,8 @@ try:
 except ImportError:
 	vim = {}  # NOQA
 
-from powerline.bindings.vim import vim_get_func, getbufvar, vim_getbufoption
+from powerline.bindings.vim import (vim_get_func, getbufvar, vim_getbufoption,
+									buffer_name)
 from powerline.theme import requires_segment_info
 from powerline.lib import add_divider_highlight_group
 from powerline.lib.vcs import guess, tree_status
@@ -18,10 +19,12 @@ from collections import defaultdict
 
 vim_funcs = {
 	'virtcol': vim_get_func('virtcol', rettype=int),
-	'fnamemodify': vim_get_func('fnamemodify', rettype=str),
-	'expand': vim_get_func('expand', rettype=str),
+	'getpos': vim_get_func('getpos'),
+	'fnamemodify': vim_get_func('fnamemodify'),
+	'expand': vim_get_func('expand'),
 	'bufnr': vim_get_func('bufnr', rettype=int),
 	'line2byte': vim_get_func('line2byte', rettype=int),
+	'line': vim_get_func('line', rettype=int),
 }
 
 vim_modes = {
@@ -88,6 +91,31 @@ def mode(pl, segment_info, override=None):
 
 
 @requires_segment_info
+def visual_range(pl, segment_info):
+	'''Return the current visual selection range.
+
+	Returns a value similar to `showcmd`.
+	'''
+	if segment_info['mode'] not in ('v', 'V', '^V'):
+		return None
+	pos_start = vim_funcs['getpos']('v')
+	pos_end = vim_funcs['getpos']('.')
+	# Workaround for vim's "excellent" handling of multibyte characters and display widths
+	pos_start[2] = vim_funcs['virtcol']([pos_start[1], pos_start[2], pos_start[3]])
+	pos_end[2] = vim_funcs['virtcol']([pos_end[1], pos_end[2], pos_end[3]])
+	visual_start = (int(pos_start[1]), int(pos_start[2]))
+	visual_end = (int(pos_end[1]), int(pos_end[2]))
+	diff_rows = abs(visual_end[0] - visual_start[0]) + 1
+	diff_cols = abs(visual_end[1] - visual_start[1]) + 1
+	if segment_info['mode'] == '^V':
+		return '{0} × {1}'.format(diff_rows, diff_cols)
+	elif segment_info['mode'] == 'V' or diff_rows > 1:
+		return '{0} rows'.format(diff_rows)
+	else:
+		return '{0} cols'.format(diff_cols)
+
+
+@requires_segment_info
 def modified_indicator(pl, segment_info, text='+'):
 	'''Return a file modified indicator.
 
@@ -130,14 +158,18 @@ def file_directory(pl, segment_info, shorten_user=True, shorten_cwd=True, shorte
 	:param bool shorten_home:
 		shorten all directories in :file:`/home/` to :file:`~user/` instead of :file:`/home/user/`.
 	'''
-	name = segment_info['buffer'].name
+	name = buffer_name(segment_info['buffer'])
 	if not name:
 		return None
+	import sys
 	file_directory = vim_funcs['fnamemodify'](name, (':~' if shorten_user else '')
 												+ (':.' if shorten_cwd else '') + ':h')
+	if not file_directory:
+		return None
 	if shorten_home and file_directory.startswith('/home/'):
-		file_directory = '~' + file_directory[6:]
-	return file_directory + os.sep if file_directory else None
+		file_directory = b'~' + file_directory[6:]
+	file_directory = file_directory.decode('utf-8', 'powerline_vim_strtrans_error')
+	return file_directory + os.sep
 
 
 @requires_segment_info
@@ -151,7 +183,7 @@ def file_name(pl, segment_info, display_no_file=False, no_file_text='[No file]')
 
 	Highlight groups used: ``file_name_no_file`` or ``file_name``, ``file_name``.
 	'''
-	name = segment_info['buffer'].name
+	name = buffer_name(segment_info['buffer'])
 	if not name:
 		if display_no_file:
 			return [{
@@ -160,8 +192,7 @@ def file_name(pl, segment_info, display_no_file=False, no_file_text='[No file]')
 			}]
 		else:
 			return None
-	file_name = vim_funcs['fnamemodify'](name, ':~:.:t')
-	return file_name
+	return os.path.basename(name).decode('utf-8', 'powerline_vim_strtrans_error')
 
 
 @window_cached
@@ -235,6 +266,44 @@ def line_percent(pl, segment_info, gradient=False):
 	return [{
 		'contents': str(int(round(percentage))),
 		'highlight_group': ['line_percent_gradient', 'line_percent'],
+		'gradient_level': percentage,
+	}]
+
+
+@window_cached
+def position(pl, position_strings={'top':'Top', 'bottom':'Bot', 'all':'All'}, gradient=False):
+	'''Return the position of the current view in the file as a percentage.
+
+	:param dict position_strings:
+		dict for translation of the position strings, e.g. ``{"top":"Oben", "bottom":"Unten", "all":"Alles"}``
+
+	:param bool gradient:
+		highlight the percentage with a color gradient (by default a green to red gradient)
+
+	Highlight groups used: ``position_gradient`` (gradient), ``position``.
+	'''
+	line_last = len(vim.current.buffer)
+
+	winline_first = vim_funcs['line']('w0')
+	winline_last = vim_funcs['line']('w$')
+	if winline_first == 1 and winline_last == line_last:
+		percentage = 0.0
+		content = position_strings['all']
+	elif winline_first == 1:
+		percentage = 0.0
+		content = position_strings['top']
+	elif winline_last == line_last:
+		percentage = 100.0
+		content = position_strings['bottom']
+	else:
+		percentage = winline_first * 100.0 / (line_last - winline_last + winline_first)
+		content = str(int(round(percentage))) + '%'
+
+	if not gradient:
+		return content
+	return [{
+		'contents': content,
+		'highlight_group': ['position_gradient', 'position'],
 		'gradient_level': percentage,
 	}]
 

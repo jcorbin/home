@@ -1,6 +1,6 @@
 # vim:fileencoding=utf-8:noet
 
-from __future__ import absolute_import
+from __future__ import unicode_literals, absolute_import
 
 import os
 import sys
@@ -104,10 +104,10 @@ def cwd(pl, segment_info, dir_shorten_len=None, dir_limit_depth=None, use_path_s
 		cwd = re.sub('^' + re.escape(home), '~', cwd, 1)
 	cwd_split = cwd.split(os.sep)
 	cwd_split_len = len(cwd_split)
-	if dir_limit_depth and cwd_split_len > dir_limit_depth + 1:
-		del(cwd_split[0:-dir_limit_depth])
-		cwd_split.insert(0, '⋯')
 	cwd = [i[0:dir_shorten_len] if dir_shorten_len and i else i for i in cwd_split[:-1]] + [cwd_split[-1]]
+	if dir_limit_depth and cwd_split_len > dir_limit_depth + 1:
+		del(cwd[0:-dir_limit_depth])
+		cwd.insert(0, '⋯')
 	ret = []
 	if not cwd[0]:
 		cwd[0] = '/'
@@ -125,6 +125,8 @@ def cwd(pl, segment_info, dir_shorten_len=None, dir_limit_depth=None, use_path_s
 	ret[-1]['highlight_group'] = ['cwd:current_folder', 'cwd']
 	if use_path_separator:
 		ret[-1]['contents'] = ret[-1]['contents'][:-1]
+		if len(ret) > 1 and ret[0]['contents'][0] == os.sep:
+			ret[0]['contents'] = ret[0]['contents'][1:]
 	return ret
 
 
@@ -335,10 +337,10 @@ class WeatherSegment(ThreadedSegment):
 			# Do not lock attribute assignments in this branch: they are used 
 			# only in .update()
 			if not self.location:
-				location_data = json.loads(urllib_read('http://freegeoip.net/json/' + _external_ip()))
+				location_data = json.loads(urllib_read('http://freegeoip.net/json/'))
 				self.location = ','.join([location_data['city'],
-											location_data['region_name'],
-											location_data['country_name']])
+											location_data['region_code'],
+											location_data['country_code']])
 			query_data = {
 				'q':
 				'use "http://github.com/yql/yql-tables/raw/master/weather/weather.bylocation.xml" as we;'
@@ -497,7 +499,10 @@ try:
 	import psutil
 
 	def _get_bytes(interface):
-		io_counters = psutil.network_io_counters(pernic=True)
+		try:
+			io_counters = psutil.net_io_counters(pernic=True)
+		except AttributeError:
+			io_counters = psutil.network_io_counters(pernic=True)
 		if_io = io_counters.get(interface)
 		if not if_io:
 			return None
@@ -588,8 +593,11 @@ username = False
 _geteuid = getattr(os, 'geteuid', lambda: 1)
 
 
-def user(pl, segment_info=None):
+def user(pl, segment_info=None, hide_user=None):
 	'''Return the current user.
+
+	:param str hide_user:
+		Omit showing segment for users with names equal to this string.
 
 	Highlights the user with the ``superuser`` if the effective user ID is 0.
 
@@ -600,6 +608,8 @@ def user(pl, segment_info=None):
 		username = _get_user(segment_info)
 	if username is None:
 		pl.warn('Failed to get username')
+		return None
+	if username == hide_user:
 		return None
 	euid = _geteuid()
 	return [{
@@ -697,13 +707,13 @@ class NetworkLoadSegment(KwThreadedSegment):
 						total = activity
 						interface = name
 
-		if interface in self.interfaces:
+		try:
 			idata = self.interfaces[interface]
 			try:
 				idata['prev'] = idata['last']
 			except KeyError:
 				pass
-		else:
+		except KeyError:
 			idata = {}
 			if self.run_once:
 				idata['prev'] = (monotonic(), _get_bytes(interface))
@@ -1014,3 +1024,54 @@ class NowPlayingSegment(object):
 			'total': now_playing[4],
 		}
 now_playing = NowPlayingSegment()
+
+
+if os.path.exists('/sys/class/power_supply/BAT0/capacity'):
+	def _get_capacity():
+		with open('/sys/class/power_supply/BAT0/capacity', 'r') as f:
+			return int(float(f.readline().split()[0]))
+else:
+	def _get_capacity():
+		raise NotImplementedError
+
+
+def battery(pl, format='{batt:3.0%}', steps=5, gamify=False):
+	'''Return battery charge status.
+
+	:param int steps:
+		number of discrete steps to show between 0% and 100% capacity
+	:param bool gamify:
+		measure in hearts (♥) instead of percentages
+
+	Highlight groups used: ``battery_gradient`` (gradient), ``battery``.
+	'''
+	try:
+		capacity = _get_capacity()
+	except NotImplementedError:
+		pl.warn('Unable to get battery capacity.')
+		return None
+	ret = []
+	denom = int(steps)
+	numer = int(denom * capacity / 100)
+	full_heart = '♥'
+	if gamify:
+		ret.append({
+			'contents': full_heart * numer,
+			'draw_soft_divider': False,
+			'highlight_group': ['battery_gradient', 'battery'],
+			'gradient_level': 99
+		})
+		ret.append({
+			'contents': full_heart * (denom - numer),
+			'draw_soft_divider': False,
+			'highlight_group': ['battery_gradient', 'battery'],
+			'gradient_level': 1
+		})
+	else:
+		batt = numer / float(denom)
+		ret.append({
+			'contents': format.format(batt=batt),
+			'highlight_group': ['battery_gradient', 'battery'],
+			'gradient_level': batt * 100
+		})
+	return ret

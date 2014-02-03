@@ -21,6 +21,11 @@
 				"exclude_modes": ["nc"]
 			},
 			{
+				"name": "visual_range",
+				"exclude_modes": ["nc"],
+				"priority": 10
+			},
+			{
 				"name": "paste_indicator",
 				"exclude_modes": ["nc"],
 				"priority": 10
@@ -52,6 +57,19 @@
 			{
 				"name": "modified_indicator",
 				"before": " "
+			},
+			{
+				"exclude_modes": ["nc"],
+				"module": "powerline.segments.plugin.syntastic",
+				"name": "syntastic",
+				"priority": 50
+			},
+			{
+				"exclude_modes": ["nc"],
+				"module": "powerline.segments.plugin.tagbar",
+				"name": "current_tag",
+				"draw_soft_divider": false,
+				"priority": 50
 			},
 			{
 				"type": "string",
