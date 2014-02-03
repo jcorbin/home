@@ -190,6 +190,8 @@ nnoremap <leader>nf :NERDTreeFind <cr>
 
 " Airline {{{
 
+let g:airline_theme="wombat"
+
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
