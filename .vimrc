@@ -217,6 +217,28 @@ nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 " }}}
 
+" Unite {{{
+
+let g:unite_enable_start_insert = 1
+
+" Yank source
+let g:unite_source_history_yank_enable = 1
+let g:unite_source_history_yank_save_clipboard = 1
+
+" To track long mru history.
+let g:unite_source_file_mru_long_limit = 3000
+let g:unite_source_directory_mru_long_limit = 3000
+
+" Mappings
+nnoremap <leader>u <Nop>
+nnoremap <leader>ub :Unite buffer<cr>
+nnoremap <leader>u" :Unite register<cr>
+nnoremap <leader>uy :Unite history/yank<cr>
+nnoremap <leader>u. :Unite file_rec<cr>
+nnoremap <leader>u% :UniteWithBufferDir file_rec<cr>
+
+" }}}
+
 " GUndo {{{
 nnoremap <leader><C-u> :GundoToggle<CR>
 " }}}
