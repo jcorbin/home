@@ -149,7 +149,6 @@ nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
 
-nnoremap <leader>u :GundoToggle<CR>
 nnoremap du :diffupdate<cr>
 
 " vimscript editing convenience {{{
@@ -216,6 +215,10 @@ nnoremap <leader>tt :Tab<cr>
 nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
+" }}}
+
+" GUndo {{{
+nnoremap <leader>u :GundoToggle<CR>
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
