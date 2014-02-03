@@ -12,18 +12,19 @@ let g:loaded_unimpaired = 1
 
 function! s:MapNextFamily(map,cmd)
   let map = '<Plug>unimpaired'.toupper(a:map)
-  let end = ' ".(v:count ? v:count : "")<CR>'
-  execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.a:cmd.'previous'.end
-  execute 'nnoremap <silent> '.map.'Next     :<C-U>exe "'.a:cmd.'next'.end
-  execute 'nnoremap <silent> '.map.'First    :<C-U>exe "'.a:cmd.'first'.end
-  execute 'nnoremap <silent> '.map.'Last     :<C-U>exe "'.a:cmd.'last'.end
+  let cmd = '".(v:count ? v:count : "")."'.a:cmd
+  let end = '"<CR>'.(a:cmd == 'l' || a:cmd == 'c' ? 'zv' : '')
+  execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.cmd.'previous'.end
+  execute 'nnoremap <silent> '.map.'Next     :<C-U>exe "'.cmd.'next'.end
+  execute 'nnoremap <silent> '.map.'First    :<C-U>exe "'.cmd.'first'.end
+  execute 'nnoremap <silent> '.map.'Last     :<C-U>exe "'.cmd.'last'.end
   execute 'nmap <silent> ['.        a:map .' '.map.'Previous'
   execute 'nmap <silent> ]'.        a:map .' '.map.'Next'
   execute 'nmap <silent> ['.toupper(a:map).' '.map.'First'
   execute 'nmap <silent> ]'.toupper(a:map).' '.map.'Last'
   if exists(':'.a:cmd.'nfile')
-    execute 'nnoremap <silent> '.map.'PFile :<C-U>exe "'.a:cmd.'pfile'.end
-    execute 'nnoremap <silent> '.map.'NFile :<C-U>exe "'.a:cmd.'nfile'.end
+    execute 'nnoremap <silent> '.map.'PFile :<C-U>exe "'.cmd.'pfile'.end
+    execute 'nnoremap <silent> '.map.'NFile :<C-U>exe "'.cmd.'nfile'.end
     execute 'nmap <silent> [<C-'.a:map.'> '.map.'PFile'
     execute 'nmap <silent> ]<C-'.a:map.'> '.map.'NFile'
   endif
@@ -171,15 +172,29 @@ function! s:Move(cmd, count, map) abort
   silent! call repeat#set("\<Plug>unimpairedMove".a:map, a:count)
 endfunction
 
-nnoremap <silent> <Plug>unimpairedMoveUp   :<C-U>call <SID>Move('--',v:count1,'Up')<CR>
-nnoremap <silent> <Plug>unimpairedMoveDown :<C-U>call <SID>Move('+',v:count1,'Down')<CR>
-xnoremap <silent> <Plug>unimpairedMoveUp   :<C-U>exe 'exe "normal! m`"<Bar>''<,''>move--'.v:count1<CR>``
-xnoremap <silent> <Plug>unimpairedMoveDown :<C-U>exe 'exe "normal! m`"<Bar>''<,''>move''>+'.v:count1<CR>``
+function! s:MoveSelectionUp(count) abort
+  normal! m`
+  exe "'<,'>move'<--".a:count
+  norm! ``
+  silent! call repeat#set("\<Plug>unimpairedMoveSelectionUp", a:count)
+endfunction
+
+function! s:MoveSelectionDown(count) abort
+  normal! m`
+  exe "'<,'>move'>+".a:count
+  norm! ``
+  silent! call repeat#set("\<Plug>unimpairedMoveSelectionDown", a:count)
+endfunction
+
+nnoremap <silent> <Plug>unimpairedMoveUp            :<C-U>call <SID>Move('--',v:count1,'Up')<CR>
+nnoremap <silent> <Plug>unimpairedMoveDown          :<C-U>call <SID>Move('+',v:count1,'Down')<CR>
+noremap  <silent> <Plug>unimpairedMoveSelectionUp   :<C-U>call <SID>MoveSelectionUp(v:count1)<CR>
+noremap  <silent> <Plug>unimpairedMoveSelectionDown :<C-U>call <SID>MoveSelectionDown(v:count1)<CR>
 
 nmap [e <Plug>unimpairedMoveUp
 nmap ]e <Plug>unimpairedMoveDown
-xmap [e <Plug>unimpairedMoveUp
-xmap ]e <Plug>unimpairedMoveDown
+xmap [e <Plug>unimpairedMoveSelectionUp
+xmap ]e <Plug>unimpairedMoveSelectionDown
 
 " }}}1
 " Option toggling {{{1
@@ -212,7 +227,9 @@ nnoremap cox :set <C-R>=&cursorline && &cursorcolumn ? 'nocursorline nocursorcol
 
 function! s:setup_paste() abort
   let s:paste = &paste
+  let s:mouse = &mouse
   set paste
+  set mouse=
 endfunction
 
 nnoremap <silent> <Plug>unimpairedPaste :call <SID>setup_paste()<CR>
@@ -231,7 +248,9 @@ augroup unimpaired_paste
   autocmd InsertLeave *
         \ if exists('s:paste') |
         \   let &paste = s:paste |
+        \   let &mouse = s:mouse |
         \   unlet s:paste |
+        \   unlet s:mouse |
         \ endif
 augroup END
 
