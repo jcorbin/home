@@ -181,13 +181,6 @@ autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
 augroup END
 " }}}
 
-" NERDTree {{{
-let NERDTreeMinimalUI=1
-let NERDTreeWinPos="right"
-nnoremap <leader>nt :NERDTreeToggle<cr>
-nnoremap <leader>nf :NERDTreeFind <cr>
-" }}}
-
 " Airline {{{
 
 let g:airline_theme="wombat"
