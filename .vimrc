@@ -226,7 +226,6 @@ let g:unite_source_directory_mru_long_limit = 3000
 
 " Mappings
 nnoremap <leader>u <Nop>
-nnoremap <leader>ut :Unite tab<cr>
 nnoremap <leader>ub :Unite buffer_tab buffer<cr>
 nnoremap <leader>u" :Unite register<cr>
 nnoremap <leader>uy :Unite history/yank<cr>
