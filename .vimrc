@@ -238,6 +238,9 @@ nnoremap <leader>u% :UniteWithBufferDir -complete -no-split file_mru file_rec/as
 
 let g:netrw_liststyle = 3
 
+" Moar vineager!
+nmap _ <Plug>VinegarVerticalSplitUp
+
 " }}}
 
 " GUndo {{{
