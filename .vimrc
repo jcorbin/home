@@ -212,6 +212,8 @@ nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 " }}}
 
+" File/buffer  browsing {{{
+
 " Unite {{{
 
 let g:unite_enable_start_insert = 0
@@ -231,6 +233,8 @@ nnoremap <leader>u" :Unite -complete -no-split register<cr>
 nnoremap <leader>uy :Unite -complete -no-split history/yank<cr>
 nnoremap <leader>u. :Unite -complete -no-split file_mru file_rec/async:!<cr>
 nnoremap <leader>u% :UniteWithBufferDir -complete -no-split file_mru file_rec/async:!<cr>
+
+" }}}
 
 " }}}
 
