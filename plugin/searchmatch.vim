@@ -25,6 +25,7 @@ if !exists("s:used_3match")
 endif
 
 function! s:set_match(n, regex)
+  execute a:n . "match Match" . a:n . " /" . a:regex . "/"
   if a:n == 1
     let s:used_1match = 1
   elseif a:n == 2
@@ -33,7 +34,6 @@ function! s:set_match(n, regex)
     let s:used_3match = 1
     NoMatchParen
   endif
-  execute a:n . "match Match" . a:n . " /" . a:regex . "/"
 endfunction
 
 function! s:reset_match()
