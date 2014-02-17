@@ -1,3 +1,8 @@
+" searchmatch.vim - easier use of match and co
+" Maintainer: Joshua T Corbin
+" URL:        https://github.com/jcorbin/vim-searchmatch
+" Version:    0.9.0
+
 function! s:CasedRegex(regex)
     return (&ignorecase ?  '\c' : '\C') . a:regex
 endfunction
