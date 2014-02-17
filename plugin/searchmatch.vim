@@ -9,7 +9,7 @@ endif
 let g:loaded_searchmatch = 1
 
 function! s:cased_regex(regex)
-  return (&ignorecase ?  '\c' : '\C') . a:regex
+  return (&ignorecase ? '\c' : '\C') . a:regex
 endfunction
 
 if !exists("s:used_1match")
