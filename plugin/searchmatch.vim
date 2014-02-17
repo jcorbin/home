@@ -54,7 +54,12 @@ function! s:reset_match()
     endif
 endfunction
 
-nnoremap <leader>/  :call <SID>set_match(1, <SID>cased_regex(@/))<cr>
-nnoremap <leader>2/ :call <SID>set_match(2, <SID>cased_regex(@/))<cr>
-nnoremap <leader>3/ :call <SID>set_match(3, <SID>cased_regex(@/))<cr>
-nnoremap <leader><c-l> :nohlsearch<cr>:call <SID>reset_match()<cr>
+command! SearchMatch1     :call <SID>set_match(1, <SID>cased_regex(@/))
+command! SearchMatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
+command! SearchMatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
+command! SearchMatchReset :call <SID>reset_match()
+
+nnoremap <leader>/  :SearchMatch1<CR>
+nnoremap <leader>2/ :SearchMatch2<CR>
+nnoremap <leader>3/ :SearchMatch3<CR>
+nnoremap <leader><c-l> :nohlsearch<cr>:SearchMatchReset<CR>
