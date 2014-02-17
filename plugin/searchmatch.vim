@@ -9,49 +9,49 @@ endif
 let g:loaded_searchmatch = 1
 
 function! s:cased_regex(regex)
-    return (&ignorecase ?  '\c' : '\C') . a:regex
+  return (&ignorecase ?  '\c' : '\C') . a:regex
 endfunction
 
 if !exists("s:used_match")
-    let s:used_match = 0
+  let s:used_match = 0
 endif
 
 if !exists("s:used_2match")
-    let s:used_2match = 0
+  let s:used_2match = 0
 endif
 
 if !exists("s:used_3match")
-    let s:used_3match = 0
+  let s:used_3match = 0
 endif
 
 function! s:set_match(n, regex)
-    if a:n == 1
-        let s:used_1match = 1
-    elseif a:n == 2
-        let s:used_2match = 1
-    elseif a:n == 3
-        let s:used_3match = 1
-        NoMatchParen
-    endif
-    execute a:n . "match Match" . a:n . " /" . a:regex . "/"
+  if a:n == 1
+    let s:used_1match = 1
+  elseif a:n == 2
+    let s:used_2match = 1
+  elseif a:n == 3
+    let s:used_3match = 1
+    NoMatchParen
+  endif
+  execute a:n . "match Match" . a:n . " /" . a:regex . "/"
 endfunction
 
 function! s:reset_match()
-    if s:used_1match
-        let s:used_1match = 0
-        match
-    endif
+  if s:used_1match
+    let s:used_1match = 0
+    match
+  endif
 
-    if s:used_2match
-        let s:used_2match = 0
-        2match
-    endif
+  if s:used_2match
+    let s:used_2match = 0
+    2match
+  endif
 
-    if s:used_3match
-        let s:used_3match = 0
-        DoMatchParen
-        3match
-    endif
+  if s:used_3match
+    let s:used_3match = 0
+    DoMatchParen
+    3match
+  endif
 endfunction
 
 command! SearchMatch1     :call <SID>set_match(1, <SID>cased_regex(@/))
