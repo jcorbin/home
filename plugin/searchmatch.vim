@@ -83,9 +83,14 @@ command! Searchmatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
 command! Searchmatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
 command! SearchmatchReset :call <SID>reset_match()
 
+nmap <Plug>Searchmatch1     :Searchmatch1<CR>
+nmap <Plug>Searchmatch2     :Searchmatch2<CR>
+nmap <Plug>Searchmatch3     :Searchmatch3<CR>
+nmap <Plug>SearchmatchReset :SearchmatchReset<CR>
+
 if !exists("g:searchmatch_nomap") && mapcheck("<leader>/", "n") == ""
-  nmap <leader>/  :Searchmatch1<CR>
-  nmap <leader>2/ :Searchmatch2<CR>
-  nmap <leader>3/ :Searchmatch3<CR>
-  nmap <leader>-/ :SearchmatchReset<CR>
+  nmap <leader>/  <Plug>Searchmatch1
+  nmap <leader>2/ <Plug>Searchmatch2
+  nmap <leader>3/ <Plug>Searchmatch3
+  nmap <leader>-/ <Plug>SearchmatchReset
 endif
