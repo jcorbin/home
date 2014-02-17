@@ -70,7 +70,9 @@ function! s:reset_match()
     3match
     let s:used_3match = 0
     if s:disabled_matchparen
-      DoMatchParen
+      if !exists("g:loaded_matchparen")
+        DoMatchParen
+      endif
       let s:disabled_matchparen = 0
     endif
   endif
