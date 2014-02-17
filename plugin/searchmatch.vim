@@ -36,8 +36,10 @@ function! s:set_match(n, regex)
     let s:used_2match = 1
   elseif a:n == 3
     let s:used_3match = 1
-    let s:disabled_matchparen = 1
-    NoMatchParen
+    if exists("g:loaded_matchparen")
+      let s:disabled_matchparen = 1
+      NoMatchParen
+    endif
   endif
 endfunction
 
