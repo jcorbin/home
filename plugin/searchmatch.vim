@@ -12,8 +12,8 @@ function! s:cased_regex(regex)
   return (&ignorecase ?  '\c' : '\C') . a:regex
 endfunction
 
-if !exists("s:used_match")
-  let s:used_match = 0
+if !exists("s:used_1match")
+  let s:used_1match = 0
 endif
 
 if !exists("s:used_2match")
