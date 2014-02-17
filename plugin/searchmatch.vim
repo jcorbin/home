@@ -43,22 +43,22 @@ endfunction
 
 function! s:reset_match()
   if s:used_1match
-    let s:used_1match = 0
     match
+    let s:used_1match = 0
   endif
 
   if s:used_2match
-    let s:used_2match = 0
     2match
+    let s:used_2match = 0
   endif
 
   if s:used_3match
+    3match
     let s:used_3match = 0
     if s:disabled_matchparen
       DoMatchParen
       let s:disabled_matchparen = 0
     endif
-    3match
   endif
 endfunction
 
