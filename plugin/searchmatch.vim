@@ -24,6 +24,10 @@ if !exists("s:used_3match")
   let s:used_3match = 0
 endif
 
+if !exists("s:disabled_matchparen")
+  let s:disabled_matchparen = 0
+endif
+
 function! s:set_match(n, regex)
   execute a:n . "match Match" . a:n . " /" . a:regex . "/"
   if a:n == 1
@@ -32,6 +36,7 @@ function! s:set_match(n, regex)
     let s:used_2match = 1
   elseif a:n == 3
     let s:used_3match = 1
+    let s:disabled_matchparen = 1
     NoMatchParen
   endif
 endfunction
@@ -49,7 +54,10 @@ function! s:reset_match()
 
   if s:used_3match
     let s:used_3match = 0
-    DoMatchParen
+    if s:disabled_matchparen
+      DoMatchParen
+      let s:disabled_matchparen = 0
+    endif
     3match
   endif
 endfunction
