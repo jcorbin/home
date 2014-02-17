@@ -28,6 +28,18 @@ if !exists("s:disabled_matchparen")
   let s:disabled_matchparen = 0
 endif
 
+function! s:setup_highlight_defaults()
+  highlight default link Match1 ErrorMsg
+  highlight default link Match2 DiffDelete
+  highlight default link Match3 DiffAdd
+endfunction
+
+augroup searchmatch
+autocmd ColorScheme * call <SID>setup_highlight_defaults()
+augroup END
+
+call <SID>setup_highlight_defaults()
+
 function! s:set_match(n, regex)
   execute a:n . "match Match" . a:n . " /" . a:regex . "/"
   if a:n == 1
