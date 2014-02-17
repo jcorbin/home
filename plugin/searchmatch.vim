@@ -3,7 +3,7 @@
 " URL:        https://github.com/jcorbin/vim-searchmatch
 " Version:    0.9.0
 
-if exists("g:loaded_searchmatch")
+if exists("g:loaded_searchmatch") || &cp
   finish
 endif
 let g:loaded_searchmatch = 1
