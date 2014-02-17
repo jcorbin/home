@@ -16,10 +16,10 @@ You just search for something, and then pin that search with one of the
 ## Usage
 
 The plugin defines 4 new commands:
-- SearchMatch1     -- sets the current search as first match
-- SearchMatch2     -- sets the current search as second match
-- SearchMatch3     -- sets the current search as third match
-- SearchMatchReset -- clears all matches set by the `searchmatch` plugin
+- `SearchMatch1`     -- sets the current search as first match
+- `SearchMatch2`     -- sets the current search as second match
+- `SearchMatch3`     -- sets the current search as third match
+- `SearchMatchReset` -- clears all matches set by the `searchmatch` plugin
 
 Unless you've already defined a mapping for `<leader>/`, then the default
 normal mappings are:
