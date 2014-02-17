@@ -13,6 +13,11 @@ feature that you know and love.
 You just search for something, and then pin that search with one of the
 `SearchMatchN` commands or key mappings.
 
+![Example Screenshot](../screenshots/self.png "Example Screenshot")
+
+The screenshot above shows /match pinned to match1, /search pinned to match2,
+and /highlight pinned to match3.  The colorscheme is a [modified lucius][0].
+
 ## Usage
 
 The plugin defines 4 new commands:
