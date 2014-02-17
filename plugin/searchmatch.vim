@@ -59,7 +59,7 @@ command! SearchMatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
 command! SearchMatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
 command! SearchMatchReset :call <SID>reset_match()
 
-nnoremap <leader>/  :SearchMatch1<CR>
-nnoremap <leader>2/ :SearchMatch2<CR>
-nnoremap <leader>3/ :SearchMatch3<CR>
-nnoremap <leader><c-l> :nohlsearch<cr>:SearchMatchReset<CR>
+nmap <leader>/  :SearchMatch1<CR>
+nmap <leader>2/ :SearchMatch2<CR>
+nmap <leader>3/ :SearchMatch3<CR>
+nmap <leader><c-l> :nohlsearch<cr>:SearchMatchReset<CR>
