@@ -8,7 +8,7 @@ if exists("g:loaded_searchmatch")
 endif
 let g:loaded_searchmatch = 1
 
-function! s:CasedRegex(regex)
+function! s:cased_regex(regex)
     return (&ignorecase ?  '\c' : '\C') . a:regex
 endfunction
 
@@ -24,7 +24,7 @@ if !exists("s:used_3match")
     let s:used_3match = 0
 endif
 
-function! s:SetMatch(n, regex)
+function! s:set_match(n, regex)
     if a:n == 1
         let s:used_1match = 1
     elseif a:n == 2
@@ -36,7 +36,7 @@ function! s:SetMatch(n, regex)
     execute a:n . "match Match" . a:n . " /" . a:regex . "/"
 endfunction
 
-function! s:MatchOff()
+function! s:reset_match()
     if s:used_1match
         let s:used_1match = 0
         match
@@ -54,7 +54,7 @@ function! s:MatchOff()
     endif
 endfunction
 
-nnoremap <leader>/  :call <SID>SetMatch(1, <SID>CasedRegex(@/))<cr>
-nnoremap <leader>2/ :call <SID>SetMatch(2, <SID>CasedRegex(@/))<cr>
-nnoremap <leader>3/ :call <SID>SetMatch(3, <SID>CasedRegex(@/))<cr>
-nnoremap <leader><c-l> :nohlsearch<cr>:call <SID>MatchOff()<cr>
+nnoremap <leader>/  :call <SID>set_match(1, <SID>cased_regex(@/))<cr>
+nnoremap <leader>2/ :call <SID>set_match(2, <SID>cased_regex(@/))<cr>
+nnoremap <leader>3/ :call <SID>set_match(3, <SID>cased_regex(@/))<cr>
+nnoremap <leader><c-l> :nohlsearch<cr>:call <SID>reset_match()<cr>
