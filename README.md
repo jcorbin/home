@@ -64,8 +64,7 @@ Typical [pathogen][1] installation:
     cd ~/.vim/bundle
     git clone https://github.com/jcorbin/vim-searchmatch
 
-If you don't use pathogen, then you probably already have an opinion on how
-to install vim plugins.
+Otherwise just copy `plugin/searchmatch.vim` into `~/.vim/plugin/searchmatch.vim`.
 
 ## TODO
 
