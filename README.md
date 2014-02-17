@@ -1,4 +1,6 @@
-# searchmatch.vim -- Easy search highlight pinning in Vim with :match
+# searchmatch.vim
+
+## Easy search highlight pinning in Vim with :match
 
 So if you're a frequent user of Vim's `hlsearch` feature, you may find yourself
 wishing that you could highlight multiple searches.  Well Vim has support for
