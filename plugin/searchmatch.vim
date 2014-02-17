@@ -62,4 +62,4 @@ command! SearchMatchReset :call <SID>reset_match()
 nmap <leader>/  :SearchMatch1<CR>
 nmap <leader>2/ :SearchMatch2<CR>
 nmap <leader>3/ :SearchMatch3<CR>
-nmap <leader><c-l> :nohlsearch<cr>:SearchMatchReset<CR>
+nmap <leader>-/ :SearchMatchReset<CR>
