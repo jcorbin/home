@@ -3,6 +3,11 @@
 " URL:        https://github.com/jcorbin/vim-searchmatch
 " Version:    0.9.0
 
+if exists("g:loaded_searchmatch")
+  finish
+endif
+let g:loaded_searchmatch = 1
+
 function! s:CasedRegex(regex)
     return (&ignorecase ?  '\c' : '\C') . a:regex
 endfunction
