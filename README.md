@@ -28,10 +28,10 @@ The plugin defines 4 new commands:
 
 Unless you've already defined a mapping for `<leader>/`, then the default
 normal mappings are:
-- `<leader>/`  -- calls Searchmatch1
-- `<leader>2/` -- calls Searchmatch2
-- `<leader>3/` -- calls Searchmatch3
-- `<leader>-/` -- calls SearchmatchReset
+- `<leader>/1` -- calls Searchmatch1
+- `<leader>/2` -- calls Searchmatch2
+- `<leader>/3` -- calls Searchmatch3
+- `<leader>/-` -- calls SearchmatchReset
 
 If you don't want the default mappings added, add this to `.vimrc`:
 

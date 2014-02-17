@@ -89,8 +89,8 @@ nmap <Plug>Searchmatch3     :Searchmatch3<CR>
 nmap <Plug>SearchmatchReset :SearchmatchReset<CR>
 
 if !exists("g:searchmatch_nomap") && mapcheck("<leader>/", "n") == ""
-  nmap <leader>/  <Plug>Searchmatch1
-  nmap <leader>2/ <Plug>Searchmatch2
-  nmap <leader>3/ <Plug>Searchmatch3
-  nmap <leader>-/ <Plug>SearchmatchReset
+  nmap <leader>/1 <Plug>Searchmatch1
+  nmap <leader>/2 <Plug>Searchmatch2
+  nmap <leader>/3 <Plug>Searchmatch3
+  nmap <leader>/- <Plug>SearchmatchReset
 endif
