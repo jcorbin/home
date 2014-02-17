@@ -21,17 +21,17 @@ and /highlight pinned to match3.  The colorscheme is a [modified lucius][0].
 ## Usage
 
 The plugin defines 4 new commands:
-- `SearchMatch1`     -- sets the current search as first match
-- `SearchMatch2`     -- sets the current search as second match
-- `SearchMatch3`     -- sets the current search as third match
-- `SearchMatchReset` -- clears all matches set by the `searchmatch` plugin
+- `Searchmatch1`     -- sets the current search as first match
+- `Searchmatch2`     -- sets the current search as second match
+- `Searchmatch3`     -- sets the current search as third match
+- `SearchmatchReset` -- clears all matches set by the `searchmatch` plugin
 
 Unless you've already defined a mapping for `<leader>/`, then the default
 normal mappings are:
-- `<leader>/`  -- calls SearchMatch1
-- `<leader>2/` -- calls SearchMatch2
-- `<leader>3/` -- calls SearchMatch3
-- `<leader>-/` -- calls SearchMatchReset
+- `<leader>/`  -- calls Searchmatch1
+- `<leader>2/` -- calls Searchmatch2
+- `<leader>3/` -- calls Searchmatch3
+- `<leader>-/` -- calls SearchmatchReset
 
 If you don't want the default mappings added, add this to `.vimrc`:
 

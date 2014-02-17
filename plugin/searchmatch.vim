@@ -78,14 +78,14 @@ function! s:reset_match()
   endif
 endfunction
 
-command! SearchMatch1     :call <SID>set_match(1, <SID>cased_regex(@/))
-command! SearchMatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
-command! SearchMatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
-command! SearchMatchReset :call <SID>reset_match()
+command! Searchmatch1     :call <SID>set_match(1, <SID>cased_regex(@/))
+command! Searchmatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
+command! Searchmatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
+command! SearchmatchReset :call <SID>reset_match()
 
 if !exists("g:searchmatch_nomap") && mapcheck("<leader>/", "n") == ""
-  nmap <leader>/  :SearchMatch1<CR>
-  nmap <leader>2/ :SearchMatch2<CR>
-  nmap <leader>3/ :SearchMatch3<CR>
-  nmap <leader>-/ :SearchMatchReset<CR>
+  nmap <leader>/  :Searchmatch1<CR>
+  nmap <leader>2/ :Searchmatch2<CR>
+  nmap <leader>3/ :Searchmatch3<CR>
+  nmap <leader>-/ :SearchmatchReset<CR>
 endif
