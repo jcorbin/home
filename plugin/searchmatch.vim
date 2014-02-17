@@ -69,7 +69,9 @@ command! SearchMatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
 command! SearchMatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
 command! SearchMatchReset :call <SID>reset_match()
 
-nmap <leader>/  :SearchMatch1<CR>
-nmap <leader>2/ :SearchMatch2<CR>
-nmap <leader>3/ :SearchMatch3<CR>
-nmap <leader>-/ :SearchMatchReset<CR>
+if mapcheck("<leader>/", "n") == ""
+  nmap <leader>/  :SearchMatch1<CR>
+  nmap <leader>2/ :SearchMatch2<CR>
+  nmap <leader>3/ :SearchMatch3<CR>
+  nmap <leader>-/ :SearchMatchReset<CR>
+endif
