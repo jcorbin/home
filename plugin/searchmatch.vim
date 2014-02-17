@@ -2,6 +2,10 @@ function! s:CasedRegex(regex)
     return (&ignorecase ?  '\c' : '\C') . a:regex
 endfunction
 
+if !exists("s:used_match")
+    let s:used_match = 0
+endif
+
 if !exists("s:used_2match")
     let s:used_2match = 0
 endif
@@ -11,7 +15,9 @@ if !exists("s:used_3match")
 endif
 
 function! s:SetMatch(n, regex)
-    if a:n == 2
+    if a:n == 1
+        let s:used_1match = 1
+    elseif a:n == 2
         let s:used_2match = 1
     elseif a:n == 3
         let s:used_3match = 1
@@ -21,7 +27,10 @@ function! s:SetMatch(n, regex)
 endfunction
 
 function! s:MatchOff()
-    match
+    if s:used_1match
+        let s:used_1match = 0
+        match
+    endif
 
     if s:used_2match
         let s:used_2match = 0
