@@ -12,10 +12,6 @@ function! s:cased_regex(regex)
   return (&ignorecase ? '\c' : '\C') . a:regex
 endfunction
 
-if !exists("s:matches")
-  let s:matches = {}
-endif
-
 if !exists("s:disabled_matchparen")
   let s:disabled_matchparen = 0
 endif
@@ -33,16 +29,25 @@ augroup END
 call <SID>setup_highlight_defaults()
 
 function! s:set_1match(regex)
+  if !exists("s:matches")
+    let s:matches = {}
+  endif
   execute "1match Match1 " . a:regex
   let s:matches[1] = a:regex
 endfunction
 
 function! s:set_2match(regex)
+  if !exists("s:matches")
+    let s:matches = {}
+  endif
   execute "2match Match2 " . a:regex
   let s:matches[2] = a:regex
 endfunction
 
 function! s:set_3match(regex)
+  if !exists("s:matches")
+    let s:matches = {}
+  endif
   execute "3match Match3 " . a:regex
   let s:matches[3] = a:regex
   if exists("g:loaded_matchparen")
@@ -64,6 +69,10 @@ function! s:set_match(n, regex)
 endfunction
 
 function! s:reset_match()
+  if !exists("s:matches")
+    return
+  endif
+
   if has_key(s:matches, 1)
     match
     unlet s:matches[1]
