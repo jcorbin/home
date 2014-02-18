@@ -40,19 +40,33 @@ augroup END
 
 call <SID>setup_highlight_defaults()
 
+function! s:set_1match(regex)
+  execute "1match Match1 " . a:regex
+  let s:used_1match = 1
+endfunction
+
+function! s:set_2match(regex)
+  execute "2match Match2 " . a:regex
+  let s:used_2match = 1
+endfunction
+
+function! s:set_3match(regex)
+  execute "3match Match3 " . a:regex
+  let s:used_3match = 1
+  if exists("g:loaded_matchparen")
+    let s:disabled_matchparen = 1
+    NoMatchParen
+  endif
+endfunction
+
 function! s:set_match(n, regex)
   let pattern = '/' . substitute(a:regex, '/', '\/', 'g') . '/'
-  execute a:n . "match Match" . a:n . " " . pattern
   if a:n == 1
-    let s:used_1match = 1
+    call <SID>set_1match(pattern)
   elseif a:n == 2
-    let s:used_2match = 1
+    call <SID>set_2match(pattern)
   elseif a:n == 3
-    let s:used_3match = 1
-    if exists("g:loaded_matchparen")
-      let s:disabled_matchparen = 1
-      NoMatchParen
-    endif
+    call <SID>set_3match(pattern)
   endif
 endfunction
 
