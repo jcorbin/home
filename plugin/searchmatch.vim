@@ -1,7 +1,7 @@
 " searchmatch.vim - easy search highlight pinning in Vim with :match
 " Maintainer: Joshua T Corbin
 " URL:        https://github.com/jcorbin/vim-searchmatch
-" Version:    0.9.0
+" Version:    0.9.1
 
 if exists("g:loaded_searchmatch") || &cp
   finish
