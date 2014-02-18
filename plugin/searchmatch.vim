@@ -1,4 +1,4 @@
-" searchmatch.vim - easier use of match and co
+" searchmatch.vim - easy search highlight pinning in Vim with :match
 " Maintainer: Joshua T Corbin
 " URL:        https://github.com/jcorbin/vim-searchmatch
 " Version:    0.9.0
