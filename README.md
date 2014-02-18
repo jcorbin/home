@@ -19,16 +19,16 @@ The screenshot above shows `/match` pinned to match1, `/search` pinned to
 match2, and `/highlight` pinned to match3.  The colorscheme is a modified
 [lucius][0].
 
-## Usage
+## Basic Usage
 
-The plugin defines 4 new commands:
+The plugin defines 4 basic commands:
 - `Searchmatch1`     -- sets the current search as first match
 - `Searchmatch2`     -- sets the current search as second match
 - `Searchmatch3`     -- sets the current search as third match
 - `SearchmatchReset` -- clears all matches set by the `searchmatch` plugin
 
 Unless you've already defined a mapping for `<leader>/`, then the default
-normal mappings are:
+normal mappings for these commands are:
 - `<leader>/1` -- calls Searchmatch1
 - `<leader>/2` -- calls Searchmatch2
 - `<leader>/3` -- calls Searchmatch3
