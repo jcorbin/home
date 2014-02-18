@@ -12,16 +12,8 @@ function! s:cased_regex(regex)
   return (&ignorecase ? '\c' : '\C') . a:regex
 endfunction
 
-if !exists("s:used_1match")
-  let s:used_1match = 0
-endif
-
-if !exists("s:used_2match")
-  let s:used_2match = 0
-endif
-
-if !exists("s:used_3match")
-  let s:used_3match = 0
+if !exists("s:matches")
+  let s:matches = {}
 endif
 
 if !exists("s:disabled_matchparen")
@@ -42,17 +34,17 @@ call <SID>setup_highlight_defaults()
 
 function! s:set_1match(regex)
   execute "1match Match1 " . a:regex
-  let s:used_1match = 1
+  let s:matches[1] = a:regex
 endfunction
 
 function! s:set_2match(regex)
   execute "2match Match2 " . a:regex
-  let s:used_2match = 1
+  let s:matches[2] = a:regex
 endfunction
 
 function! s:set_3match(regex)
   execute "3match Match3 " . a:regex
-  let s:used_3match = 1
+  let s:matches[3] = a:regex
   if exists("g:loaded_matchparen")
     let s:disabled_matchparen = 1
     NoMatchParen
@@ -72,19 +64,19 @@ function! s:set_match(n, regex)
 endfunction
 
 function! s:reset_match()
-  if s:used_1match
+  if has_key(s:matches, 1)
     match
-    let s:used_1match = 0
+    unlet s:matches[1]
   endif
 
-  if s:used_2match
+  if has_key(s:matches, 2)
     2match
-    let s:used_2match = 0
+    unlet s:matches[2]
   endif
 
-  if s:used_3match
+  if has_key(s:matches, 3)
     3match
-    let s:used_3match = 0
+    unlet s:matches[3]
     if s:disabled_matchparen
       if !exists("g:loaded_matchparen")
         DoMatchParen
