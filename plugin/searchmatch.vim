@@ -41,7 +41,7 @@ augroup END
 call <SID>setup_highlight_defaults()
 
 function! s:set_match(n, regex)
-  let pattern = '/' . a:regex . '/'
+  let pattern = '/' . substitute(a:regex, '/', '\/', 'g') . '/'
   execute a:n . "match Match" . a:n . " " . pattern
   if a:n == 1
     let s:used_1match = 1
