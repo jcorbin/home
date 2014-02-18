@@ -29,27 +29,27 @@ augroup END
 call <SID>setup_highlight_defaults()
 
 function! s:set_1match(regex)
-  if !exists("s:matches")
-    let s:matches = {}
+  if !exists("w:searchmatch_matches")
+    let w:searchmatch_matches = {}
   endif
   execute "1match Match1 " . a:regex
-  let s:matches[1] = a:regex
+  let w:searchmatch_matches[1] = a:regex
 endfunction
 
 function! s:set_2match(regex)
-  if !exists("s:matches")
-    let s:matches = {}
+  if !exists("w:searchmatch_matches")
+    let w:searchmatch_matches = {}
   endif
   execute "2match Match2 " . a:regex
-  let s:matches[2] = a:regex
+  let w:searchmatch_matches[2] = a:regex
 endfunction
 
 function! s:set_3match(regex)
-  if !exists("s:matches")
-    let s:matches = {}
+  if !exists("w:searchmatch_matches")
+    let w:searchmatch_matches = {}
   endif
   execute "3match Match3 " . a:regex
-  let s:matches[3] = a:regex
+  let w:searchmatch_matches[3] = a:regex
   if exists("g:loaded_matchparen")
     let s:disabled_matchparen = 1
     NoMatchParen
@@ -69,23 +69,23 @@ function! s:set_match(n, regex)
 endfunction
 
 function! s:reset_match()
-  if !exists("s:matches")
+  if !exists("w:searchmatch_matches")
     return
   endif
 
-  if has_key(s:matches, 1)
+  if has_key(w:searchmatch_matches, 1)
     match
-    unlet s:matches[1]
+    unlet w:searchmatch_matches[1]
   endif
 
-  if has_key(s:matches, 2)
+  if has_key(w:searchmatch_matches, 2)
     2match
-    unlet s:matches[2]
+    unlet w:searchmatch_matches[2]
   endif
 
-  if has_key(s:matches, 3)
+  if has_key(w:searchmatch_matches, 3)
     3match
-    unlet s:matches[3]
+    unlet w:searchmatch_matches[3]
     if s:disabled_matchparen
       if !exists("g:loaded_matchparen")
         DoMatchParen
