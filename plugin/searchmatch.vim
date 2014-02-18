@@ -60,7 +60,8 @@ function! s:set_3match(regex)
 endfunction
 
 function! s:set_match(n, regex)
-  let pattern = '/' . substitute(a:regex, '/', '\/', 'g') . '/'
+  let pattern = <SID>cased_regex(a:regex)
+  let pattern = '/' . substitute(pattern, '/', '\/', 'g') . '/'
   if a:n == 1
     call <SID>set_1match(pattern)
   elseif a:n == 2
@@ -93,9 +94,9 @@ function! s:reset_match()
   endif
 endfunction
 
-command! Searchmatch1     :call <SID>set_match(1, <SID>cased_regex(@/))
-command! Searchmatch2     :call <SID>set_match(2, <SID>cased_regex(@/))
-command! Searchmatch3     :call <SID>set_match(3, <SID>cased_regex(@/))
+command! Searchmatch1     :call <SID>set_match(1, @/)
+command! Searchmatch2     :call <SID>set_match(2, @/)
+command! Searchmatch3     :call <SID>set_match(3, @/)
 command! SearchmatchReset :call <SID>reset_match()
 
 nmap <Plug>Searchmatch1     :Searchmatch1<CR>
