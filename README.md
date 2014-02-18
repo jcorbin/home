@@ -34,10 +34,6 @@ normal mappings are:
 - `<leader>/3` -- calls Searchmatch3
 - `<leader>/-` -- calls SearchmatchReset
 
-If you don't want the default mappings added, add this to `.vimrc`:
-
-    let g:searchmatch_nomap = 1
-
 Additionally the user can run any of the stock match commands (`:match`,
 `:2match`, and `:3match`) to turn off any of the three highlights individually.
 
@@ -52,6 +48,12 @@ are setup to the standard `ErrorMsg`, `DiffDelete`, and `DiffAdd` groups.
 The user will almost certainly want to define these highlight groups in their
 `.vimrc` and/or patch their favorite colorscheme(s) (see for example the
 author's patched [lucius.vim][0]).
+
+## Stop the default mappings
+
+If the default mapping are causing your grief, then you can set `let
+g:searchmatch_nomap = 1` in your `.vimrc` to prevent searchmatch from defining
+any.
 
 ## About `3match`
 
