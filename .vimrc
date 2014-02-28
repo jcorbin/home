@@ -117,10 +117,6 @@ function! LessMake()
   let filename = shellescape(expand('%:r'))
   execute "!lessc " . current_file . " " . filename . ".css"
 endfunction
-augroup autocompile
-autocmd BufWritePost *.coffee CoffeeMake
-autocmd BufWritePost *.less call LessMake()
-augroup END
 " }}}
 
 augroup git
