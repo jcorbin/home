@@ -1,6 +1,6 @@
 # Terminal title setting
 HARDSTATUS="%n@%m:%~"
-if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
+if [[ $TERM == screen* ]] && ( [ -n "$TMUX" ] || [ -n "$STY" ] ); then
 	WINDOWTITLE="%~"
 else
 	WINDOWTITLE=$HARDSTATUS
