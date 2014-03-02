@@ -131,11 +131,10 @@ prompt_wunjo_setup() {
   PROMPT+=" $pc[#]%#$pc[reset] "
 
   RPROMPT=
+  RPROMPT+="$p_date"
   if [ $verbose ]; then
-    RPROMPT+="$p_date "
+    RPROMPT+=" $pc[user]%n$pc[reset] $p_line"
   fi
-  RPROMPT+="$pc[user]%n$pc[reset]"
-  RPROMPT+=" $p_line"
 
   export PROMPT RPROMPT
   add-zsh-hook precmd prompt_wunjo_precmd
