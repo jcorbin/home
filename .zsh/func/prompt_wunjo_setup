@@ -126,7 +126,9 @@ prompt_wunjo_setup() {
   PROMPT+="
 "
   PROMPT+="$pc[hist]%h$pc[reset]"
-  PROMPT+=" $pc[shortpath]%1~$pc[reset]"
+  if [ $verbose ]; then
+    PROMPT+=" $pc[shortpath]%1~$pc[reset]"
+  fi
   PROMPT+=" $pc[#]%#$pc[reset] "
 
   RPROMPT=
