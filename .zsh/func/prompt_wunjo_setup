@@ -112,7 +112,7 @@ prompt_wunjo_setup() {
 
   local p_date p_line p_rc
 
-  p_date="$pc[date]%D{%Y-%m-%d} $pc[time]%D{%T}$pc[reset]"
+  p_date="$pc[date]%D{%Y-%m-%d}$pc[reset]T$pc[time]%D{%T}$pc[reset]"
 
   p_line="$pc[line]%y$pc[reset]"
 
