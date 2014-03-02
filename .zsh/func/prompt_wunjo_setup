@@ -129,10 +129,10 @@ prompt_wunjo_setup() {
   if [ $verbose ]; then
     PROMPT+=" $pc[shortpath]%1~$pc[reset]"
   fi
+  PROMPT+=" $p_date"
   PROMPT+=" $pc[#]%#$pc[reset] "
 
   RPROMPT=
-  RPROMPT+="$p_date"
   if [ $verbose ]; then
     RPROMPT+=" $pc[user]%n$pc[reset] $p_line"
   fi
