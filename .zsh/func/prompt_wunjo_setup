@@ -130,7 +130,7 @@ prompt_wunjo_setup() {
     PROMPT+=" $pc[shortpath]%1~$pc[reset]"
   fi
   PROMPT+=" $p_date"
-  PROMPT+=" $pc[#]%#$pc[reset] "
+  PROMPT+=" \$(prompt_wunjo_scm_status_bit)$pc[#]%#$pc[reset] "
 
   RPROMPT=
   if [ $verbose ]; then
@@ -257,12 +257,10 @@ prompt_wunjo_scm_status() {
   fi
 }
 
-prompt_wunjo_scm_branch() {
+prompt_wunjo_scm_status_bit() {
   zgit_isgit || return
   local -A pc
   pc=(${(kv)wunjo_prompt_colors})
-
-  echo -n "$pc[punc]:$pc[scm_branch]$(zgit_head)"
 
   if zgit_inworktree; then
     if ! zgit_isindexclean; then
