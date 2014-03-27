@@ -53,3 +53,5 @@ re_gnu()
     prepend_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
     alias ls='ls -Fhb --time-style=long-iso --color=auto'
 }
+
+export PATH=./node_modules/.bin:$PATH
