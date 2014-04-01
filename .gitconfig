@@ -56,7 +56,8 @@
     co = checkout
     cp = cherry-pick
     dc = diff --cached
-    doh = commit --amend
+    doh = commit --amend --no-edit
+    dohe = commit --amend --edit
     fp = format-patch -n -M -C --find-copies-harder
     lg = log --graph --pretty=brief
     mt = mergetool
