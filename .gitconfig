@@ -77,7 +77,7 @@
     st = status
 
 [push]
-    default = tracking
+    default = simple
 
 [log]
     abbrevCommit = true
