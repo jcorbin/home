@@ -22,7 +22,7 @@ set expandtab
 set tabstop=4
 set shiftwidth=4
 
-set nospell
+set spell
 set splitbelow
 set splitright
 
