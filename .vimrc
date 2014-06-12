@@ -179,7 +179,7 @@ augroup END
 
 " Airline {{{
 
-let g:airline_theme="wombat"
+let g:airline_theme="lucius"
 
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
