@@ -102,9 +102,17 @@ else
   if &t_Co == 256
     colorscheme lucius
     let g:lucius_no_term_bg=1
-    LuciusBlackHighContrast
+    if $BACKGROUND == 'light'
+      LuciusLight
+    else
+      LuciusBlack
+    endif
   else
-    set background=dark
+    if $BACKGROUND == 'light'
+      set background=light
+    else
+      set background=dark
+    endif
     colorscheme desert
   endif
 
