@@ -11,8 +11,9 @@ if version >= 703
         endif
     endfunction
 
-    " start out with relative numbering on
-    set relativenumber
+    " start out without numbering
+    set nonumber
+    set norelativenumber
 
     nnoremap <leader># :call CycleNumbering()<cr>
 
