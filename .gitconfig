@@ -52,6 +52,7 @@
     ciam = commit -a -m
     cic = commit -c
     cim = commit -m
+    cix = commit --allow-empty -m 'Ex Nilho'
     cn = clean -n
     co = checkout
     cp = cherry-pick
