@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: start.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,12 +40,10 @@ function! unite#start#standard(sources, ...) "{{{
         \ unite#helper#get_source_names(a:sources))
 
   if empty(a:sources)
-    if !get(context, 'no_start_insert', 0)
-      let context.start_insert = 1
-    endif
-
-    call unite#print_message(
+    echohl Comment
+    call unite#view#_redraw_echo(
           \ '[unite.vim] interactive mode: Please input source name')
+    echohl None
   endif
 
   if context.resume
@@ -78,10 +75,11 @@ function! unite#start#standard(sources, ...) "{{{
   let current_unite = unite#variables#current_unite()
   let current_unite.last_input = context.input
   let current_unite.input = context.input
+  let current_unite.last_path = context.path
   call unite#candidates#_recache(context.input, context.is_redraw)
 
   if !current_unite.is_async &&
-        \ (context.immediately || context.no_empty) "{{{
+        \ (context.immediately || !context.empty) "{{{
     let candidates = unite#candidates#gather()
 
     if empty(candidates)
@@ -101,14 +99,7 @@ function! unite#start#standard(sources, ...) "{{{
 
   call unite#variables#disable_current_unite()
 
-  let unite = unite#get_current_unite()
-
   setlocal modifiable
-
-  " Redraw prompt.
-  silent % delete _
-  call setline(unite.prompt_linenr,
-        \ unite.prompt . unite.context.input)
 
   call unite#view#_redraw_candidates()
 
@@ -136,7 +127,7 @@ function! unite#start#temporary(sources, ...) "{{{
 
   if !empty(unite) && !empty(old_context)
     let context = deepcopy(old_context)
-    let context.old_buffer_info = insert(context.old_buffer_info, {
+    let context.unite__old_buffer_info = insert(context.unite__old_buffer_info, {
           \ 'buffer_name' : unite.buffer_name,
           \ 'pos' : getpos('.'),
           \ 'profile_name' : unite.profile_name,
@@ -145,8 +136,11 @@ function! unite#start#temporary(sources, ...) "{{{
     let context = {}
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
-    let context.old_buffer_info = []
+    let context.unite__old_buffer_info = []
   endif
+
+  let context.input = ''
+  let context.path = ''
 
   let new_context = get(a:000, 0, {})
 
@@ -155,15 +149,14 @@ function! unite#start#temporary(sources, ...) "{{{
 
   let context.temporary = 1
   let context.unite__direct_switch = 1
-  let context.input = ''
   let context.auto_preview = 0
   let context.auto_highlight = 0
   let context.unite__is_vimfiler = 0
   let context.default_action = 'default'
   let context.unite__old_winwidth = 0
   let context.unite__old_winheight = 0
-  let context.is_resize = 0
-  let context.is_restart = 0
+  let context.unite__is_resize = 0
+  let context.unite__is_restart = 0
   let context.quick_match = 0
 
   if context.script
@@ -173,7 +166,7 @@ function! unite#start#temporary(sources, ...) "{{{
 
   let buffer_name = get(a:000, 1,
         \ matchstr(context.buffer_name, '^\S\+')
-        \ . '-' . len(context.old_buffer_info))
+        \ . '-' . len(context.unite__old_buffer_info))
 
   let context.buffer_name = buffer_name
 
@@ -192,6 +185,7 @@ function! unite#start#temporary(sources, ...) "{{{
     let unite.update_time_save = unite_save.update_time_save
   endif
   let unite.winnr = unite_save.winnr
+  let unite.has_preview_window = unite_save.has_preview_window
 
   " Restore current directory.
   execute 'lcd' fnameescape(cwd)
@@ -246,7 +240,7 @@ function! unite#start#get_candidates(sources, ...) "{{{
     let context = get(a:000, 0, {})
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
-    let context.no_buffer = 1
+    let context.buffer = 0
     let context.unite__is_interactive = 0
 
     " Finalize.
@@ -267,11 +261,10 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
   let unite_save = unite#get_current_unite()
 
   try
-    let unite = unite#get_current_unite()
     let context = get(a:000, 0, {})
     let context = unite#init#_context(context,
           \ unite#helper#get_source_names(a:sources))
-    let context.no_buffer = 1
+    let context.unite__not_buffer = 1
     let context.unite__is_vimfiler = 1
     let context.unite__is_interactive = 0
     if !has_key(context, 'vimfiler__is_dummy')
@@ -286,8 +279,6 @@ function! unite#start#get_vimfiler_candidates(sources, ...) "{{{
             \ "v:val.action__path =~# '[^\\x00-\\x7f]'")
         let item.action__path = unite#util#iconv(
               \ item.action__path, 'utf-8-mac', &encoding)
-        let item.action__directory = unite#util#iconv(
-              \ item.action__directory, 'utf-8-mac', &encoding)
         let item.word = unite#util#iconv(item.word, 'utf-8-mac', &encoding)
         let item.abbr = unite#util#iconv(item.abbr, 'utf-8-mac', &encoding)
         let item.vimfiler__filename = unite#util#iconv(
@@ -329,9 +320,6 @@ function! unite#start#resume(buffer_name, ...) "{{{
     return
   endif
 
-  let winnr = winnr()
-  let win_rest_cmd = winrestcmd()
-
   if type(getbufvar(bufnr, 'unite')) != type({})
     " Unite buffer is released.
     call unite#util#print_error(
@@ -341,11 +329,17 @@ function! unite#start#resume(buffer_name, ...) "{{{
 
   let context = getbufvar(bufnr, 'unite').context
 
+  let winnr = winnr()
+  let win_rest_cmd = context.unite__direct_switch ||
+        \ unite#helper#get_unite_winnr(context.buffer_name) > 0 ?
+        \ '' : winrestcmd()
+
   let new_context = get(a:000, 0, {})
-  if has_key(new_context, 'no_start_insert')
-        \ && new_context.no_start_insert
-    let new_context.start_insert = 0
-  endif
+  " Generic no.
+  for option in map(filter(items(new_context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), "v:val[0]")
+    let new_context[option[3:]] = 0
+  endfor
   call extend(context, new_context)
 
   call unite#view#_switch_unite_buffer(context.buffer_name, context)
@@ -360,16 +354,19 @@ function! unite#start#resume(buffer_name, ...) "{{{
   let unite.access_time = localtime()
   let unite.context = context
   let unite.is_finalized = 0
+  let unite.is_resume = 1
   let unite.preview_candidate = {}
   let unite.highlight_candidate = {}
 
   call unite#set_current_unite(unite)
 
+  call unite#view#_resize_window()
   call unite#view#_init_cursor()
+  call unite#view#_bottom_cursor()
 endfunction"}}}
 
 function! unite#start#resume_from_temporary(context)  "{{{
-  if empty(a:context.old_buffer_info)
+  if empty(a:context.unite__old_buffer_info)
     return
   endif
 
@@ -378,11 +375,11 @@ function! unite#start#resume_from_temporary(context)  "{{{
   let unite_save = unite#get_current_unite()
 
   " Resume unite buffer.
-  let buffer_info = a:context.old_buffer_info[0]
+  let buffer_info = a:context.unite__old_buffer_info[0]
   call unite#start#resume(buffer_info.buffer_name,
         \ {'unite__direct_switch' : 1})
   call setpos('.', buffer_info.pos)
-  let a:context.old_buffer_info = a:context.old_buffer_info[1:]
+  let a:context.unite__old_buffer_info = a:context.unite__old_buffer_info[1:]
 
   " Overwrite unite.
   let unite = unite#get_current_unite()
@@ -399,11 +396,12 @@ function! unite#start#complete(sources, ...) "{{{
         \ 'col' : col('.'), 'complete' : 1,
         \ 'direction' : 'rightbelow',
         \ 'buffer_name' : 'completion',
+        \ 'profile_name' : 'completion',
         \ 'here' : 1,
         \ }
   call extend(context, get(a:000, 0, {}))
 
-  return printf("\<ESC>:call unite#start(%s, %s)\<CR>",
+  return printf("\<C-o>:\<C-u>call unite#start(%s, %s)\<CR>",
         \  string(sources), string(context))
 endfunction "}}}
 
@@ -417,6 +415,7 @@ function! s:get_candidates(sources, context) "{{{
   " Caching.
   let current_unite.last_input = a:context.input
   let current_unite.input = a:context.input
+  let current_unite.last_path = a:context.path
   call unite#set_current_unite(current_unite)
   call unite#set_context(a:context)
 

@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: action.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 04 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,6 +54,7 @@ function! s:source.hooks.on_syntax(args, context) "{{{
   highlight default link uniteSource__ActionKind Type
 endfunction"}}}
 
+" @vimlint(EVL102, 1, l:sources)
 function! s:source.gather_candidates(args, context) "{{{
   if empty(a:args)
     return
@@ -108,6 +108,7 @@ function! s:source.gather_candidates(args, context) "{{{
         \   'source__source_names' : sources,
         \ }"), 's:compare_word')
 endfunction"}}}
+" @vimlint(EVL102, 0, l:sources)
 
 function! s:compare_word(i1, i2)
   return (a:i1.word ># a:i2.word) ? 1 : -1
@@ -120,15 +121,15 @@ let s:source.action_table.do = {
 function! s:source.action_table.do.func(candidate) "{{{
   let context = a:candidate.source__context
 
-  if !empty(context.old_buffer_info)
+  if !empty(context.unite__old_buffer_info)
     " Restore buffer_name and profile_name.
     let buffer_name =
-          \ get(get(context.old_buffer_info, 0, {}), 'buffer_name', '')
+          \ get(get(context.unite__old_buffer_info, 0, {}), 'buffer_name', '')
     if buffer_name != ''
       let context.buffer_name = buffer_name
     endif
     let profile_name =
-          \ get(get(context.old_buffer_info, 0, {}), 'profile_name', '')
+          \ get(get(context.unite__old_buffer_info, 0, {}), 'profile_name', '')
     if profile_name != ''
       let context.profile_name = profile_name
     endif
@@ -145,7 +146,14 @@ function! s:source.action_table.do.func(candidate) "{{{
   " Check quit flag.
   if !a:candidate.action__action.is_quit
         \ && context.temporary
+    let input = unite#get_current_unite().input
+
     call unite#start#resume_from_temporary(context)
+
+    if input != ''
+      " Apply previous input changes
+      call unite#mappings#narrowing(input, 0)
+    endif
 
     " Check invalidate cache flag.
     if a:candidate.action__action.is_invalidate_cache
@@ -160,8 +168,6 @@ endfunction"}}}
 "}}}
 
 function! s:get_actions(candidates, sources) "{{{
-  let Self = unite#get_self_functions()[-1]
-
   let actions = unite#action#_get_candidate_action_table(
         \ a:candidates[0], a:sources)
 

@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,16 +63,11 @@ function! s:append(path) "{{{
     endfor
   endif
 
-    if !has('vim_starting') || bufname(bufnr) != ''
+  if !has('vim_starting') || bufname(bufnr) != ''
     call unite#sources#buffer#variables#append(bufnr)
   endif
 
   let t:unite_buffer_dictionary[bufnr] = 1
-  if bufname(bufnr('#')) != '' && !has_key(
-        \ unite#sources#buffer#variables#get_buffer_list(), bufnr('#'))
-    call unite#sources#buffer#variables#append(bufnr('#'))
-    let t:unite_buffer_dictionary[bufnr('#')] = 1
-  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo

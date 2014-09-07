@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: bookmark.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,7 +33,7 @@ let s:VERSION = '0.1.0'
 let s:bookmarks = {}
 
 call unite#util#set_default('g:unite_source_bookmark_directory',
-      \ g:unite_data_directory . '/bookmark')
+      \ unite#get_data_directory() . '/bookmark')
 "}}}
 
 function! unite#sources#bookmark#define() "{{{
@@ -42,6 +41,7 @@ function! unite#sources#bookmark#define() "{{{
 endfunction"}}}
 function! unite#sources#bookmark#_append(filename) "{{{
   if !isdirectory(g:unite_source_bookmark_directory)
+        \ && !unite#util#is_sudo()
     call mkdir(g:unite_source_bookmark_directory, 'p')
   endif
 
@@ -65,10 +65,13 @@ function! unite#sources#bookmark#_append(filename) "{{{
       let path = getbufvar(bufnr(filename), 'vimfiler').current_dir
     elseif &filetype ==# 'vimshell'
       let path = getbufvar(bufnr(filename), 'vimshell').current_dir
+    elseif &filetype ==# 'vinarise'
+      let path = getbufvar(bufnr(filename), 'vinarise').filename
     endif
   endif
 
-  let path = unite#substitute_path_separator(
+  let path = unite#util#substitute_path_separator(
+        \ path =~ '^[^:]\+://' ? path :
         \ simplify(fnamemodify(unite#util#expand(path), ':p:~')))
 
   redraw
@@ -131,7 +134,6 @@ function! s:source.gather_candidates(args, context) "{{{
           \ 'action__path' : substitute(v:val[1], '[/\\\\]$', '', ''),
           \ 'action__line' : v:val[2],
           \ 'action__pattern' : v:val[3],
-          \ 'action__directory' : unite#path2directory(v:val[1]),
           \   }")
   endfor
   return candidates
@@ -209,6 +211,10 @@ endfunction"}}}
 
 " Misc
 function! s:save(filename, bookmark)  "{{{
+  if unite#util#is_sudo()
+    return
+  endif
+
   let filename = g:unite_source_bookmark_directory . '/' . a:filename
   call writefile([s:VERSION] + map(copy(a:bookmark.files), 'join(v:val, "\t")'),
         \ filename)

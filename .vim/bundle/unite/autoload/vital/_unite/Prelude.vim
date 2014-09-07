@@ -1,9 +1,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" glob() wrapper which returns List
-" and 'wildignore' does not affect
-" this function's return value.
 if v:version ># 703 ||
 \  (v:version is 703 && has('patch465'))
   function! s:glob(expr)
@@ -16,9 +13,6 @@ else
   endfunction
 endif
 
-" globpath() wrapper which returns List
-" and 'suffixes' and 'wildignore' does not affect
-" this function's return value.
 function! s:globpath(path, expr)
   let R = globpath(a:path, a:expr, 1)
   return split(R, '\n')
@@ -215,23 +209,13 @@ function! s:is_unix()
   return s:is_unix
 endfunction
 
-function! s:_deprecated(fname, newname)
-  echomsg printf("Vital.Prelude.%s is deprecated! Please use %s instead.",
-        \ a:fname, a:newname)
-endfunction
-
-function! s:print_error(message)
-  call s:_deprecated('print_error', 'Vital.Vim.Message.error')
-
-  echohl ErrorMsg
-  for m in split(a:message, "\n")
-    echomsg m
-  endfor
-  echohl None
+function! s:_deprecated2(fname)
+  echomsg printf("Vital.Prelude.%s is deprecated!",
+        \ a:fname)
 endfunction
 
 function! s:smart_execute_command(action, word)
-  execute a:action . ' ' . (a:word == '' ? '' : '`=a:word`')
+  execute a:action (a:word == '' ? '' : fnameescape(a:word))
 endfunction
 
 function! s:escape_file_searching(buffer_name)
@@ -242,35 +226,20 @@ function! s:escape_pattern(str)
   return escape(a:str, '~"\.^$[]*')
 endfunction
 
-" iconv() wrapper for safety.
-function! s:iconv(expr, from, to)
-  if a:from == '' || a:to == '' || a:from ==? a:to
-    return a:expr
-  endif
-  let result = iconv(a:expr, a:from, a:to)
-  return result != '' ? result : a:expr
-endfunction
-
-" This is like builtin getchar() but always returns string.
 function! s:getchar(...)
   let c = call('getchar', a:000)
   return type(c) == type(0) ? nr2char(c) : c
 endfunction
 
-" This is like builtin getchar() but always returns string,
-" and also does inputsave()/inputrestore() before/after getchar().
 function! s:getchar_safe(...)
   let c = s:input_helper('getchar', a:000)
   return type(c) == type("") ? c : nr2char(c)
 endfunction
 
-" Like builtin getchar() but
-" do inputsave()/inputrestore() before/after input().
 function! s:input_safe(...)
   return s:input_helper('input', a:000)
 endfunction
 
-" Do inputsave()/inputrestore() before/after calling a:funcname.
 function! s:input_helper(funcname, args)
   let success = 0
   if inputsave() !=# success
@@ -292,6 +261,8 @@ function! s:set_default(var, val)
 endfunction
 
 function! s:set_dictionary_helper(variable, keys, pattern)
+  call s:_deprecated2('set_dictionary_helper')
+
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:pattern
@@ -351,7 +322,6 @@ endfunction
 function! s:_path2project_directory_others(vcs, path)
   let vcs = a:vcs
   let search_directory = a:path
-  let directory = ''
 
   let find_directory = s:escape_file_searching(search_directory)
   let d = finddir(vcs, find_directory . ';')
@@ -407,47 +377,6 @@ function! s:path2project_directory(path, ...)
   endif
 
   return s:substitute_path_separator(directory)
-endfunction
-
-" Check vimproc.
-function! s:has_vimproc()
-  if !exists('s:exists_vimproc')
-    try
-      call vimproc#version()
-      let s:exists_vimproc = 1
-    catch
-      let s:exists_vimproc = 0
-    endtry
-  endif
-  return s:exists_vimproc
-endfunction
-
-function! s:system(str, ...)
-  let command = a:str
-  let input = a:0 >= 1 ? a:1 : ''
-  let command = s:iconv(command, &encoding, 'char')
-  let input = s:iconv(input, &encoding, 'char')
-
-  if a:0 == 0
-    let output = s:has_vimproc() ?
-          \ vimproc#system(command) : system(command)
-  elseif a:0 == 1
-    let output = s:has_vimproc() ?
-          \ vimproc#system(command, input) : system(command, input)
-  else
-    " ignores 3rd argument unless you have vimproc.
-    let output = s:has_vimproc() ?
-          \ vimproc#system(command, input, a:2) : system(command, input)
-  endif
-
-  let output = s:iconv(output, 'char', &encoding)
-
-  return output
-endfunction
-
-function! s:get_last_status()
-  return s:has_vimproc() ?
-        \ vimproc#get_last_status() : v:shell_error
 endfunction
 
 let &cpo = s:save_cpo

@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: filters.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -108,11 +107,9 @@ function! unite#filters#lua_fuzzy_matcher(candidates, context, ignorecase) "{{{
     return []
   endif
 
-  let pattern = unite#filters#fuzzy_escape(a:context.input)
-
   lua << EOF
 do
-  local pattern = vim.eval('pattern')
+  local pattern = vim.eval('unite#filters#fuzzy_escape(a:context.input)')
   local input = vim.eval('a:context.input')
   local candidates = vim.eval('a:candidates')
   if vim.eval('&ignorecase') ~= 0 then
@@ -140,16 +137,134 @@ endfunction"}}}
 
 function! unite#filters#fuzzy_escape(string) "{{{
   " Escape string for lua regexp.
-  return substitute(unite#filters#escape(a:string),
-        \ '\%([[:alnum:]_-]\|%.\)\ze.', '\0.-', 'g')
+  let [head, input] = unite#filters#matcher_fuzzy#get_fuzzy_input(
+        \ unite#filters#escape(a:string))
+  return head . substitute(input,
+        \ '\%([[:alnum:]_/-]\|%.\)\ze.', '\0.-', 'g')
 endfunction"}}}
 
 function! unite#filters#escape(string) "{{{
   " Escape string for lua regexp.
-  return substitute(substitute(substitute(a:string,
+  return substitute(substitute(substitute(substitute(a:string,
+        \ '\\ ', ' ', 'g'),
         \ '[%\[\]().+?^$-]', '%\0', 'g'),
         \ '\*\@<!\*\*\@!', '.*', 'g'),
         \ '\*\*\+', '.*', 'g')
+endfunction"}}}
+
+function! unite#filters#lua_filter_head(candidates, input) "{{{
+lua << EOF
+do
+  local input = vim.eval('tolower(a:input)')
+  local candidates = vim.eval('a:candidates')
+  for i = #candidates-1, 0, -1 do
+    local word = candidates[i].action__path
+        or candidates[i].word
+    if string.find(string.lower(word), input, 1, true) ~= 1 then
+      candidates[i] = nil
+    end
+  end
+end
+EOF
+
+  return a:candidates
+endfunction"}}}
+
+function! unite#filters#vim_filter_head(candidates, input) "{{{
+  let input = tolower(a:input)
+  return filter(a:candidates,
+        \ "stridx(tolower(get(v:val, 'action__path',
+        \      v:val.word)), input) == 0")
+endfunction"}}}
+
+function! unite#filters#vim_filter_pattern(candidates, pattern) "{{{
+  return filter(a:candidates,
+        \ "get(v:val, 'action__path', v:val.word) !~? a:pattern")
+endfunction"}}}
+
+function! unite#filters#filter_patterns(candidates, patterns, whites) "{{{
+  return unite#util#has_lua()?
+          \ unite#filters#lua_filter_patterns(
+          \   a:candidates, a:patterns, a:whites) :
+          \ unite#filters#vim_filter_patterns(
+          \   a:candidates, a:patterns, a:whites)
+endfunction"}}}
+function! unite#filters#lua_filter_patterns(candidates, patterns, whites) "{{{
+lua << EOF
+do
+  local patterns = vim.eval('a:patterns')
+  local whites = vim.eval('a:whites')
+  local candidates = vim.eval('a:candidates')
+  for i = #candidates-1, 0, -1 do
+    local word = string.lower(candidates[i].action__path
+        or candidates[i].word)
+    for j = #patterns-1, 0, -1 do
+      if string.find(word, patterns[j]) then
+        local match = nil
+        -- Search from whites
+        for k = #whites-1, 0, -1 do
+          if string.find(word, whites[k]) then
+            match = k
+            break
+          end
+        end
+
+        if match == nil then
+          candidates[i] = nil
+        end
+      end
+    end
+  end
+end
+EOF
+
+  return a:candidates
+endfunction"}}}
+function! unite#filters#vim_filter_patterns(candidates, patterns, whites) "{{{
+  let pattern = join(a:patterns, '\|')
+  let white = join(a:whites, '\|')
+  return filter(a:candidates,
+        \ "get(v:val, 'action__path', v:val.word) !~? pattern
+        \  || get(v:val, 'action__path', v:val.word) =~? white")
+endfunction"}}}
+
+function! unite#filters#globs2patterns(globs) "{{{
+  return unite#util#has_lua() ?
+          \ unite#filters#globs2lua_patterns(a:globs) :
+          \ unite#filters#globs2vim_patterns(a:globs)
+endfunction"}}}
+function! unite#filters#globs2vim_patterns(globs) "{{{
+  let patterns = []
+  for glob in a:globs
+    if glob !~ '^/'
+      let glob = '/' . glob
+    endif
+    let glob = escape(glob, '~.^$')
+    let glob = substitute(glob, '\\\@<!\*\*', '.*', 'g')
+    let glob = substitute(glob, '\\\@<!\*', '[^/]*', 'g')
+    let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
+    let glob .= '$'
+    call add(patterns, glob)
+  endfor
+
+  return patterns
+endfunction"}}}
+function! unite#filters#globs2lua_patterns(globs) "{{{
+  let patterns = []
+  for glob in a:globs
+    if glob !~ '^/'
+      let glob = '/' . glob
+    endif
+    let glob = tolower(glob)
+    let glob = substitute(glob, '[%().+^$-]', '%\0', 'g')
+    let glob = substitute(glob, '\*\*\+', '.*', 'g')
+    let glob = substitute(glob, '\*\@<!\*\*\@!', '[^/]*', 'g')
+    let glob = substitute(glob, '\\\@<!?', '[^/]', 'g')
+    let glob .= '$'
+    call add(patterns, glob)
+  endfor
+
+  return patterns
 endfunction"}}}
 
 let &cpo = s:save_cpo

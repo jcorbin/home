@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,14 +49,23 @@ function! s:source_buffer_all.hooks.on_init(args, context) "{{{
         \ (get(a:args, 0, '') ==# '!')
   let a:context.source__is_question =
         \ (get(a:args, 0, '') ==# '?')
+  let a:context.source__is_plus =
+        \ (get(a:args, 0, '') ==# '+')
+  let a:context.source__is_minus =
+        \ (get(a:args, 0, '') ==# '-')
   let a:context.source__buffer_list =
         \ s:get_buffer_list(a:context.source__is_bang,
-        \                   a:context.source__is_question)
+        \                   a:context.source__is_question,
+        \                   a:context.source__is_plus,
+        \                   a:context.source__is_minus)
 endfunction"}}}
 function! s:source_buffer_all.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__Buffer_Name /[^/ \[\]]\+\s/
         \ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_Name Function
+  syntax match uniteSource__Buffer_Prefix /\s\d\+\s\%(\S\+\)\?/
+        \ contained containedin=uniteSource__Buffer
+  highlight default link uniteSource__Buffer_Prefix Constant
   syntax match uniteSource__Buffer_Info /\[.\{-}\] /
         \ contained containedin=uniteSource__Buffer
   highlight default link uniteSource__Buffer_Info PreProc
@@ -77,7 +85,7 @@ function! s:source_buffer_all.hooks.on_post_filter(args, context) "{{{
           \ unite#util#substitute_path_separator(
           \       fnamemodify(s:make_word(candidate.action__buffer_nr), ':p'))
     let candidate.action__directory =
-          \ s:get_directory(candidate.action__buffer_nr)
+          \ unite#helper#get_buffer_directory(candidate.action__buffer_nr)
   endfor
 endfunction"}}}
 
@@ -86,12 +94,16 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
     " Recaching.
     let a:context.source__buffer_list =
           \ s:get_buffer_list(a:context.source__is_bang,
-          \                   a:context.source__is_question)
+          \                   a:context.source__is_question,
+          \                   a:context.source__is_plus,
+          \                   a:context.source__is_minus)
   endif
 
   let candidates = map(a:context.source__buffer_list, "{
         \ 'word' : unite#util#substitute_path_separator(
-        \       fnamemodify(s:make_word(v:val.action__buffer_nr), ':p')),
+        \       filereadable(s:make_word(v:val.action__buffer_nr)) ?
+        \         fnamemodify(s:make_word(v:val.action__buffer_nr), ':p') :
+        \         s:make_word(v:val.action__buffer_nr)),
         \ 'abbr' : s:make_abbr(v:val.action__buffer_nr, v:val.source__flags)
         \        . s:format_time(v:val.source__time),
         \ 'action__buffer_nr' : v:val.action__buffer_nr,
@@ -100,7 +112,7 @@ function! s:source_buffer_all.gather_candidates(args, context) "{{{
   return candidates
 endfunction"}}}
 function! s:source_buffer_all.complete(args, context, arglead, cmdline, cursorpos) "{{{
-  return ['!', '?']
+  return ['!', '?', '+', '-']
 endfunction"}}}
 
 let s:source_buffer_tab = deepcopy(s:source_buffer_all)
@@ -113,7 +125,9 @@ function! s:source_buffer_tab.gather_candidates(args, context) "{{{
     " Recaching.
     let a:context.source__buffer_list =
           \ s:get_buffer_list(a:context.source__is_bang,
-          \                   a:context.source__is_question)
+          \                   a:context.source__is_question,
+          \                   a:context.source__is_plus,
+          \                   a:context.source__is_minus)
   endif
 
   if !exists('t:unite_buffer_dictionary')
@@ -193,20 +207,7 @@ endfunction"}}}
 function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.source__time - a:candidate_a.source__time
 endfunction"}}}
-function! s:get_directory(bufnr) "{{{
-  let filetype = getbufvar(a:bufnr, '&filetype')
-  if filetype ==# 'vimfiler'
-    let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
-  elseif filetype ==# 'vimshell'
-    let dir = getbufvar(a:bufnr, 'vimshell').current_dir
-  else
-    let path = unite#util#substitute_path_separator(bufname(a:bufnr))
-    let dir = unite#path2directory(path)
-  endif
-
-  return dir
-endfunction"}}}
-function! s:get_buffer_list(is_bang, is_question) "{{{
+function! s:get_buffer_list(is_bang, is_question, is_plus, is_minus) "{{{
   " Get :ls flags.
   redir => output
   silent! ls
@@ -222,7 +223,7 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   let bufnr = 1
   let buffer_list = unite#sources#buffer#variables#get_buffer_list()
   while bufnr <= bufnr('$')
-    if s:is_listed(a:is_bang, a:is_question, bufnr)
+    if s:is_listed(a:is_bang, a:is_question, a:is_plus, a:is_minus, bufnr)
           \ && bufnr != bufnr('%')
       let dict = get(buffer_list, bufnr, {
             \ 'action__buffer_nr' : bufnr,
@@ -237,7 +238,7 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
 
   call sort(list, 's:compare')
 
-  if s:is_listed(a:is_bang, a:is_question, bufnr('%'))
+  if s:is_listed(a:is_bang, a:is_question, a:is_plus, a:is_minus, bufnr('%'))
     " Add current buffer.
     let dict = get(unite#sources#buffer#variables#get_buffer_list(),
           \ bufnr('%'), {
@@ -252,10 +253,12 @@ function! s:get_buffer_list(is_bang, is_question) "{{{
   return list
 endfunction"}}}
 
-function! s:is_listed(is_bang, is_question, bufnr) "{{{
+function! s:is_listed(is_bang, is_question, is_plus, is_minus, bufnr) "{{{
   return bufexists(a:bufnr) &&
         \ (a:is_question ? !buflisted(a:bufnr) :
         \    (a:is_bang || buflisted(a:bufnr)))
+        \ && (!a:is_plus || getbufvar(a:bufnr, '&mod'))
+        \ && (!a:is_minus || getbufvar(a:bufnr, '&buftype') !~# 'nofile')
         \ && (getbufvar(a:bufnr, '&filetype') !=# 'unite'
         \      || getbufvar(a:bufnr, 'unite').buffer_name !=#
         \         unite#get_current_unite().buffer_name)

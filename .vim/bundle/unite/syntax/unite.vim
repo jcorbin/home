@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: syntax/unite.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,9 +34,9 @@ set cpo&vim
 
 highlight default link uniteError  Error
 
-highlight default link uniteQuickMatchTrigger  Special
 highlight default link uniteMarkedLine  Statement
 highlight default link uniteCandidateSourceName  Type
+highlight default link uniteQuickMatchMarker  Special
 highlight default link uniteCandidateMarker  Special
 highlight default link uniteCandidateInputKeyword  Function
 

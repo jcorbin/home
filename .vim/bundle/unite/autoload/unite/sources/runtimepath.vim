@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: runtimepath.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,7 +47,6 @@ function! s:source.gather_candidates(args, context) "{{{
         \ 'abbr' : unite#util#substitute_path_separator(
         \         fnamemodify(unite#util#expand(v:val), ':~')),
         \ 'action__path' : unite#util#expand(v:val),
-        \ 'action__directory' : unite#util#expand(v:val),
         \ 'source__runtimepath' : v:val,
         \ }")
 endfunction"}}}

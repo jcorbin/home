@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: handlers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,12 +27,24 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#handlers#_on_insert_enter()  "{{{
+  if &filetype !=# 'unite'
+    return
+  endif
+
+  setlocal modifiable
+
   let unite = unite#get_current_unite()
   let unite.is_insert = 1
 
-  if &filetype ==# 'unite'
-    setlocal modifiable
+  if unite.prompt_linenr != 0
+    return
   endif
+
+  " Restore prompt
+  let unite.prompt_linenr = unite.init_prompt_linenr
+  call append((unite.context.prompt_direction ==# 'below' ?
+        \ '$' : 0), '')
+  call unite#view#_redraw_prompt()
 endfunction"}}}
 function! unite#handlers#_on_insert_leave()  "{{{
   let unite = unite#get_current_unite()
@@ -43,6 +54,7 @@ function! unite#handlers#_on_insert_leave()  "{{{
   endif
 
   let unite.is_insert = 0
+  let unite.context.input = unite#helper#get_input()
 
   if &filetype ==# 'unite'
     setlocal nomodifiable
@@ -51,7 +63,7 @@ endfunction"}}}
 function! unite#handlers#_on_cursor_hold_i()  "{{{
   let unite = unite#get_current_unite()
 
-  call s:change_highlight()
+  call unite#view#_change_highlight()
 
   if unite.max_source_candidates > unite.redraw_hold_candidates
     call s:check_redraw()
@@ -76,8 +88,14 @@ function! unite#handlers#_on_cursor_moved_i()  "{{{
     startinsert!
   endif
 endfunction"}}}
+function! unite#handlers#_on_text_changed()  "{{{
+  let unite = unite#get_current_unite()
+  if unite#helper#get_input(1) !=# unite.last_input
+    call s:check_redraw()
+  endif
+endfunction"}}}
 function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
-  let unite = getbufvar(a:bufnr, 'unite')
+  silent! let unite = getbufvar(a:bufnr, 'unite')
   if type(unite) != type({})
         \ || bufwinnr(a:bufnr) < 1
     return
@@ -92,7 +110,7 @@ function! unite#handlers#_on_bufwin_enter(bufnr)  "{{{
 
   call s:restore_statusline()
 
-  if !unite.context.no_split && winnr('$') != 1
+  if unite.context.split && winnr('$') != 1
     call unite#view#_resize_window()
   endif
 
@@ -113,7 +131,7 @@ function! unite#handlers#_on_cursor_hold()  "{{{
   if &filetype ==# 'unite'
     " Redraw.
     call unite#redraw()
-    call s:change_highlight()
+    call unite#view#_change_highlight()
 
     let unite = unite#get_current_unite()
     let is_async = unite.is_async
@@ -149,45 +167,52 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let prompt_linenr = unite.prompt_linenr
   let context = unite.context
 
-  if line('.') == prompt_linenr && !&l:modifiable
-    setlocal modifiable
-  endif
-  if line('.') != prompt_linenr && &l:modifiable
-    setlocal nomodifiable
-  endif
+  let &l:modifiable = line('.') == prompt_linenr
+        \ && col('.') >= len(context.prompt)
 
-  if line('.') <= prompt_linenr
+  if line('.') == 1
     nnoremap <silent><buffer> <Plug>(unite_loop_cursor_up)
-          \ :call unite#mappings#loop_cursor_up_call(
-          \    0, 'n')<CR>
+          \ :call unite#mappings#loop_cursor_up('n')<CR>
     nnoremap <silent><buffer> <Plug>(unite_skip_cursor_up)
-          \ :call unite#mappings#loop_cursor_up_call(
-          \    1, 'n')<CR>
+          \ :call unite#mappings#loop_cursor_up('n')<CR>
     inoremap <silent><buffer> <Plug>(unite_select_previous_line)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    0, 'i')<CR>
+          \ <ESC>:call unite#mappings#loop_cursor_up('i')<CR>
     inoremap <silent><buffer> <Plug>(unite_skip_previous_line)
-          \ <ESC>:call unite#mappings#loop_cursor_up_call(
-          \    1, 'i')<CR>
+          \ <ESC>:call unite#mappings#loop_cursor_up('i')<CR>
+
+    call s:cursor_down()
+  elseif line('.') == line('$')
+    nnoremap <silent><buffer> <Plug>(unite_loop_cursor_down)
+          \ :call unite#mappings#loop_cursor_down('n')<CR>
+    nnoremap <silent><buffer> <Plug>(unite_skip_cursor_down)
+          \ :call unite#mappings#loop_cursor_down('n')<CR>
+    inoremap <silent><buffer> <Plug>(unite_select_next_line)
+          \ <ESC>:call unite#mappings#loop_cursor_down('i')<CR>
+    inoremap <silent><buffer> <Plug>(unite_skip_next_line)
+          \ <ESC>:call unite#mappings#loop_cursor_down('i')<CR>
+
+    call s:cursor_up()
   else
-    nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
-          \ unite#mappings#loop_cursor_up_expr(0)
-    nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
-          \ unite#mappings#loop_cursor_up_expr(1)
-    inoremap <expr><buffer> <Plug>(unite_select_previous_line)
-          \ unite#mappings#loop_cursor_up_expr(0)
-    inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
-          \ unite#mappings#loop_cursor_up_expr(1)
+    call s:cursor_up()
+    call s:cursor_down()
   endif
 
-  if exists('b:current_syntax') && !context.no_cursor_line
-    2match
+  if exists('b:current_syntax')
+    call unite#view#_clear_match()
 
-    if abs(line('.') - prompt_linenr) <= 1 || mode('.') == 'i' ||
-          \ split(reltimestr(reltime(unite.cursor_line_time)))[0] > '0.10'
-      call s:set_cursor_line()
+    let is_prompt = (prompt_linenr == 0 &&
+          \ (context.prompt_direction == 'below'
+          \   && line('.') == line('$') || line('.') == 1))
+          \ || line('.') == prompt_linenr
+    if is_prompt || mode('.') == 'i'
+          \ || abs(line('.') - unite.prev_line) != 1
+          \ || split(reltimestr(reltime(unite.cursor_line_time)))[0]
+          \    > context.cursor_line_time
+      call unite#view#_set_cursor_line()
     endif
+
     let unite.cursor_line_time = reltime()
+    let unite.prev_line = line('.')
   endif
 
   if context.auto_preview
@@ -206,7 +231,7 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   endif
 
   let height =
-        \ (unite.context.no_split
+        \ (!unite.context.split
         \  || unite.context.winheight == 0) ?
         \ winheight(0) : unite.context.winheight
   let candidates = unite#candidates#_gather_pos(height)
@@ -220,8 +245,8 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   let modifiable_save = &l:modifiable
   try
     setlocal modifiable
-    let lines = unite#view#_convert_lines(candidates)
     let pos = getpos('.')
+    let lines = unite#view#_convert_lines(candidates)
     silent! call append('$', lines)
   finally
     let &l:modifiable = l:modifiable_save
@@ -235,13 +260,18 @@ function! unite#handlers#_on_cursor_moved()  "{{{
   endif"}}}
 endfunction"}}}
 function! unite#handlers#_on_buf_unload(bufname)  "{{{
-  2match
+  call unite#view#_clear_match()
 
   " Save unite value.
-  let unite = getbufvar(a:bufname, 'unite')
+  silent! let unite = getbufvar(a:bufname, 'unite')
   if type(unite) != type({})
     " Invalid unite.
     return
+  endif
+
+  if &l:statusline == unite#get_current_unite().statusline
+    " Restore statusline.
+    let &l:statusline = &g:statusline
   endif
 
   if unite.is_finalized
@@ -272,58 +302,11 @@ function! unite#handlers#_on_insert_char_pre()  "{{{
   call unite#handlers#_on_cursor_moved()
 endfunction"}}}
 
-function! s:change_highlight()  "{{{
-  if &filetype !=# 'unite'
-        \ || !exists('b:current_syntax')
-    return
-  endif
-
-  let unite = unite#get_current_unite()
-  if empty(unite)
-    return
-  endif
-
-  let context = unite#get_context()
-  let prompt_linenr = unite.prompt_linenr
-  if !context.no_cursor_line
-    call s:set_cursor_line()
-  endif
-
-  silent! syntax clear uniteCandidateInputKeyword
-
-  if !context.is_changed || unite#helper#get_input() == ''
-    return
-  endif
-
-  syntax case ignore
-
-  for input_str in unite#helper#get_substitute_input(
-        \ unite#helper#get_input())
-    let input_list = map(filter(split(input_str, '\\\@<! '),
-          \ "v:val !~ '^[!:]'"),
-          \ "substitute(v:val, '\\\\ ', ' ', 'g')")
-
-    for source in filter(copy(unite.sources), "v:val.syntax != ''")
-      for matcher in filter(copy(map(filter(
-            \ copy(source.filters),
-            \ "type(v:val) == type('')"), 'unite#get_filters(v:val)')),
-            \ "has_key(v:val, 'pattern')")
-        let patterns = map(copy(input_list),
-              \ "escape(matcher.pattern(v:val), '/~')")
-
-        silent! execute 'syntax match uniteCandidateInputKeyword'
-              \ '/'.join(patterns, '\|').'/'
-              \ 'containedin='.source.syntax.' contained'
-      endfor
-    endfor
-  endfor
-
-  syntax case match
-endfunction"}}}
 function! unite#handlers#_save_updatetime()  "{{{
   let unite = unite#get_current_unite()
 
-  if unite.is_async && &updatetime > unite.context.update_time
+  if unite.is_async && unite.context.update_time > 0
+        \ && &updatetime > unite.context.update_time
     let unite.update_time_save = &updatetime
     let &updatetime = unite.context.update_time
   endif
@@ -335,7 +318,8 @@ function! unite#handlers#_restore_updatetime()  "{{{
     return
   endif
 
-  if &updatetime < unite.update_time_save
+  if unite.context.update_time > 0
+        \ && &updatetime < unite.update_time_save
     let &updatetime = unite.update_time_save
   endif
 endfunction"}}}
@@ -358,21 +342,30 @@ function! s:check_redraw() "{{{
   if line('.') == prompt_linenr || unite.context.is_redraw
     " Redraw.
     call unite#redraw()
-    call s:change_highlight()
+    call unite#view#_change_highlight()
   endif
 endfunction"}}}
-function! s:set_cursor_line()
-  let unite = unite#get_current_unite()
-  let prompt_linenr = unite.prompt_linenr
-  let context = unite.context
 
-  execute '2match' (line('.') == prompt_linenr ?
-        \ line('$') == prompt_linenr && context.input != '' ?
-        \ 'uniteError /^\%'.prompt_linenr.'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.(prompt_linenr+1).'l.*/' :
-        \ context.cursor_line_highlight.' /^\%'.line('.').'l.*/')
-  let unite.cursor_line_time = reltime()
-endfunction
+function! s:cursor_up() "{{{
+  nnoremap <expr><buffer> <Plug>(unite_loop_cursor_up)
+        \ unite#mappings#cursor_up(0)
+  nnoremap <expr><buffer> <Plug>(unite_skip_cursor_up)
+        \ unite#mappings#cursor_up(1)
+  inoremap <expr><buffer> <Plug>(unite_select_previous_line)
+        \ unite#mappings#cursor_up(0)
+  inoremap <expr><buffer> <Plug>(unite_skip_previous_line)
+        \ unite#mappings#cursor_up(1)
+endfunction"}}}
+function! s:cursor_down() "{{{
+  nnoremap <expr><buffer> <Plug>(unite_loop_cursor_down)
+        \ unite#mappings#cursor_down(0)
+  nnoremap <expr><buffer> <Plug>(unite_skip_cursor_down)
+        \ unite#mappings#cursor_down(1)
+  inoremap <expr><buffer> <Plug>(unite_select_next_line)
+        \ unite#mappings#cursor_down(0)
+  inoremap <expr><buffer> <Plug>(unite_skip_next_line)
+        \ unite#mappings#cursor_down(1)
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: helpers.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +32,6 @@ function! unite#helper#call_hook(sources, hook_name) "{{{
     return
   endif
 
-  let _ = []
   for source in a:sources
     if !has_key(source.hooks, a:hook_name)
       continue
@@ -77,7 +75,8 @@ function! unite#helper#get_substitute_input(input) "{{{
     let head = ''
   endif
 
-  let inputs = unite#helper#get_substitute_input_loop(input, substitute_patterns)
+  let inputs = unite#helper#get_substitute_input_loop(
+        \ input, substitute_patterns)
 
   return map(inputs, 'head . v:val')
 endfunction"}}}
@@ -124,20 +123,18 @@ endfunction"}}}
 
 function! unite#helper#parse_options(args) "{{{
   let args = []
-  let options = {}
+  let options = { 'custom' : {} }
   for arg in split(a:args, '\%(\\\@<!\s\)\+')
     let arg = substitute(arg, '\\\( \)', '\1', 'g')
-
     let arg_key = substitute(arg, '=\zs.*$', '', '')
-    let matched_list = filter(copy(unite#variables#options()),
-          \  'v:val ==# arg_key')
-    for option in matched_list
-      let key = substitute(substitute(option, '-', '_', 'g'), '=$', '', '')[1:]
-      let options[key] = (option =~ '=$') ?
-            \ arg[len(option) :] : 1
-    endfor
 
-    if empty(matched_list)
+    let name = substitute(tr(arg_key, '-', '_'), '=$', '', '')
+    let value = (arg_key =~ '=$') ? arg[len(arg_key) :] : 1
+
+    if arg_key =~ '^-custom-'
+          \ || index(unite#variables#options(), arg_key) >= 0
+      let options[name[1:]] = value
+    else
       call add(args, arg)
     endif
   endfor
@@ -160,13 +157,36 @@ function! unite#helper#parse_options_args(args) "{{{
   return [_, options]
 endfunction"}}}
 
+function! unite#helper#parse_project_bang(args) "{{{
+  let args = filter(copy(a:args), "v:val != '!'")
+  if empty(args)
+    let args = ['']
+  endif
+
+  if get(a:args, 0, '') == '!'
+    " Use project directory.
+    let args[0] = unite#util#path2project_directory(args[0], 1)
+  endif
+
+  return args
+endfunction"}}}
+
 function! unite#helper#get_marked_candidates() "{{{
   return unite#util#sort_by(filter(copy(unite#get_unite_candidates()),
         \ 'v:val.unite__is_marked'), 'v:val.unite__marked_time')
 endfunction"}}}
 
-function! unite#helper#get_input() "{{{
+function! unite#helper#get_input(...) "{{{
+  let is_force = get(a:000, 0, 0)
   let unite = unite#get_current_unite()
+  if !is_force && mode() !=# 'i'
+    return unite.context.input
+  endif
+
+  if unite.prompt_linenr == 0
+    return ''
+  endif
+
   " Prompt check.
   if stridx(getline(unite.prompt_linenr), unite.prompt) != 0
     let modifiable_save = &l:modifiable
@@ -237,10 +257,10 @@ function! unite#helper#get_unite_winnr(buffer_name) "{{{
     if !empty(buffer_context) &&
           \ buffer_context.buffer_name ==# a:buffer_name
       if buffer_context.temporary
-            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ && !empty(filter(copy(buffer_context.unite__old_buffer_info),
             \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
         " Disable resume.
-        let buffer_context.old_buffer_info = []
+        let buffer_context.unite__old_buffer_info = []
       endif
       return winnr
     endif
@@ -255,10 +275,10 @@ function! unite#helper#get_unite_bufnr(buffer_name) "{{{
     if !empty(buffer_context) &&
           \ buffer_context.buffer_name ==# a:buffer_name
       if buffer_context.temporary
-            \ && !empty(filter(copy(buffer_context.old_buffer_info),
+            \ && !empty(filter(copy(buffer_context.unite__old_buffer_info),
             \ 'v:val.buffer_name ==# buffer_context.buffer_name'))
         " Disable resume.
-        let buffer_context.old_buffer_info = []
+        let buffer_context.unite__old_buffer_info = []
       endif
 
       return bufnr
@@ -270,8 +290,16 @@ endfunction"}}}
 
 function! unite#helper#get_current_candidate(...) "{{{
   let linenr = a:0 >= 1? a:1 : line('.')
-  let num = linenr == unite#get_current_unite().prompt_linenr ?
-        \ 0 : linenr - (unite#get_current_unite().prompt_linenr+1)
+  let unite = unite#get_current_unite()
+  if unite.context.prompt_direction ==# 'below'
+    let num = unite.prompt_linenr == 0 ?
+          \ linenr - line('$') - 1 :
+          \ linenr == unite.prompt_linenr ?
+          \ -1 : linenr - line('$')
+  else
+    let num = linenr == unite.prompt_linenr ?
+          \ 0 : linenr - 1 - unite.prompt_linenr
+  endif
 
   return get(unite#get_unite_candidates(), num, {})
 endfunction"}}}
@@ -368,6 +396,77 @@ function! unite#helper#get_choose_windows() "{{{
         \ && !getwinvar(v:val, '&filetype') !=# 'qf'")
 endfunction"}}}
 
+function! unite#helper#get_buffer_directory(bufnr) "{{{
+  let filetype = getbufvar(a:bufnr, '&filetype')
+  if filetype ==# 'vimfiler'
+    let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
+  elseif filetype ==# 'vimshell'
+    let dir = getbufvar(a:bufnr, 'vimshell').current_dir
+  elseif filetype ==# 'vinarise'
+    let dir = getbufvar(a:bufnr, 'vinarise').current_dir
+  else
+    let path = unite#util#substitute_path_separator(bufname(a:bufnr))
+    let dir = unite#util#path2directory(path)
+  endif
+
+  return dir
+endfunction"}}}
+
+function! unite#helper#cursor_prompt() "{{{
+  " Move to prompt linenr.
+  let unite = unite#get_current_unite()
+  call cursor((unite.context.prompt_direction ==# 'below' ?
+        \ line('$') : unite.init_prompt_linenr), 0)
+endfunction"}}}
+
+function! unite#helper#skip_prompt() "{{{
+  " Skip prompt linenr.
+  let unite = unite#get_current_unite()
+  if line('.') == unite.prompt_linenr
+    call cursor(line('.') + (unite.context.prompt_direction
+          \ ==# 'below' ? -1 : 1), 1)
+  endif
+endfunction"}}}
+
+if unite#util#has_lua()
+  function! unite#helper#paths2candidates(paths) "{{{
+    let candidates = []
+  lua << EOF
+do
+  local paths = vim.eval('a:paths')
+  local candidates = vim.eval('candidates')
+  for path in paths() do
+    local candidate = vim.dict()
+    candidate.word = path
+    candidate.action__path = path
+    candidates:add(candidate)
+  end
+end
+EOF
+
+    return candidates
+  endfunction"}}}
+else
+  function! unite#helper#paths2candidates(paths) "{{{
+    return map(copy(a:paths), "{
+          \ 'word' : v:val,
+          \ 'action__path' : v:val,
+          \ }")
+  endfunction"}}}
+endif
+
+function! unite#helper#get_candidate_directory(candidate) "{{{
+  return has_key(a:candidate, 'action__directory') ?
+        \ a:candidate.action__directory :
+        \ unite#util#path2directory(a:candidate.action__path)
+endfunction"}}}
+
+function! unite#helper#is_prompt(line) "{{{
+  let prompt_linenr = unite#get_current_unite().prompt_linenr
+  let context = unite#get_context()
+  return (context.prompt_direction ==# 'below' && a:line >= prompt_linenr)
+        \ || (context.prompt_direction !=# 'below' && a:line <= prompt_linenr)
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

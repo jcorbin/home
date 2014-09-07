@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: history_input.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 24 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,7 +41,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context) "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
-        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
+        \ context.unite__old_buffer_info[0].profile_name, 'unite__inputs')
   let key = context.old_source_names_string
   if !has_key(inputs, key)
     return []
@@ -60,7 +59,7 @@ let s:source.action_table.narrow = {
       \ }
 function! s:source.action_table.narrow.func(candidate) "{{{
   call unite#force_quit_session()
-  call unite#mappings#narrowing(a:candidate.word)
+  call unite#mappings#narrowing(a:candidate.word, 0)
 endfunction"}}}
 
 let s:source.action_table.delete = {
@@ -72,7 +71,7 @@ let s:source.action_table.delete = {
 function! s:source.action_table.delete.func(candidates) "{{{
   let context = unite#get_context()
   let inputs = unite#get_profile(
-        \ context.old_buffer_info[0].profile_name, 'unite__inputs')
+        \ context.unite__old_buffer_info[0].profile_name, 'unite__inputs')
   let key = context.old_source_names_string
   if !has_key(inputs, key)
     return

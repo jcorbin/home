@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: function.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,8 +56,6 @@ function! s:source.gather_candidates(args, context) "{{{
     if line =~ '^<SNR>'
       continue
     endif
-    let orig_line = line
-
     let word = matchstr(line, '\h[[:alnum:]_:#.]*\ze()\?')
     if word == ''
       continue

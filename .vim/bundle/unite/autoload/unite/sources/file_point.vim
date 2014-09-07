@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: file_point.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,8 +64,6 @@ function! s:source.gather_candidates(args, context) "{{{
           \   'word' : a:context.source__filename,
           \   'kind' : 'file',
           \   'action__path' : a:context.source__filename,
-          \   'action__directory' : unite#util#path2directory(
-          \               a:context.source__filename),
           \ }]
   else
     " File not found.

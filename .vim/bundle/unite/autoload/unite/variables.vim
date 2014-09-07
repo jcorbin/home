@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -87,24 +86,15 @@ endfunction"}}}
 
 function! unite#variables#options() "{{{
   if !exists('s:options')
-    let s:options = [
-          \ '-buffer-name=', '-profile-name=', '-input=', '-prompt=',
-          \ '-default-action=', '-start-insert',
-          \ '-no-start-insert', '-no-quit',
-          \ '-winwidth=', '-winheight=',
-          \ '-immediately', '-no-empty',
-          \ '-auto-preview', '-auto-highlight', '-complete',
-          \ '-vertical', '-horizontal', '-direction=', '-no-split',
-          \ '-verbose', '-auto-resize',
-          \ '-toggle', '-quick-match', '-create',
-          \ '-cursor-line-highlight=', '-no-cursor-line',
-          \ '-update-time=', '-hide-source-names', '-hide-status-line',
-          \ '-max-multi-lines=', '-here', '-silent', '-keep-focus',
-          \ '-auto-quit', '-no-focus',
-          \ '-long-source-names', '-short-source-names',
-          \ '-multi-line', '-resume', '-wrap', '-select=', '-log',
-          \ '-truncate', '-tab', '-sync', '-unique',
-          \]
+    let s:options = map(filter(items(unite#variables#default_context()),
+          \ "v:val[0] !~ '^unite__'"),
+          \ "'-' . tr(v:val[0], '_', '-') .
+          \ (type(v:val[1]) == type(0) && (v:val[1] == 0 || v:val[1] == 1) ?
+          \   '' : '=')")
+
+    " Generic no options.
+    let s:options += map(filter(copy(s:options),
+          \ "v:val[-1:] != '='"), "'-no' . v:val")
   endif
 
   return s:options
@@ -174,86 +164,104 @@ endfunction"}}}
 
 function! unite#variables#default_context() "{{{
   if !exists('s:default_context')
-    let s:default_context = {
-          \ 'input' : '',
-          \ 'start_insert' : g:unite_enable_start_insert,
-          \ 'complete' : 0,
-          \ 'script' : 0,
-          \ 'col' : col('.'),
-          \ 'no_quit' : 0,
-          \ 'buffer_name' : 'default',
-          \ 'profile_name' : '',
-          \ 'prompt' : g:unite_prompt,
-          \ 'default_action' : 'default',
-          \ 'winwidth' : g:unite_winwidth,
-          \ 'winheight' : g:unite_winheight,
-          \ 'immediately' : 0,
-          \ 'no_empty' : 0,
-          \ 'auto_preview' : 0,
-          \ 'auto_highlight' : 0,
-          \ 'vertical' : g:unite_enable_split_vertically,
-          \ 'direction' : g:unite_split_rule,
-          \ 'no_split' : 0,
-          \ 'temporary' : 0,
-          \ 'verbose' : 0,
-          \ 'auto_resize' : 0,
-          \ 'old_buffer_info' : [],
-          \ 'toggle' : 0,
-          \ 'quick_match' : 0,
-          \ 'create' : 0,
-          \ 'cursor_line_highlight' :
-          \    g:unite_cursor_line_highlight,
-          \ 'no_cursor_line' : 0,
-          \ 'update_time' : g:unite_update_time,
-          \ 'no_buffer' : 0,
-          \ 'hide_source_names' : 0,
-          \ 'max_multi_lines' : 5,
-          \ 'here' : 0,
-          \ 'silent' : 0,
-          \ 'keep_focus' : 0,
-          \ 'auto_quit' : 0,
-          \ 'is_redraw' : 0,
-          \ 'is_restart' : 0,
-          \ 'is_resize' : 0,
-          \ 'no_focus' : 0,
-          \ 'multi_line' : 0,
-          \ 'resume' : 0,
-          \ 'wrap' : 0,
-          \ 'select' : 0,
-          \ 'log' : 0,
-          \ 'truncate' : 0,
-          \ 'tab' : 0,
-          \ 'sync' : 0,
-          \ 'unique' : 0,
-          \ 'execute_command' : '',
-          \ 'unite__direct_switch' : 0,
-          \ 'unite__is_interactive' : 1,
-          \ 'unite__is_complete' : 0,
-          \ 'unite__is_vimfiler' : 0,
-          \ 'unite__old_winwidth' : 0,
-          \ 'unite__old_winheight' : 0,
-          \ 'unite__disable_hooks' : 0,
-          \ 'unite__disable_max_candidates' : 0,
-          \ }
+    call s:initialize_default()
   endif
 
   return s:default_context
 endfunction"}}}
 
-function! unite#variables#get_source_variable(source, variable, default) "{{{
-  if !exists('s:source_variables')
-    let s:source_variables = {}
-  endif
+function! s:initialize_default() "{{{
+  let s:default_context = {
+        \ 'input' : '',
+        \ 'path' : '',
+        \ 'start_insert' : 0,
+        \ 'complete' : 0,
+        \ 'script' : 0,
+        \ 'col' : -1,
+        \ 'quit' : 1,
+        \ 'buffer_name' : 'default',
+        \ 'profile_name' : '',
+        \ 'prompt' : '> ',
+        \ 'default_action' : 'default',
+        \ 'winwidth' : 90,
+        \ 'winheight' : 20,
+        \ 'immediately' : 0,
+        \ 'empty' : 1,
+        \ 'auto_preview' : 0,
+        \ 'auto_highlight' : 0,
+        \ 'horizontal' : 0,
+        \ 'vertical' : 0,
+        \ 'direction' : 'topleft',
+        \ 'split' : 1,
+        \ 'temporary' : 0,
+        \ 'verbose' : 0,
+        \ 'auto_resize' : 0,
+        \ 'resize' : 1,
+        \ 'toggle' : 0,
+        \ 'quick_match' : 0,
+        \ 'create' : 0,
+        \ 'cursor_line_highlight' : 'PmenuSel',
+        \ 'abbr_highlight' : 'Normal',
+        \ 'cursor_line' : 1,
+        \ 'update_time' : 200,
+        \ 'hide_source_names' : 0,
+        \ 'max_multi_lines' : 5,
+        \ 'here' : 0,
+        \ 'silent' : 0,
+        \ 'keep_focus' : 0,
+        \ 'auto_quit' : 0,
+        \ 'focus' : 1,
+        \ 'multi_line' : 0,
+        \ 'resume' : 0,
+        \ 'wrap' : 0,
+        \ 'select' : -1,
+        \ 'log' : 0,
+        \ 'truncate' : 0,
+        \ 'tab' : 0,
+        \ 'sync' : 0,
+        \ 'unique' : 0,
+        \ 'execute_command' : '',
+        \ 'prompt_direction' : '',
+        \ 'prompt_visible' : 0,
+        \ 'short_source_names' : 0,
+        \ 'candidate_icon' : ' ',
+        \ 'marked_icon' : '*',
+        \ 'cursor_line_time' : '0.10',
+        \ 'is_redraw' : 0,
+        \ 'wipe' : 0,
+        \ 'unite__old_buffer_info' : [],
+        \ 'unite__direct_switch' : 0,
+        \ 'unite__is_interactive' : 1,
+        \ 'unite__is_complete' : 0,
+        \ 'unite__is_vimfiler' : 0,
+        \ 'unite__old_winwidth' : 0,
+        \ 'unite__old_winheight' : 0,
+        \ 'unite__disable_hooks' : 0,
+        \ 'unite__disable_max_candidates' : 0,
+        \ 'unite__not_buffer' : 0,
+        \ 'unite__is_resize' : 0,
+        \ 'unite__is_restart' : 0,
+        \ }
 
-  if !has_key(s:source_variables, a:source)
-    let s:source_variables[a:source] = {}
-  endif
-
-  if !has_key(s:source_variables[a:source], a:variable)
-    let s:source_variables[a:source][a:variable] = a:default
-  endif
-
-  return s:source_variables[a:source][a:variable]
+  " For compatibility(deprecated variables)
+  for [context, var] in filter([
+        \ ['start_insert', 'g:unite_enable_start_insert'],
+        \ ['prompt', 'g:unite_prompt'],
+        \ ['winwidth', 'g:unite_winwidth'],
+        \ ['winheight', 'g:unite_winheight'],
+        \ ['vertical', 'g:unite_enable_split_vertically'],
+        \ ['direction', 'g:unite_split_rule'],
+        \ ['cursor_line_highlight',
+        \    'g:unite_cursor_line_highlight'],
+        \ ['abbr_highlight', 'g:unite_abbr_highlight'],
+        \ ['update_time', 'g:unite_update_time'],
+        \ ['short_source_names', 'g:unite_enable_short_source_names'],
+        \ ['candidate_icon', 'g:unite_candidate_icon'],
+        \ ['marked_icon', 'g:unite_marked_icon'],
+        \ ['cursor_line_time', 'g:unite_cursor_line_time'],
+        \ ], "exists(v:val[1])")
+    let s:default_context[context] = {var}
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo

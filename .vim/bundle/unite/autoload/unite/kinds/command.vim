@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: command.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,12 +46,10 @@ function! s:kind.action_table.execute.func(candidates) "{{{
   for candidate in a:candidates
     let command = candidate.action__command
     let type = get(candidate, 'action__type', ':')
-    call s:add_history(type, command)
-    try
-      execute type . command
-    catch /E486/
-      " Ignore search pattern error.
-    endtry
+    if get(candidate, 'action__histadd', 0)
+      call s:add_history(type, command)
+    endif
+    call s:execute_command(type . command)
   endfor
 endfunction"}}}
 let s:kind.action_table.edit = {
@@ -80,18 +77,32 @@ function! s:kind.action_table.edit.func(candidate) "{{{
   let command = input(':', a:candidate.action__command, 'command')
   if command != ''
     let type = get(a:candidate, 'action__type', ':')
-    call s:add_history(type, command)
-    execute command
+    if get(a:candidate, 'action__histadd', 0)
+      call s:add_history(type, command)
+    endif
+    call s:execute_command(command)
   endif
-  " call feedkeys(':' . a:candidate.action__command, 'n')
 endfunction"}}}
 "}}}
-function! s:add_history(type, command)
+function! s:add_history(type, command) "{{{
   call histadd(a:type, a:command)
   if a:type ==# '/'
     let @/ = a:command
   endif
-endfunction
+endfunction"}}}
+function! s:execute_command(command) "{{{
+  let temp = tempname()
+  try
+    call writefile([a:command], temp)
+    execute 'source' fnameescape(temp)
+  catch /E486/
+    " Ignore search pattern error.
+  finally
+    if filereadable(temp)
+      call delete(temp)
+    endif
+  endtry
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

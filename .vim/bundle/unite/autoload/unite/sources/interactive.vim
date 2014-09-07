@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: interactive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 01 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,18 +53,18 @@ endfunction"}}}
 
 function! s:source.change_candidates(args, context) "{{{
   let _ = []
-  if a:context.input !~ ':'
+  if a:context.input !~ '\s'
     let _ += map(filter(values(unite#init#_sources([], a:context.input)),
             \ 'v:val.is_listed'), "{
             \ 'word' : v:val.name,
             \ 'abbr' : unite#util#truncate(v:val.name, 25) .
             \         (v:val.description != '' ? ' -- ' . v:val.description : ''),
-            \ 'source__word' : v:val.name . ':',
+            \ 'source__word' : v:val.name . ' ',
             \ }")
     if exists('*neobundle#get_unite_sources')
       let _ += map(neobundle#get_unite_sources(), "{
             \ 'word' : v:val,
-            \ 'source__word' : v:val . ':',
+            \ 'source__word' : v:val . ' ',
             \ }")
     endif
     if exists('g:unite_source_menu_menus')
@@ -74,14 +73,15 @@ function! s:source.change_candidates(args, context) "{{{
             \ 'word' : 'menu:'.v:key,
             \ 'abbr' : unite#util#truncate('menu:'.v:key, 25) .
             \         (get(v:val, 'description') != '' ?
-            \            ' -- ' . v:val.description : '')
+            \            ' -- ' . v:val.description : ''),
+            \ 'source__word' : 'menu:' . v:key . ' ',
             \ }"))
     endif
   else
     let _ += map(unite#complete#source(a:context.input,
           \ 'Unite ' . a:context.input, 0), "{
           \ 'word' : v:val,
-          \ 'source__word' : v:val . ':',
+          \ 'source__word' : v:val,
           \ }")
   endif
 
@@ -94,7 +94,7 @@ let s:source.action_table.narrow = {
       \ 'is_quit' : 0,
       \ }
 function! s:source.action_table.narrow.func(candidate) "{{{
-  call unite#mappings#narrowing(a:candidate.source__word)
+  call unite#mappings#narrowing(a:candidate.source__word, 0)
 endfunction"}}}
 "}}}
 

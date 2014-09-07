@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: mru.vim
+" FILE: converter_tail_abbr.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2010
+"          Sean Mackesey <s.mackesey@gmail.com> 
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,37 +24,26 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_mru')
-      \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
-      \     && $HOME !=# expand('~'.$USER)
-      \     && $HOME ==# expand('~'.$SUDO_USER))
-  finish
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
-augroup plugin-unite-source-mru
-  autocmd!
-  autocmd BufEnter,VimEnter,BufNew,BufWinEnter *
-        \ call s:append(expand('<amatch>'))
-  autocmd VimLeavePre *
-        \ call unite#sources#mru#_save({'event' : 'VimLeavePre'})
-augroup END
+function! unite#filters#converter_tail_abbr#define() "{{{
+  return s:converter
+endfunction"}}}
 
-let g:loaded_unite_source_mru = 1
+let s:converter = {
+      \ 'name' : 'converter_tail_abbr',
+      \ 'description' : 'converts abbr to tail of filename',
+      \}
 
-function! s:append(path) "{{{
-  if bufnr('%') != expand('<abuf>')
-        \ || a:path == ''
-    return
-  endif
-
-  call unite#sources#mru#variables#append()
+function! s:converter.filter(candidates, context) "{{{
+  for candidate in a:candidates
+    let candidate.abbr = fnamemodify(get(candidate, 'action__path', candidate.word), ':t')
+  endfor
+  return a:candidates
 endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" __END__
 " vim: foldmethod=marker

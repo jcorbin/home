@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: buffer.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -121,7 +120,8 @@ let s:kind.action_table.preview = {
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.preview.func(candidate) "{{{
-  pedit `=a:candidate.action__path`
+  call unite#util#smart_execute_command(
+        \ 'pedit', a:candidate.action__path)
 
   let filetype = getbufvar(a:candidate.action__buffer_nr, '&filetype')
   if filetype != ''

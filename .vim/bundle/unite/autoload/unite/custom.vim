@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: custom.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -102,9 +101,10 @@ function! unite#custom#profile(profile_name, option_name, value) "{{{
   endfor
 endfunction"}}}
 function! unite#custom#get_profile(profile_name, option_name) "{{{
-  let profile_name =
-        \ (a:profile_name == '' ? 'default' : a:profile_name)
   let custom = unite#custom#get()
+  let profile_name =
+        \ (a:profile_name == '' || !has_key(custom.profiles, a:profile_name)) ?
+        \ 'default' : a:profile_name
 
   if !has_key(custom.profiles, profile_name)
     let custom.profiles[profile_name] = {

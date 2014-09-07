@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: sorter_ftime.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,11 +36,13 @@ let s:sorter = {
       \}
 
 function! s:sorter.filter(candidates, context) "{{{
-  return unite#util#sort_by(a:candidates, '
-      \   has_key(v:val, "action__path")      ? getftime(v:val.action__path)
-      \ : has_key(v:val, "action__directory") ? getftime(v:val.action__directory)
+  return unite#util#sort_by(a:candidates, "
+      \   has_key(v:val, 'action__path')      ?
+      \       getftime(v:val.action__path)
+      \ : has_key(v:val, 'action__directory') ?
+      \       getftime(v:val.action__directory)
       \ : 0
-      \ ')
+      \ ")
 endfunction"}}}
 
 let &cpo = s:save_cpo

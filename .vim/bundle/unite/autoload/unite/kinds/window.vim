@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: window.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,10 +56,11 @@ endfunction"}}}
 let s:kind.action_table.delete = {
       \ 'description' : 'delete windows',
       \ 'is_selectable' : 1,
+      \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
 function! s:kind.action_table.delete.func(candidates) "{{{
-  for candidate in sort(a:candidates, 's:compare')
+  for _ in sort(a:candidates, 's:compare')
     close
   endfor
 endfunction"}}}

@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: unite.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +32,7 @@ augroup plugin-unite
 augroup END
 
 function! unite#version() "{{{
-  return str2nr(printf('%02d%02d', 5, 1))
+  return str2nr(printf('%02d%02d', 6, 1))
 endfunction"}}}
 
 " User functions. "{{{
@@ -194,6 +193,9 @@ function! unite#set_context(context) "{{{
 
   return old_context
 endfunction"}}}
+function! unite#get_unite_winnr(buffer_name) "{{{
+  return unite#helper#get_unite_winnr(a:buffer_name)
+endfunction"}}}
 
 function! unite#force_redraw(...) "{{{
   call unite#view#_redraw(1, get(a:000, 0, 0), get(a:000, 1, 0))
@@ -226,9 +228,21 @@ endfunction"}}}
 function! unite#remove_previewed_buffer_list(bufnr) "{{{
   return unite#view#_remove_previewed_buffer_list(a:bufnr)
 endfunction"}}}
-function! unite#get_source_variables(context) "{{{
-  return a:context.source.variables
+function! unite#get_data_directory() "{{{
+  let g:unite_data_directory =
+        \ substitute(substitute(fnamemodify(
+        \ get(g:, 'unite_data_directory',
+        \  ($XDG_CACHE_DIR != '' ?
+        \   $XDG_CACHE_DIR . '/unite' : expand('~/.cache/unite'))),
+        \  ':p'), '\\', '/', 'g'), '/$', '', '')
+
+  if !isdirectory(g:unite_data_directory)
+    call mkdir(g:unite_data_directory, 'p')
+  endif
+
+  return g:unite_data_directory
 endfunction"}}}
+
 
 " Utils.
 function! unite#print_error(message) "{{{
@@ -300,7 +314,7 @@ function! unite#force_quit_session()  "{{{
   call unite#view#_quit(1)
 
   let context = unite#get_context()
-  if context.temporary && !empty(context.old_buffer_info)
+  if context.temporary && !empty(context.unite__old_buffer_info)
     call unite#start#resume_from_temporary(context)
   endif
 endfunction"}}}
@@ -308,7 +322,7 @@ function! unite#quit_session()  "{{{
   call unite#view#_quit(0)
 
   let context = unite#get_context()
-  if context.temporary && !empty(context.old_buffer_info)
+  if context.temporary && !empty(context.unite__old_buffer_info)
     call unite#start#resume_from_temporary(context)
   endif
 endfunction"}}}

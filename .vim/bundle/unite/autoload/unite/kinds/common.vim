@@ -1,7 +1,6 @@
 "=============================================================================
 " FILE: common.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,7 +56,7 @@ function! s:kind.action_table.yank.func(candidates) "{{{
   echo 'Yanked: ' . text
 
   if has('clipboard')
-    let @* = text
+    call setreg(v:register, text)
   endif
 endfunction"}}}
 
@@ -92,13 +91,10 @@ let s:kind.action_table.insert_directory = {
       \ 'description' : 'insert directory',
       \ }
 function! s:kind.action_table.insert_directory.func(candidate) "{{{
-  let context = unite#get_current_unite().context
-
   if has_key(a:candidate,'action__directory')
       let directory = a:candidate.action__directory
   elseif has_key(a:candidate, 'action__path')
-      let directory = unite#util#substitute_path_separator(
-            \ fnamemodify(a:candidate.action__path, ':p:h'))
+      let directory = unite#util#path2directory(a:candidate.action__path)
   elseif has_key(a:candidate, 'word') && isdirectory(a:candidate.word)
       let directory = a:candidate.word
   else

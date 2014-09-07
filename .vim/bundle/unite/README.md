@@ -88,6 +88,9 @@ sources to the command you wish to select from as parameters. However, it's a
 pain in the ass to run the command explicitly every time, so I recommend you
 to set a key mapping for the command. See `:h unite`.
 
+Note: MRU sources are splitted.  To use mru sources, you must install neomru.
+https://github.com/Shougo/neomru.vim
+
 ## Resources
 
 * [Unite plugins (in Japanese)](https://github.com/Shougo/unite.vim/wiki/unite-plugins)
@@ -102,7 +105,7 @@ to set a key mapping for the command. See `:h unite`.
 
 unite file source
 -----------------
-![Unite file source.](https://a248.e.akamai.net/camo.github.com/079f081e01557032ce18e5118c8576036763854b/687474703a2f2f6779617a6f2e636f6d2f37333739663130343130383436333263363666616566396361663365316630392e706e67)
+![Unite file source.](http://gyazo.com/7379f1041084632c66faef9caf3e1f09.png)
 
 unite action source
 -------------------
