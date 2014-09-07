@@ -86,9 +86,7 @@ if has("gui_running")
   "   r - right scroll always
   set guioptions=acgit
   set guiheadroom=0
-  colorscheme lucius
-  LuciusDarkHighContrast
-
+  colorscheme molokai
 " }}}
 " Terminal options {{{
 else
@@ -98,13 +96,8 @@ else
 
   " Determine colorscheme
   if &t_Co == 256
-    colorscheme lucius
-    let g:lucius_no_term_bg=1
-    if $BACKGROUND == 'light'
-      LuciusLight
-    else
-      LuciusBlack
-    endif
+    let g:rehash256 = 1
+    colorscheme molokai
   else
     if $BACKGROUND == 'light'
       set background=light
