@@ -1,6 +1,6 @@
 " sensible.vim - Defaults everyone can agree on
 " Maintainer:   Tim Pope <http://tpo.pe/>
-" Version:      1.0
+" Version:      1.1
 
 if exists('g:loaded_sensible') || &compatible
   finish
@@ -23,10 +23,9 @@ set complete-=i
 set smarttab
 
 set nrformats-=octal
-set shiftround
 
 set ttimeout
-set ttimeoutlen=50
+set ttimeoutlen=100
 
 set incsearch
 " Use <C-L> to clear the highlighting of :set hlsearch.
@@ -53,9 +52,10 @@ endif
 
 if &listchars ==# 'eol:$'
   set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-  if !has('win32') && (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8')
-    let &listchars = "tab:\u21e5 ,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u00b7"
-  endif
+endif
+
+if has('path_extra')
+  setglobal tags-=./tags tags^=./tags;
 endif
 
 if &shell =~# 'fish$'
@@ -74,6 +74,7 @@ endif
 if !empty(&viminfo)
   set viminfo^=!
 endif
+set sessionoptions-=options
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^linux'
