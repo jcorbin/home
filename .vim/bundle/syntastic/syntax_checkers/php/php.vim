@@ -20,7 +20,7 @@ set cpo&vim
 
 function! SyntaxCheckers_php_php_GetHighlightRegex(item)
     let term = matchstr(a:item['text'], "\\munexpected '\\zs[^']\\+\\ze'")
-    return term != '' ? '\V' . term : ''
+    return term != '' ? '\V' . escape(term, '\') : ''
 endfunction
 
 function! SyntaxCheckers_php_php_GetLocList() dict
@@ -38,7 +38,8 @@ function! SyntaxCheckers_php_php_GetLocList() dict
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
-        \ 'errorformat': errorformat })
+        \ 'errorformat': errorformat,
+        \ 'postprocess': ['guards'] })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
