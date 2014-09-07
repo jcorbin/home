@@ -226,7 +226,7 @@ nmap _ <Plug>VinegarVerticalSplitUp
 " }}}
 
 " GUndo {{{
-nnoremap <leader><C-u> :GundoToggle<CR>
+nnoremap <leader>gu :GundoToggle<CR>
 " }}}
 
 " Syntastic {{{
