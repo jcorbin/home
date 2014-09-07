@@ -65,6 +65,10 @@ hi ModeMsg         guifg=#E6DB74
 hi MoreMsg         guifg=#E6DB74
 hi Operator        guifg=#F92672
 
+hi Match1          guifg=bg      guibg=#00d787
+hi Match2          guifg=bg      guibg=#0087d7
+hi Match3          guifg=bg      guibg=#d70087
+
 " complete menu
 hi Pmenu           guifg=#66D9EF guibg=#000000
 hi PmenuSel                      guibg=#808080
@@ -258,6 +262,10 @@ if &t_Co > 255
        hi PreCondit       ctermfg=154               cterm=bold
        hi PreProc         ctermfg=154
        hi Repeat          ctermfg=197               cterm=bold
+
+       hi Match1          ctermfg=234      ctermbg=154
+       hi Match2          ctermfg=234      ctermbg=81
+       hi Match3          ctermfg=234      ctermbg=161
 
        hi Statement       ctermfg=197               cterm=bold
        hi Tag             ctermfg=197
