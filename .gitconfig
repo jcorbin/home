@@ -61,6 +61,7 @@
     dohe = commit --amend --edit
     fp = format-patch -n -M -C --find-copies-harder
     lg = log --graph --pretty=brief
+    lgf = log --first-parent --graph --pretty=brief
     mt = mergetool
     nrs = name-rev --stdin
     pack = repack -Ad
