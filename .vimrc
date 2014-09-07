@@ -1,8 +1,6 @@
 call pathogen#infect()
 call pathogen#helptags()
 
-set noshiftround
-
 " Options {{{
 
 syntax on
