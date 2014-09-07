@@ -14,9 +14,13 @@ function! s:fnameescape(file) abort
   endif
 endfunction
 
+let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
+
 let g:netrw_sort_sequence = '[\/]$,*,\%(' . join(map(split(&suffixes, ','), 'escape(v:val, ".*$~")'), '\|') . '\)[*@]\=$'
 let s:escape = 'substitute(escape(v:val, ".$~"), "*", ".*", "g")'
-let g:netrw_list_hide = join(map(split(&wildignore, ','), '"^".' . s:escape . '. "$"'), ',') . ',^\.\.\=/\=$'
+let g:netrw_list_hide =
+      \ join(map(split(&wildignore, ','), '"^".' . s:escape . '. "$"'), ',') . ',^\.\.\=/\=$' .
+      \ (get(g:, 'netrw_list_hide', '')[-strlen(s:dotfiles)-1:-1] ==# s:dotfiles ? ','.s:dotfiles : '')
 let g:netrw_banner = 0
 let s:netrw_up = ''
 
@@ -25,26 +29,31 @@ if empty(maparg('-', 'n'))
   nmap - <Plug>VinegarUp
 endif
 
+nnoremap <silent> <Plug>VinegarTabUp :call <SID>opendir('tabedit')<CR>
 nnoremap <silent> <Plug>VinegarSplitUp :call <SID>opendir('split')<CR>
 nnoremap <silent> <Plug>VinegarVerticalSplitUp :call <SID>opendir('vsplit')<CR>
 
 function! s:opendir(cmd)
+  let df = ','.s:dotfiles
+  if expand('%:t')[0] ==# '.' && g:netrw_list_hide[-strlen(df):-1] ==# df
+    let g:netrw_list_hide = g:netrw_list_hide[0 : -strlen(df)-1]
+  endif
   if &filetype ==# 'netrw'
     let currdir = fnamemodify(b:netrw_curdir, ':t')
     execute s:netrw_up
-    call <SID>seek(currdir)
+    call s:seek(currdir)
   else
     if empty(expand('%'))
       execute a:cmd '.'
     else
-      execute a:cmd '%:h'
+      execute a:cmd '%:h/'
       call s:seek(expand('#:t'))
     endif
   endif
 endfunction
 
 function! s:seek(file)
-  let pattern = '^'.escape(a:file, '.*[]~\').'[/*|@=]\=\%($\|\t\)'
+  let pattern = '^\%(| \)*'.escape(a:file, '.*[]~\').'[/*|@=]\=\%($\|\t\)'
   call search(pattern, 'wc')
   return pattern
 endfunction
@@ -76,7 +85,7 @@ function! s:setup_vinegar() abort
   xnoremap <buffer> . <Esc>: <C-R>=<SID>escaped(line("'<"), line("'>"))<CR><Home>
   nmap <buffer> ! .!
   xmap <buffer> ! .!
-  nnoremap <buffer> <silent> cd :exe 'keepjumps cd ' .<SID>fnameescape(b:netrw_curdir)<CR>
+  nnoremap <buffer> <silent> cg :exe 'keepjumps cd ' .<SID>fnameescape(b:netrw_curdir)<CR>
   nnoremap <buffer> <silent> cl :exe 'keepjumps lcd '.<SID>fnameescape(b:netrw_curdir)<CR>
   exe 'syn match netrwSuffixes =\%(\S\+ \)*\S\+\%('.join(map(split(&suffixes, ','), s:escape), '\|') . '\)[*@]\=\S\@!='
   hi def link netrwSuffixes SpecialKey
