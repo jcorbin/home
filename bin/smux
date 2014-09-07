@@ -39,6 +39,18 @@ maybe_command()
     fi
 }
 
+open()
+{
+    start $remote
+    set -x
+    if [ -n "$TMUX" ]; then
+        tmux new-window -n "$remote" -- "ssh -t $remote 'tmux ls >/dev/null 2>&1 && tmux attach || tmux new'"
+    else
+        ssh -t $remote tmux ls \>/dev/null 2\>\&1 \&\& tmux attach \|\| tmux new
+    fi
+    set +x
+}
+
 case "$cmd" in
 
     start)
@@ -68,14 +80,7 @@ case "$cmd" in
 
     open)
         for remote in "$@"; do
-            start $remote
-            set -x
-            if [ -n "$TMUX" ]; then
-                tmux new-window -n "$remote" -- "ssh -t $remote 'tmux ls >/dev/null 2>&1 && tmux attach || tmux new'"
-            else
-                ssh -t $remote tmux ls \>/dev/null 2\>\&1 \&\& tmux attach \|\| tmux new
-            fi
-            set +x
+            open $remote
         done
         ;;
 
