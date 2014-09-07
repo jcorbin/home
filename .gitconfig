@@ -60,6 +60,8 @@
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
     fp = format-patch -n -M -C --find-copies-harder
+    lb = log --pretty=brief
+    lbf = log --first-parent --pretty=brief
     lg = log --graph --pretty=brief
     lgf = log --first-parent --graph --pretty=brief
     mt = mergetool
