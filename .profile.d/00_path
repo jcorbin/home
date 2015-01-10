@@ -30,24 +30,6 @@ prepend_colon_component PATH $HOME/bin
 prepend_colon_component PATH /usr/local/bin
 prepend_colon_component PATH /usr/local/git/bin
 
-# gnu toolchain from homebrew
-prepend_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
-prepend_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
-
 export PATH=$(echo $PATH | tr -s :)
-
-no_gnu()
-{
-    remove_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
-    remove_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
-    alias ls='ls -Fhb'
-}
-
-re_gnu()
-{
-    prepend_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
-    prepend_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
-    alias ls='ls -Fhb --time-style=long-iso --color=auto'
-}
 
 export PATH=./node_modules/.bin:$PATH

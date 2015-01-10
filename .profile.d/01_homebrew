@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# gnu toolchain from homebrew
+
+no_gnu()
+{
+    remove_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
+    remove_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
+    alias ls='ls -Fhb'
+}
+
+re_gnu()
+{
+    prepend_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
+    prepend_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
+    alias ls='ls -Fhb --time-style=long-iso --color=auto'
+}
+
+re_gnu
