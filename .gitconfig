@@ -79,6 +79,7 @@
     rst = reset --hard
     shbr = show-branch
     st = status
+    suri = submodule update --recursive --init
 
 [push]
     default = simple
