@@ -26,6 +26,7 @@
 !.bash_profile
 !.bashrc
 
+!.zlogin
 !.zshenv
 !.zshrc
 !.zsh/
