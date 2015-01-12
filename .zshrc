@@ -6,7 +6,7 @@ fi
 
 source $HOME/.profile
 
-for part in $HOME/.zsh/rc.d/??_*; do
+for part in $(~/bin/deporder -f ~/.zsh/rc.d); do
 	source $part
 done
 
