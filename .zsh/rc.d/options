@@ -7,4 +7,6 @@ setopt no_flowcontrol
 setopt noclobber
 setopt notify # Notify of job status immediantely
 
+autoload run-help
+
 # vim:set ft=zsh:
