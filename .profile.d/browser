@@ -1,6 +1,6 @@
 #!/bin/sh
+# after: bootstrap
 
-# Browser
 if [ -n "$DISPLAY" ]; then
 	export BROWSER="chromium:chromium-browser:firefox:opera:w3m:lynx"
 else

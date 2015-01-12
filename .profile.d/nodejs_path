@@ -1,0 +1,8 @@
+#!/bin/sh
+# before: path
+# before: nodejs
+
+# TOOD: could use prepend_colon_component if it special cased
+# .-relative paths to skip existence check
+
+export PATH=./node_modules/.bin:$PATH

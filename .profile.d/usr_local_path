@@ -1,0 +1,8 @@
+#!/bin/sh
+# before: path
+# after: colon_component
+# after: sbin_path
+
+prepend_colon_component PATH /usr/local/sbin
+prepend_colon_component PATH /usr/local/bin
+prepend_colon_component PATH /usr/local/git/bin

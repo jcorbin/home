@@ -1,4 +1,5 @@
 #!/bin/sh
+# after: term
 
 if [ -d "$HOME/powerline" ]; then
     export POWERLINE_HOME=$HOME/powerline

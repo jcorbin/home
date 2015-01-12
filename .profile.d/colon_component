@@ -19,17 +19,3 @@ prepend_colon_component()
 {
     [ -d $2 ] && export $1=$2:$(without_colon_component "$1" "$2")
 }
-
-append_colon_component PATH /sbin
-append_colon_component PATH /usr/sbin
-
-prepend_colon_component PATH /usr/local/sbin
-prepend_colon_component PATH /usr/local/bin
-prepend_colon_component PATH /usr/local/git/bin
-
-prepend_colon_component PATH $HOME/.local/bin
-prepend_colon_component PATH $HOME/bin
-
-export PATH=$(echo $PATH | tr -s :)
-
-export PATH=./node_modules/.bin:$PATH

@@ -1,3 +1,5 @@
 #!/bin/sh
+# before: nodejs
+# after: bootstrap
 
 [ -e "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"

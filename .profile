@@ -1,5 +1,5 @@
 #!/bin/sh
 
-for part in $HOME/.profile.d/??_*; do
+for part in $(~/bin/deporder -f ~/.profile.d); do
 	. $part
 done

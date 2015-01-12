@@ -1,4 +1,6 @@
 #!/bin/sh
+# before: path
+# after: colon_component
 
 cuda_root=/Developer/NVIDIA/CUDA-5.0
 append_colon_component PATH $cuda_root/bin

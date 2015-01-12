@@ -1,3 +1,4 @@
 #!/bin/sh
+# after: bootstrap
 
 [ -f $HOME/.inputrc ] && export INPUTRC=$HOME/.inputrc

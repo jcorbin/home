@@ -1,0 +1,7 @@
+#!/bin/sh
+# before: path
+# after: colon_component
+# after: sbin_path
+
+prepend_colon_component PATH $HOME/.local/bin
+prepend_colon_component PATH $HOME/bin

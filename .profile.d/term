@@ -1,4 +1,5 @@
 #!/bin/sh
+# after: bootstrap
 
 # Try to fix broken $TERM
 if [ -n "$TERM" ]; then if which tput &>/dev/null; then while true; do

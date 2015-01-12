@@ -1,3 +1,4 @@
 #!/bin/sh
+# before: bootstrap
 
 [ -z "$HOSTNAME" ] && export HOSTNAME=$(hostname)

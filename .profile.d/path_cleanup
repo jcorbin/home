@@ -1,0 +1,5 @@
+#!/bin/sh
+# after: path
+# before: bootstrap
+
+export PATH=$(echo $PATH | tr -s :)

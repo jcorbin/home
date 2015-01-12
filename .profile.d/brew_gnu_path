@@ -1,4 +1,9 @@
 #!/bin/sh
+# before: path
+# after: colon_component
+# after: usr_local_path
+
+# TODO: noop when not on OS-X and/or no brew installed gnu
 
 # gnu toolchain from homebrew
 

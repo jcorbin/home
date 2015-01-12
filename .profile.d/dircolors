@@ -1,6 +1,6 @@
 #!/bin/sh
+# after: term
 
-# Dir Colors
 if which dircolors >/dev/null 2>&1; then
     if [ -n "$TERM" ] && [ $(tput colors) -eq 256 ]; then
         eval $(dircolors ~/.dircolors/solarized/dircolors.256dark)

@@ -1,4 +1,6 @@
 #!/bin/bash
+# before: bootstrap
+# after: path
 
 export TMPDIR=${TMPDIR:-/tmp}
 

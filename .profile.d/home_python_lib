@@ -1,0 +1,6 @@
+#!/bin/sh
+# before: python
+# after: colon_component
+# after: bootstrap
+
+prepend_colon_component PYTHONPATH $HOME/lib/python

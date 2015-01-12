@@ -1,4 +1,4 @@
 #!/bin/sh
+# after: term
 
-# Editor
 export EDITOR=vim
