@@ -28,6 +28,9 @@ set splitright
 
 set list
 
+set modeline
+set modelines=1
+
 " completion
 set wildmode=longest,list:longest
 set undolevels=1000
