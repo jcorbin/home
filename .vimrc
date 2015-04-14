@@ -364,4 +364,6 @@ let g:vimshell_force_overwrite_statusline = 0
 
 " }}}
 
+:autocmd FileType javascript :iabbrev <buffer> vst var self = this;
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
