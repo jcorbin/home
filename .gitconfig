@@ -80,6 +80,7 @@
     shbr = show-branch
     st = status
     suri = submodule update --recursive --init
+    compubrd = !git checkout master && git pull && git branch -d
 
 [push]
     default = simple
