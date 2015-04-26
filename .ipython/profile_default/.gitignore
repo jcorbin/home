@@ -1,1 +1,7 @@
 history.sqlite
+db/
+log/
+pid/
+security/
+startup/
+static/
