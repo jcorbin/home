@@ -12,7 +12,13 @@ EOF
 }
 
 revstring() {
-  git describe --tags --always $1 2>/dev/null ||
+  local desc=$(git describe --tags --always $1 2>/dev/null)
+  if [ $? -eq 0 ]; then
+    if [ $(( 100 * ${#desc} / $COLUMNS )) -le 40 ]; then
+      echo $desc
+      return
+    fi
+  fi
   git rev-parse --short $1 2>/dev/null
 }
 
