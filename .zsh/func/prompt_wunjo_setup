@@ -120,7 +120,7 @@ prompt_wunjo_setup() {
   if [ $verbose ]; then
     PROMPT+="$pc[host]%m$pc[reset] "
   fi
-  PROMPT+="$pc[shortpath]%1~$pc[reset]"
+  PROMPT+="$pc[shortpath]%2~$pc[reset]"
   PROMPT+="\$(prompt_wunjo_scm_status)"
 
   PROMPT+="%(?.. $pc[rc]exited %1v $pc[reset])"
