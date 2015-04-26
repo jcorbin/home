@@ -120,17 +120,14 @@ prompt_wunjo_setup() {
   if [ $verbose ]; then
     PROMPT+="$pc[host]%m$pc[reset] "
   fi
-  PROMPT+="$pc[path]%(2~.%~.%/)$pc[reset]"
+  PROMPT+="$pc[shortpath]%1~$pc[reset]"
   PROMPT+="\$(prompt_wunjo_scm_status)"
-  PROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
+
+  PROMPT+="%(?.. $pc[rc]exited %1v $pc[reset])"
   PROMPT+="
 "
-  PROMPT+="$pc[hist]%h$pc[reset]"
-  if [ $verbose ]; then
-    PROMPT+=" $pc[shortpath]%1~$pc[reset]"
-  fi
-  PROMPT+=" $p_date"
-  PROMPT+=" \$(prompt_wunjo_scm_status_bit)$pc[#]%#$pc[reset] "
+  PROMPT+="\$(prompt_wunjo_scm_status_bit) "
+  PROMPT+="$pc[#]%#$pc[reset] "
 
   RPROMPT=
   if [ $verbose ]; then
