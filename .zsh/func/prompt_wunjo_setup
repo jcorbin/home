@@ -127,8 +127,8 @@ prompt_wunjo_setup() {
     PROMPT+="$pc[host]%m$pc[reset] "
   fi
   PROMPT+="$pc[shortpath]%2~$pc[reset]"
-  PROMPT+="%(?.. $pc[rc]exited %1v $pc[reset])"
-  PROMPT+="\$(prompt_wunjo_scm_status_bit) "
+  PROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
+  PROMPT+=" \$(prompt_wunjo_scm_status_bit)"
   PROMPT+="$pc[#]%#$pc[reset] "
 
   RPROMPT=
