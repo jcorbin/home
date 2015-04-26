@@ -127,6 +127,7 @@ prompt_wunjo_setup() {
     PROMPT+="$pc[host]%m$pc[reset] "
   fi
   PROMPT+="$pc[shortpath]%2~$pc[reset]"
+  PROMPT+="\$(git_desc)"
   PROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
   PROMPT+=" \$(prompt_wunjo_scm_status_bit)"
   PROMPT+="$pc[#]%#$pc[reset] "
@@ -150,6 +151,19 @@ prompt_wunjo_precmd() {
     psvar[1]="sig${(L)sig}"
   else
     psvar[1]="$ex"
+  fi
+}
+
+git_desc() {
+  zgit_isgit || return
+  local -A pc
+  pc=(${(kv)wunjo_prompt_colors})
+
+  head=$(zgit_head)
+  gitcommit=$(revstring $head)
+
+  if [ -n "$gitcommit" ]; then
+    echo -n " $pc[scm_commitid]$gitcommit$pc[punc]"
   fi
 }
 
@@ -191,7 +205,7 @@ prompt_wunjo_scm_status() {
       commits+="on $mess"
     fi
   elif [ -n "$gitcommit" ]; then
-    commits+="on $pc[scm_branch]$head$pc[punc]($pc[scm_commitid]$gitcommit$pc[punc])$pc[reset]"
+    commits+="on $pc[scm_branch]$head$pc[punc]$pc[reset]"
     local track_merge=$(zgit_tracking_merge)
     if [ -n "$track_merge" ]; then
       if git rev-parse --verify -q $track_merge >/dev/null; then
