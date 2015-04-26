@@ -4,6 +4,7 @@
 if which less>/dev/null; then
     export PAGER=$(which less)
     export LESS='-SMRci'
+    export LESSOPEN="|$HOME/bin/lesspipe.sh %s"
 
     # TODO: only use 256 color when available
     # Old color scheme:
