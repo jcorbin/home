@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+revs=$1
+shift
+
+# TODO: implement path for mainline not set, and make it an option, and error
+# on trying to run over any multi-parentd revisions commits
+
+mainline=1
+git rev-list --first-parent $revs |
+while read rev; do
+    patch_id_output=$(git diff-tree -p $rev^$mainline $rev | git patch-id)
+    echo "$rev ${patch_id_output% *}"
+done
