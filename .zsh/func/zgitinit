@@ -174,9 +174,7 @@ zgit_isworktreeclean() {
 
 zgit_hasuntracked() {
 	zgit_isgit || return 1
-	local -a flist
-	flist=($(git ls-files --others --exclude-standard))
-	if [ $#flist -gt 0 ]; then
+	if git ls-files --others --exclude-standard | grep -qm1 . ; then
 		return 0
 	else
 		return 1
