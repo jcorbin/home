@@ -17,6 +17,9 @@
     # Color all commands automatically
     ui = auto
 
+[column]
+    ui = auto
+
 [apply]
     # Fix all whitespace sins when applying patches
     whitespace = fix
