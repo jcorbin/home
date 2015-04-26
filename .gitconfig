@@ -81,7 +81,7 @@
     rs = rebase --skip
     rst = reset --hard
     shbr = show-branch
-    st = status
+    st = status --short --branch
     suri = submodule update --recursive --init
     compubrd = !git checkout master && git pull && git branch -d
 
