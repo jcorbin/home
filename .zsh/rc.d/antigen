@@ -6,6 +6,8 @@ fi
 source ~/.antigen/antigen/antigen.zsh
 
 antigen bundles <<EOBUNDLES
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-completions
 EOBUNDLES
 
 # vim:set ft=zsh:
