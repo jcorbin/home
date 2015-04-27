@@ -1,3 +1,5 @@
+# after: antigen
+
 # Command completions
 compctl -a {,un}alias
 compctl -/ {c,push,pop}d
@@ -65,5 +67,7 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*' word true
 
 compdef _gnu_generic qiv
+
+antigen apply
 
 # vim:set ft=zsh:

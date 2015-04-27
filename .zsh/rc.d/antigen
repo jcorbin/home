@@ -1,0 +1,11 @@
+if [ ! -d ~/.antigen/antigen ]; then
+    [ -d ~/.antigen ] || mkdir ~/.antigen
+    git clone gh:zsh-users/antigen.git ~/.antigen/antigen
+fi
+
+source ~/.antigen/antigen/antigen.zsh
+
+antigen bundles <<EOBUNDLES
+EOBUNDLES
+
+# vim:set ft=zsh:
