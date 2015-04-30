@@ -14,7 +14,7 @@ EOF
 revstring() {
   local desc=$(git describe --tags --always $1 2>/dev/null)
   if [ $? -eq 0 ]; then
-    if [ $(( 100 * ${#desc} / $COLUMNS )) -le 40 ]; then
+    if [ $(( 100 * ${#desc} / $COLUMNS )) -le 20 ]; then
       echo $desc
       return
     fi
