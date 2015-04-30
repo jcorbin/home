@@ -128,7 +128,6 @@ prompt_wunjo_setup() {
   fi
   PROMPT+="$pc[shortpath]%2~$pc[reset]"
   PROMPT+="\$(git_desc)"
-  PROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
   PROMPT+=" \$(prompt_wunjo_scm_status_bit)"
   PROMPT+="$pc[#]%#$pc[reset] "
   export PROMPT
@@ -137,6 +136,7 @@ prompt_wunjo_setup() {
   if [ $verbose ]; then
     RPROMPT+=" $pc[user]%n$pc[reset] $p_line"
   fi
+  RPROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
   RPROMPT+="\$(prompt_wunjo_scm_status)"
   export RPROMPT
 
