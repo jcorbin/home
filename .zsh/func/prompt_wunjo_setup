@@ -131,14 +131,15 @@ prompt_wunjo_setup() {
   PROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
   PROMPT+=" \$(prompt_wunjo_scm_status_bit)"
   PROMPT+="$pc[#]%#$pc[reset] "
+  export PROMPT
 
   RPROMPT=
   if [ $verbose ]; then
     RPROMPT+=" $pc[user]%n$pc[reset] $p_line"
   fi
   RPROMPT+="\$(prompt_wunjo_scm_status)"
+  export RPROMPT
 
-  export PROMPT RPROMPT
   add-zsh-hook precmd prompt_wunjo_precmd
 }
 
