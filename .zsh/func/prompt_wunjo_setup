@@ -126,6 +126,7 @@ prompt_wunjo_setup() {
   if [ $verbose ]; then
     PROMPT+="$pc[host]%m$pc[reset] "
   fi
+  PROMPT+="\$(prompt_wunjo_scm_status)"
   PROMPT+="$pc[shortpath]%2~$pc[reset]"
   PROMPT+="\$(git_desc)"
   PROMPT+=" \$(prompt_wunjo_scm_status_bit)"
@@ -137,7 +138,6 @@ prompt_wunjo_setup() {
     RPROMPT+=" $pc[user]%n$pc[reset] $p_line"
   fi
   RPROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
-  RPROMPT+="\$(prompt_wunjo_scm_status)"
   export RPROMPT
 
   add-zsh-hook precmd prompt_wunjo_precmd
