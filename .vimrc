@@ -10,36 +10,22 @@ nnoremap <leader>s% :source %<cr>
 
 " Options {{{
 
-syntax on
-filetype plugin indent on
-
-set nocompatible " This is an "option" apparently...
-
-set scrolloff=3 " Try to keep 3 lines after cursor
 set cursorline
-
-set virtualedit=all
-set smartindent
-set foldmethod=indent
-set swapsync=
-
 set expandtab
-set tabstop=4
+set foldmethod=indent
+set list
+set nocompatible " This is an "option" apparently...
+set scrolloff=3 " Try to keep 3 lines after cursor
 set shiftwidth=4
-
+set smartindent
 set spell
 set splitbelow
 set splitright
-
-"set formatoptions=croq2lj
-
-set list
-
-set modeline
-set modelines=1
-
-set wildmode=longest,list:longest
+set swapsync=
+set tabstop=4
 set undolevels=1000
+set virtualedit=all
+set wildmode=longest,list:longest
 
 " searching {{{
 set ignorecase " Do case insensitive matching...
