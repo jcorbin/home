@@ -112,9 +112,6 @@ augroup END
 
 " Mappings {{{
 
-" exiting insert mode by ctrl-cr
-inoremap <C-CR> <Esc>
-
 let mapleader=","
 
 " fugitive bindings {{{
