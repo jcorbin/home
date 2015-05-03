@@ -27,6 +27,8 @@ set undolevels=1000
 set virtualedit=all
 set wildmode=longest,list:longest
 
+"}}}
+
 " searching {{{
 set ignorecase " Do case insensitive matching...
 set smartcase  " ...but only if the user didn't explicitly case
@@ -56,8 +58,6 @@ if exists("*mkdir") && !isdirectory(&directory)
   call mkdir(&directory, "p", 0700)
 endif
 " }}}
-
-"}}}
 
 " GUI options {{{
 if has("gui_running")
