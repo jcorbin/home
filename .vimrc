@@ -36,7 +36,7 @@ augroup hlsearch
 autocmd InsertEnter * :setlocal nohlsearch
 autocmd InsertLeave * :setlocal   hlsearch
 augroup END
-"}}}
+" }}}
 
 " Persistent undo (vim 7.3+) {{{
 if has("persistent_undo")
