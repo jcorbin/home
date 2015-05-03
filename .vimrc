@@ -24,7 +24,7 @@ set virtualedit=all
 set wildmode=longest,list:longest
 let g:netrw_liststyle = 3
 
-"}}}
+" }}}
 
 " searching {{{
 set ignorecase " Do case insensitive matching...
