@@ -40,7 +40,7 @@ augroup END
 
 " Persistent undo (vim 7.3+) {{{
 if has("persistent_undo")
-  set undodir=~/.vim/undo
+  set undodir=$HOME/.vim/undo
   set undofile
   set undoreload=10000
   if !isdirectory(&undodir) && exists("*mkdir")
