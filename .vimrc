@@ -95,6 +95,7 @@ augroup END
 " syntax folding for some filetypes {{{
 augroup syntax_folding
 autocmd FileType markdown setlocal foldmethod=syntax
+autocmd FileType json setlocal foldmethod=syntax
 augroup END
 " }}}
 
