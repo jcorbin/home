@@ -86,9 +86,15 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 augroup END
 " }}}
 
-" use syntax folding in markdown {{{
-augroup markdown
-autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
+" hack filetype for some extensions {{{
+augroup filetype_ext_hacks
+autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
+augroup END
+" }}}
+
+" syntax folding for some filetypes {{{
+augroup syntax_folding
+autocmd FileType markdown setlocal foldmethod=syntax
 augroup END
 " }}}
 
