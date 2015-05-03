@@ -19,6 +19,7 @@ set tabstop=4
 set undolevels=1000
 set virtualedit=all
 set wildmode=longest,list:longest
+let g:netrw_liststyle = 3
 
 "}}}
 
@@ -162,8 +163,6 @@ nnoremap <leader>t: :Tab/:/<cr>
 " }}}
 
 " File/buffer  browsing {{{
-
-let g:netrw_liststyle = 3
 
 " Moar vineager!
 nmap _ <Plug>VinegarVerticalSplitUp
