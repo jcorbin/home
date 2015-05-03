@@ -1,5 +1,7 @@
+" plugins {{{
 call pathogen#infect()
 call pathogen#helptags()
+" }}}
 
 let g:rehash256 = 1
 colorscheme molokai
