@@ -1,6 +1,9 @@
 call pathogen#infect()
 call pathogen#helptags()
 
+let g:rehash256 = 1
+colorscheme molokai
+
 " Options {{{
 
 set cursorline
@@ -68,27 +71,12 @@ if has("gui_running")
   "   r - right scroll always
   set guioptions=acgit
   set guiheadroom=0
-  colorscheme molokai
 " }}}
 " Terminal options {{{
 else
   if $TERM =~ 'xterm' || $TERM =~ 'screen'
     set ttyfast
   endif
-
-  " Determine colorscheme
-  if &t_Co == 256
-    let g:rehash256 = 1
-    colorscheme molokai
-  else
-    if $BACKGROUND == 'light'
-      set background=light
-    else
-      set background=dark
-    endif
-    colorscheme desert
-  endif
-
 endif
 " }}}
 
