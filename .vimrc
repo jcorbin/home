@@ -1,13 +1,6 @@
 call pathogen#infect()
 call pathogen#helptags()
 
-" vimscript editing convenience {{{
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>s% :source %<cr>
-" }}}
-
 " Options {{{
 
 set cursorline
@@ -113,6 +106,13 @@ augroup END
 " Mappings {{{
 
 let mapleader=","
+
+" vimscript editing convenience {{{
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>s% :source %<cr>
+" }}}
 
 " fugitive bindings {{{
 nnoremap <leader>gb :Gblame<cr>
