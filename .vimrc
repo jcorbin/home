@@ -102,14 +102,6 @@ else
 endif
 " }}}
 
-" autocompile some files {{{
-function! LessMake()
-  let current_file = shellescape(expand('%:p'))
-  let filename = shellescape(expand('%:r'))
-  execute "!lessc " . current_file . " " . filename . ".css"
-endfunction
-" }}}
-
 augroup git
 autocmd Filetype gitcommit setlocal spell textwidth=72
 augroup END
