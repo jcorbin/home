@@ -149,28 +149,20 @@ nnoremap <leader>ic :set ignorecase!<cr>
 
 nnoremap <leader>gf :set guifont=*<cr>
 
-" }}}
-
-" TagBar {{{
+" TagBar
 nnoremap <leader>tg :TagbarToggle<cr>
-" }}}
 
-" Tabular {{{
+" Tabular
 nnoremap <leader>tt :Tab<cr>
 nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
-" }}}
 
-" File/buffer  browsing {{{
+nmap _ <Plug>VinegarVerticalSplitUp " moar vinegar!
 
-" Moar vineager!
-nmap _ <Plug>VinegarVerticalSplitUp
-
-" }}}
-
-" GUndo {{{
+" GUndo
 nnoremap <leader>gu :GundoToggle<CR>
+
 " }}}
 
 " Lightline {{{
