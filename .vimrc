@@ -108,6 +108,12 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 augroup END
 " }}}
 
+" use syntax folding in markdown {{{
+augroup markdown
+autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
+augroup END
+" }}}
+
 " Mappings {{{
 
 " exiting insert mode by ctrl-cr
@@ -147,12 +153,6 @@ if isdirectory(expand("$HOME/HyperSpec/Body"))
     let g:slimv_clhs_root=expand("file://$HOME/HyperSpec/Body/")
 endif
 let g:lisp_rainbow = 1
-" }}}
-
-" Markdown {{{
-augroup markdown
-autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
-augroup END
 " }}}
 
 " TagBar {{{
