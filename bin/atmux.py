@@ -30,7 +30,11 @@ class tmux(Popen):
 
     def __init__(self, *args, **kwargs):
         self.command = cmd = self.command(*args, **kwargs)
-        super(tmux, self).__init__(cmd, **kwargs)
+        try:
+            super(tmux, self).__init__(cmd, **kwargs)
+        except OSError:
+            print 'PATH=' + os.environ['PATH'], '+', cmd
+            raise
 
     def check(self):
         returncode = self.wait()
