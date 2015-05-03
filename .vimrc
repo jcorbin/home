@@ -155,28 +155,6 @@ nnoremap <leader>t: :Tab/:/<cr>
 
 " File/buffer  browsing {{{
 
-" Unite {{{
-
-let g:unite_enable_start_insert = 0
-
-" Yank source
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_history_yank_save_clipboard = 1
-
-" To track long mru history.
-let g:unite_source_file_mru_long_limit = 3000
-let g:unite_source_directory_mru_long_limit = 3000
-
-" Mappings
-nnoremap <leader>u <Nop>
-nnoremap <leader>ub :Unite -complete -no-split buffer_tab buffer<cr>
-nnoremap <leader>u" :Unite -complete -no-split register<cr>
-nnoremap <leader>uy :Unite -complete -no-split history/yank<cr>
-nnoremap <leader>u. :Unite -complete -no-split file_mru file_rec/async:!<cr>
-nnoremap <leader>u% :UniteWithBufferDir -complete -no-split file_mru file_rec/async:!<cr>
-
-" }}}
-
 let g:netrw_liststyle = 3
 
 " Moar vineager!
