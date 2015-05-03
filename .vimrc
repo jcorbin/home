@@ -58,11 +58,6 @@ endif
 
 "}}}
 
-" Paste Toggling with <F12> {{{
-nnoremap <leader><C-p> :set invpaste<cr>
-set pastetoggle=<leader><C-p>
-" }}}
-
 " GUI options {{{
 if has("gui_running")
   "set guifont=Inconsolata\ for\ Powerline:h13
