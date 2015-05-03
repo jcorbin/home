@@ -107,59 +107,6 @@ let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_always_populate_loc_list = 1
 " }}}
 
-" Mappings {{{
-
-let mapleader=","
-
-" vimscript editing convenience {{{
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>s% :source %<cr>
-" }}}
-
-" fugitive bindings {{{
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>g: :Git
-nnoremap <leader>g! :Gsplit!
-nnoremap <leader>g\| :Gvsplit!
-nnoremap <leader>gD :Gsplit! diff<cr>
-nnoremap <leader>ga :Git add %<cr>
-nnoremap <leader>gp :Git add --patch %<cr>
-nnoremap <leader>gr :Git reset %<cr>
-nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
-" }}}
-
-" easier re-sync for lazy diff algorithm
-nnoremap du :diffupdate<cr>
-
-" searching {{{
-nnoremap / /\v
-nnoremap ? ?\v
-nnoremap <leader>ic :set ignorecase!<cr>
-" }}}
-
-nnoremap <leader>gf :set guifont=*<cr>
-
-" TagBar
-nnoremap <leader>tg :TagbarToggle<cr>
-
-" Tabular
-nnoremap <leader>tt :Tab<cr>
-nnoremap <leader>t= :Tab/=/<cr>
-nnoremap <leader>t, :Tab/,/<cr>
-nnoremap <leader>t: :Tab/:/<cr>
-
-nmap _ <Plug>VinegarVerticalSplitUp " moar vinegar!
-
-" GUndo
-nnoremap <leader>gu :GundoToggle<CR>
-
-" }}}
-
 " Lightline {{{
 
 let g:lightline = {
@@ -289,6 +236,59 @@ endfunction
 let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
+
+" }}}
+
+" Mappings {{{
+
+let mapleader=","
+
+" vimscript editing convenience {{{
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>s% :source %<cr>
+" }}}
+
+" fugitive bindings {{{
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>g: :Git
+nnoremap <leader>g! :Gsplit!
+nnoremap <leader>g\| :Gvsplit!
+nnoremap <leader>gD :Gsplit! diff<cr>
+nnoremap <leader>ga :Git add %<cr>
+nnoremap <leader>gp :Git add --patch %<cr>
+nnoremap <leader>gr :Git reset %<cr>
+nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
+" }}}
+
+" easier re-sync for lazy diff algorithm
+nnoremap du :diffupdate<cr>
+
+" searching {{{
+nnoremap / /\v
+nnoremap ? ?\v
+nnoremap <leader>ic :set ignorecase!<cr>
+" }}}
+
+nnoremap <leader>gf :set guifont=*<cr>
+
+" TagBar
+nnoremap <leader>tg :TagbarToggle<cr>
+
+" Tabular
+nnoremap <leader>tt :Tab<cr>
+nnoremap <leader>t= :Tab/=/<cr>
+nnoremap <leader>t, :Tab/,/<cr>
+nnoremap <leader>t: :Tab/:/<cr>
+
+nmap _ <Plug>VinegarVerticalSplitUp " moar vinegar!
+
+" GUndo
+nnoremap <leader>gu :GundoToggle<CR>
 
 " }}}
 
