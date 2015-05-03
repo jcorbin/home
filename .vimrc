@@ -292,7 +292,9 @@ nnoremap <leader>gu :GundoToggle<CR>
 " }}}
 
 " abbreviations {{{
-:autocmd FileType javascript :iabbrev <buffer> vst var self = this;
+augroup filetype_abbrs
+autocmd FileType javascript :iabbrev <buffer> vst var self = this;
+augroup END
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
