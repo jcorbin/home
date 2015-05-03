@@ -38,9 +38,6 @@ autocmd InsertLeave * :setlocal   hlsearch
 augroup END
 "}}}
 
-let xml_use_xhtml=1
-let g:tex_flavor='latex'
-
 " Persistent undo (vim 7.3+) {{{
 if has("persistent_undo")
   set undodir=~/.vim/undo
