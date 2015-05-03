@@ -16,6 +16,7 @@ tmux_sessiondir = os.path.expanduser('~/.tmux-sessions')
 if os.environ.get('COLORTERM') == 'gnome-terminal':
     os.environ['TERM'] = 'xterm-256color'
 
+
 class tmux(Popen):
     socket_path = args.socket_path
 
@@ -61,8 +62,10 @@ try:
 except CalledProcessError:
     pass
 
+
 def choose_session():
-    choices = [(0, None)] + list(enumerate(sorted((sessions - attached) | detached), 1))
+    choices = [(0, None)]
+    choices.extend(enumerate(sorted((sessions - attached) | detached), 1))
     fmt = '%%%dd) %%s' % len(str(choices[-1][0]))
     default = 0
     if detached:
@@ -70,9 +73,12 @@ def choose_session():
     try:
         while True:
             for i, c in choices:
-                if c is None: c = '-- specify --'
+                if c is None:
+                    c = '-- specify --'
                 print fmt % (i, c)
-            choice = raw_input('choose session (default %d) >> ' % default) or default
+            choice = raw_input(
+                'choose session (default %d) >> ' % default
+            ) or default
             try:
                 choice = int(choice)
                 session = choices[choice][1]
@@ -94,7 +100,8 @@ if args.session == 'choose':
 
 if args.session is None:
     args.session = choose_session()
-    if args.session is None: sys.exit(0)
+    if args.session is None:
+        sys.exit(0)
 
 if tmux('has-session', '-t', args.session).wait() != 0:
     session_script = os.path.join(tmux_sessiondir, args.session)
