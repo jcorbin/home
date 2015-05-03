@@ -102,9 +102,11 @@ else
 endif
 " }}}
 
+" spell check in git mode {{{
 augroup git
 autocmd Filetype gitcommit setlocal spell textwidth=72
 augroup END
+" }}}
 
 " Mappings {{{
 
