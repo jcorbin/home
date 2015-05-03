@@ -129,6 +129,7 @@ nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
 
+" easier re-sync for lazy diff algorithm
 nnoremap du :diffupdate<cr>
 
 " searching {{{
