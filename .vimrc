@@ -273,8 +273,6 @@ nnoremap ? ?\v
 nnoremap <leader>ic :set ignorecase!<cr>
 " }}}
 
-nnoremap <leader>gf :set guifont=*<cr>
-
 " TagBar
 nnoremap <leader>tg :TagbarToggle<cr>
 
