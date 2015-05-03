@@ -103,6 +103,14 @@ autocmd BufRead,BufNewFile *.md setlocal filetype=markdown foldmethod=syntax
 augroup END
 " }}}
 
+" Syntastic {{{
+let g:syntastic_check_on_open = 1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_always_populate_loc_list = 1
+" }}}
+
 " Mappings {{{
 
 let mapleader=","
@@ -164,14 +172,6 @@ nmap _ <Plug>VinegarVerticalSplitUp
 
 " GUndo {{{
 nnoremap <leader>gu :GundoToggle<CR>
-" }}}
-
-" Syntastic {{{
-let g:syntastic_check_on_open = 1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_always_populate_loc_list = 1
 " }}}
 
 " Lightline {{{
