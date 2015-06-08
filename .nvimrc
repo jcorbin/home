@@ -3,6 +3,7 @@
 call plug#begin('~/.nvim/plugged')
 
 Plug 'SirVer/ultisnips'
+Plug 'Valloric/YouCompleteMe'
 Plug 'elzr/vim-json'
 Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
