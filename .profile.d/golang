@@ -1,0 +1,25 @@
+#!/bin/sh
+# after: colon_component
+
+export GOPATH=$HOME/golang
+append_colon_component PATH "$GOPATH/bin"
+
+goclone()
+{
+    name="$1"
+    dest="$GOPATH/src/$name"
+    [ -d "$dest" ] || mkdir -p "$dest"
+    case "$name" in
+    gh/*)
+        goclone "github.com/${name#*/}"
+        ;;
+    github.com/*)
+        git clone "gh:${name#*/}" "$dest"
+        ;;
+
+    *)
+        echo "Not sure how to goclone $name" >&2
+        exit 1
+        ;;
+    esac
+}
