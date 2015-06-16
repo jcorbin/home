@@ -28,7 +28,10 @@ lexer = None
 def colorize(code):
     global lexer
     if not lexer:
-        lexer = guess_lexer(code, **options)
+        try:
+            lexer = guess_lexer(code, **options)
+        except ClassNotFound:
+            pass
     if not lexer:
         lexer = TextLexer(**options)
     highlight(code, lexer, formatter, sys.stdout)
