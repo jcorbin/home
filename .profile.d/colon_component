@@ -19,3 +19,13 @@ prepend_colon_component()
 {
     [ -d $2 ] && export $1=$2:$(without_colon_component "$1" "$2")
 }
+
+force_append_colon_component()
+{
+    export $1=$(without_colon_component "$1" "$2"):$2
+}
+
+force_prepend_colon_component()
+{
+    export $1=$2:$(without_colon_component "$1" "$2")
+}
