@@ -16,7 +16,7 @@ case $(stat --help 2>&1) in
     fi
     ;;
 esac
-install --mode 0700 --directory $TMPDIR
+install -d -m 0700 $TMPDIR
 
 ln -sf $TMPDIR $HOME/tmp
 
