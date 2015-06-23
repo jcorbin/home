@@ -25,4 +25,8 @@ re_gnu()
     alias ls='ls -Fhb --time-style=long-iso --color=auto'
 }
 
-re_gnu
+if [ -n "$USE_GNU" ]; then
+	re_gnu
+else
+	no_gnu
+fi
