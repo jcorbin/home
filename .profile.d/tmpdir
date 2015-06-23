@@ -4,10 +4,19 @@
 
 export TMPDIR=${TMPDIR:-/tmp}
 
-if [ $(stat $TMPDIR -c %u) -ne $(id -u) ]; then
-    export TMPDIR=$TMPDIR/$(id -un)
-    install --mode 0700 --directory $TMPDIR
-fi
+case $(stat --help 2>&1) in
+*GNU*)
+    if [ $(stat -c %u $TMPDIR) -ne $(id -u) ]; then
+        export TMPDIR=$TMPDIR/$(id -un)
+    fi
+    ;;
+*)
+    if [ $(stat -f %u $TMPDIR) -ne $(id -u) ]; then
+        export TMPDIR=$TMPDIR/$(id -un)
+    fi
+    ;;
+esac
+install --mode 0700 --directory $TMPDIR
 
 ln -sf $TMPDIR $HOME/tmp
 
