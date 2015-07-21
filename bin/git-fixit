@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+rev=$1
+subject=$(git show "$rev" -s --pretty=format:%s)
+git commit -m "fixup! $subject"
