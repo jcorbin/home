@@ -28,6 +28,12 @@ set smartindent
 set ignorecase " Do case insensitive matching...
 set smartcase  " ...but only if the user didn't explicitly case
 set hlsearch   " highlight while searching
+
+" disable hlsearch in insert mode
+augroup hlsearch
+  autocmd InsertEnter * :setlocal nohlsearch
+  autocmd InsertLeave * :setlocal   hlsearch
+augroup END
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
