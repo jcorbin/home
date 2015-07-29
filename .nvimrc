@@ -102,6 +102,12 @@ augroup syntax_folding
 augroup END
 " }}}
 
+" hack filetype for some extensions {{{
+augroup filetype_ext_hacks
+  autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
+augroup END
+" }}}
+
 " Syntastic {{{
 let g:syntastic_check_on_open = 1
 let g:syntastic_aggregate_errors = 1
