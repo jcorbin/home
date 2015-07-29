@@ -25,3 +25,5 @@ options/!
 addConnection/!
 self/!
 var/!
+function/!
+server/!
