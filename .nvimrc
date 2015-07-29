@@ -3,6 +3,7 @@
 call plug#begin('~/.nvim/plugged')
 
 Plug 'godlygeek/tabular'
+Plug 'itchyny/lightline.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
