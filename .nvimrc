@@ -3,6 +3,7 @@
 call plug#begin('~/.nvim/plugged')
 
 Plug 'scrooloose/syntastic'
+Plug 'sjl/gundo.vim'
 Plug 'tomasr/molokai'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -136,6 +137,8 @@ nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " moar vinegar!
 nmap _ <Plug>VinegarVerticalSplitUp
 
+" GUndo
+nnoremap <leader>gu :GundoToggle<CR>
 
 " }}}
 
