@@ -2,6 +2,7 @@
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 
+Plug 'SirVer/ultisnips'
 Plug 'elzr/vim-json'
 Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
