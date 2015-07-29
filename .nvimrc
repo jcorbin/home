@@ -2,6 +2,7 @@
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 
+Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'tomasr/molokai'
@@ -133,6 +134,9 @@ nnoremap <leader>gp :Git add --patch %<cr>
 nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
+
+" TagBar
+nnoremap <leader>tg :TagbarToggle<cr>
 
 " moar vinegar!
 nmap _ <Plug>VinegarVerticalSplitUp
