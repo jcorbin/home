@@ -24,4 +24,10 @@ set smartindent
 
 " }}}
 
+" searching {{{
+set ignorecase " Do case insensitive matching...
+set smartcase  " ...but only if the user didn't explicitly case
+set hlsearch   " highlight while searching
+" }}}
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
