@@ -42,6 +42,8 @@ set virtualedit=all
 set wildmode=longest,list:longest
 
 let g:netrw_liststyle = 3
+set number
+set relativenumber
 
 set tabstop=4
 set shiftwidth=4
