@@ -34,6 +34,10 @@ augroup hlsearch
   autocmd InsertEnter * :setlocal nohlsearch
   autocmd InsertLeave * :setlocal   hlsearch
 augroup END
+
+" mappings to make "very magic" the default
+nnoremap / /\v
+nnoremap ? ?\v
 " }}}
 
 " Save undo files in central location {{{
