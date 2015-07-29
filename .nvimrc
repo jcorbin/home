@@ -107,6 +107,18 @@ augroup syntax_folding
   autocmd FileType markdown setlocal foldmethod=syntax
   autocmd FileType json setlocal foldmethod=syntax
 augroup END
+
+" foldcolumn on by default...
+set foldcolumn=4
+" ... except for
+augroup NoFoldColumn
+  autocmd Filetype help setlocal foldcolumn=0
+  autocmd Filetype gitcommit setlocal foldcolumn=0
+  autocmd Filetype qf setlocal foldcolumn=0
+  autocmd Filetype netrw setlocal foldcolumn=0
+augroup END
+" mapping to toggle it
+nmap <leader>fc <Plug>FoldToggleColumn
 " }}}
 
 " hack filetype for some extensions {{{
