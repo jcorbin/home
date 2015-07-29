@@ -4,6 +4,15 @@ call plug#begin('~/.nvim/plugged')
 
 Plug 'scrooloose/syntastic'
 Plug 'tomasr/molokai'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
 
 call plug#end()
 " }}}
@@ -108,6 +117,25 @@ nnoremap <leader>s% :source %<cr>
 
 " easier re-sync for lazy diff algorithm
 nnoremap du :diffupdate<cr>
+
+" fugitive bindings {{{
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>g: :Git
+nnoremap <leader>g! :Gsplit!
+nnoremap <leader>g\| :Gvsplit!
+nnoremap <leader>gD :Gsplit! diff<cr>
+nnoremap <leader>ga :Git add %<cr>
+nnoremap <leader>gp :Git add --patch %<cr>
+nnoremap <leader>gr :Git reset %<cr>
+nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
+" }}}
+
+" moar vinegar!
+nmap _ <Plug>VinegarVerticalSplitUp
+
 
 " }}}
 
