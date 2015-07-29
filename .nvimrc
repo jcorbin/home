@@ -98,6 +98,7 @@ augroup END
 
 " default to indent folding
 set foldmethod=indent
+set foldlevelstart=1
 
 " syntax folding for some filetypes
 augroup syntax_folding
