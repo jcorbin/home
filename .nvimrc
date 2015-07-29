@@ -36,4 +36,14 @@ augroup hlsearch
 augroup END
 " }}}
 
+" Save undo files in central location {{{
+if has("persistent_undo")
+  set undofile
+  set undodir=$HOME/.nvim/undo
+  if !isdirectory(&undodir) && exists("*mkdir")
+    call mkdir(&undodir, "p", 0700)
+  endif
+endif
+" }}}
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
