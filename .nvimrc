@@ -5,6 +5,7 @@ call plug#begin('~/.nvim/plugged')
 Plug 'SirVer/ultisnips'
 Plug 'Valloric/YouCompleteMe'
 Plug 'elzr/vim-json'
+Plug 'fatih/vim-go'
 Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
@@ -162,6 +163,16 @@ let g:syntastic_aggregate_errors = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_always_populate_loc_list = 1
+
+" Go! {{{
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>f <Plug>(go-info)
+au FileType go nmap <leader>o <Plug>(go-doc)
+au FileType go nmap <leader>d <Plug>(go-def)
+au FileType go nmap <leader>i <Plug>(go-implements)
+let g:go_auto_type_info = 1
+let g:go_jump_to_error = 1
+" }}}
 
 " UltiSnips {{{
 let g:UltiSnipsExpandTrigger="<c-e>"
