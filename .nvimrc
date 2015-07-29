@@ -2,6 +2,7 @@
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 
+Plug 'scrooloose/syntastic'
 Plug 'tomasr/molokai'
 
 call plug#end()
@@ -84,6 +85,14 @@ augroup syntax_folding
   autocmd FileType markdown setlocal foldmethod=syntax
   autocmd FileType json setlocal foldmethod=syntax
 augroup END
+" }}}
+
+" Syntastic {{{
+let g:syntastic_check_on_open = 1
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_always_populate_loc_list = 1
 " }}}
 
 " Mappings {{{
