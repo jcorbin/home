@@ -97,6 +97,9 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>s% :source %<cr>
 " }}}
 
+" easier re-sync for lazy diff algorithm
+nnoremap du :diffupdate<cr>
+
 " }}}
 
 " abbreviations {{{
