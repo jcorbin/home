@@ -46,4 +46,12 @@ if has("persistent_undo")
 endif
 " }}}
 
+" Save swap files in central location {{{
+set swapsync=
+set directory=$HOME/.nvim/swap
+if exists("*mkdir") && !isdirectory(&directory)
+  call mkdir(&directory, "p", 0700)
+endif
+" }}}
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
