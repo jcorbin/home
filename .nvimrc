@@ -2,6 +2,7 @@
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 
+Plug 'godlygeek/tabular'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
@@ -137,6 +138,12 @@ nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 
 " TagBar
 nnoremap <leader>tg :TagbarToggle<cr>
+
+" Tabular
+nnoremap <leader>tt :Tab<cr>
+nnoremap <leader>t= :Tab/=/<cr>
+nnoremap <leader>t, :Tab/,/<cr>
+nnoremap <leader>t: :Tab/:/<cr>
 
 " moar vinegar!
 nmap _ <Plug>VinegarVerticalSplitUp
