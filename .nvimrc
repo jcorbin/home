@@ -108,6 +108,7 @@ set foldlevelstart=1
 augroup syntax_folding
   autocmd FileType markdown setlocal foldmethod=syntax
   autocmd FileType json setlocal foldmethod=syntax
+  autocmd FileType javascript setlocal foldmethod=syntax
 augroup END
 
 " foldcolumn on by default...
