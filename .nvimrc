@@ -74,6 +74,18 @@ augroup nospell
 augroup END
 " }}}
 
+" Folding {{{
+
+" default to indent folding
+set foldmethod=indent
+
+" syntax folding for some filetypes
+augroup syntax_folding
+  autocmd FileType markdown setlocal foldmethod=syntax
+  autocmd FileType json setlocal foldmethod=syntax
+augroup END
+" }}}
+
 " Mappings {{{
 
 let mapleader=","
