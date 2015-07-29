@@ -58,6 +58,12 @@ if exists("*mkdir") && !isdirectory(&directory)
 endif
 " }}}
 
+" Mappings {{{
+
+let mapleader=","
+
+" }}}
+
 " abbreviations {{{
 augroup filetype_abbrs
   autocmd FileType javascript :iabbrev <buffer> vst var self = this;
