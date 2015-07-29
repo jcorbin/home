@@ -1,4 +1,10 @@
 #!/bin/sh
 # after: term
 
-export EDITOR=vim
+if which nvim >/dev/null 2>&1; then
+    EDITOR=$(which nvim)
+else
+    EDITOR=$(which vim)
+fi
+
+export EDITOR
