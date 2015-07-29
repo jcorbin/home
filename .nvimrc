@@ -165,6 +165,9 @@ nmap _ <Plug>VinegarVerticalSplitUp
 " GUndo
 nnoremap <leader>gu :GundoToggle<CR>
 
+" cycles between no, abs, and rel line numbering
+nmap <leader># <Plug>NumberCycle
+
 " }}}
 
 " abbreviations {{{
