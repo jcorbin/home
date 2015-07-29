@@ -63,6 +63,17 @@ if exists("*mkdir") && !isdirectory(&directory)
 endif
 " }}}
 
+" Spelling {{{
+set spell
+
+" ... except for some filetypes
+augroup nospell
+  autocmd FileType helf setlocal nospell
+  autocmd FileType qf setlocal nospell
+  autocmd FileType netrw setlocal nospell
+augroup END
+" }}}
+
 " Mappings {{{
 
 let mapleader=","
