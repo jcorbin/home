@@ -2,6 +2,7 @@
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.nvim/plugged')
 
+Plug 'elzr/vim-json'
 Plug 'godlygeek/tabular'
 Plug 'itchyny/lightline.vim'
 Plug 'kien/ctrlp.vim'
@@ -160,5 +161,7 @@ augroup filetype_abbrs
   autocmd FileType javascript :iabbrev <buffer> vst var self = this;
 augroup END
 " }}}
+
+let g:vim_json_syntax_conceal = 0
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
