@@ -44,13 +44,19 @@ set virtualedit=all
 set wildmode=longest,list:longest
 
 let g:netrw_liststyle = 3
-set number
-set relativenumber
 
 set tabstop=4
 set shiftwidth=4
 set smartindent
 
+" }}}
+
+" Line numbering {{{
+set number
+set relativenumber
+
+" cycles between no, abs, and rel line numbering
+nmap <leader># <Plug>NumberCycle
 " }}}
 
 " searching {{{
@@ -181,9 +187,6 @@ nmap _ <Plug>VinegarVerticalSplitUp
 
 " GUndo
 nnoremap <leader>gu :GundoToggle<CR>
-
-" cycles between no, abs, and rel line numbering
-nmap <leader># <Plug>NumberCycle
 
 " }}}
 
