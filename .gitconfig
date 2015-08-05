@@ -85,6 +85,7 @@
     suri = submodule update --recursive --init
     compubrd = !git checkout master && git pull && git branch -d
     pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
+    uewu = config user.email jcorbin@wunjo.org
 
 [push]
     default = simple
