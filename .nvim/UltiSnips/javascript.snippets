@@ -33,7 +33,7 @@ case $1:
 endsnippet
 
 snippet for "for (INIT; CHECK; STEP) {...}" b
-for ($1; $2; $3) {
+for (${1:var i = 0}; $2; ${3:i++}) {
 	$0
 }
 endsnippet
