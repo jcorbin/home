@@ -1,4 +1,6 @@
-# after: antigen
+if [ -f ~/.zsh/zsh-completions/zsh-completions.plugin.zsh ]; then
+    source ~/.zsh/zsh-completions/zsh-completions.plugin.zsh
+fi
 
 # Command completions
 compctl -a {,un}alias
@@ -17,9 +19,9 @@ compctl -g '*.(ps|eps)' gv
 
 # Colored file lists in completion
 if [ -n "$LS_COLORS" ]; then
-	ZLS_COLORS="$LS_COLORS"
-	export ZLS_COLORS
-	zmodload zsh/complist 2> /dev/null
+    ZLS_COLORS="$LS_COLORS"
+    export ZLS_COLORS
+    zmodload zsh/complist 2> /dev/null
 fi
 
 # Autocomplete for current dir on filetypes
@@ -67,7 +69,5 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*' word true
 
 compdef _gnu_generic qiv
-
-antigen apply
 
 # vim:set ft=zsh:
