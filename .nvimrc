@@ -28,6 +28,7 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
+Plug 'marijnh/tern_for_vim'
 
 call plug#end()
 " }}}
