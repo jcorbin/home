@@ -129,6 +129,7 @@ set foldcolumn=4
 " ... except for
 augroup NoFoldColumn
   autocmd Filetype help setlocal foldcolumn=0
+  autocmd Filetype godoc setlocal foldcolumn=0
   autocmd Filetype gitcommit setlocal foldcolumn=0
   autocmd Filetype qf setlocal foldcolumn=0
   autocmd Filetype netrw setlocal foldcolumn=0
