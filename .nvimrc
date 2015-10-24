@@ -138,7 +138,7 @@ augroup syntax_folding
 augroup END
 
 " foldcolumn on by default...
-set foldcolumn=4
+" set foldcolumn=4
 " ... except for
 augroup NoFoldColumn
   autocmd Filetype help setlocal foldcolumn=0
