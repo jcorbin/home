@@ -103,8 +103,11 @@ set spell
 " ... except for some filetypes
 augroup nospell
   autocmd FileType help setlocal nospell
+  autocmd FileType godoc setlocal nospell
   autocmd FileType qf setlocal nospell
   autocmd FileType netrw setlocal nospell
+  autocmd FileType vim-plug setlocal nospell
+  autocmd FileType fugitiveblame setlocal nospell
 augroup END
 " }}}
 
