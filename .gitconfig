@@ -84,6 +84,7 @@
     st = status --short --branch
     suri = submodule update --recursive --init
     compubrd = !git checkout master && git pull && git branch -d
+    pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
 
 [push]
     default = simple
