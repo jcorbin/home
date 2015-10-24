@@ -4,6 +4,7 @@ call plug#begin('~/.nvim/plugged')
 
 Plug 'elzr/vim-json'
 Plug 'godlygeek/tabular'
+Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'jcorbin/vim-fold-toggle'
 Plug 'jcorbin/vim-grep-operator'
