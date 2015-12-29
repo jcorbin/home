@@ -175,7 +175,7 @@ au FileType go nmap <leader>d <Plug>(go-def)
 au FileType go nmap <leader>i :GoImport<Space>
 let g:go_auto_type_info = 1
 let g:go_jump_to_error = 1
-" let g:go_fmt_command = "gofmt"
+let g:go_fmt_command = "goimports"
 " let g:go_fmt_options = ''
 " let g:go_fmt_fail_silently = 0
 let g:go_highlight_operators = 1
