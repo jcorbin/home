@@ -32,6 +32,7 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
+Plug 'vim-utils/vim-man'
 
 call plug#end()
 " }}}
@@ -106,6 +107,7 @@ set spell
 " ... except for some filetypes
 augroup nospell
   autocmd FileType help setlocal nospell
+  autocmd FileType man setlocal nospell
   autocmd FileType startify setlocal nospell
   autocmd FileType godoc setlocal nospell
   autocmd FileType qf setlocal nospell
