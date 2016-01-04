@@ -1,9 +1,9 @@
 setopt promptsubst
+setopt transientrprompt
 
 autoload -U promptinit
 promptinit
 
 prompt wunjo
-setopt transientrprompt
 
 # vim:set ft=zsh:
