@@ -4,4 +4,8 @@
 nvim_path=$(which nvim 2>/dev/null)
 if [ -n "$nvim_path" ]; then
     export EDITOR=$nvim_path
+
+    alias vim='nvim'
+    alias vimdiff='nvim -dO'
+    alias view='nvim -R'
 fi
