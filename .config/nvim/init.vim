@@ -47,6 +47,8 @@ colorscheme molokai
 
 " }}}
 
+" *line {{{
+
 " airline {{{
 let g:airline_powerline_fonts=0
 let g:airline#extensions#branch#enabled = 1
@@ -54,6 +56,8 @@ let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#eclim#enabled = 1
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#capslock#enabled = 1
+" }}}
+
 " }}}
 
 " Options {{{
