@@ -1,8 +1,11 @@
 #!/bin/sh
 # after: bootstrap
 
-if [ -n "$DISPLAY" ]; then
-	export BROWSER="chromium:chromium-browser:firefox:opera:w3m:lynx"
-else
-	export BROWSER="w3m:lynx"
-fi
+export BROWSER="open"
+
+# TODO if ever Linux desktop again...
+# if [ -n "$DISPLAY" ]; then
+# 	export BROWSER="chromium:chromium-browser:firefox:opera:w3m:lynx"
+# else
+# 	export BROWSER="w3m:lynx"
+# fi
