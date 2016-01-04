@@ -16,6 +16,7 @@ Plug 'jcorbin/vim-number-cycle'
 Plug 'junegunn/goyo.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
+Plug 'marijnh/tern_for_vim'
 Plug 'mhinz/vim-startify'
 Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/syntastic'
@@ -31,7 +32,6 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-Plug 'marijnh/tern_for_vim'
 
 call plug#end()
 " }}}
