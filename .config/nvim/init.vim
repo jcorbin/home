@@ -42,6 +42,7 @@ call plug#end()
 set background=dark
 
 let g:rehash256 = 1 " better 256-terminal colors for molokai
+let g:molokai_original = 0
 colorscheme molokai
 
 " }}}
