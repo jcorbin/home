@@ -39,6 +39,8 @@ call plug#end()
 
 " colorscheme {{{
 
+set background=dark
+
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 colorscheme molokai
 
