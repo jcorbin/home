@@ -7,6 +7,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
 Plug 'bling/vim-bufferline'
+Plug 'chriskempson/base16-vim'
 Plug 'edkolev/promptline.vim'
 Plug 'edkolev/tmuxline.vim'
 Plug 'elzr/vim-json'
@@ -22,7 +23,9 @@ Plug 'majutsushi/tagbar'
 Plug 'marijnh/tern_for_vim'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
+Plug 'morhetz/gruvbox'
 Plug 'pangloss/vim-javascript'
+Plug 'reedes/vim-colors-pencil'
 Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'solarnz/thrift.vim'
@@ -48,6 +51,19 @@ set background=dark
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 let g:molokai_original = 0
 colorscheme molokai
+
+" colorscheme base16-default
+" colorscheme base16-google
+" colorscheme base16-monokai
+" colorscheme base16-tomorrow
+"
+" colorscheme pencil
+
+" let g:gruvbox_contrast_dark = 'hard'
+" let g:gruvbox_contrast_light = 'hard'
+" let g:gruvbox_improved_strings = 0
+" let g:gruvbox_improved_warnings = 0
+" colorscheme gruvbox
 
 " }}}
 
