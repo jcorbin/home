@@ -6,6 +6,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
+Plug 'bling/vim-bufferline'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
 Plug 'godlygeek/tabular'
@@ -56,6 +57,15 @@ let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#eclim#enabled = 1
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#capslock#enabled = 1
+" }}}
+
+" bufferline {{{
+" let g:airline#extensions#bufferline#enabled = 0
+let g:airline#extensions#bufferline#enabled = 1
+let g:bufferline_echo = 0
+
+let g:bufferline_active_buffer_left = '*'
+let g:bufferline_active_buffer_right = ''
 " }}}
 
 " }}}
