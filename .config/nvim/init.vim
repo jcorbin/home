@@ -1,6 +1,6 @@
 " plugins {{{
 " https://github.com/junegunn/vim-plug
-call plug#begin('~/.nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 Plug 'SirVer/ultisnips'
 Plug 'Valloric/YouCompleteMe'
@@ -85,7 +85,7 @@ nnoremap ? ?\v
 " Save undo files in central location {{{
 if has("persistent_undo")
   set undofile
-  set undodir=$HOME/.nvim/undo
+  set undodir=$HOME/.config/nvim/undo
   if !isdirectory(&undodir) && exists("*mkdir")
     call mkdir(&undodir, "p", 0700)
   endif
@@ -94,7 +94,7 @@ endif
 
 " Save swap files in central location {{{
 set swapsync=
-set directory=$HOME/.nvim/swap
+set directory=$HOME/.config/nvim/swap
 if exists("*mkdir") && !isdirectory(&directory)
   call mkdir(&directory, "p", 0700)
 endif
