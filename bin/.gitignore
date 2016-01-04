@@ -16,3 +16,8 @@
 !githook-update-worktree-*
 !quotecmd
 !sshscreen
+
+# Scripts from https://github.com/brendangregg/FlameGraph
+stackcollapse*
+flamegraph.pl
+difffolded.pl
