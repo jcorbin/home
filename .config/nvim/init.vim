@@ -7,6 +7,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
 Plug 'bling/vim-bufferline'
+Plug 'edkolev/tmuxline.vim'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
 Plug 'godlygeek/tabular'
@@ -66,6 +67,11 @@ let g:bufferline_echo = 0
 
 let g:bufferline_active_buffer_left = '*'
 let g:bufferline_active_buffer_right = ''
+" }}}
+
+" tmuxline {{{
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_powerline_separators = 0
 " }}}
 
 " }}}
