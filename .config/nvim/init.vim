@@ -37,8 +37,12 @@ Plug 'vim-utils/vim-man'
 call plug#end()
 " }}}
 
+" colorscheme {{{
+
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 colorscheme molokai
+
+" }}}
 
 " Options {{{
 
