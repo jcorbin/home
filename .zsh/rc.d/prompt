@@ -4,6 +4,10 @@ setopt transientrprompt
 autoload -U promptinit
 promptinit
 
-prompt wunjo
+if [ -f ~/.promptline.sh ]; then
+    source ~/.promptline.sh
+else
+    prompt wunjo
+fi
 
 # vim:set ft=zsh:
