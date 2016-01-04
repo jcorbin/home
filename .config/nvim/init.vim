@@ -4,13 +4,12 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'SirVer/ultisnips'
 Plug 'Valloric/YouCompleteMe'
+Plug 'bling/vim-airline'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
 Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
-Plug 'itchyny/lightline.vim'
 Plug 'jcorbin/vim-fold-toggle'
-Plug 'jcorbin/vim-lightline-integration'
 Plug 'jcorbin/vim-number-cycle'
 Plug 'junegunn/goyo.vim'
 Plug 'kien/ctrlp.vim'
@@ -45,6 +44,15 @@ let g:rehash256 = 1 " better 256-terminal colors for molokai
 let g:molokai_original = 0
 colorscheme molokai
 
+" }}}
+
+" airline {{{
+let g:airline_powerline_fonts=0
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#eclim#enabled = 1
+let g:airline#extensions#whitespace#enabled = 1
+let g:airline#extensions#capslock#enabled = 1
 " }}}
 
 " Options {{{
