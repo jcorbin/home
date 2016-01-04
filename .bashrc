@@ -1,8 +1,8 @@
 #!/bin/bash
 
-[ -f /etc/bashrc ] && . /etc/bashrc
-[ -f ~/.profile ] && . ~/.profile
-[ -f ~/.aliases ] && . ~/.aliases
+[ -f /etc/bashrc ] && source /etc/bashrc
+[ -f ~/.profile ] && source ~/.profile
+[ -f ~/.aliases ] && source ~/.aliases
 
 export PS1='\u@\h \w\$ '
 if type __git_ps1 &>/dev/null; then
