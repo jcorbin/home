@@ -47,3 +47,5 @@
 !.ssh/
 
 !sparkup/
+
+.DS_Store
