@@ -2,8 +2,9 @@
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'SirVer/ultisnips'
-Plug 'Valloric/YouCompleteMe'
+Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
@@ -205,11 +206,16 @@ augroup END
 
 " }}}
 
-" UltiSnips {{{
-let g:UltiSnipsExpandTrigger="<c-e>"
-let g:UltiSnipsJumpForwardTrigger="<c-f>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:UltiSnipsEditSplit="vertical"
+" deoplete {{{
+let g:deoplete#enable_at_startup = 1
+" }}}
+
+" neosnippet {{{
+imap <C-e>     <Plug>(neosnippet_expand_or_jump)
+smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-e>     <Plug>(neosnippet_expand_target)
+imap <C-f>     <Plug>(neosnippet_jump)
+smap <C-f>     <Plug>(neosnippet_jump)
 " }}}
 
 " Mappings {{{
