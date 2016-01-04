@@ -218,6 +218,11 @@ imap <C-f>     <Plug>(neosnippet_jump)
 smap <C-f>     <Plug>(neosnippet_jump)
 " }}}
 
+" Java ... {{{
+let g:EclimCompletionMethod = 'omnifunc'
+au FileType java nmap <leader>i :JavaImport<Cr>
+" }}}
+
 " Mappings {{{
 
 let mapleader=","
