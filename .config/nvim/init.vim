@@ -13,6 +13,7 @@ Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
 Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
+Plug 'jcorbin/vim-bindsplit'
 Plug 'jcorbin/vim-fold-toggle'
 Plug 'jcorbin/vim-number-cycle'
 Plug 'junegunn/goyo.vim'
@@ -279,6 +280,9 @@ au FileType java nmap <leader>i :JavaImport<Cr>
 " Mappings {{{
 
 let mapleader=","
+
+" bindsplit
+nmap <leader>bs <Plug>BindsplitVsplit
 
 " no arrow keys for history
 cnoremap <C-n> <down>
