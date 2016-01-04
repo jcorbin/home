@@ -1,7 +1,7 @@
-.*.sw?
-
+# Ignore everything by default
 /*
 
+# Then start whitelisting
 !.gitignore
 !.gitconfig
 
@@ -48,4 +48,6 @@
 
 !sparkup/
 
+# File types that need to be ignored anywhere
 .DS_Store
+.*.sw?
