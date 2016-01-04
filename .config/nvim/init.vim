@@ -10,13 +10,13 @@ Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'jcorbin/vim-fold-toggle'
-Plug 'jcorbin/vim-grep-operator'
 Plug 'jcorbin/vim-lightline-integration'
 Plug 'jcorbin/vim-number-cycle'
 Plug 'junegunn/goyo.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'marijnh/tern_for_vim'
+Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
 Plug 'pangloss/vim-javascript'
 Plug 'scrooloose/syntastic'
@@ -198,6 +198,20 @@ let g:UltiSnipsEditSplit="vertical"
 " Mappings {{{
 
 let mapleader=","
+
+" grepper {{{
+
+nmap gs  <plug>(GrepperOperator)
+xmap gs  <plug>(GrepperOperator)
+
+let g:grepper           = {}
+let g:grepper.tools     = ['git', 'pt', 'grep']
+let g:grepper.open      = 1
+let g:grepper.switch    = 1
+let g:grepper.jump      = 0
+let g:grepper.next_tool = '<leader>g'
+
+" }}}
 
 " vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
