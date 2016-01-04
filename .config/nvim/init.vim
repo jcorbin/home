@@ -42,6 +42,7 @@ colorscheme molokai
 " Options {{{
 
 set cursorline
+set cursorcolumn
 set expandtab
 set list
 set scrolloff=3 " Try to keep 3 lines after cursor
