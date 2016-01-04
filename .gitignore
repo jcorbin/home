@@ -35,7 +35,8 @@
 !.Xresources
 
 !.screenrc
-!.tmux*.conf
+!/.tmux*.conf
+/.tmuxline.conf
 
 !powerline/
 !.config/
