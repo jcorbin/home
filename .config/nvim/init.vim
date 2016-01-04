@@ -7,6 +7,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
 Plug 'bling/vim-bufferline'
+Plug 'edkolev/promptline.vim'
 Plug 'edkolev/tmuxline.vim'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
@@ -72,6 +73,38 @@ let g:bufferline_active_buffer_right = ''
 " tmuxline {{{
 let g:airline#extensions#tmuxline#enabled = 0
 let g:tmuxline_powerline_separators = 0
+" }}}
+
+" promptline {{{
+
+let g:promptline_powerline_symbols = 0
+
+" sections (a, b, c, x, y, z, warn) are optional
+let g:promptline_preset = {
+            \'a' : [ promptline#slices#vcs_branch() ],
+            \'b' : [ promptline#slices#cwd() ],
+            \'c' : [ promptline#slices#git_status() ],
+            \'warn' : [ promptline#slices#last_exit_code() ],
+            \'z' : [ promptline#slices#jobs() ],
+            \'options': {
+            \  'left_sections' : [ 'b', 'a', 'c' ],
+            \  'right_sections' : [ 'warn', 'z' ],
+            \  'left_only_sections' : [ 'b', 'a', 'c', 'warn' ]
+            \}}
+
+let g:promptline_symbols = {
+            \ 'left'           : '',
+            \ 'right'          : '',
+            \ 'left_alt'       : '',
+            \ 'right_alt'      : '',
+            \ 'dir_sep'        : '/',
+            \ 'truncation'     : '…',
+            \ 'vcs_branch'     : '',
+            \ 'battery'        : '',
+            \ 'space'          : ' '}
+
+let g:airline#extensions#promptline#enabled = 1
+let g:airline#extensions#promptline#snapshot_file = "~/.promptline.sh"
 " }}}
 
 " }}}
