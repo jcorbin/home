@@ -106,6 +106,7 @@ set spell
 " ... except for some filetypes
 augroup nospell
   autocmd FileType help setlocal nospell
+  autocmd FileType startify setlocal nospell
   autocmd FileType godoc setlocal nospell
   autocmd FileType qf setlocal nospell
   autocmd FileType netrw setlocal nospell
