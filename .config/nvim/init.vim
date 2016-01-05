@@ -282,6 +282,12 @@ let g:deoplete#disable_auto_complete = 1
 
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 
+" TODO https://github.com/Rip-Rip/clang_complete
+"let g:clang_complete_auto = 0
+"let g:clang_auto_select = 0
+"let g:clang_default_keymappings = 0
+""let g:clang_use_library = 1
+
 " }}}
 
 " neosnippet {{{
