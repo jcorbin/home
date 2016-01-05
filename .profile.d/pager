@@ -5,10 +5,6 @@ if which less>/dev/null; then
     PAGER="$(which less)"
     export PAGER
     export LESS='-SMRci'
-    if which lesspipe.js >/dev/null; then
-        LESSOPEN="|$(which lesspipe.js) %s"
-        export LESSOPEN
-    fi
 
     # TODO: only use 256 color when available
     # Old color scheme:
