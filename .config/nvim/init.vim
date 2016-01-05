@@ -280,6 +280,10 @@ au FileType java nmap <leader>i :JavaImport<Cr>
 
 let mapleader=","
 
+" no arrow keys for history
+cnoremap <C-n> <down>
+cnoremap <C-p> <up>
+
 " grepper {{{
 
 nmap gs  <plug>(GrepperOperator)
