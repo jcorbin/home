@@ -1,11 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 # after: term
 
 if which less>/dev/null; then
-    export PAGER=$(which less)
+    PAGER="$(which less)"
+    export PAGER
     export LESS='-SMRci'
     if which lesspipe.js >/dev/null; then
-        export LESSOPEN="|$(which lesspipe.js) %s"
+        LESSOPEN="|$(which lesspipe.js) %s"
+        export LESSOPEN
     fi
 
     # TODO: only use 256 color when available
