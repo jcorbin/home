@@ -6,8 +6,6 @@ if which less>/dev/null; then
     export LESS='-SMRci'
     if which lesspipe.js >/dev/null; then
         export LESSOPEN="|$(which lesspipe.js) %s"
-    else
-        export LESSOPEN="|$HOME/bin/lesspipe.sh %s"
     fi
 
     # TODO: only use 256 color when available
