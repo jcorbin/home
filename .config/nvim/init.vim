@@ -288,6 +288,8 @@ inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual
 "let g:clang_default_keymappings = 0
 ""let g:clang_use_library = 1
 
+" TODO https://github.com/osyo-manga/vim-marching
+
 " }}}
 
 " neosnippet {{{
