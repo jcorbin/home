@@ -3,6 +3,7 @@
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
@@ -265,6 +266,10 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#disable_auto_complete = 1
 
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+
+" echodoc
+set noshowmode
+let g:echodoc_enable_at_startup=1
 
 " }}}
 
