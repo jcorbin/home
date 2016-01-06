@@ -38,6 +38,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-utils/vim-man'
+Plug 'zchee/deoplete-go'
 
 call plug#end()
 " }}}
@@ -254,6 +255,7 @@ let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_build_constraints = 1
+let g:deoplete#sources#go = 'vim-go'
 
 augroup nolistgo
   autocmd FileType go setlocal nolist
