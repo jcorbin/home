@@ -115,7 +115,7 @@ let g:airline#extensions#promptline#snapshot_file = "~/.promptline.sh"
 " Options {{{
 
 set cursorline
-set cursorcolumn
+set nocursorcolumn
 set expandtab
 set list
 set scrolloff=3 " Try to keep 3 lines after cursor
