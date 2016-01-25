@@ -2,7 +2,7 @@
 # after: editor
 
 nvim_path=$(which nvim 2>/dev/null)
-if [ -n "$nvim_path" ]; then
+if [ -x "$nvim_path" ]; then
     export EDITOR=$nvim_path
 
     alias vi='nvim'
