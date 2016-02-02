@@ -125,7 +125,6 @@ endif
 " }}}
 
 " Save swap files in central location {{{
-set swapsync=
 set directory=$HOME/.config/nvim/swap
 if exists("*mkdir") && !isdirectory(&directory)
   call mkdir(&directory, "p", 0700)
