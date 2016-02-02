@@ -215,6 +215,9 @@ let g:go_highlight_structs = 1
 let g:go_highlight_build_constraints = 1
 let g:deoplete#sources#go = 'vim-go'
 
+let g:go_term_mode = "split"
+let g:go_term_enabled = 1
+
 augroup nolistgo
   autocmd FileType go setlocal nolist
 augroup END
