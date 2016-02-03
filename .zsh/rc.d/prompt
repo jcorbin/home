@@ -4,7 +4,10 @@ setopt transientrprompt
 autoload -U promptinit
 promptinit
 
-if [ -f ~/.promptline.sh ]; then
+if [ -e ~/.demo-mode ]; then
+    prompt off
+    export PS1='$ '
+elif [ -f ~/.promptline.sh ]; then
     source ~/.promptline.sh
 else
     prompt wunjo
