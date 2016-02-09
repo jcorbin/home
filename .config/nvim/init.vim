@@ -254,6 +254,12 @@ au FileType java nmap <leader>i :JavaImport<Cr>
 
 let mapleader=","
 
+" easier use of ranged global normal {{{
+nnoremap <leader>gn :<C-u>nohlsearch<return>:'<,'>g/<C-r>//normal<space>
+vnoremap <leader>gn :<C-u>nohlsearch<return>:g/^/normal<space>
+vnoremap <leader>gN :<C-u>nohlsearch<return>:'<,'>g/<C-r>//normal<space>
+" }}}
+
 " bindsplit
 nmap <leader>bs <Plug>BindsplitVsplit
 
