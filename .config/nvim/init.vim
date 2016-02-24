@@ -18,6 +18,7 @@ Plug 'jcorbin/vim-number-cycle'
 Plug 'junegunn/goyo.vim'
 Plug 'justinmk/molokai' " fork of tomasr/molokai
 Plug 'kien/ctrlp.vim'
+Plug 'kopischke/vim-fetch'
 Plug 'majutsushi/tagbar'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
