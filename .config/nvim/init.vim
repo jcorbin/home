@@ -332,4 +332,6 @@ augroup END
 
 let g:vim_json_syntax_conceal = 0
 
+let g:startify_change_to_dir = 0
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
