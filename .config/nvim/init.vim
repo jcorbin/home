@@ -55,7 +55,6 @@ colorscheme molokai
 " airline {{{
 let g:airline_powerline_fonts=0
 let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#eclim#enabled = 1
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#capslock#enabled = 1
@@ -190,13 +189,6 @@ augroup filetype_ext_hacks
   autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
 augroup END
 " }}}
-
-" Syntastic {{{
-let g:syntastic_check_on_open = 1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_always_populate_loc_list = 1
 
 " Go! {{{
 au FileType go nmap <leader>r <Plug>(go-run)
