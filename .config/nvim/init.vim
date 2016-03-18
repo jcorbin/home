@@ -251,6 +251,10 @@ augroup loadvimgosnip
   autocmd FileType go NeoSnippetSource ~/.config/nvim/plugged/vim-go/gosnippets/snippets/go.snip
 augroup END
 
+" For conceal markers.
+set conceallevel=1
+set concealcursor=niv
+
 " }}}
 
 " Java ... {{{
