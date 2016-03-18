@@ -6,6 +6,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
+Plug 'benekastah/neomake'
 Plug 'bling/vim-airline'
 Plug 'bling/vim-bufferline'
 Plug 'elzr/vim-json'
@@ -335,6 +336,9 @@ augroup END
 " }}}
 
 let g:vim_json_syntax_conceal = 0
+autocmd! BufWritePost * Neomake
+autocmd! BufReadPost * Neomake
+let g:neomake_javascript_enabled_makers = ['eslint']
 
 let g:startify_change_to_dir = 0
 
