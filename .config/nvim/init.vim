@@ -24,6 +24,7 @@ Plug 'majutsushi/tagbar'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
 Plug 'pangloss/vim-javascript'
+Plug 'robertmeta/nofrils'
 Plug 'rodjek/vim-puppet'
 Plug 'sjl/gundo.vim'
 Plug 'solarnz/thrift.vim'
@@ -45,6 +46,7 @@ call plug#end()
 " colorscheme {{{
 
 set background=dark
+let g:nofrils_strbackgrounds=1
 
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 let g:molokai_original = 0
