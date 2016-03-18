@@ -6,6 +6,15 @@ import os
 import sys
 from subprocess import list2cmdline
 
+
+def ssh_quote_arg(arg):
+    # TODO: bit stove-piped / hacky... but this is what GTD
+    arg = arg.replace('\\', '\\\\\\')
+    arg = arg.replace('"', '\\"')
+    arg = '"%s"' % arg
+    return arg
+
+
 def usage(mess=None):
     if mess:
         print(str(mess) + '\n', file=sys.stderr)
@@ -16,10 +25,12 @@ def usage(mess=None):
         "\nOptions:\n"
         "  -h,  Show help.\n"
         "  -o,  Additional arguments are optional.\n"
+        "  -s,  SSH Mode; TODO what is this.\n"
         "  -v,  Print command before running it."
         .format(progname), file=sys.stderr)
     sys.exit(1)
 
+SSHMode = False
 OptionalCmd = False
 Verbose = False
 
@@ -32,6 +43,8 @@ while args and args[0].startswith('-'):
         Verbose = True
     elif arg == '-o':
         OptionalCmd = True
+    elif arg == '-s':
+        SSHMode = True
     else:
         usage('invalid option ' + arg)
 
@@ -51,7 +64,12 @@ if not args and not OptionalCmd:
           .format(list2cmdline(cmd)), file=sys.stderr)
     sys.exit(1)
 
-cmd.append(list2cmdline(args))
+if SSHMode:
+    # cmd.extend(ssh_quote_arg(arg) for arg in args)
+    cmd.append(ssh_quote_arg(list2cmdline(args)))
+else:
+    cmd.append(list2cmdline(args))
+
 if Verbose:
     print('+', list2cmdline(cmd))
 os.execvp(cmd[0], cmd)
