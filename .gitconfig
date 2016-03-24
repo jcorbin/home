@@ -88,6 +88,7 @@
     phub = !git push -u origin $(basename $(git symbolic-ref HEAD)) && hub pull-request create
     uewu = config user.email jcorbin@wunjo.org
     mrg = merge --no-ff --no-edit
+    detachat = !git checkout $(git rev-parse HEAD)
 
 [push]
     default = simple
