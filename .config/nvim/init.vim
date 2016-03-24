@@ -15,7 +15,6 @@ Plug 'godlygeek/tabular'
 Plug 'honza/vim-snippets'
 Plug 'jcorbin/vim-bindsplit'
 Plug 'jcorbin/vim-fold-toggle'
-Plug 'jcorbin/vim-number-cycle'
 Plug 'junegunn/goyo.vim'
 Plug 'justinmk/molokai' " fork of tomasr/molokai
 Plug 'kien/ctrlp.vim'
@@ -92,14 +91,6 @@ set tabstop=4
 set shiftwidth=4
 set smartindent
 
-" }}}
-
-" Line numbering {{{
-set number
-set relativenumber
-
-" cycles between no, abs, and rel line numbering
-nmap <leader># <Plug>NumberCycle
 " }}}
 
 " searching {{{
