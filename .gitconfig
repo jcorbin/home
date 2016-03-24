@@ -89,6 +89,7 @@
     uewu = config user.email jcorbin@wunjo.org
     mrg = merge --no-ff --no-edit
     detachat = !git checkout $(git rev-parse HEAD)
+    mergeto = !git checkout $1 && git merge HEAD@{1}
 
 [push]
     default = simple
