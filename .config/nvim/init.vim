@@ -49,14 +49,26 @@ let g:nofrils_strbackgrounds=1
 
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 let g:molokai_original = 0
+let g:hot_colors_name = 'molokai'
+let g:cool_colors_name = 'nofrils-dark'
 
 try
     if g:colors_name == "default"
-        colorscheme molokai
+        execute 'colorscheme ' . g:hot_colors_name
     endif
 catch E121
-    colorscheme molokai
+    execute 'colorscheme ' . g:hot_colors_name
 endtry
+
+function! ToggleHotCold()
+  if g:colors_name == g:hot_colors_name
+      execute 'colorscheme ' . g:cool_colors_name
+  else
+      execute 'colorscheme ' . g:hot_colors_name
+  endif
+endfunction
+
+nnoremap cof :call ToggleHotCold()<CR>
 
 " }}}
 
