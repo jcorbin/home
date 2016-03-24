@@ -49,7 +49,14 @@ let g:nofrils_strbackgrounds=1
 
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 let g:molokai_original = 0
-colorscheme molokai
+
+try
+    if g:colors_name == "default"
+        colorscheme molokai
+    endif
+catch E121
+    colorscheme molokai
+endtry
 
 " }}}
 
