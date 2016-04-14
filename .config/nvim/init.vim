@@ -214,12 +214,12 @@ let g:go_jump_to_error = 1
 let g:go_fmt_command = "goimports"
 " let g:go_fmt_options = ''
 " let g:go_fmt_fail_silently = 0
-let g:go_highlight_operators = 1
+let g:deoplete#sources#go = 'vim-go'
+let g:go_highlight_build_constraints = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
 let g:go_highlight_structs = 1
-let g:go_highlight_build_constraints = 1
-let g:deoplete#sources#go = 'vim-go'
 
 let g:go_term_mode = "split"
 let g:go_term_enabled = 1
