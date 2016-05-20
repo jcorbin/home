@@ -45,6 +45,7 @@ call plug#end()
 
 " colorscheme {{{
 
+set termguicolors
 set background=dark
 let g:nofrils_strbackgrounds=1
 
