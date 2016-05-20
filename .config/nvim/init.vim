@@ -366,9 +366,12 @@ augroup END
 " }}}
 
 let g:vim_json_syntax_conceal = 0
-autocmd! BufWritePost * silent Neomake
-autocmd! BufReadPost * silent Neomake
-autocmd! BufEnter * silent Neomake
+augroup neomake
+  autocmd! BufWritePost * silent Neomake
+  autocmd! BufReadPost * silent Neomake
+  " autocmd! BufEnter * silent Neomake
+  " autocmd! FocusGained * silent Neomake
+augroup END
 let g:neomake_javascript_enabled_makers = ['eslint']
 
 let g:startify_change_to_dir = 0
