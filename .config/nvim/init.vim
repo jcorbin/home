@@ -111,6 +111,7 @@ let g:netrw_liststyle = 3
 set tabstop=4
 set shiftwidth=4
 set smartindent
+set nowrap
 
 " }}}
 
