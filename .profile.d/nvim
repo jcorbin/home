@@ -10,6 +10,5 @@ if [ -n "$nvim_path" ]; then
     alias view='nvim -R'
 
     # TODO: would be nice to push these down into .config/nvim/init.vim
-    export NVIM_TUI_ENABLE_TRUE_COLOR=1
     export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 fi
