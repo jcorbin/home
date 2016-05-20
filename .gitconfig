@@ -58,6 +58,9 @@
     cix = commit --allow-empty -m 'Ex Nilho'
     cn = clean -n
     co = checkout
+    cod = checkout --detach
+    cob = checkout -b
+    coB = checkout --no-track -B
     cp = cherry-pick
     dc = diff --cached
     doh = commit --amend --no-edit
