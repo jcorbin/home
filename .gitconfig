@@ -70,6 +70,8 @@
     lbf = log --first-parent --pretty=brief
     lg = log --graph --pretty=brief
     lgf = log --first-parent --graph --pretty=brief
+    lga = log --first-parent --graph --pretty=brief --all
+    lgb = log --first-parent --graph --pretty=brief --branches
     mt = mergetool
     nrs = name-rev --stdin
     pack = repack -Ad
