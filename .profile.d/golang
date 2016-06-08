@@ -1,6 +1,9 @@
 #!/bin/sh
 # after: colon_component
 
+# shellcheck source=/dev/null
+[ -s "$HOME/.gvm/scripts/gvm" ] && . "$HOME/.gvm/scripts/gvm"
+
 export GOPATH=$HOME/golang
 append_colon_component PATH "$GOPATH/bin"
 
