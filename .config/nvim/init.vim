@@ -316,6 +316,9 @@ let g:grepper.open      = 1
 let g:grepper.switch    = 1
 let g:grepper.jump      = 0
 let g:grepper.next_tool = '<leader>g'
+let g:grepper.pt = {
+  \ 'pt':        { 'grepprg':    'pt --nogroup --skip-vcs-ignores',
+  \                'grepformat': '%f:%l:%m' }}
 
 " }}}
 
