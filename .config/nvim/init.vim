@@ -311,7 +311,7 @@ nmap gs  <plug>(GrepperOperator)
 xmap gs  <plug>(GrepperOperator)
 
 let g:grepper           = {}
-let g:grepper.tools     = ['git', 'pt', 'grep']
+let g:grepper.tools     = ['git', 'pt', 'grep', 'ack']
 let g:grepper.open      = 1
 let g:grepper.switch    = 1
 let g:grepper.jump      = 0
