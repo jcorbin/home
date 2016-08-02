@@ -1,4 +1,5 @@
-gtk-2.0
-itape/
-hub
-configstore/
+# Ignore everything by default
+/*
+
+# Then whitelist
+nvim/
