@@ -1,8 +1,0 @@
-#!/bin/sh
-# after: term
-
-if [ -d "$HOME/powerline" ]; then
-    export POWERLINE_HOME=$HOME/powerline
-    export POWERLINE_BINDINGS=$POWERLINE_HOME/powerline/bindings
-    append_colon_component PATH $POWERLINE_HOME/scripts
-fi
