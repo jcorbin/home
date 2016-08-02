@@ -6,7 +6,6 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
-Plug 'benekastah/neomake'
 Plug 'bling/vim-airline'
 Plug 'bling/vim-bufferline'
 Plug 'davidhalter/jedi-vim'
@@ -27,6 +26,7 @@ Plug 'pR0Ps/molokai-dark'
 Plug 'pangloss/vim-javascript'
 Plug 'robertmeta/nofrils'
 Plug 'rodjek/vim-puppet'
+Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'tikhomirov/vim-glsl'
@@ -384,14 +384,15 @@ let g:vim_json_syntax_conceal = 0
 let g:startify_change_to_dir = 0
 " }}}
 
-" Neomake {{{
-augroup neomake
-  autocmd! BufWritePost * silent Neomake
-  autocmd! BufReadPost * silent Neomake
-  autocmd! BufEnter * silent Neomake
-  autocmd! FocusGained * silent Neomake
-augroup END
-let g:neomake_javascript_enabled_makers = ['eslint']
+" Syntastic {{{
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_error_symbol = "\u2717"
+let g:syntastic_warning_symbol = "\u26A0"
+let g:syntastic_javascript_checkers = ["eslint"]
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
