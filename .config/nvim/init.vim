@@ -23,6 +23,7 @@ Plug 'kopischke/vim-fetch'
 Plug 'majutsushi/tagbar'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
+Plug 'pR0Ps/molokai-dark'
 Plug 'pangloss/vim-javascript'
 Plug 'robertmeta/nofrils'
 Plug 'rodjek/vim-puppet'
@@ -52,7 +53,7 @@ let g:nofrils_strbackgrounds=1
 
 let g:rehash256 = 1 " better 256-terminal colors for molokai
 let g:molokai_original = 0
-let g:hot_colors_name = 'molokai'
+let g:hot_colors_name = 'molokai-dark'
 let g:cool_colors_name = 'nofrils-dark'
 
 try
