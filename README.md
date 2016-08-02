@@ -61,3 +61,11 @@ for early fragments such as [`hostname`](.profile.d/hostname) and
 
 Dependency resolution is done by a simple [python script](bin/deporder) driving
 a simple `for part in ...; do source $part; done` loop.
+
+# Shell Orchestration: TMux (RIP Screen)
+
+I use [TMux](https://tmux.github.io/) for terminal multiplexing; its config is
+kept in [`.tmux.conf`](.tmux.conf) with an additional include [statusline
+styling](.tmux-dark.conf).
+
+I do also have mouldering [`.screenrc`](.screenrc) from a long time ago.
