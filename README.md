@@ -26,3 +26,38 @@ All of this allows me to:
   artifacts do not break my actual `$HOME`
 - easily separate public vs private changes without much risk of leaking
   private details to Github
+
+# Basic Shell Setup: `.profile`, `.bashrc`, and `.zshrc`
+
+First off, I'm primarily a Zsh user, but also have to use bash on occasion.
+
+Because of this, there's a clear separation between non-shell specific
+environment in [`.profile`](.profile), and any shell-specific things in that
+shell's rc file.
+
+There's also a shared [`.aliases`](.aliases) file between bash and zsh (TODO:
+I've never cared enough about my bash to fragment its rc, probably should get
+on that).
+
+Rather than manage a monolithic dot file, I keep my [`.profile`](.profile) and
+[`.zshrc`](.zshrc) fragmented into [`.profile.d/`](.profile.d) and
+[`.zsh/rc.d/`](.zsh/rc.d) respectively.
+
+So that I don't get into a manual numeric-prefixing game, I declare fragment
+dependencies in comments in each fragment; for example, I could have a file
+`.profile.d/bar`:
+
+    # after: foo
+    export BAR_THING="$FOO_THING"
+
+Since the `bar` fragment depends on the `foo` fragemnet to define `$FOO_THING`.
+There is also a corresponding `# before: ...` form so that a dependency can
+inject itself before a dependant.
+
+Dependency and dependant names don't have to actually be concrete files; for
+example in my [`.profile.d`](.profile.d) I have a virtual `bootstrap` dependant
+for early fragments such as [`hostname`](.profile.d/hostname) and
+[`locale`](.profile.d/locale).
+
+Dependency resolution is done by a simple [python script](bin/deporder) driving
+a simple `for part in ...; do source $part; done` loop.
