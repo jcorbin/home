@@ -33,6 +33,19 @@ Much of my workflow as a programmer revolves around managing changes.  As such,
 my [git config](.gitconfig) is one of the parts of my setup that I iterate on
 the most.  The `[alias]` section is where most of the important parts are.
 
+# (Neo)Vim
+
+The only thing I use more than git, is [vim](http://www.vim.org) (actually
+[neovim](https://neovim.io/).)  While I do still have a [.vimrc](.vimrc) for
+classic vim, it's under-maintained at this point.  Most of my vim config that
+matters is in [.config/nvim/init.vim](.config/nvim/init.vim).
+
+I use [vim-plug](https://github.com/junegunn/vim-plug) to manage my neovim
+plugins (and [pathogen](https://github.com/tpope/vim-pathogen) for classic
+vim).  I try to keep my vim config cleanly organized using manual fold markers,
+and by separating out anything beyond simple settings changes into separate
+plugins.
+
 # Basic Shell Setup: `.profile`, `.bashrc`, and `.zshrc`
 
 First off, I'm primarily a Zsh user, but also have to use bash on occasion.
