@@ -376,7 +376,15 @@ augroup filetype_abbrs
 augroup END
 " }}}
 
+" JSON {{{
 let g:vim_json_syntax_conceal = 0
+" }}}
+
+" Startify {{{
+let g:startify_change_to_dir = 0
+" }}}
+
+" Neomake {{{
 augroup neomake
   autocmd! BufWritePost * silent Neomake
   autocmd! BufReadPost * silent Neomake
@@ -384,7 +392,6 @@ augroup neomake
   autocmd! FocusGained * silent Neomake
 augroup END
 let g:neomake_javascript_enabled_makers = ['eslint']
-
-let g:startify_change_to_dir = 0
+" }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
