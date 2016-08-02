@@ -5,6 +5,8 @@
 !.gitignore
 !.gitconfig
 
+!README.md
+
 !bin/
 
 !.vimrc
