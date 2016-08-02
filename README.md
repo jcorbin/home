@@ -27,6 +27,12 @@ All of this allows me to:
 - easily separate public vs private changes without much risk of leaking
   private details to Github
 
+# Git
+
+Much of my workflow as a programmer revolves around managing changes.  As such,
+my [git config](.gitconfig) is one of the parts of my setup that I iterate on
+the most.  The `[alias]` section is where most of the important parts are.
+
 # Basic Shell Setup: `.profile`, `.bashrc`, and `.zshrc`
 
 First off, I'm primarily a Zsh user, but also have to use bash on occasion.
