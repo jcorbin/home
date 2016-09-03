@@ -3,12 +3,14 @@
 # after: colon_component
 # after: sbin_path
 
-prepend_colon_component PATH $HOME/.local/bin
-prepend_colon_component PATH $HOME/bin
+prepend_colon_component PATH "$HOME/.local/bin"
+prepend_colon_component PATH "$HOME/bin"
 
-for python_lib in $HOME/Library/Python/*; do
-    if [ -d "$python_lib" ]; then
-        force_prepend_colon_component PATH $python_lib/bin
-        break
-    fi
-done
+if [ -d "$HOME/Library/Python" ]; then
+    for python_lib in $HOME/Library/Python/*; do
+        if [ -d "$python_lib" ]; then
+            force_prepend_colon_component PATH "$python_lib/bin"
+            break
+        fi
+    done
+fi
