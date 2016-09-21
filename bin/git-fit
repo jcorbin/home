@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+case "$(basename "$0")" in
+git-s*)
+    action=squash
+    ;;
+git-f*)
+    action=fixup
+    ;;
+esac
+
+rev=${1:HEAD}
+subject=$(git show "$rev" -s --pretty=format:%s)
+git commit -m "$action! $subject"
