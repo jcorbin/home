@@ -31,6 +31,7 @@ Plug 'sjl/gundo.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'tikhomirov/vim-glsl'
 Plug 'tomasr/molokai' " XXX justinmk has some dubious O(pnions) about diff colors
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
