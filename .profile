@@ -2,7 +2,7 @@
 
 # Common shell environment and configuration
 
-for part in $(~/bin/deporder -f ~/.profile.d); do
+for part in $(~/bin/deporder ~/.profile.d); do
 	. $part
 done
 

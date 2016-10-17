@@ -95,13 +95,11 @@ def main(argv=None):
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dump', action='store_true')
-    parser.add_argument('-f', '--full', action='store_true')
     parser.add_argument('path', default='.', nargs='?')
     args = parser.parse_args(args=argv)
     G = DependencyGraph(args.path)
     parts = [node for node in G.itertopo() if node in G.parts]
-    if args.full:
-        parts = [os.path.join(G.path, part) for part in parts]
+    parts = [os.path.join(G.path, part) for part in parts]
     for part in parts:
         print part
 

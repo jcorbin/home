@@ -9,7 +9,7 @@ else
     source ~/.profile.d/arrayutil
 fi
 
-for part in $(~/bin/deporder -f ~/.zsh/rc.d); do
+for part in $(~/bin/deporder ~/.zsh/rc.d); do
     source $part
 done
 
