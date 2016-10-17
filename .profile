@@ -2,9 +2,12 @@
 
 # Common shell environment and configuration
 
-for part in $(~/bin/deporder ~/.profile.d); do
-	. $part
-done
+if [ -x ~/bin/deporder ]; then
+    ~/bin/deporder -out ~/.profile.d/.cached ~/.profile.d
+fi
+if [ -f ~/.profile.d/.cached ]; then
+    source ~/.profile.d/.cached
+fi
 
 # Given the complicated relationship between profile and shell rc,
 # and given the assumption "you never don't want your profile setup in an

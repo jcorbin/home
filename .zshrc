@@ -9,9 +9,17 @@ else
     source ~/.profile.d/arrayutil
 fi
 
-for part in $(~/bin/deporder ~/.zsh/rc.d); do
-    source $part
-done
+if [ -n "$TIME_ZSHRC" ]; then
+    ~/bin/deporder -timed -out ~/.zsh/rc.d/.cached.timed ~/.zsh/rc.d
+    source ~/.zsh/rc.d/.cached.timed
+else
+    if [ -x ~/bin/deporder ]; then
+        ~/bin/deporder -out ~/.zsh/rc.d/.cached ~/.zsh/rc.d
+    fi
+    if [ -f ~/.zsh/rc.d/.cached ]; then
+        source ~/.zsh/rc.d/.cached
+    fi
+fi
 
 # For restoring sanity to MacOS: ~/.profile.d/brew_gnu_path defines re_gnu and
 # no_gnu to subvert much of BSD userspace with GNU alternatives. However we
