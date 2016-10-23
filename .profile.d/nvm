@@ -2,4 +2,14 @@
 # before: nodejs
 # after: bootstrap
 
-[ -e "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+if [ -e "$HOME/.nvm/nvm.sh" ]; then
+    if [ -f "$HOME/.nvm/alias/default" ]; then
+        prepend_colon_component PATH "$HOME/.nvm/v$(cat "$HOME/.nvm/alias/default")/bin"
+    fi
+
+    nvm()
+    {
+        source "$HOME/.nvm/nvm.sh"
+        nvm "$@"
+    }
+fi
