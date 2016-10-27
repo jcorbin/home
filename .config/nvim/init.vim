@@ -53,8 +53,6 @@ set termguicolors
 set background=dark
 let g:nofrils_strbackgrounds=1
 
-let g:rehash256 = 1 " better 256-terminal colors for molokai
-let g:molokai_original = 0
 let g:hot_colors_name = 'molokai-dark'
 let g:cool_colors_name = 'nofrils-dark'
 
