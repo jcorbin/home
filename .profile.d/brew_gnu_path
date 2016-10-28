@@ -7,13 +7,16 @@
 
 # gnu toolchain from homebrew
 
+gnu_brews=(coreutils gnu-sed)
+
 no_gnu()
 {
     local IFS=:
-    PATH=$(without /usr/local/opt/coreutils/libexec/gnubin $PATH)
-    PATH=$(without /usr/local/opt/gnu-sed/libexec/gnubin $PATH)
-    MANPATH=$(without /usr/local/opt/coreutils/libexec/gnuman $MANPATH)
-    MANPATH=$(without /usr/local/opt/gnu-sed/libexec/gnuman $MANPATH)
+    for gnu_brew in $gnu_brews; do
+        brew_dir=/usr/local/opt/$gnu_brew
+        PATH=$(without $brew_dir/libexec/gnubin $PATH)
+        MANPATH=$(without $brew_dir/libexec/gnuman $MANPATH)
+    done
     export PATH MANPATH
     alias ls='ls -Fhb'
 }
@@ -21,10 +24,13 @@ no_gnu()
 re_gnu()
 {
     local IFS=:
-    PATH=$(prepend /usr/local/opt/coreutils/libexec/gnubin $PATH)
-    PATH=$(prepend /usr/local/opt/gnu-sed/libexec/gnubin $PATH)
-    MANPATH=$(prepend /usr/local/opt/coreutils/libexec/gnuman $MANPATH)
-    MANPATH=$(prepend /usr/local/opt/gnu-sed/libexec/gnuman $MANPATH)
+    for gnu_brew in $gnu_brews; do
+        brew_dir=/usr/local/opt/$gnu_brew
+        if [ -d "$brew_dir" ]; then
+            PATH=$(prepend $brew_dir/libexec/gnubin $PATH)
+            MANPATH=$(prepend $brew_dir/libexec/gnuman $MANPATH)
+        fi
+    done
     export PATH MANPATH
     alias ls='ls -Fhb --time-style=long-iso --color=auto'
 }
