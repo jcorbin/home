@@ -1,6 +1,6 @@
 #!/bin/sh
 # before: path
-# after: colon_component
+# after: arrayutil
 # after: usr_local_path
 
 # TODO: noop when not on OS-X and/or no brew installed gnu
@@ -9,19 +9,23 @@
 
 no_gnu()
 {
-    remove_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
-    remove_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
-    remove_colon_component PATH    /usr/local/opt/gnu-sed/libexec/gnubin
-    remove_colon_component MANPATH /usr/local/opt/gnu-sed/libexec/gnuman
+    local IFS=:
+    PATH=$(without /usr/local/opt/coreutils/libexec/gnubin $PATH)
+    PATH=$(without /usr/local/opt/gnu-sed/libexec/gnubin $PATH)
+    MANPATH=$(without /usr/local/opt/coreutils/libexec/gnuman $MANPATH)
+    MANPATH=$(without /usr/local/opt/gnu-sed/libexec/gnuman $MANPATH)
+    export PATH MANPATH
     alias ls='ls -Fhb'
 }
 
 re_gnu()
 {
-    prepend_colon_component PATH    /usr/local/opt/coreutils/libexec/gnubin
-    prepend_colon_component MANPATH /usr/local/opt/coreutils/libexec/gnuman
-    prepend_colon_component PATH    /usr/local/opt/gnu-sed/libexec/gnubin
-    prepend_colon_component MANPATH /usr/local/opt/gnu-sed/libexec/gnuman
+    local IFS=:
+    PATH=$(prepend /usr/local/opt/coreutils/libexec/gnubin $PATH)
+    PATH=$(prepend /usr/local/opt/gnu-sed/libexec/gnubin $PATH)
+    MANPATH=$(prepend /usr/local/opt/coreutils/libexec/gnuman $MANPATH)
+    MANPATH=$(prepend /usr/local/opt/gnu-sed/libexec/gnuman $MANPATH)
+    export PATH MANPATH
     alias ls='ls -Fhb --time-style=long-iso --color=auto'
 }
 

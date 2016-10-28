@@ -1,6 +1,6 @@
 #!/bin/sh
 # before: python
-# after: colon_component
+# after: arrayutil
 # after: bootstrap
 
-prepend_colon_component PYTHONPATH $HOME/lib/python
+[ -d "$HOME/lib/python" ] && export PYTHONPATH=$(IFS=:; prepend "$HOME/lib/python" $PYTHONPATH)

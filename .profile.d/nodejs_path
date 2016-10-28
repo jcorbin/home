@@ -1,8 +1,6 @@
 #!/bin/sh
 # before: path
 # before: nodejs
+# after: arrayutil
 
-# TOOD: could use prepend_colon_component if it special cased
-# .-relative paths to skip existence check
-
-export PATH=./node_modules/.bin:$PATH
+export PATH=$(IFS=:; prepend "./node_modules/.bin" $PATH)

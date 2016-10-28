@@ -1,10 +1,12 @@
 #!/bin/sh
 # before: nodejs
 # after: bootstrap
+# after: arrayutil
 
 if [ -e "$HOME/.nvm/nvm.sh" ]; then
     if [ -f "$HOME/.nvm/alias/default" ]; then
-        prepend_colon_component PATH "$HOME/.nvm/v$(cat "$HOME/.nvm/alias/default")/bin"
+        nvm_default=$(cat "$HOME/.nvm/alias/default")
+        export PATH=$(IFS=:; prepend  "$HOME/.nvm/v${nvm_default}/bin" $PATH)
     fi
 
     nvm()

@@ -1,6 +1,6 @@
 #!/bin/sh
 # before: path
-# after: colon_component
+# after: arrayutil
 
-append_colon_component PATH /sbin
-append_colon_component PATH /usr/sbin
+export PATH=$(IFS=:; append /sbin $PATH)
+export PATH=$(IFS=:; append /usr/sbin $PATH)

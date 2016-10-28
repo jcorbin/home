@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# without removes a component from a its argument array, echoing the new array
+# joined by IFS.  E.g.:
+#
+#   $ without bob alice bob charlie
+#   alice charlie
+#
+#   $ PATH=/bin:/usr/bin:/usr/local/bin
+#   $ IFS=:; without /usr/local/bin $PATH
+#   /bin:/usr/bin
+without()
+{
+    arg="$1"
+    shift
+    out=()
+    for part in "$@"; do
+        if [ -n "$part" ] && [ "$part" != "$arg" ]; then
+            out+=($part)
+        fi
+    done
+    echo "${out[*]}"
+}
+
+prepend()
+{
+    arg="$1"
+    shift
+    out=($arg)
+    for part in "$@"; do
+        if [ -n "$part" ] && [ "$part" != "$arg" ]; then
+            out+=($part)
+        fi
+    done
+    echo "${out[*]}"
+}
+
+append()
+{
+    arg="$1"
+    shift
+    out=()
+    for part in "$@"; do
+        if [ -n "$part" ] && [ "$part" != "$arg" ]; then
+            out+=($part)
+        fi
+    done
+    out+=($arg)
+    echo "${out[*]}"
+}

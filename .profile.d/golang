@@ -1,11 +1,11 @@
 #!/bin/sh
-# after: colon_component
+# after: arrayutil
 
 # shellcheck source=/dev/null
 [ -s "$HOME/.gvm/scripts/gvm" ] && . "$HOME/.gvm/scripts/gvm"
 
 export GOPATH=$HOME/golang
-append_colon_component PATH "$GOPATH/bin"
+export PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
 
 goclone()
 {
