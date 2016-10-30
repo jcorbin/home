@@ -1,17 +1,8 @@
 # Globals
 
-saneGrep() {
-  grep $@ | grep -v grep
-}
-
-alias -g L='|less'
-alias -g G='| saneGrep'
-alias -g H='|head'
-
 . ~/.aliases
 
 alias mkdir='nocorrect mkdir'
-alias gb='gitback'
 alias dirs='dirs -pv'
 
 # vim:set ft=zsh:
