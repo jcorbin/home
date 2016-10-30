@@ -8,6 +8,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'bling/vim-airline'
 Plug 'bling/vim-bufferline'
+Plug 'brookhong/cscope.vim'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
 Plug 'garyburd/go-explorer'
@@ -281,6 +282,46 @@ augroup END
 " For conceal markers.
 set conceallevel=1
 set concealcursor=niv
+
+" }}}
+
+" CScope {{{
+
+if has("cscope")
+  set csprg=/usr/local/bin/cscope
+  set csto=0
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  " else add database pointed to by environment
+  elseif $CSCOPE_DB != ""
+      cs add $CSCOPE_DB
+  endif
+  set csverb
+endif
+
+au FileType c nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
+au FileType c nnoremap <leader>l :call ToggleLocationList()<CR>
+
+" s: Find this C symbol
+au FileType c nnoremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+" g: Find this definition
+au FileType c nnoremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+" d: Find functions called by this function
+au FileType c nnoremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+" c: Find functions calling this function
+au FileType c nnoremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+" t: Find this text string
+au FileType c nnoremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+" e: Find this egrep pattern
+au FileType c nnoremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+" f: Find this file
+au FileType c nnoremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+" i: Find files #including this file
+au FileType c nnoremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
+
 
 " }}}
 
