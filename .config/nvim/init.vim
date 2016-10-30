@@ -20,7 +20,6 @@ Plug 'pR0Ps/molokai-dark'
 Plug 'pangloss/vim-javascript'
 Plug 'robertmeta/nofrils'
 Plug 'rodjek/vim-puppet'
-Plug 'scrooloose/syntastic'
 Plug 'sjl/gundo.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'tikhomirov/vim-glsl'
@@ -379,17 +378,6 @@ let g:vim_json_syntax_conceal = 0
 
 " Startify {{{
 let g:startify_change_to_dir = 0
-" }}}
-
-" Syntastic {{{
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_error_symbol = "\u2717"
-let g:syntastic_warning_symbol = "\u26A0"
-let g:syntastic_javascript_checkers = ["eslint"]
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
