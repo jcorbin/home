@@ -220,11 +220,12 @@ au FileType go nmap <leader>d <Plug>(go-doc)
 " au FileType go nmap <leader>d <Plug>(go-def)
 " au FileType go nmap <leader>i :GoImports<Cr>
 
+let g:go_fmt_command = "goimports"
+let g:go_fmt_fail_silently = 1
+
 let g:go_auto_type_info = 1
 let g:go_jump_to_error = 1
-let g:go_fmt_command = "goimports"
-" let g:go_fmt_options = ''
-let g:go_fmt_fail_silently = 1
+
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_interfaces = 1
@@ -233,8 +234,10 @@ let g:go_highlight_operators = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_generate_tags = 1
+
 let g:deoplete#sources#go = 'vim-go'
 let g:go_snippet_engine = "neosnippet"
+
 let g:go_metalinter_autosave = 1
 " let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 " let g:go_metalinter_autosave_enabled = ['vet', 'golint']
