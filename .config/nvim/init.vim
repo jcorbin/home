@@ -16,6 +16,7 @@ Plug 'honza/vim-snippets'
 Plug 'kien/ctrlp.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
+Plug 'neomake/neomake'
 Plug 'pR0Ps/molokai-dark'
 Plug 'pangloss/vim-javascript'
 Plug 'robertmeta/nofrils'
@@ -378,6 +379,13 @@ let g:vim_json_syntax_conceal = 0
 
 " Startify {{{
 let g:startify_change_to_dir = 0
+" }}}
+
+" Neomake {{{
+let g:airline#extensions#neomake#enabled=1
+augroup neomake
+  autocmd! BufWritePost,BufEnter * Neomake
+augroup END
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
