@@ -4,7 +4,14 @@
 if which less>/dev/null; then
     PAGER="$(which less)"
     export PAGER
+
+    # sets default options to less
     export LESS='-SMRci'
+    # -S truncate rather than wraplong lines; type at runtime to toggle
+    # -M verbose prompts
+    # -R pass through raw control codes (e.g. ANSI color sequences)
+    # -c better full screen repaints
+    # -i case insensitive searches
 
     # TODO: only use 256 color when available
     # Old color scheme:
