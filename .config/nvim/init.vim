@@ -336,10 +336,27 @@ au FileType java nmap <leader>i :JavaImport<Cr>
 let mapleader=","
 
 " easier use of ranged global normal {{{
-nnoremap <leader>n :'<,'>normal<space>
+" uses, and organizes around, the undocumented `g\/` and `g\&` forms describe
+" in ex_global:
+
+" Perform a normal command...
+" ...on every line of the buffer
+nnoremap <leader>n :%normal<space>
+" ...on every line of a visual selection
 vnoremap <leader>n :normal<space>
-nnoremap <leader>gn :'<,'>g/<C-r>//normal<space>
-vnoremap <leader>gn :g/<C-r>//normal<space>
+" ...on every line of the last visual selection.
+nnoremap <leader>vn :'<,'>normal<space>
+
+" Same progression filtered by the last search pattern.
+nnoremap <leader>/n :%g\/normal<space>
+vnoremap <leader>/n :g\/normal<space>
+nnoremap <leader>/vn :'<,'>g\/normal<space>
+
+" Same progression filtered by the last substitution pattern.
+nnoremap <leader>&n :%g\&normal<space>
+vnoremap <leader>&n :g\&normal<space>
+nnoremap <leader>&vn :'<,'>g\&normal<space>
+
 " }}}
 
 " bindsplit
