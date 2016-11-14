@@ -101,6 +101,7 @@ set scrolloff=3 " Try to keep 3 lines after cursor
 set splitbelow
 set splitright
 set virtualedit=all
+set inccommand=nosplit
 
 let g:netrw_liststyle = 3
 
