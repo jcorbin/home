@@ -2,8 +2,7 @@
 # after: term
 
 if which less>/dev/null; then
-    PAGER="$(which less)"
-    export PAGER
+    export PAGER="$(which less)"
 
     # sets default options to less
     export LESS='-SMRci'
