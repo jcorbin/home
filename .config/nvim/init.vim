@@ -102,6 +102,7 @@ set splitbelow
 set splitright
 set virtualedit=all
 set inccommand=nosplit
+set fillchars=
 
 let g:netrw_liststyle = 3
 
