@@ -104,6 +104,7 @@ set virtualedit=all
 set inccommand=nosplit
 set fillchars=
 set lazyredraw
+set shortmess=atToO
 
 let g:netrw_liststyle = 3
 
