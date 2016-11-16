@@ -103,6 +103,7 @@ set splitright
 set virtualedit=all
 set inccommand=nosplit
 set fillchars=
+set lazyredraw
 
 let g:netrw_liststyle = 3
 
