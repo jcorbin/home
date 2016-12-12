@@ -104,6 +104,8 @@ set inccommand=nosplit
 set fillchars=
 set lazyredraw
 set shortmess=atToO
+set cmdheight=1
+set noshowmode
 
 let g:netrw_liststyle = 3
 
@@ -267,7 +269,6 @@ set completeopt=menu,preview,longest,noselect
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 
 " echodoc
-set noshowmode
 let g:echodoc_enable_at_startup=1
 
 " }}}
