@@ -352,13 +352,17 @@ vnoremap <leader>n :normal<space>
 nnoremap <leader>vn :'<,'>normal<space>
 
 " Same progression filtered by the last search pattern.
+nnoremap <leader>/: :%g\/<space>
 nnoremap <leader>/n :%g\/normal<space>
 vnoremap <leader>/n :g\/normal<space>
+nnoremap <leader>/v: :'<,'>g\/<space>
 nnoremap <leader>/vn :'<,'>g\/normal<space>
 
 " Same progression filtered by the last substitution pattern.
+nnoremap <leader>&: :%g\&<space>
 nnoremap <leader>&n :%g\&normal<space>
 vnoremap <leader>&n :g\&normal<space>
+nnoremap <leader>&v: :'<,'>g\&<space>
 nnoremap <leader>&vn :'<,'>g\&normal<space>
 
 " }}}
