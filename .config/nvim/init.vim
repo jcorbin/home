@@ -242,6 +242,7 @@ let g:go_highlight_generate_tags = 1
 
 let g:deoplete#sources#go = 'vim-go'
 let g:go_snippet_engine = "neosnippet"
+let g:go_template_autocreate = 0
 
 let g:go_metalinter_autosave = 1
 " let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
