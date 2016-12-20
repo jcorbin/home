@@ -1,6 +1,8 @@
 #!/bin/bash
 
-alias ls='ls -Fhb --time-style=long-iso --color=auto'
+if [ -n "$USE_GNU" ]; then
+    alias ls='ls -Fhb --time-style=long-iso --color=auto'
+fi
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
