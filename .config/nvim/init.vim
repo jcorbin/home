@@ -426,6 +426,8 @@ nnoremap <leader>tg :TagbarToggle<cr>
 
 " Tabular
 nnoremap <leader>tt :Tab<cr>
+nnoremap <leader>t\| :Tab/\|/<cr>
+nnoremap <leader>t/ :Tab/\//<cr>
 nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
