@@ -433,7 +433,8 @@ nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 
 " moar vinegar!
-nmap _ <Plug>VinegarVerticalSplitUp
+nmap <leader>- <Plug>VinegarSplitUp
+nmap <leader>\| <Plug>VinegarVerticalSplitUp
 
 " GUndo
 nnoremap <leader>gu :GundoToggle<CR>
