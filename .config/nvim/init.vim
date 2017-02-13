@@ -112,6 +112,8 @@ set shiftwidth=4
 set smartindent
 set nowrap
 
+set mouse=a
+
 " }}}
 
 " searching {{{
