@@ -1,7 +1,6 @@
 #!/bin/sh
 # before: path
 # after: arrayutil
-# after: usr_local_path
 
 # TODO: noop when not on OS-X and/or no brew installed gnu
 
