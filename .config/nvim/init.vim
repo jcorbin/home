@@ -288,8 +288,6 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#disable_auto_complete = 1
 set completeopt=menu,preview,longest,noselect
 
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
-
 " echodoc
 let g:echodoc_enable_at_startup=1
 
@@ -312,6 +310,19 @@ augroup END
 " For conceal markers.
 set conceallevel=1
 set concealcursor=niv
+
+" }}}
+
+" Tab key {{{
+
+" Invokes deoplete in insert mode.
+imap <silent> <expr><Tab> deoplete#mappings#manual_complete()
+
+" Try to expand or jump in normal mode.
+snoremap <expr><Tab>
+\ neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" :
+\ "\<Tab>"
 
 " }}}
 
