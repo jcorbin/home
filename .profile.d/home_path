@@ -3,21 +3,16 @@
 # after: arrayutil
 # after: sbin_path
 
-add_home_paths()
-{
-    local IFS=:
-    [ -d "$HOME/.local/bin" ] && PATH=$(prepend "$HOME/.local/bin" $PATH)
-    [ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
+local IFS=:
+[ -d "$HOME/.local/bin" ] && PATH=$(prepend "$HOME/.local/bin" $PATH)
+[ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
 
-    if [ -d "$HOME/Library/Python" ]; then
-        for python_lib in $HOME/Library/Python/*; do
-            if [ -d "$python_lib" ]; then
-                PATH=$(prepend "$python_lib/bin" $PATH)
-                break
-            fi
-        done
-    fi
-    export PATH
-}
-
-add_home_paths
+if [ -d "$HOME/Library/Python" ]; then
+    for python_lib in $HOME/Library/Python/*; do
+        if [ -d "$python_lib" ]; then
+            PATH=$(prepend "$python_lib/bin" $PATH)
+            break
+        fi
+    done
+fi
+export PATH
