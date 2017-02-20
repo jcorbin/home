@@ -302,7 +302,8 @@ xmap <C-e>     <Plug>(neosnippet_expand_target)
 imap <C-f>     <Plug>(neosnippet_jump)
 smap <C-f>     <Plug>(neosnippet_jump)
 
-let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
+" TODO get plugged root programatically for g:neosnippet#snippets_directory
+let g:neosnippet#snippets_directory="$HOME/.config/nvim/snippets,$HOME/.config/nvim/plugged/vim-snippets/snippets"
 
 augroup loadvimgosnip
   autocmd FileType go NeoSnippetSource ~/.config/nvim/plugged/vim-go/gosnippets/snippets/go.snip
