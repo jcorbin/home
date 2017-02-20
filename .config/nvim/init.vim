@@ -16,7 +16,6 @@ Plug 'honza/vim-snippets'
 Plug 'kien/ctrlp.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
-Plug 'neomake/neomake'
 Plug 'pR0Ps/molokai-dark'
 Plug 'pangloss/vim-javascript'
 Plug 'robertmeta/nofrils'
@@ -35,9 +34,17 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-utils/vim-man'
+Plug 'w0rp/ale'
 Plug 'zchee/deoplete-go'
 
 call plug#end()
+" }}}
+
+" Ale {{{
+
+let g:ale_sign_error='⊘'
+let g:ale_sign_warning='⚠'
+
 " }}}
 
 " colorscheme {{{
@@ -454,13 +461,6 @@ let g:vim_json_syntax_conceal = 0
 
 " Startify {{{
 let g:startify_change_to_dir = 0
-" }}}
-
-" Neomake {{{
-let g:airline#extensions#neomake#enabled=1
-augroup neomake
-  autocmd! BufWritePost,BufEnter * Neomake
-augroup END
 " }}}
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
