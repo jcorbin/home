@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO shard this to ~/.aliases.d
+
 if [ -n "$USE_GNU" ]; then
     alias ls='ls -Fhb --time-style=long-iso --color=auto'
 fi
