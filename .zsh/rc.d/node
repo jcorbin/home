@@ -1,6 +1,5 @@
 #!/bin/sh
 # before: nodejs
-# after: bootstrap
 # after: arrayutil
 
 if [ -e "$HOME/.nvm/nvm.sh" ]; then
@@ -15,3 +14,5 @@ if [ -e "$HOME/.nvm/nvm.sh" ]; then
         nvm "$@"
     }
 fi
+
+export PATH=$(IFS=:; prepend "./node_modules/.bin" $PATH)

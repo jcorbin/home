@@ -1,6 +1,0 @@
-#!/bin/sh
-# before: path
-# before: nodejs
-# after: arrayutil
-
-export PATH=$(IFS=:; prepend "./node_modules/.bin" $PATH)
