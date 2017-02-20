@@ -4,6 +4,7 @@
 # Then start whitelisting
 !.gitignore
 !.gitconfig
+!.gitmodules
 
 !README.md
 !TODO.md
