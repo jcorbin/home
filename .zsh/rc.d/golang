@@ -1,3 +1,32 @@
+#!/bin/sh
+# after: arrayutil
+
+# shellcheck source=/dev/null
+[ -s "$HOME/.gvm/scripts/gvm" ] && . "$HOME/.gvm/scripts/gvm"
+
+export GOPATH=$HOME/golang
+export PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
+
+goclone()
+{
+    name="$1"
+    dest="$GOPATH/src/$name"
+    [ -d "$dest" ] || mkdir -p "$dest"
+    case "$name" in
+    gh/*)
+        goclone "github.com/${name#*/}"
+        ;;
+    github.com/*)
+        git clone "gh:${name#*/}" "$dest"
+        ;;
+
+    *)
+        echo "Not sure how to goclone $name" >&2
+        return 1
+        ;;
+    esac
+}
+
 hash -d gos="$GOPATH/src"
 hash -d gog="$GOPATH/src/github.com"
 
