@@ -254,7 +254,7 @@ let g:deoplete#sources#go = 'vim-go'
 let g:go_snippet_engine = "neosnippet"
 let g:go_template_autocreate = 0
 
-let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave = 0 " XXX disabeld due to failing on fugitive buffers
 " let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 " let g:go_metalinter_autosave_enabled = ['vet', 'golint']
 " let g:go_metalinter_deadline = "5s"
