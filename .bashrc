@@ -1,7 +1,6 @@
 #!/bin/bash
 
 [ -f /etc/bashrc ] && source /etc/bashrc
-[ -f ~/.profile ] && source ~/.profile
 [ -f ~/.aliases ] && source ~/.aliases
 
 if [ -f ~/.promptline.sh ]; then
