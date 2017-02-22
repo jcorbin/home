@@ -115,6 +115,9 @@
     autoupdate = true
     enabled = true
 
+[http]
+    followRedirects = true
+
 [url "ssh://git@github.com/"]
     insteadOf = https://github.com/
     pushInsteadOf = https://github.com/
