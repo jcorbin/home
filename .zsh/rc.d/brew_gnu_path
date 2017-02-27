@@ -10,6 +10,7 @@ gnu_brews=(coreutils gnu-sed)
 
 no_gnu()
 {
+    USE_GNU=
     local IFS=:
     for gnu_brew in "${gnu_brews[@]}"; do
         brew_dir=/usr/local/opt/$gnu_brew
@@ -18,12 +19,14 @@ no_gnu()
         # shellcheck disable=SC2086
         MANPATH=$(without $brew_dir/libexec/gnuman $MANPATH)
     done
-    export PATH MANPATH
-    alias ls='ls -Fhb'
+    export PATH MANPATH USE_GNU
+    # shellcheck source=/dev/null
+    source ~/.aliases
 }
 
 re_gnu()
 {
+    USE_GNU=1
     local IFS=:
     for gnu_brew in "${gnu_brews[@]}"; do
         brew_dir=/usr/local/opt/$gnu_brew
@@ -34,12 +37,9 @@ re_gnu()
             MANPATH=$(prepend $brew_dir/libexec/gnuman $MANPATH)
         fi
     done
-    export PATH MANPATH
-    alias ls='ls -Fhb --time-style=long-iso --color=auto'
+    export PATH MANPATH USE_GNU
+    # shellcheck source=/dev/null
+    source ~/.aliases
 }
 
-if [ -n "$USE_GNU" ]; then
-	re_gnu
-else
-	no_gnu
-fi
+re_gnu
