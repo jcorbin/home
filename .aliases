@@ -7,6 +7,11 @@ if [ -n "$USE_GNU" ]; then
     alias chmod="chmod -c"
     alias chown="chown -c"
     alias ps="ps --forest -w"
+else
+    alias ls='ls -Fhb'
+    alias chmod="chmod -v"
+    alias chown="chown -v"
+    alias ps="ps -w"
 fi
 
 alias ll='ls -l'
