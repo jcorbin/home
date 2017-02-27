@@ -1,18 +1,25 @@
-#!/bin/sh
+#!/bin/bash
 # before: path
 # after: arrayutil
 # after: sbin_path
 
-local IFS=:
-[ -d "$HOME/.local/bin" ] && PATH=$(prepend "$HOME/.local/bin" $PATH)
-[ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
+add_home_paths()
+{
+    local IFS=:
+    # shellcheck disable=2086
+    [ -d "$HOME/.local/bin" ] && PATH=$(prepend "$HOME/.local/bin" $PATH)
+    # shellcheck disable=2086
+    [ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
 
-if [ -d "$HOME/Library/Python" ]; then
-    for python_lib in $HOME/Library/Python/*; do
-        if [ -d "$python_lib" ]; then
-            PATH=$(prepend "$python_lib/bin" $PATH)
-            break
-        fi
-    done
-fi
-export PATH
+    if [ -d "$HOME/Library/Python" ]; then
+        for python_lib in $HOME/Library/Python/*; do
+            if [ -d "$python_lib" ]; then
+                # shellcheck disable=2086
+                PATH=$(prepend "$python_lib/bin" $PATH)
+                break
+            fi
+        done
+    fi
+    export PATH
+}
+add_home_paths
