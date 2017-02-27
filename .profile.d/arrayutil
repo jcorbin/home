@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # without removes a component from a its argument array, echoing the new array
 # joined by IFS.  E.g.:

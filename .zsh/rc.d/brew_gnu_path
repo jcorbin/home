@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # before: path
 # after: arrayutil
 
@@ -11,9 +11,11 @@ gnu_brews=(coreutils gnu-sed)
 no_gnu()
 {
     local IFS=:
-    for gnu_brew in $gnu_brews; do
+    for gnu_brew in "${gnu_brews[@]}"; do
         brew_dir=/usr/local/opt/$gnu_brew
+        # shellcheck disable=SC2086
         PATH=$(without $brew_dir/libexec/gnubin $PATH)
+        # shellcheck disable=SC2086
         MANPATH=$(without $brew_dir/libexec/gnuman $MANPATH)
     done
     export PATH MANPATH
@@ -23,10 +25,12 @@ no_gnu()
 re_gnu()
 {
     local IFS=:
-    for gnu_brew in $gnu_brews; do
+    for gnu_brew in "${gnu_brews[@]}"; do
         brew_dir=/usr/local/opt/$gnu_brew
         if [ -d "$brew_dir" ]; then
+            # shellcheck disable=SC2086
             PATH=$(prepend $brew_dir/libexec/gnubin $PATH)
+            # shellcheck disable=SC2086
             MANPATH=$(prepend $brew_dir/libexec/gnuman $MANPATH)
         fi
     done
