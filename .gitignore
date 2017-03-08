@@ -16,3 +16,7 @@
 # Common shell environment and configuration
 !.profile
 !.profile.d/
+
+# Bash configuration
+!.bash_profile
+!.bashrc
