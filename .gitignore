@@ -9,3 +9,6 @@
 .DS_Store
 .*.sw?
 # TODO: incomplete, needs more?
+
+# ~/bins is a good place for random utility scripts; see bin/.gitignore.
+!bin/
