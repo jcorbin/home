@@ -20,3 +20,11 @@
 # Bash configuration
 !.bash_profile
 !.bashrc
+
+# Zsh configuration
+!.zsh/
+!.zshenv
+!.zprofile
+!.zshrc
+!.zlogin
+!.zlogout
