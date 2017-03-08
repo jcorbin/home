@@ -1,0 +1,38 @@
+[branch]
+    autosetupmerge = always # setup branch tracking
+    autosetuprebase = always # default to rebasing rather than merge
+
+[color]
+    # turn on coloring in terminals
+    ui = auto
+
+[column]
+    # format lists, e.g. from git-branch, wide like `ls`'s output
+    ui = auto
+
+[diff]
+    renames = copies # more aggresisve rename detection
+
+[core]
+    # Use less as our pager, turn off the -c option if it was specified in $LESS,
+    # also don't use -S as per git default
+    pager = "less -+c -FRX"
+
+[grep]
+    patternType = perl # use modern regexp dialect by default
+
+[log]
+    # change default passed to git-log, so that we now get by default:
+    #     git log --abbrev-commit --date=relative --decorate ...
+    abbrevCommit = true
+    date = relative
+    decorate = true
+
+[rebase]
+    stat = true # show a summary by default
+    autosquash = true # honor commit markers like `fixup!`
+
+[rerere]
+    # remember and re-use merge conflict resolutions
+    autoupdate = true
+    enabled = true

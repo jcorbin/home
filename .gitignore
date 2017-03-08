@@ -28,3 +28,6 @@
 !.zshrc
 !.zlogin
 !.zlogout
+
+# Git user config
+!.gitconfig
