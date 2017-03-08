@@ -12,3 +12,7 @@
 
 # ~/bins is a good place for random utility scripts; see bin/.gitignore.
 !bin/
+
+# Common shell environment and configuration
+!.profile
+!.profile.d/
