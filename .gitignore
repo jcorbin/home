@@ -1,0 +1,11 @@
+# Ignore everything by default...
+/*
+# ...then whitelist anything that we want to track. Starting of course with
+# this file and other git meta data (e.g. for git-submodule):
+!.gitignore
+!.gitmodules
+
+# File types that need to be ignored anywhere:
+.DS_Store
+.*.sw?
+# TODO: incomplete, needs more?
