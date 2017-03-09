@@ -1,0 +1,6 @@
+# Configures libreadline (at least the GNU version)
+# See also: https://linux.die.net/man/3/readline
+
+# Mark directories and file type in completion lists (similarl to ls -F)
+set mark-directories On
+set visible-stats On

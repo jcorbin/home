@@ -17,6 +17,7 @@
 !.profile
 !.profile.d/
 !.aliases
+!.inputrc
 
 # Bash configuration
 !.bash_profile
