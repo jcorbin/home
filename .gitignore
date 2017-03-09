@@ -16,6 +16,7 @@
 # Common shell environment and configuration
 !.profile
 !.profile.d/
+!.aliases
 
 # Bash configuration
 !.bash_profile

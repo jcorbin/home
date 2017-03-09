@@ -5,3 +5,5 @@
 [ -n "$_PROFILE_LOADED" ] || source ~/.profile
 
 # TODO put configs here
+
+source ~/.aliases
