@@ -4,3 +4,6 @@
 # Mark directories and file type in completion lists (similarl to ls -F)
 set mark-directories On
 set visible-stats On
+
+# vi-style keybinds
+set editing-mode vi
