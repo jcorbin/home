@@ -34,5 +34,8 @@
 # Git user config
 !.gitconfig
 
+# SSH Config
+!.ssh/config
+
 # TMux config
 !.tmux*.conf
