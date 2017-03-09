@@ -33,3 +33,6 @@
 
 # Git user config
 !.gitconfig
+
+# TMux config
+!.tmux*.conf
