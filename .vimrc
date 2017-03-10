@@ -35,6 +35,14 @@ augroup hlsearch
   autocmd InsertLeave * :setlocal   hlsearch " ...enable it when we come out.
 augroup END
 
+" These bindings automatically prepend a `\v` to new searches so that they are
+" in "very magic" mode. This upgrades the regex language to be closer to PCRE
+" than POSIX (but still not quite a modern PCRE dialect!)
+"
+" See `:help /magic` for more.
+nnoremap / /\v
+nnoremap ? ?\v
+
 " }}}
 
 " vimscript editing convenience {{{
