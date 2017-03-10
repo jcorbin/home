@@ -20,6 +20,15 @@ Plug 'tpope/vim-sensible'
 call plug#end()
 " }}}
 
+" Save swap files in one place... {{{
+" ...instead of beside the file being edited. This ends up being kinder to
+" things like SCM and remote file systems.
+set directory=$VIMHOME/swap
+if exists("*mkdir") && !isdirectory(&directory)
+  call mkdir(&directory, "p", 0700)
+endif
+" }}}
+
 " Searching {{{
 set ignorecase " case insensitive matching...
 set smartcase  " ...but only if the user didn't explicate case.
