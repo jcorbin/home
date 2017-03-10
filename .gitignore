@@ -39,3 +39,6 @@
 
 # TMux config
 !.tmux*.conf
+
+# Vim Config
+!.vimrc
