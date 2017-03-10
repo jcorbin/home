@@ -20,4 +20,10 @@ Plug 'tpope/vim-sensible'
 call plug#end()
 " }}}
 
+" vimscript editing convenience {{{
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" }}}
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
