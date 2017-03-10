@@ -29,6 +29,19 @@ if exists("*mkdir") && !isdirectory(&directory)
 endif
 " }}}
 
+" Persistent undo (vim 7.3+) {{{
+" Saves undo history, in a similar location as swap files, so that you don't
+" loose undo history when quitting and re-editing the same file.
+if has("persistent_undo")
+  set undodir=$VIMHOME/undo
+  set undofile
+  set undoreload=10000
+  if !isdirectory(&undodir) && exists("*mkdir")
+    call mkdir(&undodir, "p", 0700)
+  endif
+endif
+" }}}
+
 " Searching {{{
 set ignorecase " case insensitive matching...
 set smartcase  " ...but only if the user didn't explicate case.
