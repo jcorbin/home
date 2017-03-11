@@ -99,6 +99,13 @@ set swapsync=       " don't fsync swap files
 
 " }}}
 
+" Hack filetype for some extensions {{{
+augroup filetype_ext_hacks
+  " Since I frequently edit Markdown files, and never Modula files
+  autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
+augroup END
+" }}}
+
 " vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
