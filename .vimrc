@@ -20,6 +20,10 @@ Plug 'tpope/vim-sensible'
 " complements builtin NetRW mode for easier file navigation
 Plug 'tpope/vim-vinegar'
 
+" Adds a new text object for "surrounding" things
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+
 call plug#end()
 " }}}
 
