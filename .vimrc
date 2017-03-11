@@ -112,4 +112,7 @@ inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " }}}
 
+" easier re-sync for lazy diff algorithm
+nnoremap du :diffupdate<cr>
+
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
