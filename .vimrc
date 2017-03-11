@@ -42,6 +42,13 @@ if has("persistent_undo")
 endif
 " }}}
 
+" File Browsing {{{
+let g:netrw_banner = 1
+let g:netrw_liststyle = 3
+let g:netrw_sizestyle = 'H'
+
+" }}}
+
 " Searching {{{
 set ignorecase " case insensitive matching...
 set smartcase  " ...but only if the user didn't explicate case.
