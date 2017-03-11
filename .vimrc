@@ -113,6 +113,12 @@ set foldlevelstart=1  " with one level open
 
 " }}}
 
+" Terminal options {{{
+if $TERM =~ 'xterm' || $TERM =~ 'screen'
+  set ttyfast
+endif
+" }}}
+
 " vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
