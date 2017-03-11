@@ -106,6 +106,13 @@ augroup filetype_ext_hacks
 augroup END
 " }}}
 
+" Folding {{{
+
+set foldmethod=indent " default to indent folding
+set foldlevelstart=1  " with one level open
+
+" }}}
+
 " vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
