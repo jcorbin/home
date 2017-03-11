@@ -80,6 +80,25 @@ nnoremap ? ?\v
 
 " }}}
 
+" Misc Options {{{
+
+set mouse=a         " enable mousing around
+set nocompatible    " drop vi-compatability
+set list            " mark tabs, trailing spaces, etc
+set tabstop=4       " 4-space tabs
+set expandtab       " expanded spaces rather than actual tabs
+set shiftwidth=4    " 4-space indent/dedent
+set cursorline      " mark the current cursor line...
+set nocursorcolumn  " ...but not the column.
+set scrolloff=3     " Try to keep 3 lines after cursor
+set sidescrolloff=3 " Try to keep 3 columns after cursor
+set splitbelow      " horizontal splits below rather than above
+set splitright      " vertical splits right rather than left
+set smartindent     " auto indent new lines
+set swapsync=       " don't fsync swap files
+
+" }}}
+
 " vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
