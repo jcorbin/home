@@ -24,6 +24,9 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
+" Better statusline
+Plug 'bling/vim-airline'
+
 call plug#end()
 " }}}
 
@@ -100,6 +103,7 @@ set splitbelow      " horizontal splits below rather than above
 set splitright      " vertical splits right rather than left
 set smartindent     " auto indent new lines
 set swapsync=       " don't fsync swap files
+set noshowmode      " redundant with mode in airline
 
 " }}}
 
