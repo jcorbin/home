@@ -17,6 +17,9 @@ call plug#begin($VIMHOME.'/plugged')
 " better defaults out of the box
 Plug 'tpope/vim-sensible'
 
+" complements builtin NetRW mode for easier file navigation
+Plug 'tpope/vim-vinegar'
+
 call plug#end()
 " }}}
 
@@ -46,6 +49,9 @@ endif
 let g:netrw_banner = 1
 let g:netrw_liststyle = 3
 let g:netrw_sizestyle = 'H'
+
+nmap <leader>- <Plug>VinegarSplitUp
+nmap <leader>\| <Plug>VinegarVerticalSplitUp
 
 " }}}
 
