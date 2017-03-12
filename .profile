@@ -4,8 +4,7 @@
 
 # For now, you must list all of your profile pieces here in whatever order
 # they need:
-# source ~/.profile.d/XXX
-# source ~/.profile.d/XXX
+source ~/.profile.d/pager
 # ...
 
 # TODO: use github.com/jcorbin/deporder once it's ready

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if which less>/dev/null; then
+    PAGER="$(which less)"
+
+    # sets default options to less
+    LESS='-SMRci'
+    # -S truncate rather than wraplong lines; type at runtime to toggle
+    # -M verbose prompts
+    # -R pass through raw control codes (e.g. ANSI color sequences)
+    # -c better full screen repaints
+    # -i case insensitive searches
+
+    # Colors for less, especially useful for man pages
+    export LESS_TERMCAP_mb=$'\E[01;31m'    # begin blinking
+    export LESS_TERMCAP_md=$'\E[01;31m'    # begin bold
+    export LESS_TERMCAP_me=$'\E[0m'        # end mode
+    export LESS_TERMCAP_so=$'\E[01;44;30m' # begin standout-mode - info box and search matches
+    export LESS_TERMCAP_se=$'\E[0m'        # end standout-mode
+    export LESS_TERMCAP_us=$'\E[01;32m'    # begin underline
+    export LESS_TERMCAP_ue=$'\E[0m'        # end underline
+
+    # Upgrade some of the colors in 256 color terminals
+    if [ "$(tput colors)" -eq 256 ] || [[ $TERM == *-256color ]]; then
+        export LESS_TERMCAP_md=$'\E[01;38;5;74m'
+        export LESS_TERMCAP_so=$'\E[38;5;220m'
+        export LESS_TERMCAP_us=$'\E[04;38;5;146m'
+    fi
+
+    export LESS PAGER
+fi
