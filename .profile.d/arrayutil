@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# without removes a component from its argument array, echoing the new array
+# joined by IFS.  For Example:
+#
+#   $ PATH=/bin:/usr/bin:/usr/local/bin
+#   $ IFS=:; without /usr/local/bin $PATH
+#   /bin:/usr/bin
+without()
+{
+    arg="$1"
+    shift
+    out=()
+    for part in "$@"; do
+        if [ -n "$part" ] && [ "$part" != "$arg" ]; then
+            out+=($part)
+        fi
+    done
+    echo "${out[*]}"
+}
+
+# prepend adds a component to the head of its argument array, echoing the new
+# array joined by IFS; the given component is deduped, and ensured to now come
+# first.  For example:
+#
+#   $ PATH=/bin:/usr/bin:/usr/local/bin
+#   $ PATH=$(IFS=:; prepend /usr/local/bin $PATH)
+#   $ echo $PATH
+#   /usr/local/bin:/bin:/usr/bin
+#
+#   $ PATH=$(IFS=:; prepend $HOME/bin $PATH)
+#   $ echo $PATH
+#   /home/bob/bin:/usr/local/bin:/bin:/usr/bin
+prepend()
+{
+    arg="$1"
+    shift
+    out=($arg)
+    for part in "$@"; do
+        if [ -n "$part" ] && [ "$part" != "$arg" ]; then
+            out+=($part)
+        fi
+    done
+    echo "${out[*]}"
+}
+
+# append adds a component to the tail of its argument array, echoing the new
+# array joined by IFS; the given component is deduped, and ensured to now come
+# last.  For example:
+#
+#   $ PATH=/bin:/usr/bin:/usr/local/bin
+#   $ PATH=$(IFS=:; prepend /usr/local/bin $PATH)
+#   $ echo $PATH
+#   /bin:/usr/bin:/usr/local/bin
+#
+#   $ PATH=$(IFS=:; prepend $HOME/bin $PATH)
+#   $ echo $PATH
+#   /bin:/usr/bin:/usr/local/bin:/home/bob/bin
+append()
+{
+    arg="$1"
+    shift
+    out=()
+    for part in "$@"; do
+        if [ -n "$part" ] && [ "$part" != "$arg" ]; then
+            out+=($part)
+        fi
+    done
+    out+=($arg)
+    echo "${out[*]}"
+}

@@ -4,6 +4,7 @@
 
 # For now, you must list all of your profile pieces here in whatever order
 # they need:
+source ~/.profile.d/arrayutil
 source ~/.profile.d/pager
 source ~/.profile.d/editor
 
