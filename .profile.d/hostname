@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Make sure that HOSTNAME is set, since some systems don't set it.
+if [ -z "$HOSTNAME" ]; then
+    HOSTNAME=$(hostname)
+    export HOSTNAME
+fi
