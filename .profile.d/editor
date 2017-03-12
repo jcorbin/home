@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Want NeoVim
+EDITOR=$(which nvim 2>/dev/null)
+
+# Fallback to Vim
+[ -x "$EDITOR" ] || EDITOR=$(which vim 2>/dev/null)
+
+# Settle for Vi
+[ -x "$EDITOR" ] || EDITOR=$(which vi 2>/dev/null)
+
+export EDITOR
