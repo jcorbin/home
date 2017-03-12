@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# add_home_paths adds ~/bin and ~/.local/bin to $PATH if they exist.
+add_home_paths()
+{
+    local IFS=:
+
+    # shellcheck disable=2086
+    [ -d "$HOME/.local/bin" ] && PATH=$(prepend "$HOME/.local/bin" $PATH)
+
+    # shellcheck disable=2086
+    [ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
+
+    export PATH
+}
+
+add_home_paths
