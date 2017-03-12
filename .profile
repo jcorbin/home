@@ -6,6 +6,7 @@
 # they need:
 source ~/.profile.d/hostname
 source ~/.profile.d/arrayutil
+source ~/.profile.d/sbin_path
 source ~/.profile.d/home_path
 source ~/.profile.d/pager
 source ~/.profile.d/editor

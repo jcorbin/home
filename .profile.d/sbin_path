@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Ensure that the sbins are in $PATH, since some systems
+# don't put them there by default.
+export PATH=$(IFS=:; append /sbin $PATH)
+export PATH=$(IFS=:; append /usr/sbin $PATH)
