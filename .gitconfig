@@ -37,6 +37,11 @@
     autoupdate = true
     enabled = true
 
+# log formats
+[pretty]
+    brief = %C(red)%h%Creset %C(green)%cd %Creset-%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset
+    briefreflog = %C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold blue)<%gn>%Creset
+
 # Command aliases
 [alias]
     au = add --update
@@ -56,12 +61,19 @@
     dc = diff --cached
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
+    lb = log --pretty=brief
+    lbf = log --first-parent --pretty=brief
+    lg = log --graph --pretty=brief
+    lga = log --first-parent --graph --pretty=brief --all
+    lgb = log --first-parent --graph --pretty=brief --branches
+    lgf = log --first-parent --graph --pretty=brief
     phub = !git push -u origin $(basename $(git symbolic-ref HEAD)) && hub pull-request create
     pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
     ra = rebase --abort
     rb = rebase
     rc = rebase --continue
     redo = reset HEAD^ --mixed
+    rlg = reflog --pretty=briefreflog
     rs = rebase --skip
     st = status --short --branch
     suri = submodule update --recursive --init
