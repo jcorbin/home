@@ -5,6 +5,10 @@
 !.gitignore
 !.gitmodules
 
+# XDG home, allow further whitelisting
+!/.config
+/.config/*
+
 # File types that need to be ignored anywhere:
 .DS_Store
 .*.sw?
