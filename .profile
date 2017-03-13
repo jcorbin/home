@@ -12,6 +12,7 @@ source ~/.profile.d/home_path
 source ~/.profile.d/pager
 source ~/.profile.d/editor
 source ~/.profile.d/term
+source ~/.profile.d/dircolors
 
 # TODO: use github.com/jcorbin/deporder once it's ready
 

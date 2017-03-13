@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -d ~/.dircolors ] && type dircolors &>/dev/null; then
+    if [ "$(tput colors)" -eq 256 ]; then
+        eval "$(dircolors ~/.dircolors/solarized/dircolors.256dark)"
+    else
+        eval "$(dircolors ~/.dircolors/solarized/dircolors.ansi-universal)"
+    fi
+fi
+
+# Better than nothing for BSD ls
+# from https://github.com/seebi/dircolors-solarized/issues/10
+export CLICOLOR=1
+export LSCOLORS="gxfxbEaEBxxEhEhBaDaCaD"
