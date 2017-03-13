@@ -21,6 +21,10 @@
 - on arrayutil and *PATHs
 - iteration, e.g. vimrc affordance
 
+# MOVING
+
+Mark `{TODO,README,MOVING}.md` to be ignored in future merges
+
 # Makefile?
 
 Maybe provide a makefile for common workflows, e.g. initial setup (like brewing).
