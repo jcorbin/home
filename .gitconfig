@@ -56,6 +56,8 @@
     dc = diff --cached
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
+    phub = !git push -u origin $(basename $(git symbolic-ref HEAD)) && hub pull-request create
+    pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
     ra = rebase --abort
     rb = rebase
     rc = rebase --continue
