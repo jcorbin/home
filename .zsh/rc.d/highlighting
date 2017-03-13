@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+if [ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+    # TODO: can customize ZSH_HIGHLIGHT_STYLES to taste
+fi
