@@ -10,5 +10,6 @@ else
 fi
 
 source ~/.zsh/rc.d/completion
+source ~/.zsh/rc.d/editor
 
 source ~/.aliases
