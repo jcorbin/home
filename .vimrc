@@ -67,8 +67,10 @@ set sidescrolloff=3 " Try to keep 3 columns after cursor
 set splitbelow      " horizontal splits below rather than above
 set splitright      " vertical splits right rather than left
 set smartindent     " auto indent new lines
-set swapsync=       " don't fsync swap files
 set noshowmode      " redundant with mode in airline
+if has("&swapsync")
+  set swapsync= " don't fsync swap files
+endif
 
 " TODO: if you want to change mapleader (deafults to "\", do it here):
 " let mapleader=","
