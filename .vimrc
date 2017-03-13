@@ -52,6 +52,29 @@ if has("persistent_undo")
 endif
 " }}}
 
+" Misc Options {{{
+
+set mouse=a         " enable mousing around
+set nocompatible    " drop vi-compatability
+set list            " mark tabs, trailing spaces, etc
+set tabstop=4       " 4-space tabs
+set expandtab       " expanded spaces rather than actual tabs
+set shiftwidth=4    " 4-space indent/dedent
+set cursorline      " mark the current cursor line...
+set nocursorcolumn  " ...but not the column.
+set scrolloff=3     " Try to keep 3 lines after cursor
+set sidescrolloff=3 " Try to keep 3 columns after cursor
+set splitbelow      " horizontal splits below rather than above
+set splitright      " vertical splits right rather than left
+set smartindent     " auto indent new lines
+set swapsync=       " don't fsync swap files
+set noshowmode      " redundant with mode in airline
+
+" TODO: if you want to change mapleader (deafults to "\", do it here):
+" let mapleader=","
+
+" }}}
+
 " File Browsing {{{
 let g:netrw_banner = 1
 let g:netrw_liststyle = 3
@@ -84,26 +107,6 @@ augroup END
 " See `:help /magic` for more.
 nnoremap / /\v
 nnoremap ? ?\v
-
-" }}}
-
-" Misc Options {{{
-
-set mouse=a         " enable mousing around
-set nocompatible    " drop vi-compatability
-set list            " mark tabs, trailing spaces, etc
-set tabstop=4       " 4-space tabs
-set expandtab       " expanded spaces rather than actual tabs
-set shiftwidth=4    " 4-space indent/dedent
-set cursorline      " mark the current cursor line...
-set nocursorcolumn  " ...but not the column.
-set scrolloff=3     " Try to keep 3 lines after cursor
-set sidescrolloff=3 " Try to keep 3 columns after cursor
-set splitbelow      " horizontal splits below rather than above
-set splitright      " vertical splits right rather than left
-set smartindent     " auto indent new lines
-set swapsync=       " don't fsync swap files
-set noshowmode      " redundant with mode in airline
 
 " }}}
 
