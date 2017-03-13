@@ -11,5 +11,6 @@ fi
 
 source ~/.zsh/rc.d/completion
 source ~/.zsh/rc.d/editor
+source ~/.zsh/rc.d/history
 
 source ~/.aliases
