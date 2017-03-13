@@ -2,7 +2,12 @@
 
 # Make sure that .profile has been loaded, even if
 # there was no "login shell" in our lineage.
-[ -n "$_PROFILE_LOADED" ] || source ~/.profile
+if [ -n "$_PROFILE_LOADED" ]; then
+    source ~/.profile
+else
+    # Make sure that we have the array utility functions.
+    source ~/.profile.d/arrayutil
+fi
 
 # TODO put your own config here, maybe even break it up over `.bashrc.d` if
 # worth it.
