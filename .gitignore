@@ -50,3 +50,8 @@
 !/.config/nvim
 .config/nvim/*
 !/.config/nvim/init.vim
+
+# For starter_home itself, you'll probably want to drop these
+!README.md
+!TODO.md
+!MOVING.md
