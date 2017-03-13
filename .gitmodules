@@ -1,3 +1,6 @@
 [submodule ".dircolors/solarized"]
 	path = .dircolors/solarized
 	url = https://github.com/seebi/dircolors-solarized
+[submodule ".zsh/zsh-completions"]
+	path = .zsh/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions
