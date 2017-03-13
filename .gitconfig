@@ -36,3 +36,30 @@
     # remember and re-use merge conflict resolutions
     autoupdate = true
     enabled = true
+
+# Command aliases
+[alias]
+    au = add --update
+    br = branch
+    brav = branch -av
+    brv = branch -v
+    ci = commit
+    cia = commit -a
+    ciam = commit -a -m
+    cic = commit -c
+    cim = commit -m
+    co = checkout
+    coB = checkout --no-track -B
+    cob = checkout -b
+    cod = checkout --detach
+    cp = cherry-pick
+    dc = diff --cached
+    doh = commit --amend --no-edit
+    dohe = commit --amend --edit
+    ra = rebase --abort
+    rb = rebase
+    rc = rebase --continue
+    redo = reset HEAD^ --mixed
+    rs = rebase --skip
+    st = status --short --branch
+    suri = submodule update --recursive --init
