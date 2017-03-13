@@ -122,14 +122,19 @@ At this point you could "just" pull `~/home-int`'s branch back into `$HOME`.
 However I've found it much more effective to setup `$HOME` to accept pushing
 directly to its checked out branch (if and only if it's safe to do so!)
 
-To setup `$HOME` to accept pushing into its working tree:
-- download [this post-receive][wt_post_rec_hook] git hook, copy it to `$HOME/.git/hooks/post-receive`
-- download [this update][wt_post_rec_hook] git hook, copy it to `$HOME/.git/hooks/update`
-- make sure that both are executable, run `chmod +x $HOME/.git/hooks/{post-receive,update}`
-- finally configure `$HOME` to allow pushing, run `git --git-dir=$HOME/.git config receive.denyCurrentBranch ignore`
+To set this up `starter_home` ships a `git-setup-worktree-push` script.
+Normally you would run this like `git setup-worktree-push` like any other
+`git-foo` command.  However since it's not yet on `$PATH`, we need to run it
+directly: `cd $HOME && ~/home-int/bin/git-setup-worktree-push`.
 
-For what it's worth my [~/bin/git-setup-worktree-push][git-setup-worktree-push]
-script does exactly that.
+For the pathologically curious, here's what this script does:
+
+- adds a git `update` hook that refuses updates for the HEAD ref if the working
+  tree is unclean
+- adds a git `post-receive` hook that will run `git checkout -f` after the HEAD
+  ref is updated (see `githook(5)`)
+- configures the repository to accept pushes to the current branche (see
+  `receive.denyCurrentBranch` in `git-config(1)`)
 
 # Life In Your New Home
 
@@ -142,7 +147,3 @@ TODO: flesh this out, some things to do:
   it; useful for removing patron-internal details or hacks that you're not yet
   fully enamored of
 - keeping in sync with future `starter_home` progress
-
-[wt_post_rec_hook]: https://github.com/jcorbin/home/blob/master/bin/githook-update-worktree-post-receive
-[wt_update_hook]: https://github.com/jcorbin/home/blob/master/bin/githook-update-worktree-update
-[git-setup-worktree-push]: https://github.com/jcorbin/home/blob/master/bin/git-setup-worktree-push

@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+# shellcheck disable=2034
+SUBDIRECTORY_OK=true
+# shellcheck source=/dev/null
+. $(git --exec-path)/git-sh-setup
+
+[ "$(git rev-parse --is-bare-repository)" == "true" ] && \
+    die "fatal: $0 cannot be used without a working tree"
+
+cd "$(dirname "$0")"
+
+cp ./githook-update-worktree-post-receive \
+   "$GIT_DIR/hooks/post-receive" \
+   || die "Cannot find githook-update-worktree-post-receive"
+
+cp ./githook-update-worktree-update \
+   "$GIT_DIR/hooks/update" \
+   || die "Cannot find githook-update-worktree-update"
+
+chmod +x "$GIT_DIR"/hooks/{update,post-receive}
+
+git config receive.denyCurrentBranch ignore

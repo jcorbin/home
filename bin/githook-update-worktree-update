@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+
+refname=$1
+# old=$2
+# new=$3
+
+# shellcheck disable=2034
+SUBDIRECTORY_OK=true
+# shellcheck source=/dev/null
+. $(git --exec-path)/git-sh-setup
+
+[ "$(git rev-parse --is-bare-repository)" == "true" ] && \
+    die "fatal: $0 cannot be used without a working tree"
+
+head_ref=$(git symbolic-ref HEAD)
+
+# we only care about updates to HEAD
+[ "$refname" == "$head_ref" ] || exit 0
+
+# HEAD must be a valid revision
+git show-ref --verify --quiet "$head_ref" || exit 1
+
+# Repository must have a valid working tree
+worktree=$(git rev-parse --show-toplevel)
+if [[ "$worktree" = */.git ]]; then
+    cd "$worktree/.."
+elif [ -n "$worktree" ]; then
+    cd "$worktree"
+elif [[ "$GIT_DIR" = */.git ]]; then
+    cd "$GIT_DIR/.."
+else
+    die "Unable to determine GIT_WORK_TREE from GIT_DIR=$GIT_DIR, set core.worktree"
+fi
+
+# Require that it's clean
+require_clean_work_tree receive-pack "Please commit or stash them."
