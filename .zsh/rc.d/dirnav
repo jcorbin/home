@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# easier directory navigation:
+# - "executing" a directory cds into it
+# - pushd instead of cd (always keep a history stack)
+setopt autocd
+setopt autopushd
+setopt pushd_ignoredups
+setopt cdablevars
