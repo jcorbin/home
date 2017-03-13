@@ -45,5 +45,8 @@
 # TMux config
 !.tmux*.conf
 
-# Vim Config
+# (Neo)Vim Config
 !.vimrc
+!/.config/nvim
+.config/nvim/*
+!/.config/nvim/init.vim
