@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+if [ -f ~/.zsh/zsh-completions/zsh-completions.plugin.zsh ]; then
+    source ~/.zsh/zsh-completions/zsh-completions.plugin.zsh
+fi
+
+# Colored file lists in completion
+if [ -n "$LS_COLORS" ]; then
+    export ZLS_COLORS="$LS_COLORS"
+    zmodload zsh/complist 2> /dev/null
+fi
+
+autoload compinit 2> /dev/null
+autoload -U compinit 2> /dev/null
+compinit

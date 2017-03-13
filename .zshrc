@@ -9,6 +9,6 @@ else
     source ~/.profile.d/arrayutil
 fi
 
-# TODO put configs here
+source ~/.zsh/rc.d/completion
 
 source ~/.aliases
