@@ -2,24 +2,26 @@
 # before: bootstrap
 # after: path
 
-export TMPDIR=${TMPDIR:-/tmp}
-
+# Privatize $TMPDIR
+TMPDIR=${TMPDIR:-/tmp}
 case $(stat --help 2>&1) in
 *GNU*)
     if [ $(stat -c %u $TMPDIR) -ne $(id -u) ]; then
-        export TMPDIR=$TMPDIR/$(id -un)
+        TMPDIR=$TMPDIR/$(id -un)
     fi
     ;;
 *)
     if [ $(stat -f %u $TMPDIR) -ne $(id -u) ]; then
-        export TMPDIR=$TMPDIR/$(id -un)
+        TMPDIR=$TMPDIR/$(id -un)
     fi
     ;;
 esac
+export TMPDIR
 install -d -m 0700 $TMPDIR
 
 ln -sf $TMPDIR $HOME/tmp
 
+# Symlink "variable" directories into $TMPDIR
 if [ -f ~/.vardirs ]; then
     for d in $(cat ~/.vardirs); do
         [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
