@@ -6,27 +6,27 @@
 TMPDIR=${TMPDIR:-/tmp}
 case $(stat --help 2>&1) in
 *GNU*)
-    if [ $(stat -c %u $TMPDIR) -ne $(id -u) ]; then
+    if [ "$(stat -c %u "$TMPDIR")" -ne "$(id -u)" ]; then
         TMPDIR=$TMPDIR/$(id -un)
     fi
     ;;
 *)
-    if [ $(stat -f %u $TMPDIR) -ne $(id -u) ]; then
+    if [ "$(stat -f %u "$TMPDIR")" -ne "$(id -u)" ]; then
         TMPDIR=$TMPDIR/$(id -un)
     fi
     ;;
 esac
 export TMPDIR
-install -d -m 0700 $TMPDIR
+install -d -m 0700 "$TMPDIR"
 
-ln -sf $TMPDIR $HOME/tmp
+ln -sf "$TMPDIR" "$HOME/tmp"
 
 # Symlink "variable" directories into $TMPDIR
 if [ -f ~/.vardirs ]; then
     for d in $(cat ~/.vardirs); do
         [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
         if [ -L "$HOME/$d" ]; then
-            [ "$(readlink $HOME/$d)" = "$TMPDIR/$d" ] && continue
+            [ "$(readlink "$HOME/$d")" = "$TMPDIR/$d" ] && continue
             rm "$HOME/$d"
         elif [ -e "$HOME/$d" ]; then
             rm -rf "$HOME/$d"
