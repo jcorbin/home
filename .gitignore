@@ -42,7 +42,7 @@
 !/.tmux*.conf
 /.tmuxline.conf
 
-!.config/
+!.config/nvim/
 
 !.terminfo.src/
 
