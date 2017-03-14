@@ -84,6 +84,7 @@ let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#eclim#enabled = 1
 let g:airline#extensions#whitespace#enabled = 1
 let g:airline#extensions#capslock#enabled = 1
+let g:airline#extensions#wordcount#enabled = 0
 
 " unicode symbols
 if !exists('g:airline_symbols')
