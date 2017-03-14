@@ -33,6 +33,7 @@ re_gnu()
         if [ -d "$brew_dir" ]; then
             # shellcheck disable=SC2086
             PATH=$(prepend $brew_dir/libexec/gnubin $PATH)
+            [ -z "$MANPATH" ] && MANPATH="$(man -w)"
             # shellcheck disable=SC2086
             MANPATH=$(prepend $brew_dir/libexec/gnuman $MANPATH)
         fi
