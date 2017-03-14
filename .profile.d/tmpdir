@@ -23,7 +23,8 @@ ln -sf "$TMPDIR" "$HOME/tmp"
 
 # Symlink "variable" directories into $TMPDIR
 if [ -f ~/.vardirs ]; then
-    for d in $(cat ~/.vardirs); do
+    <~/.vardirs | while read -r d; do
+        [ -n "$d" ] || continue
         [ -d "$TMPDIR/$d" ] || mkdir -p "$TMPDIR/$d"
         if [ -L "$HOME/$d" ]; then
             [ "$(readlink "$HOME/$d")" = "$TMPDIR/$d" ] && continue
