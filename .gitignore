@@ -53,3 +53,4 @@
 # File types that need to be ignored anywhere
 .DS_Store
 .*.sw?
+!.zprofile
