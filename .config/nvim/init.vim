@@ -34,7 +34,6 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-Plug 'vim-utils/vim-man'
 Plug 'w0rp/ale'
 Plug 'zchee/deoplete-go'
 
