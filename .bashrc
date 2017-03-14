@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -n "$_PROFILE_LOADED" ] || source ~/.profile
+
 [ -f /etc/bashrc ] && source /etc/bashrc
 [ -f ~/.aliases ] && source ~/.aliases
 
