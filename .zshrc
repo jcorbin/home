@@ -1,3 +1,5 @@
+[ -n "$_PROFILE_LOADED" ] || source ~/.profile
+
 for part in $(~/bin/deporder -f ~/.zsh/rc.d); do
 	source $part
 done
