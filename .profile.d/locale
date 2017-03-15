@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # before: bootstrap
 
 export LANG=en_US.UTF-8

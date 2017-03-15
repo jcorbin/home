@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 # before: bootstrap
 
-[ -z "$HOSTNAME" ] && export HOSTNAME=$(hostname)
+# Make sure that HOSTNAME is set, since some systems don't set it.
+if [ -z "$HOSTNAME" ]; then
+    HOSTNAME=$(hostname)
+    export HOSTNAME
+fi

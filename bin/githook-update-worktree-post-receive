@@ -1,6 +1,9 @@
 #!/bin/bash
+set -e
 
+# shellcheck disable=2034
 SUBDIRECTORY_OK=true
+# shellcheck source=/dev/null
 . $(git --exec-path)/git-sh-setup
 
 [ "$(git rev-parse --is-bare-repository)" == "true" ] && \
@@ -8,11 +11,13 @@ SUBDIRECTORY_OK=true
 
 head_ref=$(git symbolic-ref HEAD)
 
-while read oldrev newrev refname; do
-    if [ $refname == $head_ref ]; then
+while read -r oldrev newrev refname; do
+    if [ "$refname" == "$head_ref" ]; then
         worktree=$(git rev-parse --show-toplevel)
-        if [ -n "$worktree" ]; then
-            [[ "$worktree" = */.git ]] && cd "$worktree/.." || cd "$worktree"
+        if [[ "$worktree" = */.git ]]; then
+            cd "$worktree/.."
+        elif [ -n "$worktree" ]; then
+            cd "$worktree"
         elif [[ "$GIT_DIR" = */.git ]]; then
             cd "$GIT_DIR/.."
         else

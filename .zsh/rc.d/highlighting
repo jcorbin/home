@@ -1,3 +1,4 @@
+#!/bin/zsh
 # after: completion
 # after: compose
 # after: editor
@@ -28,7 +29,4 @@ if [ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     # ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=cyan
     # ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=cyan
     # ZSH_HIGHLIGHT_STYLES[assign]=none
-
 fi
-
-# vim:set ft=zsh:

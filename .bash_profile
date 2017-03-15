@@ -1,8 +1,9 @@
-# .bash_profile
+#!/bin/bash
 
+# Include common shell config
 source ~/.profile
 
-# Get the aliases and functions
-if [ -f ~/.bashrc ]; then
-	. ~/.bashrc
-fi
+# Restore asnity to bash's exclusive "login or
+# interactive" logic; in other words, make it more
+# like Zsh's ladder of progressive enhancement.
+[ -f ~/.bashrc ] && source ~/.bashrc

@@ -1,56 +1,62 @@
-# Ignore everything by default
+# Ignore everything by default...
 /*
-
-# Then start whitelisting
+# ...then whitelist anything that we want to track. Starting of course with
+# this file and other git meta data (e.g. for git-submodule):
 !.gitignore
-!.gitconfig
 !.gitmodules
 
-!README.md
-!TODO.md
+# XDG home, allow further whitelisting
+!/.config
+/.config/*
 
+# File types that need to be ignored anywhere:
+.DS_Store
+.*.sw?
+# TODO: incomplete, needs more?
+
+# ~/bins is a good place for random utility scripts; see bin/.gitignore.
 !bin/
 
-!.vimrc
-!.vim/
-
-!.nvimrc
-!.nvim/
-
-!.aliases
-!.dircolors
-
+# Common shell environment and configuration
 !.profile
-!.profile.d
-!.vardirs
-
+!.profile.d/
+!.aliases
+!.dircolors/
 !.inputrc
 
+# Bash configuration
 !.bash_profile
 !.bashrc
 
-!.zlogin
-!.zshenv
-!.zshrc
+# Zsh configuration
 !.zsh/
+!.zshenv
+!.zprofile
+!.zshrc
+!.zlogin
+!.zlogout
+
+# Git user config
+!.gitconfig
+
+# SSH Config
+!.ssh/config
+
+# TMux config
+!.tmux*.conf
+
+# (Neo)Vim Config
+!.vimrc
+!/.config/nvim
+.config/nvim/*
+!/.config/nvim/init.vim
 
 !.xinitrc
 !.xsession
 !.Xresources
-
 !.screenrc
-!/.tmux*.conf
-/.tmuxline.conf
-
-!.config/nvim/
-
 !.terminfo.src/
-
 !.ipython/
 
-!.ssh/
-
-# File types that need to be ignored anywhere
-.DS_Store
-.*.sw?
-!.zprofile
+!README.md
+!TODO.md

@@ -1,5 +1,0 @@
-bindkey -v # Vi-style bindings
-
-bindkey '^L' clear-screen
-
-# vim:set ft=zsh:

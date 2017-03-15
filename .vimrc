@@ -1,48 +1,49 @@
 " plugins {{{
-call pathogen#infect()
-call pathogen#helptags()
+
+" setup vim-plug, downloading it if needed
+" see https://github.com/junegunn/vim-plug
+let $VIMHOME=expand('<sfile>:p:h')
+if $VIMHOME == $HOME
+  let $VIMHOME=$HOME.'/.vim'
+endif
+if empty(glob($VIMHOME.'/autoload/plug.vim'))
+    silent !curl -fLo $VIMHOME/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall | source $MYVIMRC
+endif
+
+call plug#begin($VIMHOME.'/plugged')
+
+" better defaults out of the box
+Plug 'tpope/vim-sensible'
+
+" complements builtin NetRW mode for easier file navigation
+Plug 'tpope/vim-vinegar'
+
+" Adds a new text object for "surrounding" things
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+
+" Better statusline
+Plug 'bling/vim-airline'
+
+call plug#end()
 " }}}
 
-let g:rehash256 = 1
-colorscheme molokai
-
-" Options {{{
-
-set cursorline
-set expandtab
-set foldmethod=indent
-set list
-set nocompatible " This is an "option" apparently...
-set scrolloff=3 " Try to keep 3 lines after cursor
-set shiftwidth=4
-set smartindent
-set spell
-set splitbelow
-set splitright
-set swapsync=
-set tabstop=4
-set undolevels=1000
-set virtualedit=all
-set wildmode=longest,list:longest
-let g:netrw_liststyle = 3
-
-" }}}
-
-" searching {{{
-set ignorecase " Do case insensitive matching...
-set smartcase  " ...but only if the user didn't explicitly case
-set hlsearch   " highlight while searching
-
-" disable hlsearch in insert mode
-augroup hlsearch
-autocmd InsertEnter * :setlocal nohlsearch
-autocmd InsertLeave * :setlocal   hlsearch
-augroup END
+" Save swap files in one place... {{{
+" ...instead of beside the file being edited. This ends up being kinder to
+" things like SCM and remote file systems.
+set directory=$VIMHOME/swap
+if exists("*mkdir") && !isdirectory(&directory)
+  call mkdir(&directory, "p", 0700)
+endif
 " }}}
 
 " Persistent undo (vim 7.3+) {{{
+" Saves undo history, in a similar location as swap files, so that you don't
+" loose undo history when quitting and re-editing the same file.
 if has("persistent_undo")
-  set undodir=$HOME/.vim/undo
+  set undodir=$VIMHOME/undo
   set undofile
   set undoreload=10000
   if !isdirectory(&undodir) && exists("*mkdir")
@@ -51,11 +52,86 @@ if has("persistent_undo")
 endif
 " }}}
 
-" Save swap files in one place {{{
-set directory=$HOME/.vim/swap
-if exists("*mkdir") && !isdirectory(&directory)
-  call mkdir(&directory, "p", 0700)
+" Misc Options {{{
+
+set mouse=a         " enable mousing around
+set nocompatible    " drop vi-compatability
+set list            " mark tabs, trailing spaces, etc
+set tabstop=4       " 4-space tabs
+set expandtab       " expanded spaces rather than actual tabs
+set shiftwidth=4    " 4-space indent/dedent
+set cursorline      " mark the current cursor line...
+set nocursorcolumn  " ...but not the column.
+set scrolloff=3     " Try to keep 3 lines after cursor
+set sidescrolloff=3 " Try to keep 3 columns after cursor
+set splitbelow      " horizontal splits below rather than above
+set splitright      " vertical splits right rather than left
+set smartindent     " auto indent new lines
+set noshowmode      " redundant with mode in airline
+if has("&swapsync")
+  set swapsync= " don't fsync swap files
 endif
+
+set virtualedit=all " edit beyond EOL
+set wildmode=longest,list:longest
+let mapleader=","
+
+" }}}
+
+" File Browsing {{{
+let g:netrw_banner = 1
+let g:netrw_liststyle = 3
+let g:netrw_sizestyle = 'H'
+
+nmap <leader>- <Plug>VinegarSplitUp
+nmap <leader>\| <Plug>VinegarVerticalSplitUp
+
+" }}}
+
+" Searching {{{
+set ignorecase " case insensitive matching...
+set smartcase  " ...but only if the user didn't explicate case.
+set hlsearch   " highlight matches
+" NOTE: highligting doesn't have to be disabled to be temporarily hidden:
+" - you can run `:nohlsearch` to turn it off until the next search
+" - vim-sensible extends <Ctrl>-l so that it runs `:nohlsearch`
+" - furthermore, the following automatically turns off highlighting when in
+"   insert mode
+
+augroup hlsearch
+  autocmd InsertEnter * :setlocal nohlsearch " Disable hlsearch in insert mode...
+  autocmd InsertLeave * :setlocal   hlsearch " ...enable it when we come out.
+augroup END
+
+" These bindings automatically prepend a `\v` to new searches so that they are
+" in "very magic" mode. This upgrades the regex language to be closer to PCRE
+" than POSIX (but still not quite a modern PCRE dialect!)
+"
+" See `:help /magic` for more.
+nnoremap / /\v
+nnoremap ? ?\v
+
+" }}}
+
+" Hack filetype for some extensions {{{
+augroup filetype_ext_hacks
+  " Since I frequently edit Markdown files, and never Modula files
+  autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
+augroup END
+" }}}
+
+" Folding {{{
+
+set foldmethod=indent " default to indent folding
+set foldlevelstart=1  " with one level open
+
+" syntax folding for some filetypes {{{
+augroup syntax_folding
+autocmd FileType markdown setlocal foldmethod=syntax
+autocmd FileType json setlocal foldmethod=syntax
+augroup END
+" }}}
+
 " }}}
 
 " GUI options {{{
@@ -73,181 +149,25 @@ if has("gui_running")
   "   r - right scroll always
   set guioptions=acgit
   set guiheadroom=0
-" }}}
-" Terminal options {{{
-else
-  if $TERM =~ 'xterm' || $TERM =~ 'screen'
-    set ttyfast
-  endif
 endif
 " }}}
 
-" spell check in git mode {{{
-augroup git
-autocmd Filetype gitcommit setlocal spell textwidth=72
-augroup END
-" }}}
-
-" hack filetype for some extensions {{{
-augroup filetype_ext_hacks
-autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
-augroup END
-" }}}
-
-" syntax folding for some filetypes {{{
-augroup syntax_folding
-autocmd FileType markdown setlocal foldmethod=syntax
-autocmd FileType json setlocal foldmethod=syntax
-augroup END
-" }}}
-
-" Syntastic {{{
-let g:syntastic_check_on_open = 1
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_always_populate_loc_list = 1
-" }}}
-
-" Lightline {{{
-
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
-      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'fugitive': 'MyFugitive',
-      \   'filename': 'MyFilename',
-      \   'fileformat': 'MyFileformat',
-      \   'filetype': 'MyFiletype',
-      \   'fileencoding': 'MyFileencoding',
-      \   'mode': 'MyMode',
-      \   'ctrlpmark': 'CtrlPMark',
-      \ },
-      \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineFlag',
-      \ },
-      \ 'component_type': {
-      \   'syntastic': 'error',
-      \ },
-      \ 'subseparator': { 'left': '|', 'right': '|' }
-      \ }
-
-function! MyModified()
-  return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-endfunction
-
-function! MyReadonly()
-  return &ft !~? 'help' && &readonly ? 'RO' : ''
-endfunction
-
-function! MyFilename()
-  let fname = expand('%:t')
-  return fname == 'ControlP' ? g:lightline.ctrlp_item :
-        \ fname == '__Tagbar__' ? g:lightline.fname :
-        \ fname =~ '__Gundo\|NERD_tree' ? '' :
-        \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \ &ft == 'vimshell' ? vimshell#get_status_string() :
-        \ ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
-        \ ('' != fname ? fname : '[No Name]') .
-        \ ('' != MyModified() ? ' ' . MyModified() : '')
-endfunction
-
-function! MyFugitive()
-  try
-    if expand('%:t') !~? 'Tagbar\|Gundo\|NERD' && &ft !~? 'vimfiler' && exists('*fugitive#head')
-      let mark = ''  " edit here for cool mark
-      let _ = fugitive#head()
-      return strlen(_) ? mark._ : ''
-    endif
-  catch
-  endtry
-  return ''
-endfunction
-
-function! MyFileformat()
-  return winwidth(0) > 70 ? &fileformat : ''
-endfunction
-
-function! MyFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-endfunction
-
-function! MyFileencoding()
-  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
-endfunction
-
-function! MyMode()
-  let fname = expand('%:t')
-  return fname == '__Tagbar__' ? 'Tagbar' :
-        \ fname == 'ControlP' ? 'CtrlP' :
-        \ fname == '__Gundo__' ? 'Gundo' :
-        \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
-        \ fname =~ 'NERD_tree' ? 'NERDTree' :
-        \ &ft == 'vimfiler' ? 'VimFiler' :
-        \ &ft == 'vimshell' ? 'VimShell' :
-        \ winwidth(0) > 60 ? lightline#mode() : ''
-endfunction
-
-function! CtrlPMark()
-  if expand('%:t') =~ 'ControlP'
-    call lightline#link('iR'[g:lightline.ctrlp_regex])
-    return lightline#concatenate([g:lightline.ctrlp_prev, g:lightline.ctrlp_item
-          \ , g:lightline.ctrlp_next], 0)
-  else
-    return ''
-  endif
-endfunction
-
-let g:ctrlp_status_func = {
-  \ 'main': 'CtrlPStatusFunc_1',
-  \ 'prog': 'CtrlPStatusFunc_2',
-  \ }
-
-function! CtrlPStatusFunc_1(focus, byfname, regex, prev, item, next, marked)
-  let g:lightline.ctrlp_regex = a:regex
-  let g:lightline.ctrlp_prev = a:prev
-  let g:lightline.ctrlp_item = a:item
-  let g:lightline.ctrlp_next = a:next
-  return lightline#statusline(0)
-endfunction
-
-function! CtrlPStatusFunc_2(str)
-  return lightline#statusline(0)
-endfunction
-
-let g:tagbar_status_func = 'TagbarStatusFunc'
-
-function! TagbarStatusFunc(current, sort, fname, ...) abort
-    let g:lightline.fname = a:fname
-  return lightline#statusline(0)
-endfunction
-
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost *.c,*.cpp call s:syntastic()
-augroup END
-function! s:syntastic()
-  SyntasticCheck
-  call lightline#update()
-endfunction
-
-let g:vimfiler_force_overwrite_statusline = 0
-let g:vimshell_force_overwrite_statusline = 0
-
+" Terminal options {{{
+if $TERM =~ 'xterm' || $TERM =~ 'screen'
+  set ttyfast
+endif
 " }}}
 
 " Mappings {{{
-
-let mapleader=","
 
 " vimscript editing convenience {{{
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>s% :source %<cr>
 " }}}
+
+" easier re-sync for lazy diff algorithm
+nnoremap du :diffupdate<cr>
 
 " fugitive bindings {{{
 nnoremap <leader>gb :Gblame<cr>
@@ -264,15 +184,6 @@ nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
 
-" easier re-sync for lazy diff algorithm
-nnoremap du :diffupdate<cr>
-
-" searching {{{
-nnoremap / /\v
-nnoremap ? ?\v
-nnoremap <leader>ic :set ignorecase!<cr>
-" }}}
-
 " TagBar
 nnoremap <leader>tg :TagbarToggle<cr>
 
@@ -282,10 +193,19 @@ nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 
-nmap _ <Plug>VinegarVerticalSplitUp " moar vinegar!
-
 " GUndo
 nnoremap <leader>gu :GundoToggle<CR>
+
+" }}}
+
+" Spelling {{{
+set spell
+
+" spell check in git mode {{{
+augroup git
+autocmd Filetype gitcommit setlocal spell textwidth=72
+augroup END
+" }}}
 
 " }}}
 
@@ -294,5 +214,8 @@ augroup filetype_abbrs
 autocmd FileType javascript :iabbrev <buffer> vst var self = this;
 augroup END
 " }}}
+
+let g:rehash256 = 1
+colorscheme molokai
 
 " vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:

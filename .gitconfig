@@ -1,45 +1,46 @@
-# Commiter identity
-[user]
-    email = jcorbin@wunjo.org
-    name = Joshua T Corbin
+[branch]
+    autosetupmerge = always # setup branch tracking
+    autosetuprebase = always # default to rebasing rather than merge
+
+[color]
+    # turn on coloring in terminals
+    ui = auto
+
+[column]
+    # format lists, e.g. from git-branch, wide like `ls`'s output
+    ui = auto
+
+[diff]
+    renames = copies # more aggresisve rename detection
 
 [core]
     # Use less as our pager, turn off the -c option if it was specified in $LESS,
     # also don't use -S as per git default
     pager = "less -+c -FRX"
 
-[advice]
-    detachedHead = false
-    pushNonFastForward = false
-    statusHints = false
+[grep]
+    patternType = perl # use modern regexp dialect by default
 
-[color]
-    # Color all commands automatically
-    ui = auto
+[log]
+    # change default passed to git-log, so that we now get by default:
+    #     git log --abbrev-commit --date=relative --decorate ...
+    abbrevCommit = true
+    date = relative
+    decorate = true
 
-[column]
-    ui = auto
+[rebase]
+    stat = true # show a summary by default
+    autosquash = true # honor commit markers like `fixup!`
 
-[apply]
-    # Fix all whitespace sins when applying patches
-    whitespace = fix
-
-[branch]
-    # Track when branching and rebase by default
-    autosetupmerge = always
-    autosetuprebase = always
-
-[pack]
-    # Use one thread per processor core for pac king
-    threads = 0
+[rerere]
+    # remember and re-use merge conflict resolutions
+    autoupdate = true
+    enabled = true
 
 # log formats
 [pretty]
     brief = %C(red)%h%Creset %C(green)%cd %Creset-%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset
     briefreflog = %C(green)%gd %C(red)%h%Creset %Creset- %gs %C(bold blue)<%gn>%Creset
-
-[grep]
-    extendedRegexp = true
 
 # Command aliases
 [alias]
@@ -58,23 +59,29 @@
     cix = commit --allow-empty -m 'Ex Nilho'
     cn = clean -n
     co = checkout
-    cod = checkout --detach
-    cob = checkout -b
     coB = checkout --no-track -B
+    cob = checkout -b
+    cod = checkout --detach
+    compubrd = !git checkout master && git pull && git branch -d
     cp = cherry-pick
     dc = diff --cached
+    detachat = !git checkout $(git rev-parse HEAD)
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
     fp = format-patch -n -M -C --find-copies-harder
     lb = log --pretty=brief
     lbf = log --first-parent --pretty=brief
     lg = log --graph --pretty=brief
-    lgf = log --first-parent --graph --pretty=brief
     lga = log --first-parent --graph --pretty=brief --all
     lgb = log --first-parent --graph --pretty=brief --branches
+    lgf = log --first-parent --graph --pretty=brief
+    mergeto = !git checkout $1 && git merge HEAD@{1}
+    mrg = merge --no-ff --no-edit
     mt = mergetool
     nrs = name-rev --stdin
     pack = repack -Ad
+    phub = !git push -u origin $(basename $(git symbolic-ref HEAD)) && hub pull-request create
+    pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
     ra = rebase --abort
     rb = rebase
     rc = rebase --continue
@@ -88,32 +95,28 @@
     shbr = show-branch
     st = status --short --branch
     suri = submodule update --recursive --init
-    compubrd = !git checkout master && git pull && git branch -d
-    pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
-    phub = !git push -u origin $(basename $(git symbolic-ref HEAD)) && hub pull-request create
     uewu = config user.email jcorbin@wunjo.org
-    mrg = merge --no-ff --no-edit
-    detachat = !git checkout $(git rev-parse HEAD)
-    mergeto = !git checkout $1 && git merge HEAD@{1}
+
+# Commiter identity
+[user]
+    email = jcorbin@wunjo.org
+    name = Joshua T Corbin
+
+[advice]
+    detachedHead = false
+    pushNonFastForward = false
+    statusHints = false
+
+[apply]
+    # Fix all whitespace sins when applying patches
+    whitespace = fix
+
+[pack]
+    # Use one thread per processor core for pac king
+    threads = 0
 
 [push]
     default = simple
-
-[log]
-    abbrevCommit = true
-    date = relative
-    decorate = true
-
-[diff]
-    renames = copies
-
-[rebase]
-    stat = true
-    autosquash = true
-
-[rerere]
-    autoupdate = true
-    enabled = true
 
 [http]
     followRedirects = true

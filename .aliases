@@ -2,25 +2,14 @@
 
 # TODO shard this to ~/.aliases.d
 
-if [ -n "$USE_GNU" ]; then
-    alias ls='ls -Fhb --time-style=long-iso --color=auto'
-    alias chmod="chmod -c"
-    alias chown="chown -c"
-    alias ps="ps --forest -w"
-else
-    alias ls='ls -Fhb'
-    alias chmod="chmod -v"
-    alias chown="chown -v"
-    alias ps="ps -w"
-fi
+# Safer rm/mv/cp by default
+alias rm='rm -vi'
+alias mv='mv -vi'
+alias cp='cp -vi'
 
 alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
-
-alias rm="rm -vi"
-alias mv="mv -vi"
-alias cp="cp -vi"
 
 alias tnw="quotecmd -o tmux new-window --"
 alias tsh="quotecmd -o tmux split-window -h --"
@@ -31,4 +20,35 @@ if [ -x "$(which nvim 2>/dev/null)" ]; then
     alias vim='nvim'
     alias vimdiff='nvim -dO'
     alias view='nvim -R'
+fi
+
+# More userfriendly output from ls
+# shellcheck disable=2010
+if ls --version 2>/dev/null | grep -qm1 GNU; then
+    # TODO dircolors / LS_COLORS
+    alias ls='ls -Fhb --time-style=long-iso --color=auto'
+else
+    # TODO export CLICOLOR=1 LSCOLORS=XXX
+    alias ls='ls -Fhb'
+fi
+
+# Have chmod print changes
+if chmod --version 2>/dev/null | grep -qm1 GNU; then
+    alias chmod='chmod -c'
+else
+    alias chmod='chmod -v'
+fi
+
+# Have chown print changes
+if chown --version 2>/dev/null | grep -qm1 GNU; then
+    alias chown='chown -c'
+else
+    alias chown='chown -v'
+fi
+
+# TODO feature detect GNU ps like above
+if [ -n "$USE_GNU" ]; then
+    alias ps="ps --forest -w"
+else
+    alias ps="ps -w"
 fi

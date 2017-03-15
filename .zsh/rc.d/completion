@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 if [ -f ~/.zsh/zsh-completions/zsh-completions.plugin.zsh ]; then
     source ~/.zsh/zsh-completions/zsh-completions.plugin.zsh
 fi
@@ -19,8 +21,7 @@ compctl -g '*.(ps|eps)' gv
 
 # Colored file lists in completion
 if [ -n "$LS_COLORS" ]; then
-    ZLS_COLORS="$LS_COLORS"
-    export ZLS_COLORS
+    export ZLS_COLORS="$LS_COLORS"
     zmodload zsh/complist 2> /dev/null
 fi
 
@@ -29,7 +30,6 @@ compctl -g '*.Z *.gz *.tgz' + -g '*' zcat gunzip
 compctl -g '*.tar.Z *.tar.gz *.tgz *.tar.bz2' + -g '*' tar
 compctl -g '*.zip *.ZIP' + -g '*' unzip zip
 compctl -g '*.(mp3|MP3)' + -g '*(-/)'  mpg123 xmms
-
 
 # Rmdir only real directories
 compctl -g '*(D/)' rmdir
@@ -69,5 +69,3 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*' word true
 
 compdef _gnu_generic qiv
-
-# vim:set ft=zsh:

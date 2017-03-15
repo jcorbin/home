@@ -1,3 +1,8 @@
+# Chances are that you'll want to add some ignores here eventually.
+# For example if you have a habit of cloning things into $HOME, and then
+# symlinking their bins into $HOME/bin, then you probably want to ignore those
+# symlinks.
+
 *
 !.gitignore
 !atmux

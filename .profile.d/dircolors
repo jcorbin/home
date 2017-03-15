@@ -1,10 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 # after: term
 
-if which dircolors >/dev/null 2>&1; then
-    if [ -n "$TERM" ] && [ $(tput colors) -eq 256 ]; then
-        eval $(dircolors ~/.dircolors/solarized/dircolors.256dark)
+if [ -d ~/.dircolors ] && type dircolors &>/dev/null; then
+    if [ "$(tput colors)" -eq 256 ]; then
+        eval "$(dircolors ~/.dircolors/solarized/dircolors.256dark)"
     else
-        eval $(dircolors ~/.dircolors/solarized/dircolors.ansi-universal)
+        eval "$(dircolors ~/.dircolors/solarized/dircolors.ansi-universal)"
     fi
 fi
+
+# Better than nothing for BSD ls
+# from https://github.com/seebi/dircolors-solarized/issues/10
+export CLICOLOR=1
+export LSCOLORS="gxfxbEaEBxxEhEhBaDaCaD"
