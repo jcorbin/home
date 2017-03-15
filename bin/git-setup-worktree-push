@@ -21,4 +21,4 @@ cp ./githook-update-worktree-update \
 
 chmod +x "$GIT_DIR"/hooks/{update,post-receive}
 
-git config receive.denyCurrentBranch ignore
+git --git-dir="$GIT_DIR" config receive.denyCurrentBranch ignore
