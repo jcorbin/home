@@ -1,4 +1,8 @@
-# Chances are that you'll want to add some ignores here eventually.
-# For example if you have a habit of cloning things into $HOME, and then
-# symlinking their bins into $HOME/bin, then you probably want to ignore those
-# symlinks.
+# Follow the same pattern as the toplevel ignore: whitelist
+*
+!.gitignore
+
+# git-setup-worktree-push and ancillary
+!git-setup-worktree-push
+!githook-update-worktree-post-receive
+!githook-update-worktree-update
