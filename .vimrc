@@ -268,7 +268,7 @@ au FileType go nmap <leader>d <Plug>(go-doc)
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 
-let g:go_auto_type_info = 1
+let g:go_auto_type_info = 0
 let g:go_jump_to_error = 1
 
 let g:go_highlight_build_constraints = 1
