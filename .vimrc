@@ -247,6 +247,7 @@ let g:ale_sign_warning='⚠'
 
 " Go! {{{
 
+au FileType go nmap <leader>l <Plug>(go-metalinter)
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
