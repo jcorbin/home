@@ -1,11 +1,17 @@
 " plugins {{{
 
-" setup vim-plug, downloading it if needed
-" see https://github.com/junegunn/vim-plug
+" Define $VIMHOME:
+" - for NeoVim it's the directory that contains $MYVIMRC, usually
+"   ~/.config/nvim on unix
+" - for Vim it's ~/.vim on unix
+" - TODO: add support for Windows if you need it
 let $VIMHOME=expand('<sfile>:p:h')
 if $VIMHOME == $HOME
   let $VIMHOME=$HOME.'/.vim'
 endif
+
+" setup vim-plug, downloading it if needed
+" see https://github.com/junegunn/vim-plug
 if empty(glob($VIMHOME.'/autoload/plug.vim'))
     silent !curl -fLo $VIMHOME/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
