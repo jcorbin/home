@@ -51,6 +51,7 @@ class tmux(Popen):
         if exc_type is None and returncode != 0:
             raise CalledProcessError(returncode, self.command)
 
+
 sessions = set()
 if os.path.exists(tmux_sessiondir):
     sessions = set(os.listdir(tmux_sessiondir))
@@ -95,6 +96,7 @@ def choose_session():
     except EOFError:
         print
         return None
+
 
 if args.session is None and 'default' not in attached:
     args.session = 'default'
