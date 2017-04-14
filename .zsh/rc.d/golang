@@ -4,8 +4,15 @@
 # shellcheck source=/dev/null
 [ -s "$HOME/.gvm/scripts/gvm" ] && . "$HOME/.gvm/scripts/gvm"
 
-export GOPATH=$HOME/golang
-export PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
+altgopath()
+{
+    if [ -n "$GOPATH" ]; then
+        PATH=$(IFS=:; without "$GOPATH/bin" $PATH)
+    fi
+    GOPATH=$1
+    PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
+    export GOPATH PATH
+}
 
 goclone()
 {
@@ -26,6 +33,8 @@ goclone()
         ;;
     esac
 }
+
+altgopath "$HOME/golang"
 
 hash -d gos="$GOPATH/src"
 hash -d gog="$GOPATH/src/github.com"
