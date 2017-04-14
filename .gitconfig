@@ -52,7 +52,6 @@
     brv = branch -v
     cf = clean -f
     ch = cherry -v
-    chnrs = !git ch | git nrs
     ci = commit
     cia = commit -a
     ciam = commit -a -m
@@ -61,40 +60,25 @@
     cix = commit --allow-empty -m 'Ex Nihilo'
     cn = clean -n
     co = checkout
-    coB = checkout --no-track -B
-    cob = checkout -b
-    cod = checkout --detach
-    compubrd = !git checkout master && git pull && git branch -d
     cp = cherry-pick
     dc = diff --cached
-    detachat = !git checkout $(git rev-parse HEAD)
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
-    fp = format-patch -n -M -C --find-copies-harder
     lb = log --pretty=brief
     lbf = log --first-parent --pretty=brief
     lg = log --graph --pretty=brief
     lga = log --graph --pretty=brief --all
     lgb = log --graph --pretty=brief --branches
     lgf = log --first-parent --graph --pretty=brief
-    mergeto = !git checkout $1 && git merge HEAD@{1}
-    mrg = merge --no-ff --no-edit
-    mt = mergetool
-    nrs = name-rev --stdin
-    pack = repack -Ad
-    phub = !git push -u origin $(basename $(git symbolic-ref HEAD)) && hub pull-request create
     pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
     ra = rebase --abort
     rb = rebase
     rc = rebase --continue
-    rebr = rewrite-branch
     redo = reset HEAD^ --mixed
     rem = remote
     remv = remote -v
-    rlg = reflog --pretty=briefreflog
     rs = rebase --skip
     rst = reset --hard
-    shbr = show-branch
     st = status --short --branch
     suri = submodule update --recursive --init
     uewu = config user.email jcorbin@wunjo.org
