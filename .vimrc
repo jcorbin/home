@@ -65,6 +65,8 @@ if has("nvim")
   Plug 'Shougo/deoplete.nvim'
   Plug 'zchee/deoplete-go'
   Plug 'Shougo/echodoc.vim'
+else
+  Plug 'Shougo/neocomplete.vim'
 endif
 
 call plug#end()
