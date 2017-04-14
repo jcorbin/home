@@ -34,8 +34,6 @@ Plug 'tpope/vim-surround'
 Plug 'bling/vim-airline'
 
 " TODO: group and explain; some are probably neovim specific
-Plug 'Shougo/deoplete.nvim'
-Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'brookhong/cscope.vim'
@@ -62,7 +60,12 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-Plug 'zchee/deoplete-go'
+
+if has("nvim")
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'zchee/deoplete-go'
+  Plug 'Shougo/echodoc.vim'
+endif
 
 call plug#end()
 " }}}
@@ -283,7 +286,6 @@ let g:go_highlight_fields = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_generate_tags = 1
 
-let g:deoplete#sources#go = 'vim-go'
 let g:go_snippet_engine = "neosnippet"
 let g:go_template_autocreate = 0
 
@@ -302,13 +304,16 @@ augroup END
 " }}}
 
 " deoplete {{{
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#disable_auto_complete = 1
-set completeopt=menu,preview,longest,noselect
+if has("nvim")
+  let g:deoplete#sources#go = 'vim-go'
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#disable_auto_complete = 1
+  set completeopt=menu,preview,longest,noselect
 
-" echodoc
-let g:echodoc_enable_at_startup=1
+  " echodoc
+  let g:echodoc_enable_at_startup=1
 
+endif
 " }}}
 
 " neosnippet {{{
