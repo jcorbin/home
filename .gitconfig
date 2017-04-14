@@ -19,7 +19,7 @@
     pager = "less -+c -FRX"
 
 [grep]
-    patternType = perl # use modern regexp dialect by default
+    patternType = extended # use modern regexp dialect by default
 
 [log]
     # change default passed to git-log, so that we now get by default:
