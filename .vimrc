@@ -111,11 +111,14 @@ endif
 
 set virtualedit=all " edit beyond EOL
 set nowrap
-set inccommand=nosplit
 set fillchars=
 set lazyredraw
 set shortmess=atToO
 set cmdheight=1
+
+if has("nvim")
+  set inccommand=nosplit
+endif
 
 let mapleader=","
 
