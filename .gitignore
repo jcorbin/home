@@ -22,6 +22,7 @@
 !.profile
 !.profile.d/
 .profile.d/tokens
+.profile.d/.cached*
 !.aliases
 !.dircolors/
 !.inputrc
