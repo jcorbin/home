@@ -33,6 +33,7 @@
 
 # Zsh configuration
 !.zsh/
+.zsh/rc.d/.cached*
 !.zshenv
 !.zprofile
 !.zshrc
