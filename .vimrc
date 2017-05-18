@@ -73,11 +73,14 @@ call plug#end()
 " }}}
 
 " Save swap files in one place... {{{
-" ...instead of beside the file being edited. This ends up being kinder to
-" things like SCM and remote file systems.
-set directory=$VIMHOME/swap
-if exists("*mkdir") && !isdirectory(&directory)
-  call mkdir(&directory, "p", 0700)
+if !has("nvim")
+  " ...instead of beside the file being edited. This ends up being kinder to
+  " things like SCM and remote file systems.
+  " Neovim already does similar outof the box (under ~/.local/share/nvim/swap/...).
+  set directory=$VIMHOME/swap
+  if exists("*mkdir") && !isdirectory(&directory)
+    call mkdir(&directory, "p", 0700)
+  endif
 endif
 " }}}
 
