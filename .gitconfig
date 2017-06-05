@@ -73,8 +73,8 @@
     lb = log --pretty=brief
     lbf = log --first-parent --pretty=brief
     lg = log --graph --pretty=brief
-    lga = log --first-parent --graph --pretty=brief --all
-    lgb = log --first-parent --graph --pretty=brief --branches
+    lga = log --graph --pretty=brief --all
+    lgb = log --graph --pretty=brief --branches
     lgf = log --first-parent --graph --pretty=brief
     mergeto = !git checkout $1 && git merge HEAD@{1}
     mrg = merge --no-ff --no-edit
