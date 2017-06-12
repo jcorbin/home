@@ -97,6 +97,7 @@
     st = status --short --branch
     suri = submodule update --recursive --init
     uewu = config user.email jcorbin@wunjo.org
+    mrg = merge --no-edit --no-ff
 
 # Commiter identity
 [user]
