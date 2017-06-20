@@ -479,6 +479,8 @@ nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
 
+au FileType gitrebase nmap <leader>bf :g/\v^pick.*\)$/norm $byeoexec git branch -f <C-v><C-r>"<Return>
+
 " TagBar
 nnoremap <leader>tg :TagbarToggle<cr>
 
