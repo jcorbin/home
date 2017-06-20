@@ -479,7 +479,14 @@ nnoremap <leader>gr :Git reset %<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 " }}}
 
+" Stacked Diff Helpers {{{
+" - the bf binding finds any decorated picks, and follows them with an `exec
+"   git branch -f name`
+" - the gbf binding then anchors on those added execs allowing you to layer
+"   further edits on each instance
 au FileType gitrebase nmap <leader>bf :g/\v^pick.*\)$/norm $byeoexec git branch -f <C-v><C-r>"<Return>
+au FileType gitrebase nmap <leader>gbf :g/^exec git branch -f/norm<Space>
+" }}}
 
 " TagBar
 nnoremap <leader>tg :TagbarToggle<cr>
