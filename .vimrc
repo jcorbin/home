@@ -84,11 +84,6 @@ Plug 'tpope/vim-unimpaired'
 " allows Ctrl-A/X to inc/dec dates (and more!)
 Plug 'tpope/vim-speeddating'
 
-" TODO: group and explain; some are probably neovim specific
-Plug 'brookhong/cscope.vim'
-" Plug 'garyburd/go-explorer'
-Plug 'sjl/gundo.vim'
-
 " live linting, no more waiting for write!
 Plug 'w0rp/ale'
 
