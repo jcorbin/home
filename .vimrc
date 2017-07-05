@@ -30,35 +30,66 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
+" Command to (un)comment things
+Plug 'tpope/vim-commentary'
+
 " Better statusline
 Plug 'bling/vim-airline'
 
-" TODO: group and explain; some are probably neovim specific
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/neosnippet.vim'
-Plug 'brookhong/cscope.vim'
+" colorschemes
+Plug 'pR0Ps/molokai-dark'
+Plug 'robertmeta/nofrils'
+
+" better support for certain languages
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go'
-" Plug 'garyburd/go-explorer'
-Plug 'godlygeek/tabular'
-Plug 'honza/vim-snippets'
-Plug 'kien/ctrlp.vim'
-Plug 'majutsushi/tagbar'
-Plug 'mhinz/vim-grepper'
-Plug 'mhinz/vim-startify'
-Plug 'pR0Ps/molokai-dark'
 Plug 'pangloss/vim-javascript'
-Plug 'robertmeta/nofrils'
 Plug 'rodjek/vim-puppet'
-Plug 'sjl/gundo.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'tikhomirov/vim-glsl'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-commentary'
+
+" for snippets
+Plug 'Shougo/neosnippet-snippets'
+Plug 'Shougo/neosnippet.vim'
+Plug 'honza/vim-snippets'
+
+" fuzzy file loading (apply face to keyboard, get a file!)
+Plug 'kien/ctrlp.vim'
+
+" useful starting screen (load MRU file, fortune, etc)
+Plug 'mhinz/vim-startify'
+
+" git integration
 Plug 'tpope/vim-fugitive'
+
+" line things up
+Plug 'godlygeek/tabular'
+
+" adds a sidebar that displays tags
+Plug 'majutsushi/tagbar'
+
+" grep integration (for any grep-like program)
+Plug 'mhinz/vim-grepper'
+
+" mostly for casing coercion (aka "bikeshed transit" ;-))
+Plug 'tpope/vim-abolish'
+
+" autodetect indent level (stop running `:set ts=X sw=X` all the time when
+" crossing tribe lines)
 Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-speeddating'
+
+" grab bag, mostly for the "paired" bindings
 Plug 'tpope/vim-unimpaired'
+
+" allows Ctrl-A/X to inc/dec dates (and more!)
+Plug 'tpope/vim-speeddating'
+
+" TODO: group and explain; some are probably neovim specific
+Plug 'brookhong/cscope.vim'
+" Plug 'garyburd/go-explorer'
+Plug 'sjl/gundo.vim'
+
+" live linting, no more waiting for write!
 Plug 'w0rp/ale'
 
 if has("nvim")
