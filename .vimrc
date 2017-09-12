@@ -341,6 +341,7 @@ if has("nvim")
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#disable_auto_complete = 1
   set completeopt=menu,preview,longest,noselect
+  set infercase
 
   " echodoc
   let g:echodoc_enable_at_startup=1
