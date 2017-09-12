@@ -40,7 +40,7 @@
 
 # log formats
 [pretty]
-    brief = %C(red)%h%Creset %C(green)%cd%Creset %C(bold blue)<%an>%Creset %s%C(yellow)%d%Creset
+    brief = %C(red)%h%Creset %C(green)%ad%Creset %C(bold blue)<%an>%Creset %s%C(yellow)%d%Creset
     briefreflog = %C(green)%gd %C(red)%h%Creset %C(bold blue)<%gn>%Creset %gs
 
 # Command aliases
