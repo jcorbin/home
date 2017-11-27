@@ -257,25 +257,6 @@ let g:ale_sign_warning='⚠'
 
 " Go! {{{
 
-au FileType go nmap <leader>l <Plug>(go-metalinter)
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <leader>t <Plug>(go-test)
-au FileType go nmap <leader>c <Plug>(go-coverage)
-au FileType go nmap <Leader>e <Plug>(go-rename)
-au FileType go nmap <Leader>s <Plug>(go-implements)
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <Leader>do <Plug>(go-doc)
-au FileType go nmap <Leader>dd <Plug>(go-def)
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-
-au FileType go nmap <leader>d <Plug>(go-doc)
-" au FileType go nmap <leader>f <Plug>(go-info)
-" au FileType go nmap <leader>d <Plug>(go-def)
-" au FileType go nmap <leader>i :GoImports<Cr>
-
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 
@@ -450,6 +431,29 @@ nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>g: :Git<space>
+" }}}
+
+" go bindings {{{
+
+au FileType go nmap <leader>l <Plug>(go-metalinter)
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>do <Plug>(go-doc)
+au FileType go nmap <Leader>dd <Plug>(go-def)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+
+au FileType go nmap <leader>d <Plug>(go-doc)
+" au FileType go nmap <leader>f <Plug>(go-info)
+" au FileType go nmap <leader>d <Plug>(go-def)
+" au FileType go nmap <leader>i :GoImports<Cr>
+
 " }}}
 
 " Stacked Diff Helpers {{{
