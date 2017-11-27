@@ -422,9 +422,8 @@ cnoremap <C-p> <up>
 nmap gs  <plug>(GrepperOperator)
 xmap gs  <plug>(GrepperOperator)
 
-nnoremap <leader>g :Grepper -tool git<cr>
-nnoremap <leader>G :Grepper -tool pt<cr>
-" nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
+nnoremap <leader>Gg :Grepper -tool git<cr>
+nnoremap <leader>Gp :Grepper -tool pt<cr>
 
 let g:grepper           = {}
 let g:grepper.tools     = ['git', 'pt', 'grep', 'ack']
