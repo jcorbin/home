@@ -242,7 +242,6 @@ endif
 
 " airline {{{
 
-" let g:airline#extensions#eclim#enabled = 1
 " let g:airline#extensions#whitespace#enabled = 1
 " let g:airline#extensions#capslock#enabled = 1
 
@@ -396,11 +395,6 @@ if has("cscope")
 endif
 
 
-" }}}
-
-" Java ... {{{
-let g:EclimCompletionMethod = 'omnifunc'
-au FileType java nmap <leader>i :JavaImport<Cr>
 " }}}
 
 " Mappings {{{
