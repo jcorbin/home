@@ -220,20 +220,6 @@ augroup syntax_folding
 augroup END
 " }}}
 
-" foldcolumn on by default...
-" set foldcolumn=4
-" ... except for
-augroup NoFoldColumn
-  autocmd Filetype help setlocal foldcolumn=0
-  autocmd Filetype godoc setlocal foldcolumn=0
-  autocmd Filetype gitcommit setlocal foldcolumn=0
-  autocmd Filetype qf setlocal foldcolumn=0
-  autocmd Filetype netrw setlocal foldcolumn=0
-augroup END
-" mapping to toggle it
-nmap <leader>fc <Plug>FoldToggleColumn
-" }}}
-
 " Terminal options {{{
 if $TERM =~ 'xterm' || $TERM =~ 'screen'
   set ttyfast
