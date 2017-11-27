@@ -41,13 +41,9 @@ Plug 'pR0Ps/molokai-dark'
 Plug 'robertmeta/nofrils'
 
 " better support for certain languages
-Plug 'elzr/vim-json'
+Plug 'sheerun/vim-polyglot'
 Plug 'fatih/vim-go'
-Plug 'pangloss/vim-javascript'
-Plug 'python-mode/python-mode'
-Plug 'rodjek/vim-puppet'
-Plug 'solarnz/thrift.vim'
-Plug 'tikhomirov/vim-glsl'
+let g:polyglot_disabled = ['go', 'markdown']
 
 " for snippets
 Plug 'Shougo/neosnippet-snippets'
