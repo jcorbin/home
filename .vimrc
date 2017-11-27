@@ -468,9 +468,6 @@ nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 
-" GUndo
-nnoremap <leader>gu :GundoToggle<CR>
-
 " }}}
 
 " Spelling {{{
