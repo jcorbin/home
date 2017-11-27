@@ -81,6 +81,10 @@ Plug 'tpope/vim-speeddating'
 Plug 'w0rp/ale'
 
 if has("nvim")
+  " TODO: re-consider https://github.com/tjdevries/nvim-langserver-shim, since
+  " it looks to be trying for upstream
+  Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'zchee/deoplete-go'
   Plug 'Shougo/echodoc.vim'
@@ -146,6 +150,17 @@ set cmdheight=1
 if has("nvim")
   set inccommand=nosplit
 endif
+
+" }}}
+
+" Language Server Clients {{{
+
+let g:LanguageClient_serverCommands = {
+    \ 'go': ['/Users/joshua/golang/bin/go-langserver'],
+    \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
 
 " }}}
 
@@ -478,6 +493,14 @@ nmap <leader>f :Denite file_rec<cr>
 nmap <leader>h :Denite help<cr>
 nmap <leader>r :Denite register<cr>
 " nmap <leader>l :Denite line<cr>
+
+" Language Server Client
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gr  :call LanguageClient_textDocument_rename()<CR>
+nmap <leader>ld :Denite documentSymbol<cr>
+nmap <leader>lw :Denite workspaceSymbol<cr>
+nmap <leader>lr :Denite references<cr>
 
 " }}}
 
