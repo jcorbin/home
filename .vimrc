@@ -155,9 +155,6 @@ let g:netrw_banner = 1
 let g:netrw_liststyle = 3
 let g:netrw_sizestyle = 'H'
 
-nmap <leader>- <Plug>VinegarSplitUp
-nmap <leader>\| <Plug>VinegarVerticalSplitUp
-
 " }}}
 
 " Searching {{{
@@ -385,6 +382,10 @@ let mapleader=","
 " easier use of ranged global normal {{{
 " uses, and organizes around, the undocumented `g\/` and `g\&` forms describe
 " in ex_global:
+
+" File Browsing
+nmap <leader>- <Plug>VinegarSplitUp
+nmap <leader>\| <Plug>VinegarVerticalSplitUp
 
 " Perform a normal command...
 " ...on every line of the buffer
