@@ -395,26 +395,6 @@ if has("cscope")
   set csverb
 endif
 
-au FileType c nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
-au FileType c nnoremap <leader>l :call ToggleLocationList()<CR>
-
-" s: Find this C symbol
-au FileType c nnoremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
-" g: Find this definition
-au FileType c nnoremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
-" d: Find functions called by this function
-au FileType c nnoremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
-" c: Find functions calling this function
-au FileType c nnoremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
-" t: Find this text string
-au FileType c nnoremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
-" e: Find this egrep pattern
-au FileType c nnoremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
-" f: Find this file
-au FileType c nnoremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
-" i: Find files #including this file
-au FileType c nnoremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
-
 
 " }}}
 
