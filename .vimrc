@@ -50,8 +50,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet.vim'
 Plug 'honza/vim-snippets'
 
-" fuzzy file loading (apply face to keyboard, get a file!)
-Plug 'kien/ctrlp.vim'
+Plug 'Shougo/denite.nvim'
 
 " useful starting screen (load MRU file, fortune, etc)
 Plug 'mhinz/vim-startify'
@@ -471,6 +470,14 @@ nnoremap <leader>t/ :Tab/\//<cr>
 nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
+
+" Denite basics
+nmap <leader>b :Denite buffer<cr>
+nmap <leader>d :Denite directory_rec<cr>
+nmap <leader>f :Denite file_rec<cr>
+nmap <leader>h :Denite help<cr>
+nmap <leader>r :Denite register<cr>
+" nmap <leader>l :Denite line<cr>
 
 " }}}
 
