@@ -62,9 +62,6 @@ Plug 'tpope/vim-fugitive'
 " line things up
 Plug 'godlygeek/tabular'
 
-" adds a sidebar that displays tags
-Plug 'majutsushi/tagbar'
-
 " grep integration (for any grep-like program)
 Plug 'mhinz/vim-grepper'
 
@@ -462,9 +459,6 @@ nnoremap <leader>g: :Git<space>
 au FileType gitrebase nmap <leader>bf :g/\v^pick.*\)$/norm $byeoexec git branch -f <C-v><C-r>"<Return>
 au FileType gitrebase nmap <leader>gbf :g/^exec git branch -f/norm<Space>
 " }}}
-
-" TagBar
-nnoremap <leader>tg :TagbarToggle<cr>
 
 " Tabular
 nnoremap <leader>tt :Tab<cr>
