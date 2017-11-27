@@ -148,8 +148,6 @@ if has("nvim")
   set inccommand=nosplit
 endif
 
-let mapleader=","
-
 " }}}
 
 " File Browsing {{{
@@ -381,6 +379,8 @@ endif
 " }}}
 
 " Mappings {{{
+
+let mapleader=","
 
 " easier use of ranged global normal {{{
 " uses, and organizes around, the undocumented `g\/` and `g\&` forms describe
