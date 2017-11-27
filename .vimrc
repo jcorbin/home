@@ -85,7 +85,7 @@ Plug 'tpope/vim-speeddating'
 Plug 'w0rp/ale'
 
 if has("nvim")
-  Plug 'Shougo/deoplete.nvim'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'zchee/deoplete-go'
   Plug 'Shougo/echodoc.vim'
 else
