@@ -448,6 +448,8 @@ nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>g: :Git<space>
+nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
+
 " }}}
 
 " go bindings {{{
