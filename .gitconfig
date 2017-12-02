@@ -57,7 +57,7 @@
     ciam = commit -a -m
     cic = commit -c
     cim = commit -m
-    cix = commit --allow-empty -m 'Ex Nilho'
+    cix = commit --allow-empty -m 'Ex Nihilo'
     cn = clean -n
     co = checkout
     coB = checkout --no-track -B
