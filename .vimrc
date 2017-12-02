@@ -191,8 +191,8 @@ augroup END
 " than POSIX (but still not quite a modern PCRE dialect!)
 "
 " See `:help /magic` for more.
-nnoremap / /\v
-nnoremap ? ?\v
+" nnoremap / /\v
+" nnoremap ? ?\v
 
 " }}}
 
