@@ -271,8 +271,14 @@ let g:ale_sign_warning='⚠'
 
 " Go! {{{
 
+" " vim-go {{{
+
+let g:go_doc_keywordprg_enabled = 0
+let g:go_echo_go_info = 1
+
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
+let g:go_fmt_autosave = 1
 
 let g:go_auto_type_info = 0
 let g:go_jump_to_error = 1
@@ -297,6 +303,8 @@ let g:go_metalinter_autosave = 0 " XXX disabeld due to failing on fugitive buffe
 let g:go_term_mode = "split"
 let g:go_term_enabled = 1
 
+" }}}
+
 augroup nolistgo
   autocmd FileType go setlocal nolist
 augroup END
@@ -305,7 +313,6 @@ augroup END
 
 " deoplete {{{
 if has("nvim")
-  let g:deoplete#sources#go = 'vim-go'
   let g:deoplete#enable_at_startup = 1
   let g:deoplete#disable_auto_complete = 1
   set completeopt=menu,preview,longest,noselect
@@ -326,10 +333,6 @@ smap <C-f>     <Plug>(neosnippet_jump)
 
 " TODO get plugged root programatically for g:neosnippet#snippets_directory
 let g:neosnippet#snippets_directory="$HOME/.config/nvim/snippets,$HOME/.config/nvim/plugged/vim-snippets/snippets"
-
-augroup loadvimgosnip
-  autocmd FileType go NeoSnippetSource ~/.config/nvim/plugged/vim-go/gosnippets/snippets/go.snip
-augroup END
 
 " For conceal markers.
 set conceallevel=1
