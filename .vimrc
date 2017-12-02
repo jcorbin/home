@@ -375,7 +375,7 @@ endif
 
 " Mappings {{{
 
-let mapleader=","
+let mapleader="\\"
 
 " easier use of ranged global normal {{{
 " uses, and organizes around, the undocumented `g\/` and `g\&` forms describe
