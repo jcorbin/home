@@ -101,7 +101,7 @@ if !has("nvim")
   " things like SCM and remote file systems.
   " Neovim already does similar outof the box (under ~/.local/share/nvim/swap/...).
   set directory=$VIMHOME/swap
-  if exists("*mkdir") && !isdirectory(&directory)
+  if !isdirectory(&directory)
     call mkdir(&directory, "p", 0700)
   endif
 endif
