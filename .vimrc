@@ -13,6 +13,9 @@ endif
 " setup vim-plug, downloading it if needed
 " see https://github.com/junegunn/vim-plug
 if empty(glob($VIMHOME.'/autoload/plug.vim'))
+    if !isdirectory($VIMHOME.'/autoload')
+      call mkdir($VIMHOME.'/autoload', "p")
+    endif
     !curl -fLo $VIMHOME/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall | source $MYVIMRC
