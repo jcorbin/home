@@ -159,7 +159,7 @@ endif
 " Language Server Clients {{{
 
 let g:LanguageClient_serverCommands = {
-    \ 'go': ['/Users/joshua/golang/bin/go-langserver', '-pprof', ':26060'],
+    \ 'go': [$GOPATH.'/bin/go-langserver', '-pprof', ':26060'],
     \ }
 
 " Automatically start language servers.
