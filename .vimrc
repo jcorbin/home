@@ -210,6 +210,7 @@ augroup END
 
 set foldmethod=indent " default to indent folding
 set foldlevelstart=1  " with one level open
+autocmd Syntax c,cpp,vim,xml,html,xhtml,go setlocal foldmethod=syntax
 
 " set foldmethod=syntax
 " let javaScript_fold=1         " JavaScript
