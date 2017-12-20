@@ -43,6 +43,7 @@ Plug 'vim-airline/vim-airline-themes'
 " colorschemes
 Plug 'pR0Ps/molokai-dark'
 Plug 'robertmeta/nofrils'
+Plug 'chriskempson/base16-vim'
 
 " better support for certain languages
 Plug 'sheerun/vim-polyglot'
