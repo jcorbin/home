@@ -556,7 +556,7 @@ let g:startify_change_to_dir = 0
 
 " colorscheme {{{
 
-if has("&termguicolors")
+if has("termguicolors")
   set termguicolors
 endif
 
