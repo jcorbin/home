@@ -37,7 +37,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 
 " Better statusline
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
 
 " colorschemes
 Plug 'pR0Ps/molokai-dark'
