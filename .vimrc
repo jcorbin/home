@@ -385,6 +385,8 @@ let mapleader="\\"
 " uses, and organizes around, the undocumented `g\/` and `g\&` forms describe
 " in ex_global:
 
+nmap <leader>s :Startify<cr>
+
 " File Browsing
 nmap <leader>- <Plug>VinegarSplitUp
 nmap <leader>\| <Plug>VinegarVerticalSplitUp
