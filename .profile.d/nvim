@@ -4,7 +4,4 @@
 nvim_path=$(which nvim 2>/dev/null)
 if [ -x "$nvim_path" ]; then
     export EDITOR=$nvim_path
-
-    # TODO: would be nice to push these down into .config/nvim/init.vim
-    export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 fi
