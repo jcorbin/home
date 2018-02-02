@@ -20,6 +20,7 @@
 # Common shell environment and configuration
 !.profile
 !.profile.d/
+.profile.d/tokens
 !.aliases
 !.dircolors/
 !.inputrc
