@@ -18,3 +18,6 @@ done
 # only default such subversion on for interactive shells, so that we don't
 # break scripts written with BSD assumptions.
 re_gnu
+
+# So that $HOME skew doesn't go unnoticed for too long
+git -C "$HOME" status --short
