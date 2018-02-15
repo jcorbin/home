@@ -4,6 +4,16 @@
 # shellcheck source=/dev/null
 [ -s "$HOME/.gvm/scripts/gvm" ] && . "$HOME/.gvm/scripts/gvm"
 
+altgoroot()
+{
+    if [ -n "$GOROOT" ]; then
+        PATH=$(IFS=:; without "$GOROOT/bin" $PATH)
+    fi
+    GOROOT=$1
+    PATH=$(IFS=:; prepend "$GOROOT/bin" $PATH)
+    export GOROOT PATH
+}
+
 altgopath()
 {
     if [ -n "$GOPATH" ]; then
