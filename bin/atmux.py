@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import argparse
 import re
 import os
@@ -33,7 +35,7 @@ class tmux(Popen):
         try:
             super(tmux, self).__init__(cmd, **kwargs)
         except OSError:
-            print 'PATH=' + os.environ['PATH'], '+', cmd
+            print('PATH=' + os.environ['PATH'], '+', cmd)
             raise
 
     def check(self):
@@ -60,7 +62,7 @@ rline = re.compile(r'^(.+?): .*?(\(attached\))?$')
 attached, detached = set(), set()
 try:
     with tmux('list-sessions', stdout=PIPE) as p:
-        for match in (rline.match(line.strip()) for line in p.stdout):
+        for match in (rline.match(str(line).strip()) for line in p.stdout):
             if match:
                 session, is_attached = match.groups()
                 (attached if is_attached else detached).add(session)
@@ -80,7 +82,7 @@ def choose_session():
             for i, c in choices:
                 if c is None:
                     c = '-- specify --'
-                print fmt % (i, c)
+                print(fmt % (i, c))
             choice = raw_input(
                 'choose session (default %d) >> ' % default
             ) or default
@@ -94,7 +96,7 @@ def choose_session():
             session = raw_input('specify name >> ').strip()
         return session
     except EOFError:
-        print
+        print()
         return None
 
 
