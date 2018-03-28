@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # before: path
 # after: arrayutil
 # after: sbin_path
