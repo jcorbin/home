@@ -19,6 +19,7 @@
 !git-shell-pack
 !git-subtree
 !git-work
+!pkgit
 !quotecmd
 !sshscreen
 

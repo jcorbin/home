@@ -1,0 +1,170 @@
+#!/bin/bash
+set -e
+
+# A Less Crude Personal Package Manager
+# http://nullprogram.com/blog/2018/03/27/
+# FIXME documentation / help / etc
+
+PREFIX=$(dirname "$0")
+if [[ $PREFIX = */bin ]]; then
+    PREFIX=${PREFIX%/bin}
+fi
+if [ "$PREFIX" = "$HOME" ]; then
+    PREFIX=$HOME/.local
+fi
+
+# TODO implement install/upgrade side
+# cd $PREFIX
+# git remote add pkg $PKGREPO
+# git fetch pkg
+# git merge --allow-unrelated-histories pkg/neovim
+
+PKGREPO=$PREFIX/.pkg.git/
+if ! [ -d "$PKGREPO" ]; then
+    git init --bare "$PKGREPO"
+    rm -f "$PKGREPO"/hooks/*.hook
+fi
+
+SRCDIR=$(pwd)
+PKGNAME=$(basename "$SRCDIR")
+PKGVERSION=$(git --git-dir="$SRCDIR/.git" describe)
+PKGREF="refs/heads/$PKGNAME"
+PKGDIR=$PKGREPO/pkg/$PKGNAME
+BUILDDIR=$PKGDIR/build-$PKGVERSION
+DESTDIR=$PKGDIR/install-$PKGVERSION
+
+pkgit() {
+    if [ -d "$DESTDIR/$PREFIX" ]; then
+        GIT_DIR="$PKGREPO" GIT_INDEX_FILE="$PKGDIR/INDEX" GIT_WORK_TREE="$DESTDIR/$PREFIX" git "$@"
+    else
+        GIT_DIR="$PKGREPO" GIT_INDEX_FILE="$PKGDIR/INDEX" git "$@"
+    fi
+}
+
+priorBuild() {
+    echo "# Prior $PKGREF:"
+    pkgit cat-file commit "$PKGREF" | while read -r line; do
+        if [[ "$line" = Script:* ]]; then
+            got=yup
+            echo "# $line"
+        elif [ -n "$got" ]; then
+            if [ -z "$header" ] && [ -n "$line" ]; then
+                header="Prior build commands:"
+                echo "# $header"
+            fi
+            echo "$line"
+        elif [ -n "$line" ]; then
+            echo "# > $line"
+        else
+            echo "# >"
+        fi
+    done
+}
+
+withBuild() {
+    export BUILDDIR DESTDIR PKGNAME PKGREPO PKGREF PKGVERSION PREFIX SRCDIR
+    mkdir -p "$BUILDDIR"
+    cd "$BUILDDIR"
+    "$@"
+}
+
+commitMess() {
+    cat <<EOM
+Built $PKGVERSION
+
+Source: $SRCDIR
+
+Script:
+$(cat "$PKGDIR/BUILD.sh")
+
+# Diff Stat:
+$(pkgit diff --cached --stat | sed -e 's/^/# /')
+EOM
+}
+
+historyBuild() {
+    cat <<EOM
+# Session shell history:
+# TODO: curate this, as it will be used as a rebuild script later!
+$(if [ -f "$PKGDIR/history.prior" ]; then
+    diff "$PKGDIR/history"{.prior,} | grep '^> ' | cut -c 3-
+else
+    cat -u "$PKGDIR/history"
+fi)
+EOM
+}
+
+doCommit() {
+    cd "$DESTDIR/$PREFIX"
+    commitMess >"$PKGDIR/COMMIT"
+    pkgit symbolic-ref HEAD "$PKGREF"
+    pkgit add .
+    pkgit commit -e -F "$PKGDIR/COMMIT"
+    pkgit tag -f "$PKGNAME-$PKGVERSION"
+}
+
+doExec() {
+    export HISTFILE="$PKGDIR/history"
+    echo "$@" >>"$PKGDIR/history"
+    withBuild "$@"
+}
+
+doBuild() {
+    if [ -f "$PKGDIR/history" ]; then
+        cp "$PKGDIR/history"{,.prior}
+    fi
+    echo "Dropping into shell for build, salient variables:"
+    {
+        echo "  VAR=description=value"
+        echo "  SRCDIR=Package Source Directory=$SRCDIR"
+        echo "  PKGNAME=Package Name=$PKGNAME"
+        echo "  PKGVERSION=Package Version=$PKGVERSION"
+        echo "  BUILDDIR=Build Scratch Directory=$BUILDDIR"
+        echo "  PREFIX=Target Installation Directory=$PREFIX"
+        echo "  DESTDIR=Install Destination Directory=$DESTDIR"
+    } | column -ts=
+
+    if pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
+        echo "Last Commit:"
+        pkgit show -s "$PKGREF" | sed -e 's/^/  /'
+    fi
+
+    HISTFILE="$PKGDIR/history" withBuild bash
+    historyBuild >"$PKGDIR/BUILD.sh"
+    doCommit
+    rm -rf "$BUILDDIR" "$DESTDIR"
+}
+
+doRebuild() {
+    priorBuild >"$PKGDIR/BUILD.sh"
+    "$EDITOR" "$PKGDIR/BUILD.sh"
+    withBuild bash "$PKGDIR/BUILD.sh"
+    doCommit
+    rm -rf "$BUILDDIR" "$DESTDIR"
+}
+
+case "$1" in
+exec)
+    shift
+    doExec "$@"
+    ;;
+
+build)
+    shift
+    doBuild
+    ;;
+
+rebuild)
+    doRebuild
+    ;;
+
+*)
+    if [ $# -gt 0 ]; then
+        pkgit "$@"
+    elif pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
+        doRebuild
+    else
+        doBuild
+    fi
+    ;;
+esac
