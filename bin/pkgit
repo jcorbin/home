@@ -61,7 +61,7 @@ Built $PKGVERSION
 Source: $SRCDIR
 
 Script:
-$(grep -v '^## ' "$PKGDIR/BUILD.sh")
+$(grep -v '^## ' "$PKGDIR/build.bash")
 
 # Diff Stat:
 $(pkgit diff --cached --stat | sed -e 's/^/# /')
@@ -116,15 +116,15 @@ doBuild() {
     fi
 
     HISTFILE="$PKGDIR/history" withBuild bash
-    historyBuild >"$PKGDIR/BUILD.sh"
+    historyBuild >"$PKGDIR/build.bash"
     doCommit
     rm -rf "$BUILDDIR" "$DESTDIR"
 }
 
 doRebuild() {
-    priorBuild >"$PKGDIR/BUILD.sh"
-    "$EDITOR" "$PKGDIR/BUILD.sh"
-    withBuild bash "$PKGDIR/BUILD.sh"
+    priorBuild >"$PKGDIR/build.bash"
+    "$EDITOR" "$PKGDIR/build.bash"
+    withBuild bash "$PKGDIR/build.bash"
     doCommit
     rm -rf "$BUILDDIR" "$DESTDIR"
 }
