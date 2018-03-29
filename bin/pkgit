@@ -82,10 +82,9 @@ EOM
 
 doCommit() {
     cd "$DESTDIR/$PREFIX"
-    commitMess >"$PKGDIR/COMMIT"
     pkgit symbolic-ref HEAD "$PKGREF"
     pkgit add .
-    pkgit commit -e -F "$PKGDIR/COMMIT"
+    commitMess | pkgit commit -e -F -
     pkgit tag -f "$PKGNAME-$PKGVERSION"
 }
 
