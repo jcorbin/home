@@ -42,23 +42,9 @@ pkgit() {
 }
 
 priorBuild() {
-    echo "# Prior $PKGREF:"
-    pkgit cat-file commit "$PKGREF" | while read -r line; do
-        if [[ "$line" = Script:* ]]; then
-            got=yup
-            echo "# $line"
-        elif [ -n "$got" ]; then
-            if [ -z "$header" ] && [ -n "$line" ]; then
-                header="Prior build commands:"
-                echo "# $header"
-            fi
-            echo "$line"
-        elif [ -n "$line" ]; then
-            echo "# > $line"
-        else
-            echo "# >"
-        fi
-    done
+    echo "## commit $(pkgit rev-parse "$PKGREF") from $PKGREF"
+    pkgit cat-file commit "$PKGREF" \
+    | awk 'BEGIN { prefix="## " }; { print prefix $0; if (match($0, "Script:") == 1) {prefix=""} }'
 }
 
 withBuild() {
@@ -75,7 +61,7 @@ Built $PKGVERSION
 Source: $SRCDIR
 
 Script:
-$(cat "$PKGDIR/BUILD.sh")
+$(grep -v '^## ' "$PKGDIR/BUILD.sh")
 
 # Diff Stat:
 $(pkgit diff --cached --stat | sed -e 's/^/# /')
