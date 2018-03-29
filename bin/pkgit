@@ -146,7 +146,7 @@ doRebuild() {
     fi
 
     "$EDITOR" "$PKGDIR/build.bash"
-    withBuild bash "$PKGDIR/build.bash"
+    withBuild bash "$PKGDIR/build.bash" 2>&1 | tee "$PKGDIR/build.log"
     doCommit
 }
 
