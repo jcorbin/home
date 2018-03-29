@@ -136,7 +136,6 @@ doBuild() {
     HISTFILE="$PKGDIR/history" withBuild bash
     historyBuild >"$PKGDIR/build.bash"
     doCommit
-    rm -rf "$BUILDDIR" "$DESTDIR"
 }
 
 doRebuild() {
@@ -149,7 +148,6 @@ doRebuild() {
     "$EDITOR" "$PKGDIR/build.bash"
     withBuild bash "$PKGDIR/build.bash"
     doCommit
-    rm -rf "$BUILDDIR" "$DESTDIR"
 }
 
 case "$1" in
@@ -166,6 +164,10 @@ build)
 rebuild)
     shift
     doRebuild "$@"
+    ;;
+
+clean)
+    rm -rf "$BUILDDIR" "$DESTDIR"
     ;;
 
 *)
