@@ -166,6 +166,10 @@ rebuild)
     doRebuild "$@"
     ;;
 
+commit)
+    doCommit
+    ;;
+
 rm)
     rm -rf "$PKGDIR"
     ;;
