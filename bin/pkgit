@@ -34,11 +34,7 @@ BUILDDIR=$PKGDIR/build-$PKGVERSION
 DESTDIR=$PKGDIR/install-$PKGVERSION
 
 pkgit() {
-    if [ -d "$DESTDIR/$PREFIX" ]; then
-        GIT_DIR="$PKGREPO" GIT_INDEX_FILE="$PKGDIR/INDEX" GIT_WORK_TREE="$DESTDIR/$PREFIX" git "$@"
-    else
-        GIT_DIR="$PKGREPO" GIT_INDEX_FILE="$PKGDIR/INDEX" git "$@"
-    fi
+    GIT_DIR="$PKGREPO" GIT_INDEX_FILE="$PKGDIR/INDEX" git "$@"
 }
 
 priorBuild() {
@@ -83,8 +79,8 @@ EOM
 doCommit() {
     cd "$DESTDIR/$PREFIX"
     pkgit symbolic-ref HEAD "$PKGREF"
-    pkgit add .
-    commitMess | pkgit commit -e -F -
+    GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
+    commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
     pkgit tag -f "$PKGNAME-$PKGVERSION"
 }
 
