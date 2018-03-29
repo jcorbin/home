@@ -166,6 +166,10 @@ rebuild)
     doRebuild "$@"
     ;;
 
+rm)
+    rm -rf "$PKGDIR"
+    ;;
+
 clean)
     rm -rf "$BUILDDIR" "$DESTDIR"
     ;;
