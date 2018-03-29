@@ -27,7 +27,11 @@ fi
 
 SRCDIR=$(pwd)
 PKGNAME=$(basename "$SRCDIR")
-PKGVERSION=$(git --git-dir="$SRCDIR/.git" describe)
+
+PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
+PKGDESC=$(git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV")
+
+PKGVERSION=${PKGDESC##*/}
 PKGREF="refs/heads/$PKGNAME"
 PKGDIR=$PKGREPO/pkg/$PKGNAME
 BUILDDIR=$PKGDIR/build-$PKGVERSION
