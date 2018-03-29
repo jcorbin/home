@@ -19,7 +19,7 @@ fi
 # git fetch pkg
 # git merge --allow-unrelated-histories pkg/neovim
 
-PKGREPO=$PREFIX/.pkg.git/
+PKGREPO=$PREFIX/.git
 if ! [ -d "$PKGREPO" ]; then
     git init --bare "$PKGREPO"
     rm -f "$PKGREPO"/hooks/*.hook
@@ -32,9 +32,17 @@ PKGREF="refs/heads/$PKGNAME"
 PKGDIR=$PKGREPO/pkg/$PKGNAME
 BUILDDIR=$PKGDIR/build-$PKGVERSION
 DESTDIR=$PKGDIR/install-$PKGVERSION
+PKGSUBREPO=$PKGDIR/.git
 
 pkgit() {
-    GIT_DIR="$PKGREPO" GIT_INDEX_FILE="$PKGDIR/INDEX" git "$@"
+    [ -d "$PKGSUBREPO" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
+    GIT_OBJECT_DIRECTORY="$PKGREPO/objects" git --git-dir="$PKGSUBREPO" "$@"
+}
+
+setupSubRepo() {
+    git init --bare "$PKGSUBREPO"
+    rm -rf "$PKGSUBREPO"/{hooks/*,objects}
+    git --git-dir="$PKGSUBREPO" symbolic-ref HEAD "$PKGREF"
 }
 
 priorBuild() {
@@ -78,10 +86,9 @@ EOM
 
 doCommit() {
     cd "$DESTDIR/$PREFIX"
-    pkgit symbolic-ref HEAD "$PKGREF"
     GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
     commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
-    pkgit tag -f "$PKGNAME-$PKGVERSION"
+    git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$(pkgit rev-parse HEAD)"
 }
 
 doExec() {
