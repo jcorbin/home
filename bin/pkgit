@@ -156,6 +156,10 @@ exec)
     doExec "$@"
     ;;
 
+build-script)
+    priorBuild
+    ;;
+
 build)
     shift
     doBuild "$@"
