@@ -28,6 +28,9 @@ fi
 SRCDIR=$(pwd)
 PKGNAME=$(basename "$SRCDIR")
 
+PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
+PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
+PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
 PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
 PKGDESC=$(git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV")
 
@@ -67,6 +70,8 @@ commitMess() {
 Built $PKGVERSION
 
 Source: $SRCDIR
+Upstream: $PKGURL
+Revision: $PKGREV
 
 Script:
 $(grep -v '^## ' "$PKGDIR/build.bash")
