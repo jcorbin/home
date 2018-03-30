@@ -33,7 +33,11 @@ inspectPackage() {
     PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
     PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
     PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
-    PKGDESC=$(git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV")
+    PKGDESC=$(
+        git --git-dir="$SRCDIR/.git" describe "$PKGREV" 2>/dev/null ||
+        git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null ||
+        git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
+    )
 
     PKGVERSION=${PKGDESC##*/}
     PKGREF="refs/heads/$PKGNAME"
