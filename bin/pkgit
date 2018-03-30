@@ -5,26 +5,6 @@ set -e
 # http://nullprogram.com/blog/2018/03/27/
 # FIXME documentation / help / etc
 
-PREFIX=$(dirname "$0")
-if [[ $PREFIX = */bin ]]; then
-    PREFIX=${PREFIX%/bin}
-fi
-if [ "$PREFIX" = "$HOME" ]; then
-    PREFIX=$HOME/.local
-fi
-
-# TODO implement install/upgrade side
-# cd $PREFIX
-# git remote add pkg $PKGREPO
-# git fetch pkg
-# git merge --allow-unrelated-histories pkg/neovim
-
-PKGREPO=$PREFIX/.git
-if ! [ -d "$PKGREPO" ]; then
-    git init --bare "$PKGREPO"
-    rm -f "$PKGREPO"/hooks/*.hook
-fi
-
 inspectPackage() {
     SRCDIR=$1
     PKGNAME=$(basename "$SRCDIR")
@@ -46,8 +26,6 @@ inspectPackage() {
     DESTDIR=$PKGDIR/install-$PKGVERSION
     PKGSUBREPO=$PKGDIR/.git
 }
-
-inspectPackage "$(pwd)"
 
 pkgit() {
     [ -d "$PKGSUBREPO" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
@@ -157,6 +135,28 @@ doRebuild() {
     withBuild bash "$PKGDIR/build.bash" 2>&1 | tee "$PKGDIR/build.log"
     doCommit
 }
+
+PREFIX=$(dirname "$0")
+if [[ $PREFIX = */bin ]]; then
+    PREFIX=${PREFIX%/bin}
+fi
+if [ "$PREFIX" = "$HOME" ]; then
+    PREFIX=$HOME/.local
+fi
+
+PKGREPO=$PREFIX/.git
+if ! [ -d "$PKGREPO" ]; then
+    git init --bare "$PKGREPO"
+    rm -f "$PKGREPO"/hooks/*.hook
+fi
+
+# TODO implement install/upgrade side
+# cd $PREFIX
+# git remote add pkg $PKGREPO
+# git fetch pkg
+# git merge --allow-unrelated-histories pkg/neovim
+
+inspectPackage "$(pwd)"
 
 case "$1" in
 exec)
