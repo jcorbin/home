@@ -150,11 +150,20 @@ if ! [ -d "$PKGREPO" ]; then
     rm -f "$PKGREPO"/hooks/*.hook
 fi
 
-# TODO implement install/upgrade side
-# cd $PREFIX
-# git remote add pkg $PKGREPO
-# git fetch pkg
-# git merge --allow-unrelated-histories pkg/neovim
+case "$1" in
+    # TODO install)
+    # cd $PREFIX
+    # git remote add pkg $PKGREPO
+    # git fetch pkg
+    # git merge --allow-unrelated-histories pkg/neovim
+
+repogit)
+    shift
+    cd "$PREFIX"
+    git --git-dir="$PKGREPO" "$@"
+    exit 0
+    ;;
+esac
 
 inspectPackage "$(pwd)"
 
