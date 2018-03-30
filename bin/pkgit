@@ -5,6 +5,11 @@ set -e
 # http://nullprogram.com/blog/2018/03/27/
 # FIXME documentation / help / etc
 
+die() {
+    echo "$@" >&2
+    exit 1
+}
+
 inspectPackage() {
     SRCDIR=$1
     PKGNAME=$(basename "$SRCDIR")
@@ -151,11 +156,22 @@ if ! [ -d "$PKGREPO" ]; then
 fi
 
 case "$1" in
-    # TODO install)
-    # cd $PREFIX
-    # git remote add pkg $PKGREPO
-    # git fetch pkg
-    # git merge --allow-unrelated-histories pkg/neovim
+install)
+    shift
+    if [ $# -eq 0 ]; then
+        inspectPackage "$(pwd)"
+    else
+        die "UNIMPLEMENTED install package by name; only works from within package source tree for now"
+    fi
+    ref=$(pkgit rev-list "$PKGREF" \
+        | git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
+        | grep -v undefined | head -n1)
+    cd "$PREFIX"
+    git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
+    echo
+    git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
+    exit 0
+    ;;
 
 repogit)
     shift
