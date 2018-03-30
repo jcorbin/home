@@ -25,21 +25,25 @@ if ! [ -d "$PKGREPO" ]; then
     rm -f "$PKGREPO"/hooks/*.hook
 fi
 
-SRCDIR=$(pwd)
-PKGNAME=$(basename "$SRCDIR")
+inspectPackage() {
+    SRCDIR=$1
+    PKGNAME=$(basename "$SRCDIR")
 
-PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
-PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
-PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
-PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
-PKGDESC=$(git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV")
+    PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
+    PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
+    PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
+    PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
+    PKGDESC=$(git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV")
 
-PKGVERSION=${PKGDESC##*/}
-PKGREF="refs/heads/$PKGNAME"
-PKGDIR=$PKGREPO/pkg/$PKGNAME
-BUILDDIR=$PKGDIR/build-$PKGVERSION
-DESTDIR=$PKGDIR/install-$PKGVERSION
-PKGSUBREPO=$PKGDIR/.git
+    PKGVERSION=${PKGDESC##*/}
+    PKGREF="refs/heads/$PKGNAME"
+    PKGDIR=$PKGREPO/pkg/$PKGNAME
+    BUILDDIR=$PKGDIR/build-$PKGVERSION
+    DESTDIR=$PKGDIR/install-$PKGVERSION
+    PKGSUBREPO=$PKGDIR/.git
+}
+
+inspectPackage "$(pwd)"
 
 pkgit() {
     [ -d "$PKGSUBREPO" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
