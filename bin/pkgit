@@ -98,14 +98,19 @@ doExec() {
 }
 
 doBuild() {
-    if [ -n "$1" ]; then
-        cat "$1" >> "$PKGDIR/history"
-        withBuild bash "$1" 2>&1 | tee "$PKGDIR/build.log"
+    prior=$1
+
+    if [ -n "$prior" ]; then
+        cp "$prior" "$PKGDIR/build.bash"
+        withBuild bash "$PKGDIR/build.bash" 2>&1 | tee "$PKGDIR/build.log"
     fi
 
     [ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
     if [ -f "$PKGDIR/history" ]; then
         cp "$PKGDIR/history"{,.prior}
+    fi
+    if [ -n "$prior" ]; then
+        cat "$PKGDIR/build.bash" >> "$PKGDIR/history"
     fi
 
     echo "Dropping into shell for build, salient variables:"
