@@ -105,13 +105,14 @@ doBuild() {
     if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
         priorBuild >"$PKGDIR/prior_build.bash"
         prior="$PKGDIR/prior_build.bash"
-        "$EDITOR" "$PKGDIR/prior_build.bash"
     fi
 
     steps=()
 
     if [ -n "$prior" ]; then
         cp "$prior" "$PKGDIR/build.bash"
+        "$EDITOR" "$PKGDIR/build.bash"
+
         steps+=("$PKGDIR/build.bash" )
     fi
 
