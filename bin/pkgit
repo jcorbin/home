@@ -129,12 +129,6 @@ doInteract() {
         echo "  PREFIX=Target Installation Directory=$PREFIX"
         echo "  DESTDIR=Install Destination Directory=$DESTDIR"
     } | column -ts=
-
-    if pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
-        echo "Last Commit:"
-        pkgit show -s "$PKGREF" | sed -e 's/^/  /'
-    fi
-
     HISTFILE="$PKGDIR/history" withBuild bash
 }
 
