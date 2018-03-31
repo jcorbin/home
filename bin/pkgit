@@ -25,7 +25,6 @@ inspectPackage() {
 	)
 
 	PKGVERSION=${PKGDESC##*/}
-	PKGREF="refs/heads/$PKGNAME"
 	PKGDIR=$PKGREPO/pkg/$PKGNAME
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
 	DESTDIR=$PKGDIR/install-$PKGVERSION
@@ -40,18 +39,18 @@ pkgit() {
 setupSubRepo() {
 	git init --bare "$PKGSUBREPO"
 	rm -rf "$PKGSUBREPO"/{hooks/*,objects}
-	git --git-dir="$PKGSUBREPO" symbolic-ref HEAD "$PKGREF"
+	git --git-dir="$PKGSUBREPO" symbolic-ref HEAD "refs/heads/$PKGNAME"
 }
 
 priorBuild() {
-	echo "## prior build script from $PKGREF"
+	echo "## prior build script from $(pkgit symbolic-ref HEAD)"
 	echo "##"
-	pkgit show "$PKGREF" -s --pretty='commit %h%d%ntree %t%nAuthored by %an <%ae> at %ai%nCommitted by %cn <%ce> at %ci%nSubject: %B' \
+	pkgit show HEAD -s --pretty='commit %h%d%ntree %t%nAuthored by %an <%ae> at %ai%nCommitted by %cn <%ce> at %ci%nSubject: %B' \
 	| awk 'BEGIN { prefix="## " }; { print prefix $0; if (match($0, "Script:") == 1) {prefix=""} }'
 }
 
 withBuild() {
-	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGREF PKGVERSION PREFIX SRCDIR
+	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGVERSION PREFIX SRCDIR
 	mkdir -p "$BUILDDIR"
 	cd "$BUILDDIR"
 	"$@"
@@ -90,7 +89,7 @@ doBuild() {
 
 	[ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
 
-	if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
+	if [ -z "$prior" ] && pkgit rev-parse --verify -q HEAD >/dev/null; then
 		priorBuild >"$PKGDIR/prior_build.bash"
 		prior="$PKGDIR/prior_build.bash"
 	fi
@@ -165,7 +164,7 @@ install)
 	else
 		die "UNIMPLEMENTED install package by name; only works from within package source tree for now"
 	fi
-	ref=$(pkgit rev-list "$PKGREF" \
+	ref=$(pkgit rev-list HEAD \
 		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
 		| grep -v undefined | head -n1)
 	cd "$PREFIX"
