@@ -85,13 +85,6 @@ fi)
 EOM
 }
 
-doCommit() {
-	cd "$DESTDIR/$PREFIX"
-	GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
-	commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
-	git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$(pkgit rev-parse HEAD)"
-}
-
 doBuild() {
 	prior=$1
 
@@ -128,8 +121,12 @@ doBuild() {
 		doInteract
 	fi
 
+	tag=$(pkgit rev-parse HEAD)
 	historyBuild >"$PKGDIR/build.bash"
-	doCommit
+	cd "$DESTDIR/$PREFIX"
+	GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
+	commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
+	git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$tag"
 }
 
 doInteract() {
@@ -196,10 +193,6 @@ build-script)
 build)
 	shift
 	doBuild "$@"
-	;;
-
-commit)
-	doCommit
 	;;
 
 rm)
