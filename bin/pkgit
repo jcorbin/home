@@ -6,58 +6,58 @@ set -e
 # FIXME documentation / help / etc
 
 die() {
-    echo "$@" >&2
-    exit 1
+	echo "$@" >&2
+	exit 1
 }
 
 inspectPackage() {
-    SRCDIR=$1
-    PKGNAME=$(basename "$SRCDIR")
+	SRCDIR=$1
+	PKGNAME=$(basename "$SRCDIR")
 
-    PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
-    PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
-    PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
-    PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
-    PKGDESC=$(
-        git --git-dir="$SRCDIR/.git" describe "$PKGREV" 2>/dev/null ||
-        git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null ||
-        git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
-    )
+	PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
+	PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
+	PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
+	PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
+	PKGDESC=$(
+		git --git-dir="$SRCDIR/.git" describe "$PKGREV" 2>/dev/null ||
+		git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null ||
+		git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
+	)
 
-    PKGVERSION=${PKGDESC##*/}
-    PKGREF="refs/heads/$PKGNAME"
-    PKGDIR=$PKGREPO/pkg/$PKGNAME
-    BUILDDIR=$PKGDIR/build-$PKGVERSION
-    DESTDIR=$PKGDIR/install-$PKGVERSION
-    PKGSUBREPO=$PKGDIR/.git
+	PKGVERSION=${PKGDESC##*/}
+	PKGREF="refs/heads/$PKGNAME"
+	PKGDIR=$PKGREPO/pkg/$PKGNAME
+	BUILDDIR=$PKGDIR/build-$PKGVERSION
+	DESTDIR=$PKGDIR/install-$PKGVERSION
+	PKGSUBREPO=$PKGDIR/.git
 }
 
 pkgit() {
-    [ -d "$PKGSUBREPO" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
-    GIT_OBJECT_DIRECTORY="$PKGREPO/objects" git --git-dir="$PKGSUBREPO" "$@"
+	[ -d "$PKGSUBREPO" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
+	GIT_OBJECT_DIRECTORY="$PKGREPO/objects" git --git-dir="$PKGSUBREPO" "$@"
 }
 
 setupSubRepo() {
-    git init --bare "$PKGSUBREPO"
-    rm -rf "$PKGSUBREPO"/{hooks/*,objects}
-    git --git-dir="$PKGSUBREPO" symbolic-ref HEAD "$PKGREF"
+	git init --bare "$PKGSUBREPO"
+	rm -rf "$PKGSUBREPO"/{hooks/*,objects}
+	git --git-dir="$PKGSUBREPO" symbolic-ref HEAD "$PKGREF"
 }
 
 priorBuild() {
-    echo "## commit $(pkgit rev-parse "$PKGREF") from $PKGREF"
-    pkgit cat-file commit "$PKGREF" \
-    | awk 'BEGIN { prefix="## " }; { print prefix $0; if (match($0, "Script:") == 1) {prefix=""} }'
+	echo "## commit $(pkgit rev-parse "$PKGREF") from $PKGREF"
+	pkgit cat-file commit "$PKGREF" \
+	| awk 'BEGIN { prefix="## " }; { print prefix $0; if (match($0, "Script:") == 1) {prefix=""} }'
 }
 
 withBuild() {
-    export BUILDDIR DESTDIR PKGNAME PKGREPO PKGREF PKGVERSION PREFIX SRCDIR
-    mkdir -p "$BUILDDIR"
-    cd "$BUILDDIR"
-    "$@"
+	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGREF PKGVERSION PREFIX SRCDIR
+	mkdir -p "$BUILDDIR"
+	cd "$BUILDDIR"
+	"$@"
 }
 
 commitMess() {
-    cat <<EOM
+	cat <<EOM
 Built $PKGVERSION
 
 Source: $SRCDIR
@@ -73,158 +73,158 @@ EOM
 }
 
 historyBuild() {
-    cat <<EOM
+	cat <<EOM
 # Session shell history:
 # TODO: curate this, as it will be used as a rebuild script later!
 $(if [ -f "$PKGDIR/history.prior" ]; then
-    diff "$PKGDIR/history"{.prior,} | grep '^> ' | cut -c 3-
+	diff "$PKGDIR/history"{.prior,} | grep '^> ' | cut -c 3-
 else
-    cat -u "$PKGDIR/history"
+	cat -u "$PKGDIR/history"
 fi)
 EOM
 }
 
 doCommit() {
-    cd "$DESTDIR/$PREFIX"
-    GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
-    commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
-    git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$(pkgit rev-parse HEAD)"
+	cd "$DESTDIR/$PREFIX"
+	GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
+	commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
+	git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$(pkgit rev-parse HEAD)"
 }
 
 doExec() {
-    export HISTFILE="$PKGDIR/history"
-    echo "$@" >>"$PKGDIR/history"
-    withBuild "$@"
+	export HISTFILE="$PKGDIR/history"
+	echo "$@" >>"$PKGDIR/history"
+	withBuild "$@"
 }
 
 doBuild() {
-    prior=$1
+	prior=$1
 
-    [ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
+	[ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
 
-    if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
-        priorBuild >"$PKGDIR/prior_build.bash"
-        prior="$PKGDIR/prior_build.bash"
-    fi
+	if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
+		priorBuild >"$PKGDIR/prior_build.bash"
+		prior="$PKGDIR/prior_build.bash"
+	fi
 
-    steps=()
+	steps=()
 
-    if [ -n "$prior" ]; then
-        cp "$prior" "$PKGDIR/build.bash"
-        "$EDITOR" "$PKGDIR/build.bash"
+	if [ -n "$prior" ]; then
+		cp "$prior" "$PKGDIR/build.bash"
+		"$EDITOR" "$PKGDIR/build.bash"
 
-        steps+=("$PKGDIR/build.bash" )
-    fi
+		steps+=("$PKGDIR/build.bash" )
+	fi
 
-    if [ -f "$PKGDIR/history" ]; then
-        cp "$PKGDIR/history"{,.prior}
-    fi
+	if [ -f "$PKGDIR/history" ]; then
+		cp "$PKGDIR/history"{,.prior}
+	fi
 
-    i=0
-    for step in "${steps[@]}"; do
-        if [ $i -gt 0 ]; then
-            doInteract
-        fi
-        cat "$step" >> "$PKGDIR/history"
-        withBuild bash "$step" 2>&1 | tee "$PKGDIR/build.log"
-        i=$(( i + 1 ))
-    done
-    if [ $i -eq 0 ]; then
-        doInteract
-    fi
+	i=0
+	for step in "${steps[@]}"; do
+		if [ $i -gt 0 ]; then
+			doInteract
+		fi
+		cat "$step" >> "$PKGDIR/history"
+		withBuild bash "$step" 2>&1 | tee "$PKGDIR/build.log"
+		i=$(( i + 1 ))
+	done
+	if [ $i -eq 0 ]; then
+		doInteract
+	fi
 
-    historyBuild >"$PKGDIR/build.bash"
-    doCommit
+	historyBuild >"$PKGDIR/build.bash"
+	doCommit
 }
 
 doInteract() {
-    echo "Dropping into shell for build, salient variables:"
-    {
-        echo "  VAR=description=value"
-        echo "  SRCDIR=Package Source Directory=$SRCDIR"
-        echo "  PKGNAME=Package Name=$PKGNAME"
-        echo "  PKGVERSION=Package Version=$PKGVERSION"
-        echo "  BUILDDIR=Build Scratch Directory=$BUILDDIR"
-        echo "  PREFIX=Target Installation Directory=$PREFIX"
-        echo "  DESTDIR=Install Destination Directory=$DESTDIR"
-    } | column -ts=
-    HISTFILE="$PKGDIR/history" withBuild bash
+	echo "Dropping into shell for build, salient variables:"
+	{
+		echo "  VAR=description=value"
+		echo "  SRCDIR=Package Source Directory=$SRCDIR"
+		echo "  PKGNAME=Package Name=$PKGNAME"
+		echo "  PKGVERSION=Package Version=$PKGVERSION"
+		echo "  BUILDDIR=Build Scratch Directory=$BUILDDIR"
+		echo "  PREFIX=Target Installation Directory=$PREFIX"
+		echo "  DESTDIR=Install Destination Directory=$DESTDIR"
+	} | column -ts=
+	HISTFILE="$PKGDIR/history" withBuild bash
 }
 
 PREFIX=$(dirname "$0")
 if [[ $PREFIX = */bin ]]; then
-    PREFIX=${PREFIX%/bin}
+	PREFIX=${PREFIX%/bin}
 fi
 if [ "$PREFIX" = "$HOME" ]; then
-    PREFIX=$HOME/.local
+	PREFIX=$HOME/.local
 fi
 
 PKGREPO=$PREFIX/.git
 if ! [ -d "$PKGREPO" ]; then
-    git init --bare "$PKGREPO"
-    rm -f "$PKGREPO"/hooks/*.hook
+	git init --bare "$PKGREPO"
+	rm -f "$PKGREPO"/hooks/*.hook
 fi
 
 case "$1" in
 install)
-    shift
-    if [ $# -eq 0 ]; then
-        inspectPackage "$(pwd)"
-    else
-        die "UNIMPLEMENTED install package by name; only works from within package source tree for now"
-    fi
-    ref=$(pkgit rev-list "$PKGREF" \
-        | git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
-        | grep -v undefined | head -n1)
-    cd "$PREFIX"
-    git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
-    echo
-    git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
-    exit 0
-    ;;
+	shift
+	if [ $# -eq 0 ]; then
+		inspectPackage "$(pwd)"
+	else
+		die "UNIMPLEMENTED install package by name; only works from within package source tree for now"
+	fi
+	ref=$(pkgit rev-list "$PKGREF" \
+		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
+		| grep -v undefined | head -n1)
+	cd "$PREFIX"
+	git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
+	echo
+	git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
+	exit 0
+	;;
 
 repogit)
-    shift
-    cd "$PREFIX"
-    git --git-dir="$PKGREPO" "$@"
-    exit 0
-    ;;
+	shift
+	cd "$PREFIX"
+	git --git-dir="$PKGREPO" "$@"
+	exit 0
+	;;
 esac
 
 inspectPackage "$(pwd)"
 
 case "$1" in
 exec)
-    shift
-    doExec "$@"
-    ;;
+	shift
+	doExec "$@"
+	;;
 
 build-script)
-    priorBuild
-    ;;
+	priorBuild
+	;;
 
 build)
-    shift
-    doBuild "$@"
-    ;;
+	shift
+	doBuild "$@"
+	;;
 
 commit)
-    doCommit
-    ;;
+	doCommit
+	;;
 
 rm)
-    rm -rf "$PKGDIR"
-    ;;
+	rm -rf "$PKGDIR"
+	;;
 
 clean)
-    rm -rf "$BUILDDIR" "$DESTDIR"
-    ;;
+	rm -rf "$BUILDDIR" "$DESTDIR"
+	;;
 
 *)
-    if [ $# -gt 0 ]; then
-        pkgit "$@"
-    else
-        doBuild
-    fi
-    ;;
+	if [ $# -gt 0 ]; then
+		pkgit "$@"
+	else
+		doBuild
+	fi
+	;;
 esac
