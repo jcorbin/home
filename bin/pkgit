@@ -100,12 +100,13 @@ doExec() {
 doBuild() {
     prior=$1
 
+    [ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
+
     if [ -n "$prior" ]; then
         cp "$prior" "$PKGDIR/build.bash"
         withBuild bash "$PKGDIR/build.bash" 2>&1 | tee "$PKGDIR/build.log"
     fi
 
-    [ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
     if [ -f "$PKGDIR/history" ]; then
         cp "$PKGDIR/history"{,.prior}
     fi
