@@ -102,6 +102,12 @@ doBuild() {
 
     [ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
 
+    if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
+        priorBuild >"$PKGDIR/prior_build.bash"
+        prior="$PKGDIR/prior_build.bash"
+        "$EDITOR" "$PKGDIR/prior_build.bash"
+    fi
+
     steps=()
 
     if [ -n "$prior" ]; then
@@ -142,19 +148,6 @@ doInteract() {
         echo "  DESTDIR=Install Destination Directory=$DESTDIR"
     } | column -ts=
     HISTFILE="$PKGDIR/history" withBuild bash
-}
-
-
-doRebuild() {
-    if [ -n "$1" ]; then
-        cp "$1" "$PKGDIR/build.bash"
-    else
-        priorBuild >"$PKGDIR/build.bash"
-    fi
-
-    "$EDITOR" "$PKGDIR/build.bash"
-    withBuild bash "$PKGDIR/build.bash" 2>&1 | tee "$PKGDIR/build.log"
-    doCommit
 }
 
 PREFIX=$(dirname "$0")
@@ -214,11 +207,6 @@ build)
     doBuild "$@"
     ;;
 
-rebuild)
-    shift
-    doRebuild "$@"
-    ;;
-
 commit)
     doCommit
     ;;
@@ -234,8 +222,6 @@ clean)
 *)
     if [ $# -gt 0 ]; then
         pkgit "$@"
-    elif pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
-        doRebuild
     else
         doBuild
     fi
