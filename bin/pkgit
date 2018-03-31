@@ -102,19 +102,30 @@ doBuild() {
 
     [ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
 
+    steps=()
+
     if [ -n "$prior" ]; then
         cp "$prior" "$PKGDIR/build.bash"
-        withBuild bash "$PKGDIR/build.bash" 2>&1 | tee "$PKGDIR/build.log"
+        steps+=("$PKGDIR/build.bash" )
     fi
 
     if [ -f "$PKGDIR/history" ]; then
         cp "$PKGDIR/history"{,.prior}
     fi
-    if [ -n "$prior" ]; then
-        cat "$PKGDIR/build.bash" >> "$PKGDIR/history"
+
+    i=0
+    for step in "${steps[@]}"; do
+        if [ $i -gt 0 ]; then
+            doInteract
+        fi
+        cat "$step" >> "$PKGDIR/history"
+        withBuild bash "$step" 2>&1 | tee "$PKGDIR/build.log"
+        i=$(( i + 1 ))
+    done
+    if [ $i -eq 0 ]; then
+        doInteract
     fi
 
-    doInteract
     historyBuild >"$PKGDIR/build.bash"
     doCommit
 }
