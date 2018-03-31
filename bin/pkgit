@@ -54,6 +54,16 @@ priorBuild() {
 }
 
 withBuild() {
+	if [ -n "$PKGIT_DRYRUN" ]; then
+		if [ "$1" == "bash" ] && [ $# -eq 2 ]; then
+			echo cd "$BUILDDIR" '&& {'
+			sed -e 's/^/  /' "$2"
+			echo '}'
+		else
+			echo cd "$BUILDDIR" '&&' "$@"
+		fi
+		return
+	fi
 	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGVERSION PREFIX SRCDIR
 	mkdir -p "$BUILDDIR"
 	cd "$BUILDDIR"
@@ -138,14 +148,22 @@ doBuild() {
 	fi
 
 	tag=$(pkgit rev-parse HEAD)
-	historyBuild >"$PKGDIR/build.bash"
-	cd "$DESTDIR/$PREFIX"
-	GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
-	commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
-	git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$tag"
+	if [ -n "$PKGIT_DRYRUN" ]; then
+		echo "# would add, commit, and tag $tag"
+	else
+		historyBuild >"$PKGDIR/build.bash"
+		cd "$DESTDIR/$PREFIX"
+		GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
+		commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
+		git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$tag"
+	fi
 }
 
 doInteract() {
+	if [ -n "$PKGIT_DRYRUN" ]; then
+		echo "# would drop into build shell"
+		return
+	fi
 	echo "Dropping into build shell, salient variables:"
 	{
 		echo "  VAR=description=value"
