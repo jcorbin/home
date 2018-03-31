@@ -113,6 +113,12 @@ doBuild() {
         cat "$PKGDIR/build.bash" >> "$PKGDIR/history"
     fi
 
+    doInteract
+    historyBuild >"$PKGDIR/build.bash"
+    doCommit
+}
+
+doInteract() {
     echo "Dropping into shell for build, salient variables:"
     {
         echo "  VAR=description=value"
@@ -130,9 +136,8 @@ doBuild() {
     fi
 
     HISTFILE="$PKGDIR/history" withBuild bash
-    historyBuild >"$PKGDIR/build.bash"
-    doCommit
 }
+
 
 doRebuild() {
     if [ -n "$1" ]; then
