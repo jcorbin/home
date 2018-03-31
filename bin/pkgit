@@ -92,12 +92,6 @@ doCommit() {
 	git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$(pkgit rev-parse HEAD)"
 }
 
-doExec() {
-	export HISTFILE="$PKGDIR/history"
-	echo "$@" >>"$PKGDIR/history"
-	withBuild "$@"
-}
-
 doBuild() {
 	prior=$1
 
@@ -195,11 +189,6 @@ esac
 inspectPackage "$(pwd)"
 
 case "$1" in
-exec)
-	shift
-	doExec "$@"
-	;;
-
 build-script)
 	priorBuild
 	;;
