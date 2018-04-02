@@ -14,6 +14,8 @@ inspectPackage() {
 	PREFIX=$PKGROOT
 	SRCDIR=$1
 	PKGNAME=$(basename "$SRCDIR")
+	PKGDIR=$PKGREPO/pkg/$PKGNAME
+	PKGSUBREPO=$PKGDIR/.git
 
 	PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
 	PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
@@ -26,10 +28,8 @@ inspectPackage() {
 	)
 
 	PKGVERSION=${PKGDESC##*/}
-	PKGDIR=$PKGREPO/pkg/$PKGNAME
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
 	DESTDIR=$PKGDIR/install-$PKGVERSION
-	PKGSUBREPO=$PKGDIR/.git
 }
 
 pkgit() {
