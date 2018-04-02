@@ -147,7 +147,7 @@ doBuild() {
 		doInteract
 	fi
 
-	tag=$(pkgit rev-parse HEAD)
+	tag=$PKGNAME-$PKGVERSION
 	if [ -n "$PKGIT_DRYRUN" ]; then
 		echo "# would add, commit, and tag $tag"
 	else
@@ -155,7 +155,7 @@ doBuild() {
 		cd "$DESTDIR/$PREFIX"
 		GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
 		commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
-		git --git-dir="$PKGREPO" tag -f "$PKGNAME-$PKGVERSION" "$tag"
+		git --git-dir="$PKGREPO" tag -f "$tag" "$(pkgit rev-parse HEAD)"
 	fi
 }
 
