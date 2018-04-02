@@ -99,6 +99,11 @@ EOM
 }
 
 doBuild() {
+	if [ -n "$PKGIT_DRYRUN" ]; then
+		echo "Dry Run Build Variables:"
+		dumpVars
+	fi
+
 	prior=$1
 
 	[ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
@@ -165,6 +170,12 @@ doInteract() {
 		return
 	fi
 	echo "Dropping into build shell, salient variables:"
+	dumpVars
+	echo "NOTE: prior build commands are available in history"
+	HISTFILE="$PKGDIR/history" withBuild bash
+}
+
+dumpVars() {
 	{
 		echo "  VAR=description=value"
 		echo "  SRCDIR=Package Source Directory=$SRCDIR"
@@ -174,8 +185,6 @@ doInteract() {
 		echo "  PREFIX=Target Installation Directory=$PREFIX"
 		echo "  DESTDIR=Install Destination Directory=$DESTDIR"
 	} | column -ts=
-	echo "NOTE: prior build commands are available in history"
-	HISTFILE="$PKGDIR/history" withBuild bash
 }
 
 PREFIX=$(dirname "$0")
