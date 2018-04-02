@@ -158,9 +158,10 @@ doBuild() {
 		echo "# would add, commit, and tag $tag"
 	else
 		historyBuild >"$PKGDIR/build.bash"
-		cd "$DESTDIR/$PREFIX"
-		GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit add .
-		commitMess | GIT_WORK_TREE="$DESTDIR/$PREFIX" pkgit commit -e -F -
+		tree="$DESTDIR/$PKGROOT"
+		cd "$tree"
+		GIT_WORK_TREE="$tree" pkgit add .
+		commitMess | GIT_WORK_TREE="$tree" pkgit commit -e -F -
 		git --git-dir="$PKGREPO" tag -f "$tag" "$(pkgit rev-parse HEAD)"
 	fi
 }
