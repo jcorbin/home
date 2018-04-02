@@ -11,6 +11,7 @@ die() {
 }
 
 inspectPackage() {
+	PREFIX=$PKGROOT
 	SRCDIR=$1
 	PKGNAME=$(basename "$SRCDIR")
 
@@ -187,15 +188,15 @@ dumpVars() {
 	} | column -ts=
 }
 
-PREFIX=$(dirname "$0")
-if [[ $PREFIX = */bin ]]; then
-	PREFIX=${PREFIX%/bin}
+PKGROOT=$(dirname "$0")
+if [[ $PKGROOT = */bin ]]; then
+	PKGROOT=${PKGROOT%/bin}
 fi
-if [ "$PREFIX" = "$HOME" ]; then
-	PREFIX=$HOME/.local
+if [ "$PKGROOT" = "$HOME" ]; then
+	PKGROOT=$HOME/.local
 fi
 
-PKGREPO=$PREFIX/.git
+PKGREPO=$PKGROOT/.git
 if ! [ -d "$PKGREPO" ]; then
 	git init --bare "$PKGREPO"
 	rm -f "$PKGREPO"/hooks/*.hook
@@ -212,7 +213,7 @@ install)
 	ref=$(pkgit rev-list HEAD \
 		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
 		| grep -v undefined | head -n1)
-	cd "$PREFIX"
+	cd "$PKGROOT"
 	git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
 	echo
 	git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
@@ -221,7 +222,7 @@ install)
 
 repogit)
 	shift
-	cd "$PREFIX"
+	cd "$PKGROOT"
 	git --git-dir="$PKGREPO" "$@"
 	exit 0
 	;;
