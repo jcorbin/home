@@ -15,12 +15,11 @@ inspectPackage() {
 	SRCDIR=$1
 	PKGNAME=$(basename "$SRCDIR")
 	PKGDIR=$PKGREPO/pkg/$PKGNAME
-	PKGSUBREPO=$PKGDIR/.git
 
 	PKGVARIANT=
 	PKGREF=$(pkgit symbolic-ref HEAD)
-	if [ -f "$PKGSUBREPO/variant" ]; then
-		PKGVARIANT=$(bash "$PKGSUBREPO/variant")
+	if [ -f "$PKGDIR/variant" ]; then
+		PKGVARIANT=$(bash "$PKGDIR/variant")
 		PREFIX+=/$PKGVARIANT
 		if [ "$PKGREF" != "refs/heads/$PKGVARIANT" ]; then
 			PKGREF="refs/heads/$PKGVARIANT"
@@ -44,14 +43,14 @@ inspectPackage() {
 }
 
 pkgit() {
-	[ -d "$PKGSUBREPO" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
-	GIT_OBJECT_DIRECTORY="$PKGREPO/objects" git --git-dir="$PKGSUBREPO" "$@"
+	[ -d "$PKGDIR" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
+	GIT_OBJECT_DIRECTORY="$PKGREPO/objects" git --git-dir="$PKGDIR" "$@"
 }
 
 setupSubRepo() {
-	git init --bare "$PKGSUBREPO"
-	rm -rf "$PKGSUBREPO"/{hooks/*,objects}
-	git --git-dir="$PKGSUBREPO" symbolic-ref HEAD "refs/heads/$PKGNAME"
+	git init --bare "$PKGDIR"
+	rm -rf "$PKGDIR"/{hooks/*,objects}
+	git --git-dir="$PKGDIR" symbolic-ref HEAD "refs/heads/$PKGNAME"
 }
 
 priorBuild() {
@@ -264,13 +263,13 @@ truncate)
 variant)
 	shift
 	if [ $# -gt 0 ]; then
-		echo "$@" >"$PKGSUBREPO/variant"
-		PKGVARIANT=$(bash "$PKGSUBREPO/variant")
+		echo "$@" >"$PKGDIR/variant"
+		PKGVARIANT=$(bash "$PKGDIR/variant")
 	fi
-	if ! [ -f "$PKGSUBREPO/variant" ]; then
+	if ! [ -f "$PKGDIR/variant" ]; then
 		die "No package variant script configured; run \`pkgit variant ...\` to set one."
 	fi
-	echo "variant command: \`$(cat "$PKGSUBREPO/variant")\`"
+	echo "variant command: \`$(cat "$PKGDIR/variant")\`"
 	echo "variant: $PKGVARIANT"
 	;;
 
