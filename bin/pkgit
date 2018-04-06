@@ -17,6 +17,8 @@ inspectPackage() {
 	PKGDIR=$PKGREPO/pkg/$PKGNAME
 	PKGSUBREPO=$PKGDIR/.git
 
+	PKGREF=$(pkgit symbolic-ref HEAD)
+
 	PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
 	PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
 	PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
@@ -44,7 +46,7 @@ setupSubRepo() {
 }
 
 priorBuild() {
-	ref=${1:-HEAD}
+	ref=${1:-$PKGREF}
 	echo "## prior build script from $ref"
 	echo "##"
 	pkgit show "$ref" -s --pretty='commit %h%d%ntree %t%nAuthored by %an <%ae> at %ai%nCommitted by %cn <%ce> at %ci%nSubject: %B' \
@@ -110,8 +112,8 @@ doBuild() {
 
 	[ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
 
-	if [ -z "$prior" ] && pkgit rev-parse --verify -q HEAD >/dev/null; then
-		priorBuild >"$PKGDIR/prior_build.bash"
+	if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
+		priorBuild "$PKGREF" >"$PKGDIR/prior_build.bash"
 		prior="$PKGDIR/prior_build.bash"
 	fi
 
@@ -163,7 +165,7 @@ doBuild() {
 		cd "$tree"
 		GIT_WORK_TREE="$tree" pkgit add .
 		commitMess | GIT_WORK_TREE="$tree" pkgit commit -e -F -
-		git --git-dir="$PKGREPO" tag -f "$tag" "$(pkgit rev-parse HEAD)"
+		git --git-dir="$PKGREPO" tag -f "$tag" "$(pkgit rev-parse "$PKGREF")"
 	fi
 }
 
@@ -212,7 +214,7 @@ install)
 	else
 		die "UNIMPLEMENTED install package by name; only works from within package source tree for now"
 	fi
-	ref=$(pkgit rev-list HEAD \
+	ref=$(pkgit rev-list "$PKGREF" \
 		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
 		| grep -v undefined | head -n1)
 	cd "$PKGROOT"
