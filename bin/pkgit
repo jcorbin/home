@@ -232,7 +232,7 @@ doBuild() {
 		i=$(( i + 1 ))
 	done
 	if [ $i -eq 0 ]; then
-		doInteract
+		doFirstInteract
 	fi
 
 	tag=$PKGNAME-$PKGVERSION
@@ -248,14 +248,44 @@ doBuild() {
 	fi
 }
 
+doFirstInteract() {
+	if [ -n "$PKGIT_DRYRUN" ]; then
+		echo "# would drop into initial build shell"
+		return
+	fi
+	cat <<-EOF
+	Dropping into build shell, salient variables:
+	$(dumpVars)
+
+	If the project uses standard autotools, a good start:
+
+	    \$SRCDIR/configure
+	    make
+	    make install
+
+	If the project uses cmake, try:
+
+	    cmake \$SRCDIR
+	    make
+
+	Finally, try to do an "out-of-tree" build, but if you want/need the source:
+
+	    git --git-dir="\$SRCDIR/.git" archive HEAD | tar -x
+	EOF
+	HISTFILE="$PKGDIR/history" withBuild bash
+}
+
 doInteract() {
 	if [ -n "$PKGIT_DRYRUN" ]; then
 		echo "# would drop into build shell"
 		return
 	fi
-	echo "Dropping into build shell, salient variables:"
-	dumpVars
-	echo "NOTE: prior build commands are available in history"
+	cat <<-EOF
+	Dropping into build shell, salient variables:
+	$(dumpVars)
+
+	NOTE: any prior build commands are available in history
+	EOF
 	HISTFILE="$PKGDIR/history" withBuild bash
 }
 
