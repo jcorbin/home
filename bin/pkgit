@@ -14,6 +14,58 @@ doHelp() {
 	- pkgit # build is the default command
 	- pkgit install
 
+	# The Long
+
+	pkgit is designed to manage some \$PREFIX, while its primary intention is
+	to manage \$HOME/.local, it can in principle work for other things like
+	/usr/local.
+
+	\$PREFIX will be managed as a git repository; if it isn't one already,
+	pkgit will initialize it.  Packages each get their own sub-repository under
+	\$PREFIX/.git/pkg/NAME.
+
+	Each package seb-repo is a a bare git repository with no objects of its own
+	(all objects are stored in \$PREFIX/.git/objects).  Build related
+	artifacts, mostly temporary in nature, are stored under the package
+	sub-repo.
+
+	Builds are done under \$PREFIX/.git/pkg/NAME/{build,install}-VERSION:
+	- build-VERSION SHOULD serve as an out-of-tree build directory
+	- install-VERSION serves as the working tree
+	- the contents of the install-VERSION working tree is then comitted to a
+	  branch in the package's repository, and a NAME-VERSION tag is created
+	  in the \$PREFIX repository
+
+	The first time a package is built, the user is dropped into an interactive
+	shell to perform the build.  After the user exits that shell, their history
+	is recorded as a build script for next time.  The contents of the
+	install-VERSION directory are committed, along with the build script, into
+	a branch in the package sub-repo.  Users may optionally provide an initial
+	build script to avoid the interactive process.
+
+	Subsequent builds are then primed by using the build script recorded in the
+	last commit.  Whenever a build script is used (either recovered from prior
+	commit, or given by the user to \`pkgit build ...\`), the user is presented
+	with it in their \$EDITOR.  The user has a chance to instrument the build
+	script with interactive shell "breakpoints".  Just like the initial
+	interactive shell, any history within these breakpoints is recorded for
+	inclusion in the resulting build script.
+
+	Installs are done by merging a built tag into \$PREFIX; however the user
+	can just as easily \`cd \$PREFIX\` git-around themselves; pkgit currently
+	add most of its value during the above build phase, and generally
+	managing each package's sub-repository. NOTE/TODO: merging already
+	large-ish branches together into an even bigger working tree may quickly
+	known scaling limit in git; because of this, and also to ease things like
+	up/down-grades the user and/or pkgit itself should explore using \`git
+	submodule\` rather than the current tree-grafting approach.
+
+	## Variants
+
+	TODO explain this in longer form, basically it's multiple branches within
+	the sub-repo, keyed off some extracted version component from the source
+	tree; e.g. to separate python2 and python3.
+
 	# Inspiration / Motivation:
 
 	- inspired by [A Crude Personal Package Manager](http://nullprogram.com/blog/2018/03/27/)
