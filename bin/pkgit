@@ -244,6 +244,14 @@ build)
 	doBuild "$@"
 	;;
 
+truncate)
+	tree=$(pkgit rev-parse "$PKGREF":)
+	commit=$(pkgit show -s --pretty=%B "$PKGREF" | pkgit commit-tree "$tree" -F -)
+	tag=$PKGNAME-$PKGVERSION
+	pkgit update-ref "$PKGREF" "$commit" -m "pkgit truncate"
+	git --git-dir="$PKGREPO" tag -f "$tag" "$commit"
+	;;
+
 rm)
 	rm -rf "$PKGDIR"
 	;;
