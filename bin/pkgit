@@ -1,9 +1,28 @@
 #!/bin/bash
 set -e
 
-# A Less Crude Personal Package Manager
-# http://nullprogram.com/blog/2018/03/27/
-# FIXME documentation / help / etc
+doHelp() {
+	cat <<-EOF
+	pkgit: a git-based (personal) package manager
+
+	# The Short
+
+	To a first approximation pkgit is "just" a wrapper for (a specially
+	configured) git with a "build" and "install" command tacked on:
+	- cp pkgit \$HOME/bin/pkgit # or \$HOME/.local/bin/pkgit to taste
+	- cd path/to/source/tree/for/thing
+	- pkgit # build is the default command
+	- pkgit install
+
+	# Inspiration / Motivation:
+
+	- inspired by [A Crude Personal Package Manager](http://nullprogram.com/blog/2018/03/27/)
+	- pkgit set(s) out to be "A Less Crude Personal Package Manager"
+	- in other words, this grew out of my initial "tar(balls)?!? who uses
+	  tar(balls) in 2018? Software comes through git, and git can manage the
+	  installed artifacts better to boot!" reaction to reading said blog post.
+	EOF
+}
 
 die() {
 	echo "$@" >&2
@@ -220,6 +239,11 @@ if ! [ -d "$PKGREPO" ]; then
 fi
 
 case "$1" in
+help)
+	doHelp
+	exit 0
+	;;
+
 install)
 	shift
 	if [ $# -eq 0 ]; then
