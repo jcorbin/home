@@ -210,8 +210,13 @@ fi
 
 PKGREPO=$PKGROOT/.git
 if ! [ -d "$PKGREPO" ]; then
-	git init --bare "$PKGREPO"
-	rm -f "$PKGREPO"/hooks/*.hook
+	pushd "$PKGREPO"
+	git init
+	rm -f .git/hooks/*.hook
+	git commit --allow-empty -m 'Initial Commit Left Intentionally Empty'
+	echo "Initialized an empty git repository in $PKGROOT; consider addressing any"
+	echo "prior content (commit it, or commit some gitignores for it)." popd
+	popd
 fi
 
 case "$1" in
