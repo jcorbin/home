@@ -112,6 +112,7 @@ inspectPackage() {
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
 	DESTDIR=$PKGDIR/install-$PKGVERSION
 	BUILDSCRIPT=$PKGDIR/build.bash
+	BUILDHISTORY=$PKGDIR/history
 }
 
 pkgit() {
@@ -174,10 +175,10 @@ historyBuild() {
 	cat <<EOM
 # Session shell history:
 # TODO: curate this, as it will be used as a rebuild script later!
-$(if [ -f "$PKGDIR/history.prior" ]; then
-	diff "$PKGDIR/history"{.prior,} | grep '^> ' | cut -c 3-
+$(if [ -f "$BUILDHISTORY.prior" ]; then
+	diff "$BUILDHISTORY"{.prior,} | grep '^> ' | cut -c 3-
 else
-	cat -u "$PKGDIR/history"
+	cat -u "$BUILDHISTORY"
 fi)
 EOM
 }
@@ -219,8 +220,8 @@ doBuild() {
 		done
 	fi
 
-	if [ -f "$PKGDIR/history" ]; then
-		cp "$PKGDIR/history"{,.prior}
+	if [ -f "$BUILDHISTORY" ]; then
+		cp "$BUILDHISTORY"{,.prior}
 	fi
 
 	i=0
@@ -228,7 +229,7 @@ doBuild() {
 		if [ $i -gt 0 ]; then
 			doInteract
 		fi
-		cat "$step" >> "$PKGDIR/history"
+		cat "$step" >> "$BUILDHISTORY"
 		withBuild bash "$step" 2>&1 | tee "$PKGDIR/build.log"
 		i=$(( i + 1 ))
 	done
@@ -273,7 +274,7 @@ doFirstInteract() {
 
 	    git --git-dir="\$SRCDIR/.git" archive HEAD | tar -x
 	EOF
-	HISTFILE="$PKGDIR/history" withBuild bash
+	HISTFILE="$BUILDHISTORY" withBuild bash
 }
 
 doInteract() {
@@ -287,7 +288,7 @@ doInteract() {
 
 	NOTE: any prior build commands are available in history
 	EOF
-	HISTFILE="$PKGDIR/history" withBuild bash
+	HISTFILE="$BUILDHISTORY" withBuild bash
 }
 
 dumpVars() {
