@@ -150,7 +150,6 @@ withBuild() {
 		return
 	fi
 	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGVERSION PREFIX SRCDIR
-	mkdir -p "$BUILDDIR"
 	cd "$BUILDDIR"
 	"$@"
 }
@@ -189,9 +188,10 @@ doBuild() {
 		dumpVars
 	fi
 
-	prior=$1
+	mkdir -p "$PKGDIR"
+	mkdir -p "$BUILDDIR"
 
-	[ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
+	prior=$1
 
 	if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
 		priorBuild "$PKGREF" >"$BUILDSCRIPT"
