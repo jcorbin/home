@@ -233,7 +233,7 @@ doBuild() {
 			doInteract
 		fi
 		cat "$step" >> "$BUILDHISTORY"
-		withBuild bash "$step" 2>&1 | tee "$BUILDSCRIPT.log"
+		withBuild bash "$step" 2>&1 | tee -a "$BUILDSCRIPT.log"
 		i=$(( i + 1 ))
 	done
 	if [ $i -eq 0 ]; then
