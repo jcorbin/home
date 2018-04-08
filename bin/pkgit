@@ -107,10 +107,11 @@ inspectPackage() {
 		git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null ||
 		git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
 	)
-
 	PKGVERSION=${PKGDESC##*/}
+
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
 	DESTDIR=$PKGDIR/install-$PKGVERSION
+	BUILDSCRIPT=$PKGDIR/build.bash
 }
 
 pkgit() {
@@ -162,7 +163,7 @@ Upstream: $PKGURL
 Revision: $PKGREV
 
 Script:
-$(grep -v '^##' "$PKGDIR/build.bash")
+$(grep -v '^##' "$BUILDSCRIPT")
 
 # Diff Stat:
 $(pkgit diff --cached --stat | sed -e 's/^/# /')
@@ -199,12 +200,12 @@ doBuild() {
 	steps=()
 
 	if [ -n "$prior" ]; then
-		cp "$prior" "$PKGDIR/build.bash"
-		"$EDITOR" "$PKGDIR/build.bash"
+		cp "$prior" "$BUILDSCRIPT"
+		"$EDITOR" "$BUILDSCRIPT"
 
 		pushd "$PKGDIR"
 		rm -f build.*.bash
-		awk -f - build.bash <<- EOA
+		awk -f - "$BUILDSCRIPT" <<- EOA
 			BEGIN {n=0; of="build.0.bash"} {
 				if (match(\$0, "shell") == 1) {of=sprintf("build.%d.bash", ++n); print "" > of}
 				else if (match(\$0, "##") != 1) {print > of} }
@@ -239,7 +240,7 @@ doBuild() {
 	if [ -n "$PKGIT_DRYRUN" ]; then
 		echo "# would add, commit, and tag $tag"
 	else
-		historyBuild >"$PKGDIR/build.bash"
+		historyBuild >"$BUILDSCRIPT"
 		tree="$DESTDIR/$PKGROOT"
 		cd "$tree"
 		GIT_WORK_TREE="$tree" pkgit add .
