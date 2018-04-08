@@ -110,9 +110,9 @@ inspectPackage() {
 	PKGVERSION=${PKGDESC##*/}
 
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
-	DESTDIR=$PKGDIR/install-$PKGVERSION
-	BUILDSCRIPT=$PKGDIR/build.bash
-	BUILDHISTORY=$PKGDIR/history
+	DESTDIR=$BUILDDIR/install_root
+	BUILDSCRIPT=$BUILDDIR/build.bash
+	BUILDHISTORY=$BUILDDIR/.history
 }
 
 pkgit() {
