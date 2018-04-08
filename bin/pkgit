@@ -205,18 +205,16 @@ doBuild() {
 		fi
 		"$EDITOR" "$BUILDSCRIPT"
 
-		pushd "$PKGDIR"
-		rm -f build.*.bash
+		rm -f "$BUILDSCRIPT".*
 		awk -f - "$BUILDSCRIPT" <<- EOA
-			BEGIN {n=0; of="build.0.bash"} {
-				if (match(\$0, "shell") == 1) {of=sprintf("build.%d.bash", ++n); print "" > of}
+			BEGIN {n=0; of="$BUILDSCRIPT.0"} {
+				if (match(\$0, "shell") == 1) {of=sprintf("$BUILDSCRIPT.%d", ++n); print "" > of}
 				else if (match(\$0, "##") != 1) {print > of} }
 			EOA
-		popd
 
 		i=0
-		while [ -f "$PKGDIR/build.$i.bash" ]; do
-			steps+=("$PKGDIR/build.$i.bash")
+		while [ -f "$BUILDSCRIPT.$i" ]; do
+			steps+=("$BUILDSCRIPT.$i")
 			i=$(( i + 1 ))
 		done
 	fi
