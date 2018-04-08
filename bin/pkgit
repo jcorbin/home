@@ -193,14 +193,16 @@ doBuild() {
 	[ -d "$PKGDIR" ] || mkdir -p "$PKGDIR"
 
 	if [ -z "$prior" ] && pkgit rev-parse --verify -q "$PKGREF" >/dev/null; then
-		priorBuild "$PKGREF" >"$PKGDIR/prior_build.bash"
-		prior="$PKGDIR/prior_build.bash"
+		priorBuild "$PKGREF" >"$BUILDSCRIPT"
+		prior="$BUILDSCRIPT"
 	fi
 
 	steps=()
 
 	if [ -n "$prior" ]; then
-		cp "$prior" "$BUILDSCRIPT"
+		if [ "$prior" != "$BUILDSCRIPT" ]; then
+			cp "$prior" "$BUILDSCRIPT"
+		fi
 		"$EDITOR" "$BUILDSCRIPT"
 
 		pushd "$PKGDIR"
