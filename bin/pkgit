@@ -224,13 +224,16 @@ doBuild() {
 		cp "$BUILDHISTORY"{,.prior}
 	fi
 
+	if [ -f "$BUILDSCRIPT.log" ]; then
+		rm "$BUILDSCRIPT.log"
+	fi
 	i=0
 	for step in "${steps[@]}"; do
 		if [ $i -gt 0 ]; then
 			doInteract
 		fi
 		cat "$step" >> "$BUILDHISTORY"
-		withBuild bash "$step" 2>&1 | tee "$PKGDIR/build.log"
+		withBuild bash "$step" 2>&1 | tee "$BUILDSCRIPT.log"
 		i=$(( i + 1 ))
 	done
 	if [ $i -eq 0 ]; then
