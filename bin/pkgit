@@ -114,8 +114,8 @@ inspectPackage() {
 	pkgit symbolic-ref HEAD "$PKGREF"
 
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
-	DESTDIR=$BUILDDIR/install_root
-	BUILDSCRIPT=$BUILDDIR/build.bash
+	DESTDIR=$BUILDDIR/.install
+	BUILDSCRIPT=$BUILDDIR/.build.bash
 	BUILDHISTORY=$BUILDDIR/.history
 }
 
