@@ -388,6 +388,25 @@ clean)
 	rm -rf "$BUILDDIR" "$DESTDIR"
 	;;
 
+vars)
+	echo "SRCDIR=$SRCDIR"
+	echo "PKGDIR=$PKGDIR"
+	echo "PKGNAME=$PKGNAME"
+	echo "PKGHEAD=$PKGHEAD"
+	echo "PKGREMOTE=$PKGREMOTE"
+	echo "PKGURL=$PKGURL"
+	echo "PKGREV=$PKGREV"
+	echo "PKGDESC=$PKGDESC"
+	echo "PKGVERSION=$PKGVERSION"
+	echo "PKGVARIANT=$PKGVARIANT"
+	echo "PKGREF=$PKGREF"
+	echo "PREFIX=$PREFIX"
+	echo "BUILDDIR=$BUILDDIR"
+	echo "BUILDHISTORY=$BUILDHISTORY"
+	echo "BUILDSCRIPT=$BUILDSCRIPT"
+	echo "DESTDIR=$DESTDIR"
+	;;
+
 *)
 	if [ $# -gt 0 ]; then
 		pkgit "$@"
