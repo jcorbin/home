@@ -82,32 +82,36 @@ die() {
 }
 
 inspectPackage() {
-	PREFIX=$PKGROOT
 	SRCDIR=$1
 	PKGNAME=$(basename "$SRCDIR")
 	PKGDIR=$PKGREPO/pkg/$PKGNAME
-
-	PKGVARIANT=
-	PKGREF=$(pkgit symbolic-ref HEAD)
-	if [ -f "$PKGDIR/variant" ]; then
-		PKGVARIANT=$(bash "$PKGDIR/variant")
-		PREFIX+=/$PKGVARIANT
-		if [ "$PKGREF" != "refs/heads/$PKGVARIANT" ]; then
-			PKGREF="refs/heads/$PKGVARIANT"
-			pkgit symbolic-ref HEAD "$PKGREF"
-		fi
-	fi
 
 	PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
 	PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
 	PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
 	PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
+
 	PKGDESC=$(
 		git --git-dir="$SRCDIR/.git" describe "$PKGREV" 2>/dev/null ||
-		git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null ||
-		git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
-	)
-	PKGVERSION=${PKGDESC##*/}
+		git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null)
+	# || git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
+	PKGDESC=${PKGDESC##*/}
+
+	PKGVERSION=${PKGDESC#${PKGDESC/[0-9]*/}}
+	case "$PKGVERSION" in
+	*-*-g*)
+		PKGVARIANT=devel
+		;;
+	[0-9]*)
+		PKGVARIANT=${PKGVERSION%.*}
+		;;
+	*)
+		PKGVARIANT=$PKGVERSION
+	esac
+
+	PREFIX=$PKGROOT/$PKGNAME-$PKGVARIANT
+	PKGREF="refs/heads/$PKGNAME-$PKGVARIANT"
+	pkgit symbolic-ref HEAD "$PKGREF"
 
 	BUILDDIR=$PKGDIR/build-$PKGVERSION
 	DESTDIR=$BUILDDIR/install_root
@@ -374,19 +378,6 @@ truncate)
 	tag=$PKGNAME-$PKGVERSION
 	pkgit update-ref "$PKGREF" "$commit" -m "pkgit truncate"
 	git --git-dir="$PKGREPO" tag -f "$tag" "$commit"
-	;;
-
-variant)
-	shift
-	if [ $# -gt 0 ]; then
-		echo "$@" >"$PKGDIR/variant"
-		PKGVARIANT=$(bash "$PKGDIR/variant")
-	fi
-	if ! [ -f "$PKGDIR/variant" ]; then
-		die "No package variant script configured; run \`pkgit variant ...\` to set one."
-	fi
-	echo "variant command: \`$(cat "$PKGDIR/variant")\`"
-	echo "variant: $PKGVARIANT"
 	;;
 
 rm)
