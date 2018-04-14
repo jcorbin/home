@@ -102,7 +102,7 @@ inspectPackage() {
 	*-*-g*)
 		PKGVARIANT=devel
 		;;
-	[0-9]*)
+	[0-9]*.*.*)
 		PKGVARIANT=${PKGVERSION%.*}
 		;;
 	*)
