@@ -162,6 +162,9 @@ commitMess() {
 	cat <<EOM
 Built $PKGVERSION
 
+Package: $PKGNAME
+Variant: $PKGVARIANT
+Prefix: $PREFIX
 Source: $SRCDIR
 Upstream: $PKGURL
 Revision: $PKGREV
