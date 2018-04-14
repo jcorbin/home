@@ -252,7 +252,7 @@ doBuild() {
 		echo "# would add, commit, and tag $tag"
 	else
 		historyBuild >"$BUILDSCRIPT"
-		tree="$DESTDIR/$PKGROOT"
+		tree="$DESTDIR/$PREFIX"
 		cd "$tree"
 		GIT_WORK_TREE="$tree" pkgit add .
 		commitMess | GIT_WORK_TREE="$tree" pkgit commit -e -F -
