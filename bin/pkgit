@@ -386,6 +386,15 @@ doInstall() {
 		git read-tree -v -u --prefix="$target/" MERGE_HEAD
 	fi
 
+	if checkLinks; then
+		makeLinks
+		for n in "$PREFIX/bin/"*; do
+			git add "${n#$PREFIX/}"
+		done
+	else
+		echo "Not linking due to conflict, run \`pkgit link $PKGNAME $PKGVARIANT\` to force."
+	fi
+
 	{
 		cat <<-EOM
 		Install $ref
@@ -401,6 +410,21 @@ doInstall() {
 	} >.git/MERGE_MSG
 
 	git commit
+}
+
+checkLinks() {
+	local bin target
+	rc=0
+	for n in "$PREFIX/bin/"*; do
+		bin=$PKGROOT/${n#$PREFIX/}
+		[ -e "$bin" ] || continue
+		target=$(readlink "$bin")
+		if [ "$target" != "../${n#$PKGROOT/}" ]; then
+			echo "conflicting ${n#$PREFIX/} => $target"
+			rc=1
+		fi
+	done
+	return $rc
 }
 
 makeLinks() {
