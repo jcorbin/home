@@ -441,6 +441,26 @@ install)
 	exit 0
 	;;
 
+upgrade)
+	shift
+	if [ $# -eq 0 ]; then
+		inspectPackage "$(pwd)"
+	else
+		lookupPackage "$@"
+	fi
+	priorversion="$PKGVERSION"
+	cd "$SRCDIR"
+	git pull
+	inspectPackage "$SRCDIR"
+	if [ "$PKGVERSION" == "$priorversion" ]; then
+		echo "Nothing to upgrade: $PKGNAME-$PKGVERSION already built."
+		exit 0
+	fi
+	doBuild
+	doInstall
+	exit 0
+	;;
+
 repogit)
 	shift
 	cd "$PKGROOT"
