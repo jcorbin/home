@@ -403,6 +403,22 @@ doInstall() {
 	git commit
 }
 
+makeLinks() {
+	[ -d "$PKGROOT/bin" ] || mkdir -p "$PKGROOT/bin"
+	for n in "$PREFIX/bin/"*; do
+		ln -nsf "../${n#$PKGROOT/}" "$PKGROOT/${n#$PREFIX/}"
+	done
+}
+
+doLink() {
+	makeLinks
+	cd "$PKGROOT"
+	for n in "$PREFIX/bin/"*; do
+		git add "${n#$PREFIX/}"
+	done
+	git commit -m "Link $PKGNAME-$PKGVARIANT"
+}
+
 PKGROOT=$(dirname "$0")
 if [[ $PKGROOT = */bin ]]; then
 	PKGROOT=${PKGROOT%/bin}
@@ -436,6 +452,17 @@ install)
 		lookupPackage "$@"
 	fi
 	doInstall
+	exit 0
+	;;
+
+link)
+	shift
+	if [ $# -eq 0 ]; then
+		inspectPackage "$(pwd)"
+	else
+		lookupPackage "$@"
+	fi
+	doLink
 	exit 0
 	;;
 
