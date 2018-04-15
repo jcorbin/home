@@ -113,12 +113,6 @@ inspectPackage() {
 
 	PREFIX=$PKGROOT/$PKGNAME/$PKGVARIANT
 	PKGREF="refs/heads/$PKGNAME-$PKGVARIANT"
-	pkgit symbolic-ref HEAD "$PKGREF"
-
-	BUILDDIR=$PKGDIR/build-$PKGVERSION
-	DESTDIR=$BUILDDIR/.install
-	BUILDSCRIPT=$BUILDDIR/.build.bash
-	BUILDHISTORY=$BUILDDIR/.history
 }
 
 pkgit() {
@@ -192,6 +186,13 @@ EOM
 }
 
 doBuild() {
+	pkgit symbolic-ref HEAD "$PKGREF"
+
+	BUILDDIR=$PKGDIR/build-$PKGVERSION
+	DESTDIR=$BUILDDIR/.install
+	BUILDSCRIPT=$BUILDDIR/.build.bash
+	BUILDHISTORY=$BUILDDIR/.history
+
 	if [ -n "$PKGIT_DRYRUN" ]; then
 		echo "Dry Run Build Variables:"
 		dumpVars
