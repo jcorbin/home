@@ -82,22 +82,24 @@ die() {
 }
 
 inspectPackage() {
+	local pkghead pkgremote pkgdesc
+
 	SRCDIR=$1
 	PKGNAME=$(basename "$SRCDIR")
 	PKGDIR=$PKGREPO/pkg/$PKGNAME
 
-	PKGHEAD=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
-	PKGREMOTE=$(git --git-dir="$SRCDIR/.git" config "branch.${PKGHEAD:-master}.remote" 2>/dev/null) || true
-	PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${PKGREMOTE:-origin}.url")
+	pkghead=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
+	pkgremote=$(git --git-dir="$SRCDIR/.git" config "branch.${pkghead:-master}.remote" 2>/dev/null) || true
+	PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${pkgremote:-origin}.url")
 	PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
 
-	PKGDESC=$(
+	pkgdesc=$(
 		git --git-dir="$SRCDIR/.git" describe "$PKGREV" 2>/dev/null ||
 		git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null)
 	# || git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
-	PKGDESC=${PKGDESC##*/}
+	pkgdesc=${pkgdesc##*/}
 
-	PKGVERSION=${PKGDESC#${PKGDESC/[0-9]*/}}
+	PKGVERSION=${pkgdesc#${pkgdesc/[0-9]*/}}
 	case "$PKGVERSION" in
 	*-*-g*)
 		PKGVARIANT=devel
@@ -395,11 +397,8 @@ vars)
 	echo "SRCDIR=$SRCDIR"
 	echo "PKGDIR=$PKGDIR"
 	echo "PKGNAME=$PKGNAME"
-	echo "PKGHEAD=$PKGHEAD"
-	echo "PKGREMOTE=$PKGREMOTE"
 	echo "PKGURL=$PKGURL"
 	echo "PKGREV=$PKGREV"
-	echo "PKGDESC=$PKGDESC"
 	echo "PKGVERSION=$PKGVERSION"
 	echo "PKGVARIANT=$PKGVARIANT"
 	echo "PKGREF=$PKGREF"
