@@ -372,6 +372,16 @@ dumpVars() {
 	} | column -ts=
 }
 
+doInstall() {
+	ref=$(pkgit rev-list "$PKGREF" \
+		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
+		| grep -v undefined | head -n1)
+	cd "$PKGROOT"
+	git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
+	echo
+	git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
+}
+
 PKGROOT=$(dirname "$0")
 if [[ $PKGROOT = */bin ]]; then
 	PKGROOT=${PKGROOT%/bin}
@@ -404,13 +414,7 @@ install)
 	else
 		lookupPackage "$@"
 	fi
-	ref=$(pkgit rev-list "$PKGREF" \
-		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
-		| grep -v undefined | head -n1)
-	cd "$PKGROOT"
-	git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
-	echo
-	git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
+	doInstall
 	exit 0
 	;;
 
