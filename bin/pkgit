@@ -373,13 +373,36 @@ dumpVars() {
 }
 
 doInstall() {
+	local ref target
 	ref=$(pkgit rev-list "$PKGREF" \
 		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
 		| grep -v undefined | head -n1)
+	target="${PREFIX#$PKGROOT/}"
+
 	cd "$PKGROOT"
-	git --git-dir="$PKGREPO" merge --allow-unrelated-histories --no-edit "$ref"
-	echo
-	git --git-dir="$PKGREPO" show -s --pretty=oneline --no-decorate
+
+	if [ -d "$target" ]; then
+		git merge -s subtree --no-commit "$ref"
+	else
+		git rev-parse "$ref" >.git/MERGE_HEAD
+		git read-tree -v -u --prefix="$target/" MERGE_HEAD
+	fi
+
+	{
+		cat <<-EOM
+		Install $ref
+
+		Package: $PKGNAME
+		Variant: $PKGVARIANT
+		Version: $PKGVERSION
+		Prefix: $PREFIX
+		Source: $SRCDIR
+		Upstream: $PKGURL
+		Revision: $PKGREV
+		EOM
+	} >.git/MERGE_MSG
+
+	git commit
 }
 
 PKGROOT=$(dirname "$0")
