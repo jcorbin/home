@@ -380,7 +380,7 @@ doInstall() {
 	cd "$PKGROOT"
 
 	if [ -d "$target" ]; then
-		git merge -s subtree --no-commit "$ref"
+		git merge -X subtree="$target/" --no-commit "$ref"
 	else
 		git rev-parse "$ref" >.git/MERGE_HEAD
 		git read-tree -v -u --prefix="$target/" MERGE_HEAD
