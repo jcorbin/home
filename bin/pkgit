@@ -374,9 +374,7 @@ dumpVars() {
 
 doInstall() {
 	local ref target
-	ref=$(pkgit rev-list "$PKGREF" \
-		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
-		| grep -v undefined | head -n1)
+	ref="$PKGNAME-$PKGVERSION"
 	target="${PREFIX#$PKGROOT/}"
 
 	cd "$PKGROOT"
