@@ -115,6 +115,62 @@ inspectPackage() {
 	PKGREF="refs/heads/$PKGNAME-$PKGVARIANT"
 }
 
+lookupPackage() {
+	local argname argvariant
+	argname=$1
+	argvariant=$2
+	PKGDIR=$PKGREPO/pkg/$argname
+
+	if [ -z "$argvariant" ]; then
+		PKGREF=$(pkgit symbolic-ref HEAD)
+	else
+		PKGREF="refs/heads/$argname-$argvariant"
+	fi
+
+	eval "$(pkgit show -s --pretty=%B "$PKGREF" | parsePackageCommit)"
+	if [ "$PKGNAME" != "$argname" ]; then
+		die "parsed package name ($PKGNAME) doesn't match given name ($argname)"
+	fi
+	if [ -n "$argvariant" ] && [ "$PKGVARIANT" != "$argvariant" ]; then
+		die "parsed package variant ($PKGVARIANT) doesn't match given variant ($argvariant)"
+	fi
+}
+
+parsePackageCommit() {
+	local word value rest
+	read -r word value rest
+	if [ "$word" != "Built" ]; then
+		die "invalid package commit subject line: \"$word $value $rest\""
+	fi
+	echo "PKGVERSION=$value"
+
+	while read -r word value; do
+		case "$word" in
+		Package:)
+			echo "PKGNAME=$value"
+			;;
+		Variant:)
+			echo "PKGVARIANT=$value"
+			;;
+		Prefix:)
+			echo "PREFIX=$value"
+			;;
+		Source:)
+			echo "SRCDIR=$value"
+			;;
+		Upstream:)
+			echo "PKGURL=$value"
+			;;
+		Revision:)
+			echo "PKGREV=$value"
+			;;
+		Script:)
+			break
+			;;
+		esac
+	done
+}
+
 pkgit() {
 	[ -d "$PKGDIR" ] || GIT_OBJECT_DIRECTORY="$PKGREPO/objects" setupSubRepo
 	GIT_OBJECT_DIRECTORY="$PKGREPO/objects" git --git-dir="$PKGDIR" "$@"
@@ -346,7 +402,7 @@ install)
 	if [ $# -eq 0 ]; then
 		inspectPackage "$(pwd)"
 	else
-		die "UNIMPLEMENTED install package by name; only works from within package source tree for now"
+		lookupPackage "$@"
 	fi
 	ref=$(pkgit rev-list "$PKGREF" \
 		| git --git-dir="$PKGREPO" name-rev --tags --name-only --stdin \
