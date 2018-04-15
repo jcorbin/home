@@ -155,22 +155,22 @@ withBuild() {
 }
 
 commitMess() {
-	cat <<EOM
-Built $PKGVERSION
+	cat <<-EOM
+	Built $PKGVERSION
 
-Package: $PKGNAME
-Variant: $PKGVARIANT
-Prefix: $PREFIX
-Source: $SRCDIR
-Upstream: $PKGURL
-Revision: $PKGREV
+	Package: $PKGNAME
+	Variant: $PKGVARIANT
+	Prefix: $PREFIX
+	Source: $SRCDIR
+	Upstream: $PKGURL
+	Revision: $PKGREV
 
-Script:
-$(grep -v '^##' "$BUILDSCRIPT")
+	Script:
+	$(grep -v '^##' "$BUILDSCRIPT")
 
-# Diff Stat:
-$(pkgit diff --cached --stat | sed -e 's/^/# /')
-EOM
+	# Diff Stat:
+	$(pkgit diff --cached --stat | sed -e 's/^/# /')
+	EOM
 }
 
 historyBuild() {
