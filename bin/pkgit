@@ -138,6 +138,7 @@ inspectPackage() {
 	# || git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
 	pkgdesc=${pkgdesc##*/}
 
+	# TODO may need to allow per-package customization
 	PKGVERSION=${pkgdesc#${pkgdesc/[0-9]*/}}
 	case "$PKGVERSION" in
 	*-*-g*)
@@ -269,6 +270,7 @@ commitMess() {
 }
 
 historyBuild() {
+	# TODO stop using diff
 	cat <<EOM
 # Session shell history:
 # TODO: curate this, as it will be used as a rebuild script later!
@@ -349,7 +351,20 @@ doBuild() {
 		doFirstInteract
 	fi
 
+	# TODO variant activation script
+	# if [ -n "$PKGVARIANT" ] && ! [ -f "$DESTDIR/$PREFIX/bin/activate" ]; then
+	# 	cat >"$DESTDIR/$PREFIX/bin/activate" <<-EOF
+	# 	NEWPATH=$PREFIX/bin:\$PATH
+	# 	# export PATH
+	# 	EOF
+	# fi
+
+	# TODO when does variant need to be in tag name?
 	tag=$PKGNAME-$PKGVERSION
+
+	# if [ -n "$PKGVARIANT" ]; then
+	# fi
+
 	if [ -n "$PKGIT_DRYRUN" ]; then
 		echo "# would add, commit, and tag $tag"
 	else
@@ -471,6 +486,8 @@ checkLinks() {
 }
 
 makeLinks() {
+	# TODO upgrade to an "ensureLinks" or "updateLinks" based on commit
+	# history that can remove obsolete links
 	[ -d "$PKGROOT/bin" ] || mkdir -p "$PKGROOT/bin"
 	for n in "$PREFIX/bin/"*; do
 		ln -nsf "../${n#$PKGROOT/}" "$PKGROOT/${n#$PREFIX/}"
@@ -577,6 +594,7 @@ build)
 	;;
 
 truncate)
+	# TODO support N-back truncation
 	tree=$(pkgit rev-parse "$PKGREF":)
 	commit=$(pkgit show -s --pretty=%B "$PKGREF" | pkgit commit-tree "$tree" -F -)
 	tag=$PKGNAME-$PKGVERSION
