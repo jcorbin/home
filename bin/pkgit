@@ -89,7 +89,15 @@ inspectPackage() {
 	PKGDIR=$PKGREPO/pkg/$PKGNAME
 
 	pkghead=$(basename "$(git --git-dir="$SRCDIR/.git" symbolic-ref HEAD 2>/dev/null)") || true
-	pkgremote=$(git --git-dir="$SRCDIR/.git" config "branch.${pkghead:-master}.remote" 2>/dev/null) || true
+	pkgbranch=${pkghead:-master}
+
+	pkgremote=$(git --git-dir="$SRCDIR/.git" config "branch.$pkgbranch.remote" 2>/dev/null) || true
+	while [ "$pkgremote" == "." ] ; do
+		merge=$(git config branch."$pkgbranch".merge)
+		pkgbranch=${merge##*/}
+		pkgremote=$(git --git-dir="$SRCDIR/.git" config "branch.$pkgbranch.remote" 2>/dev/null) || true
+	done
+
 	PKGURL=$(git --git-dir="$SRCDIR/.git" config "remote.${pkgremote:-origin}.url")
 	PKGREV=$(git --git-dir="$SRCDIR/.git" rev-parse HEAD)
 
