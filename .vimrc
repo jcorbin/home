@@ -46,9 +46,9 @@ Plug 'robertmeta/nofrils'
 Plug 'chriskempson/base16-vim'
 
 " better support for certain languages
-Plug 'sheerun/vim-polyglot'
-Plug 'fatih/vim-go'
 let g:polyglot_disabled = ['go', 'markdown']
+Plug 'sheerun/vim-polyglot', {'commit':'d9b11ed'} " pinned due to conflict: https://github.com/sheerun/vim-polyglot/issues/309
+Plug 'fatih/vim-go'
 
 " for snippets
 Plug 'Shougo/neosnippet-snippets'
