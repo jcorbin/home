@@ -466,6 +466,7 @@ au FileType go nmap <leader>gol <Plug>(go-metalinter)
 au FileType go nmap <leader>gor <Plug>(go-run)
 au FileType go nmap <leader>got <Plug>(go-test)
 au FileType go nmap <Leader>god <Plug>(go-doc)
+au FileType go nmap <Leader>goa <Plug>(go-alternate-edit)
 
 " au FileType go nmap <leader>b <Plug>(go-build)
 " au FileType go nmap <leader>c <Plug>(go-coverage)
