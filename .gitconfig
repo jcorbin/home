@@ -70,7 +70,7 @@
     lga = log --graph --pretty=brief --all
     lgb = log --graph --pretty=brief --branches
     lgf = log --first-parent --graph --pretty=brief
-    pub = !git push -u origin $(basename $(git symbolic-ref HEAD))
+    pub = !git push -u origin $(git symbolic-ref HEAD | sed -e 's~^refs/heads/~~')
     ra = rebase --abort
     rb = rebase
     rc = rebase --continue
