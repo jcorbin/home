@@ -83,6 +83,7 @@
     suri = submodule update --recursive --init
     uewu = config user.email jcorbin@wunjo.org
     mrg = merge --no-edit --no-ff
+    mark = commit -m mark --allow-empty
 
 # Commiter identity
 [user]
