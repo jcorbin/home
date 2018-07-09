@@ -586,7 +586,7 @@ function! ToggleHotCold()
   endif
 endfunction
 
-nnoremap cof :call ToggleHotCold()<CR>
+nnoremap yof :call ToggleHotCold()<CR>
 
 " }}}
 
