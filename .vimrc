@@ -77,6 +77,9 @@ Plug 'godlygeek/tabular'
 " Undo history navigation
 Plug 'mbbill/undotree'
 
+" adds a sidebar that displays tags
+Plug 'majutsushi/tagbar'
+
 " grep integration (for any grep-like program)
 Plug 'mhinz/vim-grepper'
 
@@ -533,6 +536,9 @@ au FileType gitrebase nmap <leader>gbf :g/^exec git branch -f/norm<Space>
 " Undotree
 let g:undotree_ShortIndicators=1
 nnoremap <leader>ut :UndotreeToggle<cr>
+
+" TagBar
+nnoremap <leader>tg :TagbarToggle<cr>
 
 " Tabular
 nnoremap <leader>tt :Tab<cr>
