@@ -40,6 +40,9 @@ Plug 'tpope/vim-commentary'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" focus
+Plug 'junegunn/goyo.vim'
+
 " colorschemes
 Plug 'pR0Ps/molokai-dark'
 Plug 'robertmeta/nofrils'
@@ -587,6 +590,13 @@ function! ToggleHotCold()
 endfunction
 
 nnoremap yof :call ToggleHotCold()<CR>
+
+" }}}
+
+" Focus {{{
+
+nmap yog :Goyo<cr>
+let g:goyo_height='100%'
 
 " }}}
 
