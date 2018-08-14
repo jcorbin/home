@@ -11,5 +11,6 @@ git-f*)
 esac
 
 rev=${1:HEAD}
-subject=$(git show "$rev" -s --pretty=format:%s)
-git commit -m "$action! $subject"
+shift
+subject=$(git show -s --pretty=format:%s "$rev" --)
+git commit -m "$action! $subject" "$@"
