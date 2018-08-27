@@ -1,7 +1,38 @@
 #!/bin/bash
 set -e
 
-doHelp() {
+printHelp() {
+	if [ "$1" = "design" ]; then
+		printDesign
+		return
+	fi
+
+	cat <<-EOF
+	pkgit: a git-based (personal) package manager
+
+	pkgit help                // short help (this screen)
+	pkgit help design         // long form design do
+
+	pkgit repogit ...         // git command in the install repo
+	pkgit ...                 // git command in the package repo
+
+	pkgit [build]             // build reusing prior script
+	pkgit build [SCRIPT|REF]  // build from explicit script
+	pkgit build-script [REF]  // dump build script
+
+	pkgit upgrade             // build and install
+	pkgit install             // install built package
+	pkgit link                // link built package variant
+
+	pkgit vars                // dump package variables
+	pkgit rm                  // remove pakage git repo
+	pkgit truncate            // truncate package git repo history
+	pkgit clean               // cleanup build artifacts
+
+	EOF
+}
+
+printDesign() {
 	cat <<-EOF
 	pkgit: a git-based (personal) package manager
 
@@ -472,7 +503,7 @@ fi
 
 case "$1" in
 help)
-	doHelp
+	printHelp "$@"
 	exit 0
 	;;
 
