@@ -307,7 +307,11 @@ doBuild() {
 
 	if [ -n "$prior" ]; then
 		if [ "$prior" != "$BUILDSCRIPT" ]; then
-			cp "$prior" "$BUILDSCRIPT"
+			if [ -f "$prior" ]; then
+				cp "$prior" "$BUILDSCRIPT"
+			else
+				priorBuild "$prior" >"$BUILDSCRIPT"
+			fi
 		fi
 		"$EDITOR" "$BUILDSCRIPT"
 
