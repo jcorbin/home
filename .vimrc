@@ -526,6 +526,7 @@ augroup nospell
   autocmd FileType vim-plug setlocal nospell
   autocmd FileType fugitiveblame setlocal nospell
   autocmd FileType goterm setlocal nospell
+  autocmd FileType godebug* setlocal nospell
 augroup END
 
 " spell check in git mode
