@@ -46,11 +46,17 @@
 # TMux config
 !.tmux*.conf
 
-# (Neo)Vim Config
-!.vimrc
+# NeoVim Config
 !/.config/nvim
 .config/nvim/*
 !/.config/nvim/init.vim
+!/.config/nvim/snippets/
+
+# Vim Config
+!.vimrc
+!/.vim
+/.vim/*
+!/.vim/snippets
 
 !.xinitrc
 !.xsession

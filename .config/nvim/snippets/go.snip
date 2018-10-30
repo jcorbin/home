@@ -1,0 +1,14 @@
+snippet tt "test table setup"
+	for _, tc := range []struct{
+		name string
+		${1}
+	}{
+		${2}
+	} {
+		${3}
+	}
+
+snippet tr "test sub-run setup"
+	t.Run(${1}, func(t *testing.T) {
+		${2}
+	})
