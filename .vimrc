@@ -335,6 +335,8 @@ endif
 
 let g:neosnippet#snippets_directory="$VIMHOME/snippets,$VIMHOME/plugged/vim-snippets/snippets"
 
+nnoremap <leader>es :NeoSnippetEdit -split -horizontal<cr>
+
 " For conceal markers.
 set conceallevel=1
 set concealcursor=niv
