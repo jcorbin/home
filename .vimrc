@@ -329,8 +329,11 @@ xmap <C-e>     <Plug>(neosnippet_expand_target)
 imap <C-f>     <Plug>(neosnippet_jump)
 smap <C-f>     <Plug>(neosnippet_jump)
 
-" TODO get plugged root programatically for g:neosnippet#snippets_directory
-let g:neosnippet#snippets_directory="$HOME/.config/nvim/snippets,$HOME/.config/nvim/plugged/vim-snippets/snippets"
+if !isdirectory($VIMHOME.'/snippets')
+  call mkdir($VIMHOME.'/snippets', "p")
+endif
+
+let g:neosnippet#snippets_directory="$VIMHOME/snippets,$VIMHOME/plugged/vim-snippets/snippets"
 
 " For conceal markers.
 set conceallevel=1
