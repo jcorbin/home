@@ -285,11 +285,6 @@ EOM
 doBuild() {
 	pkgit symbolic-ref HEAD "$PKGREF"
 
-	BUILDDIR=$PKGDIR/build-$PKGVERSION
-	DESTDIR=$BUILDDIR/.install
-	BUILDSCRIPT=$BUILDDIR/.build.bash
-	BUILDHISTORY=$BUILDDIR/.history
-
 	if [ -n "$PKGIT_DRYRUN" ]; then
 		echo "Dry Run Build Variables:"
 		dumpVars
@@ -538,6 +533,11 @@ install|link|upgrade|build-script|build|truncate|rm|clean|vars)
 	else
 		lookupPackage "$@"
 	fi
+
+	BUILDDIR=$PKGDIR/build-$PKGVERSION
+	DESTDIR=$BUILDDIR/.install
+	BUILDSCRIPT=$BUILDDIR/.build.bash
+	BUILDHISTORY=$BUILDDIR/.history
 
 	case "$cmd" in
 	install)
