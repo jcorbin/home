@@ -528,51 +528,47 @@ help)
 	exit 0
 	;;
 
-install)
+# package management command
+install|link|upgrade)
+	cmd=$1
 	shift
+
 	if [ $# -eq 0 ]; then
 		inspectPackage "$(pwd)"
 	else
 		lookupPackage "$@"
 	fi
-	doInstall
+
+	case "$cmd" in
+	install)
+		doInstall
+		;;
+
+	link)
+		doLink
+		;;
+
+	upgrade)
+		priorversion="$PKGVERSION" # TODO want actually the version last built, not necessarily the last version in the source directory
+		cd "$SRCDIR"
+		if upstream_ref=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null); then
+			echo "Pulling upstream $upstream_ref"
+			git pull
+		fi
+		inspectPackage "$SRCDIR"
+		if [ "$PKGVERSION" == "$priorversion" ]; then
+			echo "Nothing to upgrade: $PKGNAME-$PKGVERSION already built."
+		else
+			doBuild
+			doInstall
+		fi
+		;;
+
+	esac
 	exit 0
 	;;
 
-link)
-	shift
-	if [ $# -eq 0 ]; then
-		inspectPackage "$(pwd)"
-	else
-		lookupPackage "$@"
-	fi
-	doLink
-	exit 0
-	;;
-
-upgrade)
-	shift
-	if [ $# -eq 0 ]; then
-		inspectPackage "$(pwd)"
-	else
-		lookupPackage "$@"
-	fi
-	priorversion="$PKGVERSION" # TODO want actually the version last built, not necessarily the last version in the source directory
-	cd "$SRCDIR"
-	if upstream_ref=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null); then
-		echo "Pulling upstream $upstream_ref"
-		git pull
-	fi
-	inspectPackage "$SRCDIR"
-	if [ "$PKGVERSION" == "$priorversion" ]; then
-		echo "Nothing to upgrade: $PKGNAME-$PKGVERSION already built."
-		exit 0
-	fi
-	doBuild
-	doInstall
-	exit 0
-	;;
-
+# pass through to repository git
 repogit)
 	shift
 	cd "$PKGROOT"
