@@ -529,7 +529,7 @@ help)
 	;;
 
 # package management command
-install|link|upgrade)
+install|link|upgrade|build-script|build|truncate|rm|clean|vars)
 	cmd=$1
 	shift
 
@@ -564,8 +564,48 @@ install|link|upgrade)
 		fi
 		;;
 
+	build-script)
+		priorBuild "$1"
+		;;
+
+	build)
+		doBuild "$@"
+		;;
+
+	truncate)
+		# TODO support N-back truncation
+		tree=$(pkgit rev-parse "$PKGREF":)
+		commit=$(pkgit show -s --pretty=%B "$PKGREF" | pkgit commit-tree "$tree" -F -)
+		tag=$PKGNAME-$PKGVERSION
+		pkgit update-ref "$PKGREF" "$commit" -m "pkgit truncate"
+		git --git-dir="$PKGREPO" tag -f "$tag" "$commit"
+		;;
+
+	rm)
+		rm -rf "$PKGDIR"
+		;;
+
+	clean)
+		rm -rf "$BUILDDIR" "$DESTDIR"
+		;;
+
+	vars)
+		echo "SRCDIR=$SRCDIR"
+		echo "PKGDIR=$PKGDIR"
+		echo "PKGNAME=$PKGNAME"
+		echo "PKGURL=$PKGURL"
+		echo "PKGREV=$PKGREV"
+		echo "PKGVERSION=$PKGVERSION"
+		echo "PKGVARIANT=$PKGVARIANT"
+		echo "PKGREF=$PKGREF"
+		echo "PREFIX=$PREFIX"
+		echo "BUILDDIR=$BUILDDIR"
+		echo "BUILDHISTORY=$BUILDHISTORY"
+		echo "BUILDSCRIPT=$BUILDSCRIPT"
+		echo "DESTDIR=$DESTDIR"
+		;;
+
 	esac
-	exit 0
 	;;
 
 # pass through to repository git
@@ -573,56 +613,11 @@ repogit)
 	shift
 	cd "$PKGROOT"
 	git --git-dir="$PKGREPO" "$@"
-	exit 0
-	;;
-esac
-
-inspectPackage "$(pwd)"
-
-case "$1" in
-build-script)
-	priorBuild "$2"
 	;;
 
-build)
-	shift
-	doBuild "$@"
-	;;
-
-truncate)
-	# TODO support N-back truncation
-	tree=$(pkgit rev-parse "$PKGREF":)
-	commit=$(pkgit show -s --pretty=%B "$PKGREF" | pkgit commit-tree "$tree" -F -)
-	tag=$PKGNAME-$PKGVERSION
-	pkgit update-ref "$PKGREF" "$commit" -m "pkgit truncate"
-	git --git-dir="$PKGREPO" tag -f "$tag" "$commit"
-	;;
-
-rm)
-	rm -rf "$PKGDIR"
-	;;
-
-clean)
-	rm -rf "$BUILDDIR" "$DESTDIR"
-	;;
-
-vars)
-	echo "SRCDIR=$SRCDIR"
-	echo "PKGDIR=$PKGDIR"
-	echo "PKGNAME=$PKGNAME"
-	echo "PKGURL=$PKGURL"
-	echo "PKGREV=$PKGREV"
-	echo "PKGVERSION=$PKGVERSION"
-	echo "PKGVARIANT=$PKGVARIANT"
-	echo "PKGREF=$PKGREF"
-	echo "PREFIX=$PREFIX"
-	echo "BUILDDIR=$BUILDDIR"
-	echo "BUILDHISTORY=$BUILDHISTORY"
-	echo "BUILDSCRIPT=$BUILDSCRIPT"
-	echo "DESTDIR=$DESTDIR"
-	;;
-
+# default pass through to package git
 *)
+	inspectPackage "$(pwd)"
 	if [ $# -gt 0 ]; then
 		pkgit "$@"
 	else
