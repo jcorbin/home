@@ -588,7 +588,7 @@ install|link|upgrade|build-script|build|truncate|rm|clean|vars)
 		;;
 
 	clean)
-		rm -rf "$BUILDDIR" "$DESTDIR"
+		rm -rfv "$PKGDIR"/build-* "$DESTDIR"
 		;;
 
 	vars)
