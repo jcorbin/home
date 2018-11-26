@@ -505,8 +505,8 @@ nnoremap <leader>t: :Tab/:/<cr>
 
 " Denite basics
 nmap <leader>b :Denite buffer<cr>
-nmap <leader>d :Denite directory_rec<cr>
-nmap <leader>f :Denite file_rec<cr>
+nmap <leader>d :DeniteProjectDir directory_rec<cr>
+nmap <leader>f :DeniteProjectDir file_rec<cr>
 nmap <leader>h :Denite help<cr>
 nmap <leader>r :Denite register<cr>
 nmap <leader>c :Denite colorscheme<cr>
