@@ -333,7 +333,8 @@ if !isdirectory($VIMHOME.'/snippets')
   call mkdir($VIMHOME.'/snippets', "p")
 endif
 
-let g:neosnippet#snippets_directory="$VIMHOME/snippets,$VIMHOME/plugged/vim-snippets/snippets"
+let g:neosnippet#snippets_directory = $VIMHOME."/snippets"
+let g:neosnippet#snippets_directory .= ",".$VIMHOME."/plugged/vim-snippets/snippets"
 
 nnoremap <leader>es :NeoSnippetEdit -split -horizontal<cr>
 
