@@ -333,6 +333,10 @@ if !isdirectory($VIMHOME.'/snippets')
   call mkdir($VIMHOME.'/snippets', "p")
 endif
 
+let g:neosnippet#disable_runtime_snippets = {
+\ 'go' : 1,
+\ }
+
 let g:neosnippet#snippets_directory = $VIMHOME."/snippets"
 let g:neosnippet#snippets_directory .= ",".$VIMHOME."/plugged/vim-snippets/snippets"
 
