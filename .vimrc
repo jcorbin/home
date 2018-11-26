@@ -432,6 +432,7 @@ nnoremap <leader>Gg :Grepper -tool git<cr>
 nnoremap <leader>Gp :Grepper -tool pt<cr>
 
 let g:grepper           = {}
+let g:grepper.dir       = 'repo,filecwd'
 let g:grepper.tools     = ['git', 'pt', 'grep', 'ack']
 let g:grepper.open      = 1
 let g:grepper.switch    = 1
