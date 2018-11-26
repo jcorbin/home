@@ -43,6 +43,9 @@ Plug 'vim-airline/vim-airline-themes'
 " focus
 Plug 'junegunn/goyo.vim'
 
+" unicode
+Plug 'chrisbra/unicode.vim'
+
 " colorschemes
 Plug 'pR0Ps/molokai-dark'
 Plug 'robertmeta/nofrils'
