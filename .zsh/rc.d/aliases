@@ -5,7 +5,4 @@
 alias mkdir='nocorrect mkdir'
 alias dirs='dirs -pv'
 
-hash -d gos="$GOPATH/src"
-hash -d gog="$GOPATH/src/github.com"
-
 # vim:set ft=zsh:
