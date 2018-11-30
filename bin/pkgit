@@ -561,14 +561,13 @@ install|link|upgrade|build-script|build|truncate|rm|clean|vars)
 		;;
 
 	upgrade)
-		priorversion="$PKGVERSION" # TODO want actually the version last built, not necessarily the last version in the source directory
 		cd "$SRCDIR"
 		if upstream_ref=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null); then
 			echo "Pulling upstream $upstream_ref"
 			git pull
 		fi
 		inspectPackage "$SRCDIR"
-		if [ "$PKGVERSION" == "$priorversion" ]; then
+		if [ "$PKGVERSION" == "$PKGBUILT" ]; then
 			echo "Nothing to upgrade: $PKGNAME-$PKGVERSION already built."
 		else
 			doBuild
