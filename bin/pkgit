@@ -234,13 +234,15 @@ setupSubRepo() {
 priorBuild() {
 	ref=${1:-$PKGREF}
 	echo "## prior build script from $ref"
-	echo "##"
+	echo ""
 	pkgit show "$ref" -s --pretty='commit %h%d%ntree %t%nAuthored by %an <%ae> at %ai%nCommitted by %cn <%ce> at %ci%nSubject: %B' \
 	| awk 'BEGIN { prefix="## " }; { print prefix $0; if (match($0, "Script:") == 1) {prefix=""} }'
 	echo ""
 	echo "## NOTE: you may add any number \`shell\` lines to drop into a shell within"
 	echo "##       the build environment; any commands executed within it are captured"
 	echo "##       for the final build script."
+	echo ""
+	dumpVars | sed -e 's/^/## /'
 }
 
 withBuild() {
