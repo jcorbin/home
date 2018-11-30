@@ -113,7 +113,7 @@ die() {
 }
 
 inspectPackage() {
-	local pkghead pkgremote pkgdesc
+	local pkghead pkgremote pkgdesc pkgsubj
 
 	SRCDIR=$1
 	PKGNAME=$(basename "$SRCDIR")
@@ -137,6 +137,12 @@ inspectPackage() {
 		git --git-dir="$SRCDIR/.git" describe --tags "$PKGREV" 2>/dev/null)
 	# || git --git-dir="$SRCDIR/.git" describe --all --always "$PKGREV"
 	pkgdesc=${pkgdesc##*/}
+
+	PKGBUILT=
+	pkgsubj=$(pkgit show -s --pretty='%s')
+	if [[ $pkgsubj = Built\ * ]]; then
+		PKGBUILT=${pkgsubj#* }
+	fi
 
 	# TODO may need to allow per-package customization
 	PKGVERSION=${pkgdesc#${pkgdesc/[0-9]*/}}
@@ -184,6 +190,7 @@ parsePackageCommit() {
 	if [ "$word" != "Built" ]; then
 		die "invalid package commit subject line: \"$word $value $rest\""
 	fi
+	echo "PKGBUILT=$value"
 	echo "PKGVERSION=$value"
 
 	while read -r word value; do
@@ -247,7 +254,7 @@ withBuild() {
 		fi
 		return
 	fi
-	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGVERSION PREFIX SRCDIR
+	export BUILDDIR DESTDIR PKGNAME PKGREPO PKGBUILT PKGVERSION PREFIX SRCDIR
 	cd "$BUILDDIR"
 	"$@"
 }
@@ -420,6 +427,7 @@ dumpVars() {
 		echo "  VAR=description=value"
 		echo "  SRCDIR=Package Source Directory=$SRCDIR"
 		echo "  PKGNAME=Package Name=$PKGNAME"
+		echo "  PKGBUILT=Last Built Package Version=$PKGBUILT"
 		echo "  PKGVERSION=Package Version=$PKGVERSION"
 		echo "  BUILDDIR=Build Scratch Directory=$BUILDDIR"
 		echo "  PREFIX=Target Installation Directory=$PREFIX"
