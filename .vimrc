@@ -465,11 +465,14 @@ nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 
 " go bindings {{{
 
+au FileType go nmap <Leader>goa <Plug>(go-alternate-edit)
+au FileType go nmap <Leader>goc <Plug>(go-cover)
+au FileType go nmap <Leader>god <Plug>(go-doc)
+au FileType go nmap <Leader>gof <Plug>(go-test-func)
+au FileType go nmap <Leader>goi <Plug>(go-imports)
 au FileType go nmap <leader>gol <Plug>(go-metalinter)
 au FileType go nmap <leader>gor <Plug>(go-run)
 au FileType go nmap <leader>got <Plug>(go-test)
-au FileType go nmap <Leader>god <Plug>(go-doc)
-au FileType go nmap <Leader>goa <Plug>(go-alternate-edit)
 
 " au FileType go nmap <leader>b <Plug>(go-build)
 " au FileType go nmap <leader>c <Plug>(go-coverage)
