@@ -84,6 +84,7 @@
     uewu = config user.email jcorbin@wunjo.org
     mrg = merge --no-edit --no-ff
     mark = commit -m mark --allow-empty
+    fp = merge-base --fork-point
 
 # Commiter identity
 [user]
