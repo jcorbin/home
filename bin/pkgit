@@ -571,6 +571,7 @@ install|link|upgrade|build-script|build|truncate|rm|clean|vars)
 			echo "Nothing to upgrade: $PKGNAME-$PKGVERSION already built."
 		else
 			doBuild
+			inspectPackage "$SRCDIR"
 			doInstall
 		fi
 		;;
