@@ -72,6 +72,9 @@ Plug 'tpope/vim-fugitive'
 " line things up
 Plug 'godlygeek/tabular'
 
+" Undo history navigation
+Plug 'mbbill/undotree'
+
 " grep integration (for any grep-like program)
 Plug 'mhinz/vim-grepper'
 
@@ -500,6 +503,10 @@ au FileType go nmap <leader>got <Plug>(go-test)
 au FileType gitrebase nmap <leader>bf :g/\v^pick.*\)$/norm $byeoexec git branch -f <C-v><C-r>"<Return>
 au FileType gitrebase nmap <leader>gbf :g/^exec git branch -f/norm<Space>
 " }}}
+
+" Undotree
+let g:undotree_ShortIndicators=1
+nnoremap <leader>ut :UndotreeToggle<cr>
 
 " Tabular
 nnoremap <leader>tt :Tab<cr>
