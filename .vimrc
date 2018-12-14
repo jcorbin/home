@@ -642,7 +642,14 @@ nnoremap yof :call ToggleHotCold()<CR>
 
 " Focus {{{
 
-nmap yog :Goyo<cr>
+nmap yogg :Goyo<cr>
+nmap yog5 :Goyo 50%<cr>
+nmap yog6 :Goyo 60%<cr>
+nmap yog7 :Goyo 70%<cr>
+nmap yog8 :Goyo 80%<cr>
+nmap yog9 :Goyo 90%<cr>
+
+let g:goyo_width='100%'
 let g:goyo_height='100%'
 
 " }}}
