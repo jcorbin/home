@@ -275,7 +275,7 @@ let g:ale_sign_warning='⚠'
 
 " Go! {{{
 
-" " vim-go {{{
+" vim-go {{{
 
 let g:go_doc_keywordprg_enabled = 0
 let g:go_echo_go_info = 1
