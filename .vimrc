@@ -49,9 +49,10 @@ Plug 'junegunn/goyo.vim'
 Plug 'chrisbra/unicode.vim'
 
 " colorschemes
-Plug 'pR0Ps/molokai-dark'
-Plug 'robertmeta/nofrils'
-Plug 'chriskempson/base16-vim'
+Plug 'pR0Ps/molokai-dark'      " high contrast
+Plug 'robertmeta/nofrils'      " the 'no color' colorscheme
+Plug 'chriskempson/base16-vim' " framework of many 16-color themes
+Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
 
 " better support for certain languages
 let g:polyglot_disabled = ['go', 'markdown']
