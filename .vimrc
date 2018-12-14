@@ -53,6 +53,7 @@ Plug 'pR0Ps/molokai-dark'      " high contrast
 Plug 'jcorbin/darkula'         " medium contrast (darker version of IDEA's darcula)
 Plug 'robertmeta/nofrils'      " the 'no color' colorscheme
 Plug 'chriskempson/base16-vim' " framework of many 16-color themes
+Plug 'cocopon/iceberg.vim'     " blue theme
 Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
 
 " better support for certain languages
@@ -639,7 +640,7 @@ set background=dark
 let g:nofrils_strbackgrounds=1
 
 let g:hot_colors_name = 'darkula'
-let g:cool_colors_name = 'nofrils-dark'
+let g:cool_colors_name = 'iceberg'
 
 try
     if g:colors_name == "default"
