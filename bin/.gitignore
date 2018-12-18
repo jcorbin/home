@@ -15,6 +15,7 @@
 !git-branch-base
 !git-clique
 !git-current-branch
+!git-fix-userid
 !git-rewrite-branch
 !git-shell-pack
 !git-subtree

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -e
+
+filter=
+
+repo_email=$(git config user.email)
+global_email=$(git config --global user.email)
+if [ "$repo_email" != "$global_email" ]; then filter+="
+if test '\$GIT_AUTHOR_EMAIL' = '$global_email'; then
+  GIT_AUTHOR_EMAIL='$repo_email'
+fi
+if test '\$GIT_COMMITTER_EMAIL' = '$global_email'; then
+  GIT_COMMITTER_EMAIL='$repo_email'
+fi
+"; fi
+
+repo_name=$(git config user.name)
+global_name=$(git config --global user.name)
+if [ "$repo_name" != "$global_name" ]; then filter+="
+if test '\$GIT_AUTHOR_NAME' = '$global_name'; then
+  GIT_AUTHOR_NAME='$repo_name'
+fi
+if test '\$GIT_COMMITTER_NAME' = '$global_name'; then
+  GIT_COMMITTER_NAME='$repo_name'
+fi
+"; fi
+
+if [ -n "$filter" ]; then
+  set -x
+  git filter-branch --env-filter "$filter" "$@"
+fi
