@@ -11,10 +11,6 @@ alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 
-alias tnw="quotecmd -o tmux new-window --"
-alias tsh="quotecmd -o tmux split-window -h --"
-alias tsv="quotecmd -o tmux split-window -v --"
-
 if [ -x "$(command -v nvim 2>/dev/null)" ]; then
     alias vi='nvim'
     alias vim='nvim'
