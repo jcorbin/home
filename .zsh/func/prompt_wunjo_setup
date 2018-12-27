@@ -24,7 +24,9 @@ revstring() {
 
 prompt_wunjo_setup() {
   local verbose
-  if [[ $TERM == screen* ]] && ( [ -n "$TMUX" ] || [ -n "$STY" ] ); then
+  if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
+    verbose=
+  elif [[ $TERM == tmux* ]] && [ -n "$TMUX" ]; then
     verbose=
   else
     verbose=1
@@ -95,7 +97,7 @@ prompt_wunjo_setup() {
 
   PROMPT=
   if [ $verbose ]; then
-    PROMPT+="$p_host "
+    PROMPT+="$p_date $p_host "
   fi
   PROMPT+="$p_path "
   PROMPT+="$p_git"
