@@ -367,10 +367,6 @@ let g:go_term_enabled = 1
 
 " }}}
 
-augroup nolistgo
-  autocmd FileType go setlocal nolist
-augroup END
-
 " }}}
 
 " deoplete {{{
