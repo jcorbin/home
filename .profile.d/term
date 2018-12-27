@@ -7,8 +7,8 @@ if [ -n "$TERM" ] && command -v tput &>/dev/null; then
         [ -t 2 ] && echo -n "TERM=$TERM didn't work out..." >&2
 
         # if we ship a source for $TERM, and it's compiled yet, compile it and try again
-        if [ -f $HOME/.terminfo.src/$TERM.terminfo ] && ! [ -f $HOME/.terminfo/${TERM:0:1}/$TERM ]; then
-            tic $HOME/.terminfo.src/$TERM.terminfo
+        if [ -f "$HOME/.terminfo.src/$TERM.terminfo" ] && ! [ -f "$HOME/.terminfo/${TERM:0:1}/$TERM" ]; then
+            tic "$HOME/.terminfo.src/$TERM.terminfo"
             if tput longname &>/dev/null; then
                 [ -t 2 ] && echo "compiled ~/.terminfo worked!" >&2
                 break
