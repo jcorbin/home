@@ -93,7 +93,8 @@ prompt_wunjo_setup() {
   p_prompt="$pc[prompt]%#$pc[reset]"
   p_user="$pc[user]%n$pc[reset]"
   p_exited="%(?.. $pc[rc]exited %1v$pc[reset])"
-  p_git="\$(git_desc)\$(prompt_wunjo_scm_status_bit)"
+  p_git="\$(git_desc)"
+  p_git_state="\$(prompt_wunjo_scm_status_bit)"
 
   PROMPT=
   if [ $verbose ]; then
@@ -101,7 +102,7 @@ prompt_wunjo_setup() {
   fi
   PROMPT+="$p_path "
   PROMPT+="$p_git"
-  PROMPT+="$p_prompt "
+  PROMPT+=" $p_git_state$p_prompt "
   export PROMPT
 
   RPROMPT=
@@ -135,7 +136,7 @@ git_desc() {
   gitcommit=$(revstring $head)
 
   if [ -n "$gitcommit" ]; then
-    echo -n "$pc[scm_commitid]$gitcommit$pc[punc] "
+    echo -n "$pc[scm_branch]$head$pc[reset] $pc[scm_commitid]$gitcommit$pc[reset]"
   fi
 }
 
