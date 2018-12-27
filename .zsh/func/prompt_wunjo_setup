@@ -97,8 +97,6 @@ prompt_wunjo_setup() {
   if [ $verbose ]; then
     PROMPT+="$p_host "
   fi
-  PROMPT+="\$(git_status)
-"
   PROMPT+="$p_path "
   PROMPT+="$p_git"
   PROMPT+="$p_prompt "
@@ -123,17 +121,6 @@ prompt_wunjo_precmd() {
     psvar[1]="sig${(L)sig}"
   else
     psvar[1]="$ex"
-  fi
-}
-
-git_status() {
-  zgit_isgit || return
-
-  head=$(zgit_head)
-  gitcommit=$(revstring $head)
-
-  if [ -n "$gitcommit" ]; then
-    git -c color.ui=always status --short --branch | head -n1 | cut -d' ' -f2-
   fi
 }
 
