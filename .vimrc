@@ -182,6 +182,14 @@ let g:LanguageClient_serverCommands = {
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
+
+nmap <leader>ld :Denite documentSymbol<cr>
+nmap <leader>lw :Denite workspaceSymbol<cr>
+nmap <leader>lr :Denite references<cr>
+
 " }}}
 
 " File Browsing {{{
@@ -574,14 +582,6 @@ nmap <leader>h :Denite help<cr>
 nmap <leader>r :Denite register<cr>
 nmap <leader>c :Denite colorscheme<cr>
 " nmap <leader>l :Denite line<cr>
-
-" Language Server Client
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> gr  :call LanguageClient_textDocument_rename()<CR>
-nmap <leader>ld :Denite documentSymbol<cr>
-nmap <leader>lw :Denite workspaceSymbol<cr>
-nmap <leader>lr :Denite references<cr>
 
 " }}}
 
