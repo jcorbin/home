@@ -20,7 +20,7 @@ altgopath()
         PATH=$(IFS=:; without "$GOPATH/bin" $PATH)
     fi
     GOPATH=$1
-    PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
+    PATH=$(IFS=:; prepend "$GOPATH/bin" $PATH)
     export GOPATH PATH
 }
 
