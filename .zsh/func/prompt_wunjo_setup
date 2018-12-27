@@ -85,26 +85,30 @@ prompt_wunjo_setup() {
   local p_date p_line p_rc
 
   p_date="$pc[date]%D{%Y-%m-%d}$pc[reset]T$pc[time]%D{%T%z}$pc[reset]"
-
   p_line="$pc[line]%y$pc[reset]"
+  p_host="$pc[host]%m$pc[reset]"
+  p_path="$pc[shortpath]%2~$pc[reset]"
+  p_prompt="$pc[prompt]%#$pc[reset]"
+  p_user="$pc[user]%n$pc[reset]"
+  p_exited="%(?.. $pc[rc]exited %1v$pc[reset])"
+  p_git="\$(git_desc)\$(prompt_wunjo_scm_status_bit)"
 
   PROMPT=
   if [ $verbose ]; then
-    PROMPT+="$pc[host]%m$pc[reset] "
+    PROMPT+="$p_host "
   fi
   PROMPT+="\$(git_status)
 "
-  PROMPT+="$pc[shortpath]%2~$pc[reset]"
-  PROMPT+="\$(git_desc)"
-  PROMPT+=" \$(prompt_wunjo_scm_status_bit)"
-  PROMPT+="$pc[prompt]%#$pc[reset] "
+  PROMPT+="$p_path "
+  PROMPT+="$p_git"
+  PROMPT+="$p_prompt "
   export PROMPT
 
   RPROMPT=
   if [ $verbose ]; then
-    RPROMPT+=" $pc[user]%n$pc[reset] $p_line"
+    RPROMPT+=" $p_user $p_line"
   fi
-  RPROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
+  RPROMPT+="$p_exited"
   export RPROMPT
 
   add-zsh-hook precmd prompt_wunjo_precmd
@@ -142,7 +146,7 @@ git_desc() {
   gitcommit=$(revstring $head)
 
   if [ -n "$gitcommit" ]; then
-    echo -n " $pc[scm_commitid]$gitcommit$pc[punc]"
+    echo -n "$pc[scm_commitid]$gitcommit$pc[punc] "
   fi
 }
 
