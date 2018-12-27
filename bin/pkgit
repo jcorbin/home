@@ -139,8 +139,7 @@ inspectPackage() {
 	pkgdesc=${pkgdesc##*/}
 
 	PKGBUILT=
-	pkgsubj=$(pkgit show -s --pretty='%s')
-	if [[ $pkgsubj = Built\ * ]]; then
+	if pkgsubj=$(pkgit show -s --pretty='%s' 2>/dev/null) && [[ $pkgsubj = Built\ * ]]; then
 		PKGBUILT=${pkgsubj#* }
 	fi
 
