@@ -43,39 +43,66 @@ prompt_wunjo_setup() {
   classic_colors[white]="37"
   classic_colors[default]="0"
 
-  typeset -A attcode
-  attcode[none]=00
-  attcode[bold]=01
-  attcode[faint]=02
-  attcode[standout]=03
-  attcode[underline]=04
-  attcode[blink]=05
-  attcode[reverse]=07
-  attcode[conceal]=08
-  attcode[normal]=22
-  attcode[no-standout]=23
-  attcode[no-underline]=24
-  attcode[no-blink]=25
-  attcode[no-reverse]=27
-  attcode[no-conceal]=28
+  local -A darkula_colors
+  darkula_colors[default]="0"
+  darkula_colors[black]="38;2;0;0;0"                 # BLACK           #000000
+  darkula_colors[darker_grey]="38;2;18;18;18"        # DARKER_GREY     #121212
+  darkula_colors[dark_grey]="38;2;38;38;38"          # DARK_GREY       #262626
+  darkula_colors[grey]="38;2;68;68;68"               # GREY            #444444
+  darkula_colors[light_grey]="38;2;88;88;88"         # LIGHT_GREY      #585858
+  darkula_colors[lighter_grey]="38;2;102;102;102"    # LIGHTER_GREY    #666666
+  darkula_colors[white]="38;2;192;192;192"           # WHITE           #c0c0c0
+  darkula_colors[dark_white]="38;2;158;158;158"      # DARK_WHITE      #9e9e9e
+  darkula_colors[blue]="38;2;95;135;175"             # BLUE            #5f87af
+  darkula_colors[bright_purple]="38;2;95;0;255"      # BRIGHT_PURPLE   #5f00ff
+  darkula_colors[cyan]="38;2;0;215;215"              # CYAN            #00d7d7
+  darkula_colors[dark_orange]="38;2;175;95;0"        # DARK_ORANGE     #af5f00
+  darkula_colors[dark_sea_green]="38;2;95;135;95"    # DARK_SEA_GREEN  #5f875f
+  darkula_colors[green]="38;2;0;175;0"               # GREEN           #00af00
+  darkula_colors[light_cyan]="38;2;95;175;175"       # LIGHT_CYAN      #5fafaf
+  darkula_colors[magenta]="38;2;255;0;135"           # MAGENTA         #ff0087
+  darkula_colors[orange]="38;2;215;135;0"            # ORANGE          #d78700
+  darkula_colors[purple]="38;2;135;135;175"          # PURPLE          #8787af
+  darkula_colors[red]="38;2;215;0;0"                 # RED             #d70000
+  darkula_colors[red_orange]="38;2;175;95;95"        # RED_ORANGE      #af5f5f
+  darkula_colors[yellow]="38;2;128;128;0"            # YELLOW          #808000
+  darkula_colors[yellow_orange]="38;2;215;175;0"     # YELLOW_ORANGE   #d7af00
 
   local -A pc
-  pc[default]="\e[$classic_colors[default]m"
-  pc[date]="\e[$classic_colors[cyan]m"
-  pc[time]="\e[$classic_colors[blue]m"
-  pc[host]="\e[$classic_colors[green]m"
-  pc[user]="\e[$classic_colors[cyan]m"
-  pc[punc]="\e[$classic_colors[yellow]m"
-  pc[line]="\e[$classic_colors[magenta]m"
-  pc[hist]="\e[$classic_colors[green]m"
-  pc[path]="\e[$classic_colors[cyan]m"
-  pc[shortpath]="\e[$classic_colors[default]m"
-  pc[rc]="\e[$classic_colors[red]m"
-  pc[scm_branch]="\e[$classic_colors[cyan]m"
-  pc[scm_commitid]="\e[$classic_colors[yellow]m"
-  pc[scm_status_dirty]="\e[$classic_colors[red]m"
-  pc[scm_status_staged]="\e[$classic_colors[green]m"
-  pc[prompt]="\e[$classic_colors[yellow]m"
+  if [ "$COLORTERM" = "truecolor" ]; then
+    pc[default]="\e[$darkula_colors[default]m"
+    pc[date]="\e[$darkula_colors[blue]m"
+    pc[time]="\e[$darkula_colors[blue]m"
+    pc[host]="\e[$darkula_colors[dark_sea_green]m"
+    pc[user]="\e[$darkula_colors[blue]m"
+    pc[punc]="\e[$darkula_colors[blue]m"
+    pc[line]="\e[$darkula_colors[dark_sea_green]m"
+    pc[hist]="\e[$darkula_colors[green]m"
+    pc[path]="\e[$darkula_colors[blue]m"
+    pc[shortpath]="\e[$darkula_colors[blue]m"
+    pc[rc]="\e[$darkula_colors[red_orange]m"
+    pc[scm_branch]="\e[$darkula_colors[dark_sea_green]m"
+    pc[scm_commitid]="\e[$darkula_colors[purple]m"
+    pc[scm_status_dirty]="\e[$darkula_colors[red]m"
+    pc[scm_status_staged]="\e[$darkula_colors[green]m"
+  else
+    pc[default]="\e[$classic_colors[default]m"
+    pc[date]="\e[$classic_colors[cyan]m"
+    pc[time]="\e[$classic_colors[blue]m"
+    pc[host]="\e[$classic_colors[green]m"
+    pc[user]="\e[$classic_colors[cyan]m"
+    pc[punc]="\e[$classic_colors[yellow]m"
+    pc[line]="\e[$classic_colors[magenta]m"
+    pc[hist]="\e[$classic_colors[green]m"
+    pc[path]="\e[$classic_colors[cyan]m"
+    pc[shortpath]="\e[$classic_colors[default]m"
+    pc[rc]="\e[$classic_colors[red]m"
+    pc[scm_branch]="\e[$classic_colors[cyan]m"
+    pc[scm_commitid]="\e[$classic_colors[yellow]m"
+    pc[scm_status_dirty]="\e[$classic_colors[red]m"
+    pc[scm_status_staged]="\e[$classic_colors[green]m"
+  fi
+
   pc[reset]="\e[0m"
   for cn in ${(k)pc}; do
     pc[${cn}]=$(echo "%{"${pc[${cn}]}"%}")
@@ -90,7 +117,7 @@ prompt_wunjo_setup() {
   p_line="$pc[line]%y$pc[reset]"
   p_host="$pc[host]%m$pc[reset]"
   p_path="$pc[shortpath]%2~$pc[reset]"
-  p_prompt="$pc[prompt]%#$pc[reset]"
+  p_prompt="$pc[punc]%#$pc[reset]"
   p_user="$pc[user]%n$pc[reset]"
   p_exited="%(?.. $pc[rc]exited %1v$pc[reset])"
   p_git="\$(git_desc)"
