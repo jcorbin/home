@@ -15,7 +15,7 @@ alias tnw="quotecmd -o tmux new-window --"
 alias tsh="quotecmd -o tmux split-window -h --"
 alias tsv="quotecmd -o tmux split-window -v --"
 
-if [ -x "$(which nvim 2>/dev/null)" ]; then
+if [ -x "$(command -v nvim 2>/dev/null)" ]; then
     alias vi='nvim'
     alias vim='nvim'
     alias vimdiff='nvim -dO'

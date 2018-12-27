@@ -1,8 +1,8 @@
 #!/bin/bash
 # after: term
 
-if which less>/dev/null; then
-    PAGER="$(which less)"
+if command -v less>/dev/null; then
+    PAGER="$(command -v less)"
 
     # sets default options to less
     LESS='-SMRci'

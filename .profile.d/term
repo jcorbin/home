@@ -2,7 +2,7 @@
 # after: bootstrap
 
 # Try to fix broken $TERM
-if [ -n "$TERM" ] && which tput &>/dev/null; then
+if [ -n "$TERM" ] && command -v tput &>/dev/null; then
     while ! tput longname &>/dev/null; do
         [ -t 2 ] && echo -n "TERM=$TERM didn't work out..." >&2
 

@@ -2,12 +2,12 @@
 # after: term
 
 # Want NeoVim
-EDITOR=$(which nvim 2>/dev/null)
+EDITOR=$(command -v nvim 2>/dev/null)
 
 # Fallback to Vim
-[ -x "$EDITOR" ] || EDITOR=$(which vim 2>/dev/null)
+[ -x "$EDITOR" ] || EDITOR=$(command -v vim 2>/dev/null)
 
 # Settle for Vi
-[ -x "$EDITOR" ] || EDITOR=$(which vi 2>/dev/null)
+[ -x "$EDITOR" ] || EDITOR=$(command -v vi 2>/dev/null)
 
 export EDITOR
