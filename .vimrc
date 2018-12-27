@@ -249,6 +249,9 @@ endif
 " let g:airline#extensions#whitespace#enabled = 1
 " let g:airline#extensions#capslock#enabled = 1
 
+" disable mangling of fugitive buffer names
+let g:airline#extensions#fugitiveline#enabled = 0
+
 " tabline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
