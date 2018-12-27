@@ -26,8 +26,10 @@ call plug#begin($VIMHOME.'/plugged')
 " better defaults out of the box
 Plug 'tpope/vim-sensible'
 
-" complements builtin NetRW mode for easier file navigation
-Plug 'tpope/vim-vinegar'
+" file browsing
+Plug 'tpope/vim-eunuch'
+Plug 'justinmk/vim-dirvish'
+Plug 'kristijanhusak/vim-dirvish-git'
 
 " Adds a new text object for "surrounding" things
 Plug 'tpope/vim-repeat'
@@ -179,9 +181,15 @@ let g:LanguageClient_autoStart = 1
 " }}}
 
 " File Browsing {{{
-let g:netrw_banner = 1
-let g:netrw_liststyle = 3
-let g:netrw_sizestyle = 'H'
+
+nmap <leader>- <Plug>(dirvish_split_up)
+nmap <leader>\| <Plug>(dirvish_vsplit_up)
+
+augroup dirvish_config
+  autocmd!
+  autocmd FileType dirvish nnoremap <buffer> % :e %
+  autocmd FileType dirvish nnoremap <buffer> <leader>d :Mkdir %
+augroup END
 
 " }}}
 
@@ -396,10 +404,6 @@ let mapleader="\\"
 " in ex_global:
 
 nmap <leader>s :Startify<cr>
-
-" File Browsing
-nmap <leader>- <Plug>VinegarSplitUp
-nmap <leader>\| <Plug>VinegarVerticalSplitUp
 
 " Perform a normal command...
 " ...on every line of the buffer
