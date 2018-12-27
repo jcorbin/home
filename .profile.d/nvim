@@ -1,7 +1,0 @@
-#!/bin/bash
-# after: editor
-
-nvim_path=$(which nvim 2>/dev/null)
-if [ -x "$nvim_path" ]; then
-    export EDITOR=$nvim_path
-fi
