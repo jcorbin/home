@@ -181,6 +181,10 @@ lookupPackage() {
 	fi
 
 	inspectPackage "$SRCDIR"
+
+	if [ -n "$argvariant" ]; then
+		PKGREF="refs/heads/$argname-$argvariant"
+	fi
 }
 
 parsePackageCommit() {
