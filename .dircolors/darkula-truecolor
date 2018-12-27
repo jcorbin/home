@@ -1,0 +1,297 @@
+
+# darkula truecolor dircolors theme
+# converted from solarized 256 color theme
+
+# Term Section
+TERM Eterm
+TERM ansi
+TERM color-xterm
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM dvtm
+TERM dvtm-256color
+TERM eterm-color
+TERM fbterm
+TERM gnome
+TERM gnome-256color
+TERM jfbterm
+TERM konsole
+TERM konsole-256color
+TERM kterm
+TERM linux
+TERM linux-c
+TERM mach-color
+TERM mlterm
+TERM putty
+TERM putty-256color
+TERM rxvt
+TERM rxvt-256color
+TERM rxvt-cygwin
+TERM rxvt-cygwin-native
+TERM rxvt-unicode
+TERM rxvt-unicode256
+TERM rxvt-unicode-256color
+TERM screen
+TERM screen-16color
+TERM screen-16color-bce
+TERM screen-16color-s
+TERM screen-16color-bce-s
+TERM screen-256color
+TERM screen-256color-bce
+TERM screen-256color-s
+TERM screen-256color-bce-s
+TERM screen-256color-italic
+TERM screen-bce
+TERM screen-w
+TERM screen.linux
+TERM screen.xterm-256color
+TERM st
+TERM st-meta
+TERM st-256color
+TERM st-meta-256color
+TERM tmux
+TERM tmux-256color
+TERM vt100
+TERM xterm
+TERM xterm-16color
+TERM xterm-256color
+TERM xterm-256color-italic
+TERM xterm-88color
+TERM xterm-color
+TERM xterm-debian
+TERM xterm-termite
+
+## Documentation
+#
+# standard colors
+#
+# Below are the color init strings for the basic file types. A color init
+# string consists of one or more of the following numeric codes:
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+#
+#
+# 256 color support
+# see here: http://www.mail-archive.com/bug-coreutils@gnu.org/msg11030.html)
+#
+# Text 256 color coding:
+# 38;5;COLOR_NUMBER
+# Background 256 color coding:
+# 48;5;COLOR_NUMBER
+
+## Special files
+
+NORMAL 0
+FILE 0;38;2;95;135;95
+RESET 0 # reset to "normal" color
+DIR 0;38;2;95;135;175
+LINK 0;38;2;95;135;175
+ # numerical value, the color is as for the file pointed to.)
+MULTIHARDLINK 00 # regular file with more than one link
+FIFO 1;38;2;175;95;0;48;2;135;135;175
+SOCK 1;38;2;175;95;0;48;2;135;135;175
+DOOR 1;38;2;175;95;0;48;2;135;135;175
+BLK 1;38;2;95;135;95;48;2;135;135;175
+CHR 1;38;2;95;135;95;48;2;135;135;175
+ORPHAN 38;2;215;0;0;48;2;38;38;38
+SETUID 38;2;135;135;175;48;2;215;0;0
+SETGID 38;2;135;135;175;48;2;175;95;0
+CAPABILITY 38;2;0;0;0;48;2;215;0;0
+STICKY_OTHER_WRITABLE 38;2;135;135;175;48;2;128;128;0
+OTHER_WRITABLE 38;2;95;135;175;48;2;38;38;38
+STICKY 38;2;135;135;175;48;2;95;135;175
+# This is for files with execute permission:
+EXEC 0;38;2;128;128;0
+
+## Archives or compressed (violet + bold for compression)
+.tar 0;38;2;95;135;175
+.tgz 0;38;2;95;135;175
+.arj 0;38;2;95;135;175
+.taz 0;38;2;95;135;175
+.lzh 0;38;2;95;135;175
+.lzma 0;38;2;95;135;175
+.tlz 0;38;2;95;135;175
+.txz 0;38;2;95;135;175
+.zip 0;38;2;95;135;175
+.z 0;38;2;95;135;175
+.Z 0;38;2;95;135;175
+.dz 0;38;2;95;135;175
+.gz 0;38;2;95;135;175
+.lz 0;38;2;95;135;175
+.xz 0;38;2;95;135;175
+.bz2 0;38;2;95;135;175
+.bz 0;38;2;95;135;175
+.tbz 0;38;2;95;135;175
+.tbz2 0;38;2;95;135;175
+.tz 0;38;2;95;135;175
+.deb 0;38;2;95;135;175
+.rpm 0;38;2;95;135;175
+.jar 0;38;2;95;135;175
+.rar 0;38;2;95;135;175
+.ace 0;38;2;95;135;175
+.zoo 0;38;2;95;135;175
+.cpio 0;38;2;95;135;175
+.7z 0;38;2;95;135;175
+.rz 0;38;2;95;135;175
+.apk 0;38;2;95;135;175
+.gem 0;38;2;95;135;175
+
+# Image formats (yellow)
+.jpg 0;38;2;175;95;0
+.JPG 0;38;2;175;95;0
+.jpeg 0;38;2;175;95;0
+.gif 0;38;2;175;95;0
+.bmp 0;38;2;175;95;0
+.pbm 0;38;2;175;95;0
+.pgm 0;38;2;175;95;0
+.ppm 0;38;2;175;95;0
+.tga 0;38;2;175;95;0
+.xbm 0;38;2;175;95;0
+.xpm 0;38;2;175;95;0
+.tif 0;38;2;175;95;0
+.tiff 0;38;2;175;95;0
+.png 0;38;2;175;95;0
+.PNG 0;38;2;175;95;0
+.svg 0;38;2;175;95;0
+.svgz 0;38;2;175;95;0
+.mng 0;38;2;175;95;0
+.pcx 0;38;2;175;95;0
+.dl 0;38;2;175;95;0
+.xcf 0;38;2;175;95;0
+.xwd 0;38;2;175;95;0
+.yuv 0;38;2;175;95;0
+.cgm 0;38;2;175;95;0
+.emf 0;38;2;175;95;0
+.eps 0;38;2;175;95;0
+.CR2 0;38;2;175;95;0
+.ico 0;38;2;175;95;0
+
+# Files of special interest (base1)
+.tex 0;38;2;135;135;175
+.rdf 0;38;2;135;135;175
+.owl 0;38;2;135;135;175
+.n3 0;38;2;135;135;175
+.ttl 0;38;2;135;135;175
+.nt 0;38;2;135;135;175
+.torrent 0;38;2;135;135;175
+.xml 0;38;2;135;135;175
+*Makefile 0;38;2;135;135;175
+*Rakefile 0;38;2;135;135;175
+*Dockerfile 0;38;2;135;135;175
+*build.xml 0;38;2;135;135;175
+*rc 0;38;2;135;135;175
+*1 0;38;2;135;135;175
+.nfo 0;38;2;135;135;175
+*README 0;38;2;135;135;175
+*README.txt 0;38;2;135;135;175
+*readme.txt 0;38;2;135;135;175
+.md 0;38;2;135;135;175
+*README.markdown 0;38;2;135;135;175
+.ini 0;38;2;135;135;175
+.yml 0;38;2;135;135;175
+.cfg 0;38;2;135;135;175
+.conf 0;38;2;135;135;175
+.h 0;38;2;135;135;175
+.hpp 0;38;2;135;135;175
+.c 0;38;2;135;135;175
+.cpp 0;38;2;135;135;175
+.cxx 0;38;2;135;135;175
+.cc 0;38;2;135;135;175
+.objc 0;38;2;135;135;175
+.sqlite 0;38;2;135;135;175
+.go 0;38;2;135;135;175
+.sql 0;38;2;135;135;175
+.csv 0;38;2;135;135;175
+
+# "unimportant" files as logs and backups (base01)
+.log 0;38;2;88;88;88
+.bak 0;38;2;88;88;88
+.aux 0;38;2;88;88;88
+.lof 0;38;2;88;88;88
+.lol 0;38;2;88;88;88
+.lot 0;38;2;88;88;88
+.out 0;38;2;88;88;88
+.toc 0;38;2;88;88;88
+.bbl 0;38;2;88;88;88
+.blg 0;38;2;88;88;88
+*~ 0;38;2;88;88;88
+*# 0;38;2;88;88;88
+.part 0;38;2;88;88;88
+.incomplete 0;38;2;88;88;88
+.swp 0;38;2;88;88;88
+.tmp 0;38;2;88;88;88
+.temp 0;38;2;88;88;88
+.o 0;38;2;88;88;88
+.pyc 0;38;2;88;88;88
+.class 0;38;2;88;88;88
+.cache 0;38;2;88;88;88
+
+# Audio formats (orange)
+.aac 0;38;2;175;95;0
+.au 0;38;2;175;95;0
+.flac 0;38;2;175;95;0
+.mid 0;38;2;175;95;0
+.midi 0;38;2;175;95;0
+.mka 0;38;2;175;95;0
+.mp3 0;38;2;175;95;0
+.mpc 0;38;2;175;95;0
+.ogg 0;38;2;175;95;0
+.opus 0;38;2;175;95;0
+.ra 0;38;2;175;95;0
+.wav 0;38;2;175;95;0
+.m4a 0;38;2;175;95;0
+# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
+.axa 0;38;2;175;95;0
+.oga 0;38;2;175;95;0
+.spx 0;38;2;175;95;0
+.xspf 0;38;2;175;95;0
+
+# Video formats (as audio + bold)
+.mov 0;38;2;175;95;0
+.MOV 0;38;2;175;95;0
+.mpg 0;38;2;175;95;0
+.mpeg 0;38;2;175;95;0
+.m2v 0;38;2;175;95;0
+.mkv 0;38;2;175;95;0
+.ogm 0;38;2;175;95;0
+.mp4 0;38;2;175;95;0
+.m4v 0;38;2;175;95;0
+.mp4v 0;38;2;175;95;0
+.vob 0;38;2;175;95;0
+.qt 0;38;2;175;95;0
+.nuv 0;38;2;175;95;0
+.wmv 0;38;2;175;95;0
+.asf 0;38;2;175;95;0
+.rm 0;38;2;175;95;0
+.rmvb 0;38;2;175;95;0
+.flc 0;38;2;175;95;0
+.avi 0;38;2;175;95;0
+.fli 0;38;2;175;95;0
+.flv 0;38;2;175;95;0
+.gl 0;38;2;175;95;0
+.m2ts 0;38;2;175;95;0
+.divx 0;38;2;175;95;0
+.webm 0;38;2;175;95;0
+# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
+.axv 0;38;2;175;95;0
+.anx 0;38;2;175;95;0
+.ogv 0;38;2;175;95;0
+.ogx 0;38;2;175;95;0
+
+

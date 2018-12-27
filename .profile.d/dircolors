@@ -2,10 +2,12 @@
 # after: term
 
 if [ -d ~/.dircolors ] && type dircolors &>/dev/null; then
-    if [ "$(tput colors)" -eq 256 ]; then
-        eval "$(dircolors ~/.dircolors/solarized/dircolors.256dark)"
+    if [ "$COLORTERM" = "truecolor" ]; then
+        eval "$(dircolors ~/.dircolors/darkula-truecolor)"
+    elif [ "$(tput colors)" -eq 256 ]; then
+        eval "$(dircolors ~/.dircolors/darkula-256)"
     else
-        eval "$(dircolors ~/.dircolors/solarized/dircolors.ansi-universal)"
+        eval "$(dircolors ~/.dircolors/ansi-universal)"
     fi
 fi
 
