@@ -61,9 +61,8 @@ let g:polyglot_disabled = ['go', 'markdown']
 Plug 'sheerun/vim-polyglot', {'commit':'d9b11ed'} " pinned due to conflict: https://github.com/sheerun/vim-polyglot/issues/309
 Plug 'fatih/vim-go'
 
-" for snippets
-Plug 'Shougo/neosnippet-snippets'
-Plug 'Shougo/neosnippet.vim'
+" snippets
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 Plug 'Shougo/denite.nvim'
@@ -360,7 +359,7 @@ let g:go_highlight_fields = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_generate_tags = 1
 
-let g:go_snippet_engine = "neosnippet"
+let g:go_snippet_engine = "ultisnips"
 let g:go_template_autocreate = 0
 
 let g:go_metalinter_autosave = 0 " XXX disabeld due to failing on fugitive buffers
@@ -388,25 +387,21 @@ if has("nvim")
 endif
 " }}}
 
-" neosnippet {{{
-imap <C-e>     <Plug>(neosnippet_expand_or_jump)
-smap <C-e>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-e>     <Plug>(neosnippet_expand_target)
-imap <C-f>     <Plug>(neosnippet_jump)
-smap <C-f>     <Plug>(neosnippet_jump)
+" snippets {{{
 
-if !isdirectory($VIMHOME.'/snippets')
-  call mkdir($VIMHOME.'/snippets', "p")
+let g:UltiSnipsExpandTrigger       = "<c-e>"
+let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+let g:UltiSnipsRemoveSelectModeMappings = 0
+
+if !isdirectory($VIMHOME.'/UltiSnips')
+  call mkdir($VIMHOME.'/UltiSnips', "p")
 endif
+let g:UltiSnipsSnippetsDir = $VIMHOME.'/UltiSnips'
 
-let g:neosnippet#disable_runtime_snippets = {
-\ 'go' : 1,
-\ }
-
-let g:neosnippet#snippets_directory = $VIMHOME."/snippets"
-let g:neosnippet#snippets_directory .= ",".$VIMHOME."/plugged/vim-snippets/snippets"
-
-nnoremap <leader>es :NeoSnippetEdit -split -horizontal<cr>
+let g:UltiSnipsEditSplit = "context"
+nnoremap <leader>es :UltiSnipsEdit<cr>
 
 " For conceal markers.
 set conceallevel=1
@@ -418,12 +413,6 @@ set concealcursor=niv
 
 " Invokes deoplete in insert mode.
 imap <silent> <expr><Tab> deoplete#mappings#manual_complete()
-
-" Try to expand or jump in normal mode.
-snoremap <expr><Tab>
-\ neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" :
-\ "\<Tab>"
 
 " }}}
 
