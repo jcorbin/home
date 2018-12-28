@@ -106,11 +106,33 @@ if has("nvim")
   " it looks to be trying for upstream
   Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'zchee/deoplete-go'
+  Plug 'ncm2/ncm2'
+  Plug 'roxma/nvim-yarp'
+  Plug 'ncm2/ncm2-bufword'
+  Plug 'fgrsnau/ncm2-otherbuf', {'branch': 'ncm2'}
+  Plug 'ncm2/ncm2-path'
+  Plug 'ncm2/ncm2-tagprefix'
+  Plug 'ncm2/ncm2-ultisnips'
+  Plug 'wellle/tmux-complete.vim'
+
+  Plug 'filipekiss/ncm2-look.vim'
+
+  Plug 'ncm2/ncm2-html-subscope'
+  Plug 'ncm2/ncm2-markdown-subscope'
+
+  Plug 'ncm2/ncm2-jedi', {'do': 'pip3 install --user --upgrade jedi'}
+  Plug 'ncm2/ncm2-racer'
+  Plug 'ncm2/ncm2-pyclang'
+  Plug 'ObserverOfTime/ncm2-jc2'
+  Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
+  Plug 'ncm2/ncm2-cssomni'
+  Plug 'ncm2/ncm2-go', {'do': 'go get -u -f github.com/stamblerre/gocode'}
+  Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
+
+  Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
+  Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
+
   Plug 'Shougo/echodoc.vim'
-else
-  Plug 'Shougo/neocomplete.vim'
 endif
 
 call plug#end()
@@ -374,17 +396,37 @@ let g:go_term_enabled = 1
 
 " }}}
 
-" deoplete {{{
+" Completion {{{
+
+set completeopt=menuone,noselect,noinsert
+set infercase
+set shortmess+=c
+
+" CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+inoremap <c-c> <ESC>
+
+" Use <TAB> to select the popup menu:
+inoremap <Tab> <c-n>
+inoremap <S-Tab> <c-p>
+
+" <expr> ... pumvisible() ? "\<C-n>" : "\<Tab>"
+" <expr> ... pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 if has("nvim")
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#disable_auto_complete = 1
-  set completeopt=menu,preview,longest,noselect
-  set infercase
+  " enable ncm2 for all buffer
+  autocmd BufEnter * call ncm2#enable_for_buffer()
 
   " echodoc
   let g:echodoc_enable_at_startup=1
 
 endif
+
+augroup look_completion
+  autocmd!
+  autocmd FileType markdown let b:ncm2_look_enabled = 1
+  autocmd FileType gitcommit let b:ncm2_look_enabled = 1
+augroup END
+
 " }}}
 
 " snippets {{{
@@ -406,13 +448,6 @@ nnoremap <leader>es :UltiSnipsEdit<cr>
 " For conceal markers.
 set conceallevel=1
 set concealcursor=niv
-
-" }}}
-
-" Tab key {{{
-
-" Invokes deoplete in insert mode.
-imap <silent> <expr><Tab> deoplete#mappings#manual_complete()
 
 " }}}
 
