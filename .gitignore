@@ -8,6 +8,7 @@
 # XDG home, allow further whitelisting
 !/.config
 /.config/*
+!/.config/flake8
 
 # File types that need to be ignored anywhere:
 .DS_Store
