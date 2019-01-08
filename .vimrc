@@ -96,6 +96,8 @@ Plug 'tpope/vim-speeddating'
 " live linting, no more waiting for write!
 Plug 'w0rp/ale'
 
+Plug 'prabirshrestha/async.vim'
+
 if has("nvim")
   " TODO: re-consider https://github.com/tjdevries/nvim-langserver-shim, since
   " it looks to be trying for upstream
