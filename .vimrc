@@ -239,10 +239,24 @@ set foldlevelstart=1  " with one level open
 " syntax folding for some filetypes {{{
 augroup syntax_folding
   autocmd!
+
   autocmd FileType go setlocal foldmethod=syntax
   autocmd FileType json setlocal foldmethod=syntax
   autocmd FileType javascript setlocal foldmethod=syntax
+
+  " this kludge is the best we can do for markdown (due to inadequate syntax definition)
+  autocmd FileType markdown setlocal foldmethod=expr foldexpr=MarkdownLevel()
 augroup END
+
+function MarkdownLevel()
+    let h = matchstr(getline(v:lnum), '^#\+')
+    if empty(h)
+        return "="
+    else
+        return ">" . len(h)
+    endif
+endfunction
+
 " }}}
 
 " Terminal options {{{
