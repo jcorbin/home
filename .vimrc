@@ -208,6 +208,7 @@ set hlsearch   " highlight matches
 "   insert mode
 
 augroup hlsearch
+  autocmd!
   autocmd InsertEnter * :setlocal nohlsearch " Disable hlsearch in insert mode...
   autocmd InsertLeave * :setlocal   hlsearch " ...enable it when we come out.
 augroup END
@@ -224,6 +225,7 @@ augroup END
 
 " Hack filetype for some extensions {{{
 augroup filetype_ext_hacks
+  autocmd!
   " Since I frequently edit Markdown files, and never Modula files
   autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
 augroup END
@@ -236,6 +238,7 @@ set foldlevelstart=1  " with one level open
 
 " syntax folding for some filetypes {{{
 augroup syntax_folding
+  autocmd!
   autocmd FileType go setlocal foldmethod=syntax
   autocmd FileType json setlocal foldmethod=syntax
   autocmd FileType javascript setlocal foldmethod=syntax
@@ -573,6 +576,7 @@ set spell
 
 " ... except for some filetypes
 augroup nospell
+  autocmd!
   autocmd FileType help setlocal nospell
   autocmd FileType man setlocal nospell
   autocmd FileType startify setlocal nospell
@@ -588,13 +592,15 @@ augroup END
 
 " spell check in git mode
 augroup git
-autocmd Filetype gitcommit setlocal spell textwidth=72
+  autocmd!
+  autocmd Filetype gitcommit setlocal spell textwidth=72
 augroup END
 
 " }}}
 
 " abbreviations {{{
 augroup filetype_abbrs
+  autocmd!
   autocmd FileType javascript :iabbrev <buffer> vst var self = this;
 augroup END
 " }}}
