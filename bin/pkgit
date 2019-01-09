@@ -277,6 +277,18 @@ commitMess() {
 
 	Script:
 	$(grep -v '^##' "$BUILDSCRIPT")
+	EOM
+
+	if line=$(pkgit show --pretty='%b' | grep -o 'Revision: .*') && [[ $line = Revision:\ * ]]; then
+		priorrev=${line#* }
+		cat <<-EOM
+
+		# Changes since $priorrev:
+		$(git --git-dir="$SRCDIR/.git" log --pretty='- %s' --no-decorate --first-parent "$priorrev..$PKGREV")
+		EOM
+	fi
+
+	cat <<-EOM
 
 	# Diff Stat:
 	$(pkgit diff --cached --stat | sed -e 's/^/# /')
