@@ -64,8 +64,6 @@
     dc = diff --cached
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
-    lb = log --pretty=brief
-    lbf = log --first-parent --pretty=brief
     lg = log --graph --pretty=brief
     lga = log --graph --pretty=brief --all
     lgb = log --graph --pretty=brief --branches
