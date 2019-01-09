@@ -41,6 +41,7 @@
 # log formats
 [pretty]
     brief = %C(red)%h%Creset %C(green)%ad%Creset %C(bold blue)<%an>%Creset %s%C(yellow)%d%Creset
+    briefbody = %C(red)%h%Creset %C(green)%ad%Creset %C(bold blue)<%an>%Creset %s%C(yellow)%d%Creset%n%n%-b
     briefreflog = %C(green)%gd %C(red)%h%Creset %C(bold blue)<%gn>%Creset %gs
 
 # Command aliases
@@ -68,6 +69,10 @@
     lga = log --graph --pretty=brief --all
     lgb = log --graph --pretty=brief --branches
     lgf = log --first-parent --graph --pretty=brief
+    lb = log --graph --pretty=briefbody
+    lba = log --graph --pretty=briefbody --all
+    lbb = log --graph --pretty=briefbody --branches
+    lbf = log --first-parent --graph --pretty=briefbody
     pub = !git push -u origin $(git symbolic-ref HEAD | sed -e 's~^refs/heads/~~')
     ra = rebase --abort
     rb = rebase
