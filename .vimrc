@@ -269,6 +269,8 @@ endfunction
 
 " }}}
 
+" }}}
+
 " Terminal options {{{
 if $TERM =~ 'xterm' || $TERM =~ 'screen'
   set ttyfast
