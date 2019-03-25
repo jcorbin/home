@@ -63,7 +63,8 @@ Plug 'fatih/vim-go'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
-Plug 'Shougo/denite.nvim'
+" PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " useful starting screen (load MRU file, fortune, etc)
 Plug 'mhinz/vim-startify'
@@ -207,10 +208,6 @@ let g:LanguageClient_useFloatingHover = 1
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
-
-nmap <leader>ld :Denite documentSymbol<cr>
-nmap <leader>lw :Denite workspaceSymbol<cr>
-nmap <leader>lr :Denite references<cr>
 
 " }}}
 
@@ -599,14 +596,9 @@ nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 
-" Denite basics
-nmap <leader>b :Denite buffer<cr>
-nmap <leader>d :DeniteProjectDir directory_rec<cr>
-nmap <leader>f :DeniteProjectDir file_rec<cr>
-nmap <leader>h :Denite help<cr>
-nmap <leader>r :Denite register<cr>
-nmap <leader>c :Denite colorscheme<cr>
-" nmap <leader>l :Denite line<cr>
+" FZF
+nmap <leader>f :FZF<cr>
+
 
 " }}}
 
