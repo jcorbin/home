@@ -404,6 +404,11 @@ inoremap <c-c> <ESC>
 inoremap <Tab> <c-n>
 inoremap <S-Tab> <c-p>
 
+" neovim 0.4.0+ : semi-transparent popup menu
+if has('nvim') && has('termguicolors')
+  silent! set pumblend=20
+endif
+
 " <expr> ... pumvisible() ? "\<C-n>" : "\<Tab>"
 " <expr> ... pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
