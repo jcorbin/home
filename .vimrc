@@ -357,10 +357,14 @@ let g:ale_sign_warning='⚠'
 
 " vim-go {{{
 
+let g:go_fmt_autosave = 1
+
 if executable('gopls')
   let g:LanguageClient_serverCommands['go'] = [exepath('gopls')]
   let g:go_def_mode='gopls'
   let g:ale_pattern_options['\.go$'] = {'ale_enabled': 0}
+  let g:go_fmt_autosave = 0
+  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 endif
 
 let g:go_doc_keywordprg_enabled = 0
@@ -368,7 +372,6 @@ let g:go_echo_go_info = 1
 
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 0
-let g:go_fmt_autosave = 1
 
 let g:go_auto_type_info = 0
 let g:go_jump_to_error = 1
