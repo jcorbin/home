@@ -164,12 +164,18 @@ lookupPackage() {
 	local argname argvariant
 	argname=$1
 	argvariant=$2
+
+	if [[ $argname = *-* ]] && [[ -z $argvariant ]]; then
+		argvariant=${argname#*-}
+		argname=${argname%%-*}
+	fi
+
 	PKGDIR=$PKGREPO/pkg/$argname
 
-	if [ -z "$argvariant" ]; then
-		PKGREF=$(pkgit symbolic-ref HEAD)
-	else
+	if [[ -n "$argvariant" ]]; then
 		PKGREF="refs/heads/$argname-$argvariant"
+	else
+		PKGREF=$(pkgit symbolic-ref HEAD)
 	fi
 
 	eval "$(pkgit show -s --pretty=%B "$PKGREF" | parsePackageCommit)"
@@ -555,7 +561,10 @@ install|link|upgrade|build-script|build|truncate|rm|clean|vars)
 	cmd=$1
 	shift
 
-	if [ $# -eq 0 ]; then
+	if [[ $# -eq 0 ]] || [[ $1 = -- ]]; then
+		if [[ $1 = -- ]]; then
+			shift
+		fi
 		inspectPackage "$(pwd)"
 	else
 		lookupPackage "$@"
