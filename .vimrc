@@ -196,10 +196,6 @@ endif
 
 let g:LanguageClient_serverCommands = {}
 
-if executable('go-langserver')
-  let g:LanguageClient_serverCommands['go'] = [exepath('go-langserver')]
-endif
-
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_useFloatingHover = 1
@@ -350,6 +346,8 @@ let g:airline_mode_map = {
 
 " Ale {{{
 
+let g:ale_pattern_options = {}
+
 let g:ale_sign_error='⊘'
 let g:ale_sign_warning='⚠'
 
@@ -358,6 +356,12 @@ let g:ale_sign_warning='⚠'
 " Go! {{{
 
 " vim-go {{{
+
+if executable('gopls')
+  let g:LanguageClient_serverCommands['go'] = [exepath('gopls')]
+  let g:go_def_mode='gopls'
+  let g:ale_pattern_options['\.go$'] = {'ale_enabled': 0}
+endif
 
 let g:go_doc_keywordprg_enabled = 0
 let g:go_echo_go_info = 1
