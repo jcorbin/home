@@ -112,6 +112,7 @@ if has("nvim")
   Plug 'ncm2/ncm2-tagprefix'
   Plug 'ncm2/ncm2-ultisnips'
   Plug 'wellle/tmux-complete.vim'
+  Plug 'ncm2/float-preview.nvim'
 
   Plug 'filipekiss/ncm2-look.vim'
 
