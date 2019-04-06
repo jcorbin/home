@@ -99,9 +99,10 @@ Plug 'w0rp/ale'
 Plug 'prabirshrestha/async.vim'
 
 if has("nvim")
-  " TODO: re-consider https://github.com/tjdevries/nvim-langserver-shim, since
-  " it looks to be trying for upstream
-  Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'autozimu/LanguageClient-neovim', {
+  \ 'branch': 'next',
+  \ 'do': 'bash install.sh',
+  \ }
 
   Plug 'ncm2/ncm2'
   Plug 'roxma/nvim-yarp'
