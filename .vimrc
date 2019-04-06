@@ -131,8 +131,6 @@ if has("nvim")
 
   Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
   Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
-
-  Plug 'Shougo/echodoc.vim'
 endif
 
 call plug#end()
