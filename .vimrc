@@ -56,11 +56,6 @@ Plug 'chriskempson/base16-vim' " framework of many 16-color themes
 Plug 'cocopon/iceberg.vim'     " blue theme
 Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
 
-" better support for certain languages
-let g:polyglot_disabled = ['go', 'markdown']
-Plug 'sheerun/vim-polyglot', {'commit':'d9b11ed'} " pinned due to conflict: https://github.com/sheerun/vim-polyglot/issues/309
-Plug 'fatih/vim-go'
-
 " snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
