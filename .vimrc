@@ -260,7 +260,7 @@ augroup syntax_folding
   autocmd FileType markdown setlocal foldmethod=expr foldexpr=MarkdownLevel()
 augroup END
 
-function MarkdownLevel()
+function! MarkdownLevel()
     let h = matchstr(getline(v:lnum), '^#\+')
     if empty(h)
         return "="
