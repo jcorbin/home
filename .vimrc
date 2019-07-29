@@ -363,9 +363,15 @@ let g:ale_sign_warning='⚠'
 
 let g:go_fmt_autosave = 1
 
+let g:go_def_mode = 'godef' " guru
+let g:go_info_mode = 'gocode'
+
 if executable('gopls')
   let g:LanguageClient_serverCommands['go'] = [exepath('gopls')]
-  let g:go_def_mode='gopls'
+
+  let g:go_info_mode = 'gopls'
+  let g:go_def_mode = 'gopls'
+
   let g:ale_pattern_options['\.go$'] = {'ale_enabled': 0}
   let g:go_fmt_autosave = 0
   autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
