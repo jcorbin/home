@@ -27,3 +27,5 @@ else
         export PS1='\u@\h \w$(__git_ps1 " (%s)")\$ '
     fi
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
