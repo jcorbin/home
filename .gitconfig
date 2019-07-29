@@ -31,7 +31,7 @@
 [rebase]
     stat = true # show a summary by default
     autosquash = true # honor commit markers like `fixup!`
-    instructionFormat = [%ad] <%an> %s %d
+    instructionFormat = %s %d # subject with decoration
 
 [rerere]
     # remember and re-use merge conflict resolutions
