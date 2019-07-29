@@ -21,3 +21,5 @@ re_gnu
 
 # So that $HOME skew doesn't go unnoticed for too long
 git -C "$HOME" status --short
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
