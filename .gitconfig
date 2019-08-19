@@ -38,6 +38,9 @@
     autoupdate = true
     enabled = true
 
+[format]
+    pretty = authorbody
+
 # log formats
 [pretty]
     brief = %C(red)%h %C(green)%cd %Creset%s%C(yellow)%d%Creset
@@ -67,14 +70,17 @@
     dc = diff --cached
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
-    lg = log --graph --pretty=brief
-    lga = log --graph --pretty=brief --all
-    lgb = log --graph --pretty=brief --branches
-    lgf = log --first-parent --graph --pretty=brief
-    lb = log --graph --pretty=briefbody
-    lba = log --graph --pretty=briefbody --all
-    lbb = log --graph --pretty=briefbody --branches
-    lbf = log --first-parent --graph --pretty=briefbody
+    lg  = log --pretty=author
+    lob = log --pretty=briefbody
+    lb  = log --pretty=brief
+    logg = log --graph
+    lgg  = log --graph --pretty=author
+    lobg = log --graph --pretty=briefbody
+    lbg  = log --graph --pretty=brief
+    logf = log --graph --first-parent
+    lgf  = log --graph --first-parent --pretty=author
+    lobf = log --graph --first-parent --pretty=briefbody
+    lbf  = log --graph --first-parent --pretty=brief
     pub = !git push -u origin $(git symbolic-ref HEAD | sed -e 's~^refs/heads/~~')
     ra = rebase --abort
     rb = rebase
