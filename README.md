@@ -1,26 +1,25 @@
-# How I Manage My Home
+# My `$HOME` (there are many like them...)
 
-Simply put: it's a git repository.
+I use Git to manage my home directory:
 
-There's no indirection between `$HOME` and it change tracking.
+- set up to [ignore](.gitignore) everything by default
+- and then whitelist what git should track
+- notably I do not use any sort of symlink indirection between a "dotfiles
+  repository" and `$HOME` itself
 
-I use Git with a twist:
-- I've set it up to [ignore](.gitignore) everything by default
-- I then whitelist what git should care about
+Where I do find indirection useful is at review time:
 
-Finally use a few other twists around git:
 - `$HOME`'s only remote is a local repository, such as `$HOME/home-int`
 - `$HOME` is on a context-specific non-master branch (e.g. `patron`,
   `personal`, `server`, etc)
-- `$HOME/home-int` has the remotes you'd expect:
-  - Github for the master branch
-  - Linode for any personal branches
-  - private git server for patron branches
-
-I also use automatic worktree updating on push, as setup by my
-[git-setup-worktree-push](bin/git-setup-worktree-push) script.
+- `$HOME/home-int` then can mediate between various remotes, like:
+  - Github for sharing the `master` branch
+  - private git servers for `personal` and `patron` branches
+- `$HOME` is setup to [automatic checkout when pushed
+  into](bin/git-setup-worktree-push)
 
 All of this allows me to:
+
 - quickly commit any changes in `$HOME` before they become forgotten
 - reconciliation (merging, rebasing, etc) so that any conflicts or other
   artifacts do not break my actual `$HOME`
@@ -29,62 +28,61 @@ All of this allows me to:
 
 # Git
 
-Much of my workflow as a programmer revolves around managing changes.  As such,
-my [git config](.gitconfig) is one of the parts of my setup that I iterate on
-the most.  The `[alias]` section is where most of the important parts are.
+Since much of my workflow as a programmer revolves around managing changes,
+my [git config](.gitconfig) is one of the most vital parts of my setup;
+especially its `[alias]` section and custom `[pretty]` formats (for `git-log`)
 
 # (Neo)Vim
 
-The only thing I use more than git, is [vim](http://www.vim.org) (actually
-[neovim](https://neovim.io/).)  While I do still have a [.vimrc](.vimrc) for
-classic vim, it's under-maintained at this point.  Most of my vim config that
-matters is in [.config/nvim/init.vim](.config/nvim/init.vim).
+The only thing I use more than git is my [`$EDITOR`](.profile.d/editor):
+[NeoVim][neovim_io] a modernized fork of [Vim][vim_org]
 
-I use [vim-plug](https://github.com/junegunn/vim-plug) to manage my neovim
-plugins (and [pathogen](https://github.com/tpope/vim-pathogen) for classic
-vim).  I try to keep my vim config cleanly organized using manual fold markers,
-and by separating out anything beyond simple settings changes into separate
-plugins.
+So that I can still use systems without neovim my, I have a a unified
+[.vimrc](.vimrc) and [.config/nvim/init.vim](.config/nvim/init.vim)
+
+I try to keep my vim config cleanly organized using manual fold markers, and by
+separating out anything beyond simple settings changes into separate plugins
+
+Its [darkula][jcorbin_darkula] color scheme is one that I assembled after
+reaching dissatisfaction with other available choices
 
 # Basic Shell Setup: `.profile`, `.bashrc`, and `.zshrc`
 
-First off, I'm primarily a Zsh user, but also have to use bash on occasion.
+While I'm primarily a Zsh user, I do occasionally use bash
 
-Because of this, there's a clear separation between non-shell specific
-environment in [`.profile`](.profile), and any shell-specific things in that
-shell's rc file.
+I keep a clear separation between between non-shell specific environment in
+[`.profile`](.profile) and any shell-specific things in that shell's config
 
-There's also a shared [`.aliases`](.aliases) file between bash and zsh (TODO:
-I've never cared enough about my bash to fragment its rc, probably should get
-on that).
+The Zsh config lives in: [`.zshenv`](.zshenv) and [`.zshrc`](.zshrc) with
+modules broken out in [`.zsh/`](.zsh)
 
-Rather than manage a monolithic dot file, I keep my [`.profile`](.profile) and
-[`.zshrc`](.zshrc) fragmented into [`.profile.d/`](.profile.d) and
-[`.zsh/rc.d/`](.zsh/rc.d) respectively.
+The Bash config lives in [`.bash_profile`](.bash_profile) and
+[`.bashrc`](.bashrc)
 
-So that I don't get into a manual numeric-prefixing game, I declare fragment
-dependencies in comments in each fragment; for example, I could have a file
-`.profile.d/bar`:
-
-    # after: foo
-    export BAR_THING="$FOO_THING"
-
-Since the `bar` fragment depends on the `foo` fragemnet to define `$FOO_THING`.
-There is also a corresponding `# before: ...` form so that a dependency can
-inject itself before a dependant.
-
-Dependency and dependant names don't have to actually be concrete files; for
-example in my [`.profile.d`](.profile.d) I have a virtual `bootstrap` dependant
-for early fragments such as [`hostname`](.profile.d/hostname) and
-[`locale`](.profile.d/locale).
-
-Dependency resolution is done by a simple [python script](bin/deporder) driving
-a simple `for part in ...; do source $part; done` loop.
+Both share a common [`.aliases`](.aliases) file
 
 # Shell Orchestration: TMux (RIP Screen)
 
-I use [TMux](https://tmux.github.io/) for terminal multiplexing; its config is
-kept in [`.tmux.conf`](.tmux.conf) with an additional include [statusline
-styling](.tmux-dark.conf).
+I use [TMux][tmux_io] for terminal multiplexing its config is kept in
+[`.tmux.conf`](.tmux.conf); including a `darkula` colorscheme
 
-I do also have mouldering [`.screenrc`](.screenrc) from a long time ago.
+# All The Colors
+
+Key to working [24-bit color][xvilka_24bit], especially in like Mac OS X:
+
+- [profile fragment](.profile.d/term) to adjust `$TERM` and...
+- ... compile any necessary [terminfo definitions](.terminfo.src/)
+
+Then you can turn up the color in various places:
+
+- [dircolors](.profile.d/dircolors) for `ls` and friends
+- [pager](.profile.d/pager) for `less` (used for things like manual pages, git log viewing, etc)
+- [zsh syntax highlighting](.zsh/rc.d/highlighting)
+- [neovim and vim 8+](.vimrc) support a `termguicolors` feature so that all
+  24-bit color schemes Just Work in the terminal
+
+[jcorbin_darkula]: https//:github.com/jcorbin/darkula
+[neovim_io]: https://neovim.io/
+[tmux_io]: https://tmux.github.io/
+[vim_org]: http://www.vim.org
+[xvilka_24bit]: https://gist.github.com/XVilka/8346728
