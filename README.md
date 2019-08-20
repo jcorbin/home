@@ -68,6 +68,10 @@ I use [TMux][tmux_io] for terminal multiplexing its config is kept in
 
 # All The Colors
 
+The color scheme that I use, is one that I assembled called
+[darkula][jcorbin_darkula]; it's derived from [Jet Brains
+Dracula][jetbrains_dracula], but further darkened a bit
+
 Key to working [24-bit color][xvilka_24bit], especially in like Mac OS X:
 
 - [profile fragment](.profile.d/term) to adjust `$TERM` and...
@@ -82,6 +86,7 @@ Then you can turn up the color in various places:
   24-bit color schemes Just Work in the terminal
 
 [jcorbin_darkula]: https//:github.com/jcorbin/darkula
+[jetbrains_dracula]: https://plugins.jetbrains.com/plugin/12275-dracula-theme
 [neovim_io]: https://neovim.io/
 [tmux_io]: https://tmux.github.io/
 [vim_org]: http://www.vim.org
