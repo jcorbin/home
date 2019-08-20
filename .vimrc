@@ -655,7 +655,7 @@ set background=dark
 let g:nofrils_strbackgrounds=1
 
 let g:hot_colors_name = 'darkula'
-let g:cool_colors_name = 'iceberg'
+let g:cool_colors_name = 'nofrils-dark'
 
 try
     if g:colors_name == "default"
