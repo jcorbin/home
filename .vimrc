@@ -288,12 +288,6 @@ endfunction
 
 " }}}
 
-" Terminal options {{{
-if $TERM =~ 'xterm' || $TERM =~ 'screen'
-  set ttyfast
-endif
-" }}}
-
 " airline {{{
 
 " let g:airline#extensions#whitespace#enabled = 1
