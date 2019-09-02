@@ -596,10 +596,6 @@ nnoremap <leader>t= :Tab/=/<cr>
 nnoremap <leader>t, :Tab/,/<cr>
 nnoremap <leader>t: :Tab/:/<cr>
 
-" FZF
-nmap <leader>f :FZF<cr>
-
-
 " }}}
 
 " Spelling {{{
