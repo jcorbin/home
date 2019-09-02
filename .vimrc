@@ -431,10 +431,6 @@ endif
 if has("nvim")
   " enable ncm2 for all buffer
   autocmd BufEnter * call ncm2#enable_for_buffer()
-
-  " echodoc
-  let g:echodoc_enable_at_startup=1
-
 endif
 
 augroup look_completion
