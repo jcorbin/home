@@ -290,9 +290,6 @@ endfunction
 
 " airline {{{
 
-" let g:airline#extensions#whitespace#enabled = 1
-" let g:airline#extensions#capslock#enabled = 1
-
 " disable mangling of fugitive buffer names
 let g:airline#extensions#fugitiveline#enabled = 0
 
