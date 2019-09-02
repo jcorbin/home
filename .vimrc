@@ -404,6 +404,17 @@ set completeopt=menuone,noselect,noinsert
 set infercase
 set shortmess+=c
 
+if has("nvim")
+  " enable ncm2 for all buffer
+  autocmd BufEnter * call ncm2#enable_for_buffer()
+
+  augroup look_completion
+    autocmd!
+    autocmd FileType markdown let b:ncm2_look_enabled = 1
+    autocmd FileType gitcommit let b:ncm2_look_enabled = 1
+  augroup END
+endif
+
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
 
@@ -415,17 +426,6 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 if has('nvim') && has('termguicolors')
   silent! set pumblend=20
 endif
-
-if has("nvim")
-  " enable ncm2 for all buffer
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-endif
-
-augroup look_completion
-  autocmd!
-  autocmd FileType markdown let b:ncm2_look_enabled = 1
-  autocmd FileType gitcommit let b:ncm2_look_enabled = 1
-augroup END
 
 " }}}
 
