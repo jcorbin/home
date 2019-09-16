@@ -674,4 +674,4 @@ let g:goyo_height='100%'
 
 " }}}
 
-" vim:set foldmethod=marker foldlevel=0 ts=2 sw=2 expandtab:
+" vim:set foldmethod=marker ts=2 sw=2 expandtab:
