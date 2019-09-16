@@ -600,6 +600,7 @@ augroup nospell
   autocmd FileType fugitiveblame setlocal nospell
   autocmd FileType goterm setlocal nospell
   autocmd FileType godebug* setlocal nospell
+  autocmd FileType dirvish setlocal nospell
 augroup END
 
 " spell check in git mode
