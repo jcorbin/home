@@ -601,6 +601,7 @@ augroup nospell
   autocmd FileType goterm setlocal nospell
   autocmd FileType godebug* setlocal nospell
   autocmd FileType dirvish setlocal nospell
+  autocmd TermOpen * setlocal nospell
 augroup END
 
 " spell check in git mode
