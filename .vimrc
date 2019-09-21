@@ -408,16 +408,13 @@ set shortmess+=c
 inoremap <c-c> <ESC>
 
 " Use <TAB> to select the popup menu:
-inoremap <Tab> <c-n>
-inoremap <S-Tab> <c-p>
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " neovim 0.4.0+ : semi-transparent popup menu
 if has('nvim') && has('termguicolors')
   silent! set pumblend=20
 endif
-
-" <expr> ... pumvisible() ? "\<C-n>" : "\<Tab>"
-" <expr> ... pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 if has("nvim")
   " enable ncm2 for all buffer
