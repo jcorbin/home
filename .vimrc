@@ -131,13 +131,15 @@ if has("nvim")
   Plug 'ncm2/ncm2-racer'
   Plug 'ncm2/ncm2-pyclang'
   Plug 'ObserverOfTime/ncm2-jc2'
-  Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
   Plug 'ncm2/ncm2-cssomni'
 
   Plug 'ncm2/ncm2-vim'
   Plug 'ncm2/ncm2-syntax'
   Plug 'ncm2/ncm2-neoinclude'
 endif
+
+" npm install -g typescript typescript-language-server
+Plug 'ryanolsonx/vim-lsp-javascript', {'do': 'npm install -g typescript typescript-language-server'}
 
 call plug#end()
 " }}}
