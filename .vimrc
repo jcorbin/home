@@ -832,6 +832,38 @@ let g:startify_session_savevars = [
 \ 'g:startify_custom_header',
 \ ]
 
+function! UnstartifySession()
+  let g:startify_custom_header = 'startify#fortune#cowsay()'
+  let g:startify_lists = [
+  \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+  \ { 'type': 'files',     'header': ['   MRU']            },
+  \ { 'type': 'sessions',  'header': ['   Sessions']       },
+  \ ]
+endfunction
+
+function! SessionInit()
+  let g:startify_custom_header = map(split(system('echo "Session Under"; pwd'), '\n'), '"   ". v:val')
+  let g:startify_lists = [
+  \ { 'type': 'commands',  'header': ['   Commands']       },
+  \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+  \ ]
+endfunction
+
+function! SessionClose() abort
+  if exists('v:this_session') && filewritable(v:this_session)
+    call startify#session_write(fnameescape(v:this_session))
+    let v:this_session = ''
+  endif
+  call startify#session_delete_buffers()
+  call UnstartifySession()
+  Startify
+endfunction
+
+command! -nargs=0 SessionInit call SessionInit()
+command! -nargs=0 SessionClose call SessionClose()
+
+nnoremap <leader>Si :SessionInit<cr>
+nnoremap <leader>Sc :SessionClose<cr>
 nnoremap <leader>Ss :exe 'mksession! ' . fnameescape(v:this_session)<CR>
 nnoremap <leader>Se :exe 'edit ' . fnameescape(v:this_session)<CR>
 
