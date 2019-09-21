@@ -105,6 +105,12 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'thomasfaingnaert/vim-lsp-snippets'
 Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
+Plug 'Shougo/neco-vim'
+Plug 'Shougo/neco-syntax'
+Plug 'Shougo/neoinclude.vim'
+
+Plug 'wellle/tmux-complete.vim'
+
 if has("nvim")
   Plug 'ncm2/ncm2'
   Plug 'ncm2/ncm2-vim-lsp'
@@ -114,7 +120,6 @@ if has("nvim")
   Plug 'ncm2/ncm2-path'
   Plug 'ncm2/ncm2-tagprefix'
   Plug 'ncm2/ncm2-ultisnips'
-  Plug 'wellle/tmux-complete.vim'
   Plug 'ncm2/float-preview.nvim'
 
   Plug 'filipekiss/ncm2-look.vim'
@@ -129,10 +134,10 @@ if has("nvim")
   Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
   Plug 'ncm2/ncm2-cssomni'
   Plug 'ncm2/ncm2-go', {'do': 'go get -u -f github.com/stamblerre/gocode'}
-  Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim'
 
-  Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
-  Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
+  Plug 'ncm2/ncm2-vim'
+  Plug 'ncm2/ncm2-syntax'
+  Plug 'ncm2/ncm2-neoinclude'
 endif
 
 call plug#end()
