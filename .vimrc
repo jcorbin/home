@@ -127,7 +127,6 @@ if has("nvim")
   Plug 'ncm2/ncm2-html-subscope'
   Plug 'ncm2/ncm2-markdown-subscope'
 
-  Plug 'ncm2/ncm2-jedi', {'do': 'pip3 install --user --upgrade jedi'}
   Plug 'ncm2/ncm2-racer'
   Plug 'ncm2/ncm2-pyclang'
   Plug 'ObserverOfTime/ncm2-jc2'
@@ -140,6 +139,9 @@ endif
 
 " npm install -g typescript typescript-language-server
 Plug 'ryanolsonx/vim-lsp-javascript', {'do': 'npm install -g typescript typescript-language-server'}
+
+" pip install python-language-server
+Plug 'ryanolsonx/vim-lsp-python'
 
 call plug#end()
 " }}}
