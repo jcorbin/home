@@ -598,8 +598,6 @@ let mapleader="\\"
 " uses, and organizes around, the undocumented `g\/` and `g\&` forms describe
 " in ex_global:
 
-nmap <leader>s :Startify<cr>
-
 " Perform a normal command...
 " ...on every line of the buffer
 nnoremap <leader>n :%normal<space>
@@ -759,10 +757,6 @@ augroup END
 let g:vim_json_syntax_conceal = 0
 " }}}
 
-" Startify {{{
-let g:startify_change_to_dir = 0
-" }}}
-
 " colorscheme {{{
 
 if has("termguicolors")
@@ -807,6 +801,39 @@ nmap yog9 :Goyo 90%<cr>
 
 let g:goyo_width='100%'
 let g:goyo_height='100%'
+
+" }}}
+
+" Sessions {{{
+
+nnoremap <leader>s :Startify<cr>
+
+set sessionoptions=blank,buffers,curdir,folds,help,winsize
+
+let g:startify_enable_special = 0
+let g:startify_use_env = 1
+let g:startify_fortune_use_unicode = 1
+
+let g:startify_change_to_dir = 1
+let g:startify_change_to_vcs_root = 1
+
+let g:startify_bookmarks = [
+\ {'st': '$HOME/status'},
+\ ]
+
+let g:startify_session_autoload = 1
+
+let g:startify_session_persistence = 1
+let g:startify_session_savevars = [
+\ 'g:startify_session_savevars',
+\ 'g:startify_session_savecmds',
+\ 'g:startify_lists',
+\ 'g:startify_commands',
+\ 'g:startify_custom_header',
+\ ]
+
+nnoremap <leader>Ss :exe 'mksession! ' . fnameescape(v:this_session)<CR>
+nnoremap <leader>Se :exe 'edit ' . fnameescape(v:this_session)<CR>
 
 " }}}
 
