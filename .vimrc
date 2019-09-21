@@ -101,14 +101,13 @@ Plug 'tpope/vim-speeddating'
 Plug 'w0rp/ale'
 
 Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
 if has("nvim")
-  Plug 'autozimu/LanguageClient-neovim', {
-  \ 'branch': 'next',
-  \ 'do': 'bash install.sh',
-  \ }
-
   Plug 'ncm2/ncm2'
+  Plug 'ncm2/ncm2-vim-lsp'
   Plug 'roxma/nvim-yarp'
   Plug 'ncm2/ncm2-bufword'
   Plug 'fgrsnau/ncm2-otherbuf', {'branch': 'ncm2'}
@@ -197,17 +196,18 @@ endif
 
 " }}}
 
-" Language Server Clients {{{
+" LSP {{{
 
-let g:LanguageClient_serverCommands = {}
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_useFloatingHover = 1
-
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> gr :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> K :LspHover<CR>
+nnoremap <silent> <leader>a :LspCodeAction<CR>
+nnoremap <silent> <leader>d :LspPeekDefinition<CR>
+nnoremap <silent> <leader>] :LspDefinition<CR>
+nnoremap <silent> <leader>f :LspDocumentFormat<CR>
+nnoremap <silent> <leader>r :LspRename<CR>
+nnoremap <silent> <leader>R :LspReferences<CR>
+nnoremap <silent> <leader>t :LspPeekTypeDefinition<CR>
+nnoremap <silent> <leader>e :LspNextError<CR>
+nnoremap <silent> <leader>* :LspNextReference<CR>
 
 " }}}
 
@@ -361,11 +361,15 @@ if executable('gopls')
   let g:go_info_mode = 'gopls'
   let g:go_def_mode = 'gopls'
 
-  let g:LanguageClient_serverCommands['go'] = [exepath('gopls')]
-
-  augroup gowrite
+  augroup golsp
   autocmd!
-  autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+  autocmd User lsp_setup call lsp#register_server({
+    \ 'name': 'gopls',
+    \ 'cmd': {server_info->['gopls']},
+    \ 'whitelist': ['go'],
+    \ })
+
+  autocmd BufWritePre *.go silent LspDocumentFormatSync
   augroup END
 endif
 
