@@ -133,7 +133,6 @@ if has("nvim")
   Plug 'ObserverOfTime/ncm2-jc2'
   Plug 'ncm2/ncm2-tern', {'do': 'npm install'}
   Plug 'ncm2/ncm2-cssomni'
-  Plug 'ncm2/ncm2-go', {'do': 'go get -u -f github.com/stamblerre/gocode'}
 
   Plug 'ncm2/ncm2-vim'
   Plug 'ncm2/ncm2-syntax'
