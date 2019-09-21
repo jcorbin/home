@@ -130,7 +130,6 @@ if has("nvim")
   Plug 'ncm2/ncm2-racer'
   Plug 'ncm2/ncm2-pyclang'
   Plug 'ObserverOfTime/ncm2-jc2'
-  Plug 'ncm2/ncm2-cssomni'
 
   Plug 'ncm2/ncm2-vim'
   Plug 'ncm2/ncm2-syntax'
@@ -224,6 +223,15 @@ if executable('flow')
     \ 'cmd': {server_info->['flow', 'lsp']},
     \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), '.flowconfig'))},
     \ 'whitelist': ['javascript', 'javascript.jsx'],
+    \ })
+endif
+
+" npm install -g vscode-css-languageserver-bin
+if executable('css-languageserver')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'css-languageserver',
+    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
+    \ 'whitelist': ['css', 'less', 'sass'],
     \ })
 endif
 
