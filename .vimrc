@@ -128,7 +128,6 @@ if has("nvim")
   Plug 'ncm2/ncm2-markdown-subscope'
 
   Plug 'ncm2/ncm2-pyclang'
-  Plug 'ObserverOfTime/ncm2-jc2'
 
   Plug 'ncm2/ncm2-vim'
   Plug 'ncm2/ncm2-syntax'
@@ -242,6 +241,33 @@ if executable('rls')
     \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
     \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
     \ 'whitelist': ['rust'],
+    \ })
+endif
+
+" mkdir -p ~/lsp/java
+" cd ~/lsp/java
+" curl -L https://download.eclipse.org/jdtls/milestones/0.35.0/jdt-language-server-0.35.0-201903142358.tar.gz -O
+" tar xf jdt-language-server-0.35.0-201903142358.tar.gz
+if executable('java') && filereadable(expand('~/lsp/java/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'))
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'eclipse.jdt.ls',
+    \ 'cmd': {server_info->[
+    \     'java',
+    \     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    \     '-Dosgi.bundles.defaultStartLevel=4',
+    \     '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    \     '-Dlog.level=ALL',
+    \     '-noverify',
+    \     '-Dfile.encoding=UTF-8',
+    \     '-Xmx1G',
+    \     '-jar',
+    \     expand('~/lsp/java/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'),
+    \     '-configuration',
+    \     expand('~/lsp/java/config_win'),
+    \     '-data',
+    \     getcwd()
+    \ ]},
+    \ 'whitelist': ['java'],
     \ })
 endif
 
