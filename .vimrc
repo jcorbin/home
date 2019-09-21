@@ -312,6 +312,16 @@ if executable('java') && filereadable(expand('~/lsp/xml/org.eclipse.lsp4xml-0.3.
     \ })
 endif
 
+" gem install solargraph
+if executable('solargraph')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'solargraph',
+    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
+    \ 'initialization_options': {"diagnostics": "true"},
+    \ 'whitelist': ['ruby'],
+    \ })
+endif
+
 " }}}
 
 " File Browsing {{{
