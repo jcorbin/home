@@ -127,8 +127,6 @@ if has("nvim")
   Plug 'ncm2/ncm2-html-subscope'
   Plug 'ncm2/ncm2-markdown-subscope'
 
-  Plug 'ncm2/ncm2-pyclang'
-
   Plug 'ncm2/ncm2-vim'
   Plug 'ncm2/ncm2-syntax'
   Plug 'ncm2/ncm2-neoinclude'
@@ -268,6 +266,15 @@ if executable('java') && filereadable(expand('~/lsp/java/eclipse.jdt.ls/plugins/
     \     getcwd()
     \ ]},
     \ 'whitelist': ['java'],
+    \ })
+endif
+
+" brew install llvm (or whatever package manager)
+if executable('clangd')
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'clangd',
+    \ 'cmd': {server_info->['clangd', '-background-index']},
+    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
     \ })
 endif
 
