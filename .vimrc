@@ -869,4 +869,29 @@ nnoremap <leader>Se :exe 'edit ' . fnameescape(v:this_session)<CR>
 
 " }}}
 
+" Terminal {{{
+
+if !has_key(environ(), 'TMUX')
+    function! OpenTmux(...)
+        if a:0 > 0
+            let session = a:1
+        elseif v:this_session != ""
+            let session = fnamemodify(v:this_session, ':h:t')
+        else
+            let session = fnamemodify(getcwd(), ':t')
+        endif
+
+        exe 'terminal tmux new-session -A -s ' . shellescape(session)
+        autocmd TermOpen <buffer> startinsert
+        autocmd TermClose <buffer> close!
+    endfunction
+    command! -nargs=* Tmux call OpenTmux(<f-args>)
+
+    nmap <C-u>z :vert split \| Tmux<CR>
+    nmap <C-u>d :Tmux<CR>
+    tnoremap <C-u><Esc> <C-\><C-n>
+endif
+
+" }}}
+
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
