@@ -294,6 +294,24 @@ if executable(expand('~/lsp/kotlin/server-0.1.13/bin/server'))
     \ })
 endif
 
+" mkdir -p ~/lsp/xml
+" curl -L https://github.com/angelozerr/lsp4xml/releases/download/0.3.0/org.eclipse.lsp4xml-0.3.0-uber.jar -o ~/lsp/xml/org.eclipse.lsp4xml-0.3.0-uber.jar
+if executable('java') && filereadable(expand('~/lsp/xml/org.eclipse.lsp4xml-0.3.0-uber.jar'))
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'lsp4xml',
+    \ 'cmd': {server_info->[
+    \     'java',
+    \     '-noverify',
+    \     '-Xmx1G',
+    \     '-XX:+UseStringDeduplication',
+    \     '-Dfile.encoding=UTF-8',
+    \     '-jar',
+    \     expand('~/lsp/xml/org.eclipse.lsp4xml-0.3.0-uber.jar')
+    \ ]},
+    \ 'whitelist': ['xml']
+    \ })
+endif
+
 " }}}
 
 " File Browsing {{{
