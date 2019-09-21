@@ -278,6 +278,22 @@ if executable('clangd')
     \ })
 endif
 
+" mkdir -p ~/lsp/kotlin
+" cd ~/lsp/kotlin
+" curl -L https://github.com/fwcd/KotlinLanguageServer/releases/download/0.1.13/server-0.1.13.zip -O
+" unzip server-0.1.13.zip
+if executable(expand('~/lsp/kotlin/server-0.1.13/bin/server'))
+  au User lsp_setup call lsp#register_server({
+    \ 'name': 'KotlinLanguageServer',
+    \ 'cmd': {server_info->[
+    \     &shell,
+    \     &shellcmdflag,
+    \     expand('~/lsp/kotlin/server-0.1.13/bin/server')
+    \ ]},
+    \ 'whitelist': ['kotlin']
+    \ })
+endif
+
 " }}}
 
 " File Browsing {{{
