@@ -513,11 +513,9 @@ let g:grepper.pt = {
 
 " }}}
 
-" vimscript editing convenience {{{
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-inoremap <leader>ev <esc>:vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>s% :source %<cr>
+" vimrc {{{
+nnoremap <leader>ve :vsplit $MYVIMRC<cr>
+nnoremap <leader>vs :source $MYVIMRC<cr>
 " }}}
 
 " easier re-sync for lazy diff algorithm
