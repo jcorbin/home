@@ -8,6 +8,7 @@
 !githook-update-worktree-update
 
 !atmux
+!termvim
 
 !git-branch-base
 !git-clique

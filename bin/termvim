@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -eo pipefail
+# NOTE: leaving out -o nounset, since it's not compatible with things like
+# virtualenvwrapper sourced by profile
+
+trap wtf INT TERM EXIT
+
+wtf()
+{
+    echo "$0: launch failed <press enter to exit>" >&2
+    read -r
+}
+
+if [ -z "${_PROFILE_LOADED-}" ]; then
+    # shellcheck source=/dev/null
+    source ~/.profile
+fi
+
+exec nvim "$@"
