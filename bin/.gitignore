@@ -9,9 +9,7 @@
 
 !atmux
 !atmux.py
-!choose-screen
-!chroot-system
-!dotgit
+
 !git-branch-base
 !git-clique
 !git-current-branch
