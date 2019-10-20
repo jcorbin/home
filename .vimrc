@@ -26,6 +26,9 @@ call plug#begin($VIMHOME.'/plugged')
 " better defaults out of the box
 Plug 'tpope/vim-sensible'
 
+" direnv integration
+Plug 'direnv/direnv.vim'
+
 " file browsing
 Plug 'tpope/vim-eunuch'
 Plug 'justinmk/vim-dirvish'
