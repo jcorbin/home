@@ -23,3 +23,5 @@ re_gnu
 git -C "$HOME" status --short
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[ -f ~/.zsh/iterm2.zsh ] && source ~/.zsh/iterm2.zsh
