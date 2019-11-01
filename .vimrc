@@ -119,7 +119,7 @@ if has("nvim")
   Plug 'ncm2/ncm2-vim-lsp'
   Plug 'roxma/nvim-yarp'
   Plug 'ncm2/ncm2-bufword'
-  Plug 'fgrsnau/ncm2-otherbuf', {'branch': 'ncm2'}
+  Plug 'fgrsnau/ncm2-otherbuf'
   Plug 'ncm2/ncm2-path'
   Plug 'ncm2/ncm2-tagprefix'
   Plug 'ncm2/ncm2-ultisnips'
