@@ -28,8 +28,11 @@
     date = relative
     decorate = true
 
+[merge]
+    stat = false # no summary diff stats
+
 [rebase]
-    stat = true # show a summary by default
+    stat = false # no summary diff stats
     autosquash = true # honor commit markers like `fixup!`
     instructionFormat = %s %d # subject with decoration
 
