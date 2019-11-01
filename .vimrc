@@ -956,6 +956,21 @@ nmap <leader>$ :STerm<cr>
 
 tnoremap <C-\><C-c> <C-\><C-n><C-w>c
 
+" Neovim server/remote support
+if has('nvim')
+  if !exists("$NVIM_LISTEN_ADDRESS")
+    call serverstart()
+  endif
+  if executable('nvr')
+    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+  endif
+
+  augroup delete_git_buffers
+    autocmd!
+    autocmd FileType gitcommit,gitrebase,gitconfig setlocal bufhidden=delete
+  augroup END
+endif
+
 " }}}
 
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
