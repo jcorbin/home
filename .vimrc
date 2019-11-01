@@ -593,6 +593,10 @@ nnoremap <leader>es :UltiSnipsEdit<cr>
 " For conceal markers.
 set conceallevel=1
 set concealcursor=niv
+augroup noconceal
+  autocmd!
+  autocmd FileType markdown setlocal conceallevel=0
+augroup END
 
 " }}}
 
