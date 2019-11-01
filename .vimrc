@@ -59,6 +59,9 @@ Plug 'chriskempson/base16-vim' " framework of many 16-color themes
 Plug 'cocopon/iceberg.vim'     " blue theme
 Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
 
+" Lobster!
+Plug 'jcorbin/vim-lobster'
+
 " Golang support
 Plug 'fatih/vim-go'
 
