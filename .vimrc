@@ -921,6 +921,7 @@ endif
 
 " Create or show existing terminal buffer
 nmap <leader>$ :Term<cr>
+nmap <leader>` :TermHUD<cr>
 
 " Quicker 'Go Back' binding
 tnoremap <C-\><C-o> <C-\><C-n><C-o>
