@@ -829,6 +829,7 @@ let g:startify_change_to_vcs_root = 1
 
 let g:startify_bookmarks = [
 \ {'hi': '$HOME/home-int'},
+\ {'vi': '$VIMHOME'},
 \ ]
 
 let g:startify_session_autoload = 1
