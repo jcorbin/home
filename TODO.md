@@ -1,6 +1,7 @@
+- continue exploring the post-tmux lifestyle afforded by "vimux" (neovim `:terminal` for $most things)
+  - assisted by shifting most of what I do at the terminal (*cough* git *cough*) over to vim-fugitive
+- automated install or vendoring of nvr
+- maybe it's time to revamp / reboot zsh config... or switch to bash...
 - port deporder to Go (this is already done and laying around $somewhere)
   - eliminates python virtualenv interactions
   - faster, better, stronger...
-- bash... pretty much any care about bash
-- classic vim is languishing too much
-- further expand README coverage
