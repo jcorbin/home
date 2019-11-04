@@ -62,6 +62,8 @@ Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels li
 " Lobster!
 Plug 'jcorbin/vim-lobster'
 
+Plug 'jcorbin/neovim-termhide'
+
 " Golang support
 Plug 'fatih/vim-go'
 
@@ -912,49 +914,18 @@ autocmd TermOpen * startinsert
 augroup END
 
 if has('win32')
-  if executable('powershell.exe')
-    let g:term_shell = 'powershell.exe'
-  else
-    let g:term_shell = 'cmd.exe'
-  endif
-else
-  let g:term_shell = 'bash'
+  let g:termhide_default_shell = 'powershell.exe'
+elseif executable('zsh')
+  let g:termhide_default_shell = 'zsh'
 endif
 
-function! OpenTerm(split, ...)
-  if a:0 > 0
-    let term_shell = a:1
-  else
-    let term_shell = g:term_shell
-  endif
+" Create or show existing terminal buffer
+nmap <leader>$ :Term<cr>
 
-  let buf_expr = 'term://*' . term_shell
-  let wn = bufwinnr(buf_expr)
-  if wn >= 0
-    exe wn .  'wincmd w' | startinsert
-    return
-  endif
+" Quicker 'Go Back' binding
+tnoremap <C-\><C-o> <C-\><C-n><C-o>
 
-  if a:split == 1
-    split
-  elseif a:split == 2
-    vsplit
-  endif
-
-  let bn = bufnr(buf_expr)
-  if bn >= 0
-    exe bn . 'buffer' | startinsert
-  else
-    exe 'terminal ' . term_shell | setlocal bufhidden=hide
-  endif
-endfunction
-
-command! -nargs=* Term call OpenTerm(0, <q-args>)
-command! -nargs=* STerm call OpenTerm(1, <q-args>)
-command! -nargs=* VTerm call OpenTerm(2, <q-args>)
-
-nmap <leader>$ :STerm<cr>
-
+" Quicker 'Close Window' binding
 tnoremap <C-\><C-c> <C-\><C-n><C-w>c
 
 " Neovim server/remote support
