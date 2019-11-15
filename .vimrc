@@ -920,8 +920,11 @@ elseif executable('zsh')
 endif
 
 " Create or show existing terminal buffer
-nmap <leader>$ :Term<cr>
-nmap <leader>` :TermHUD<cr>
+nnoremap <leader>$ :Term<cr>
+
+" Easy HUD toggle
+nnoremap <leader>` :TermHUD<cr>
+tnoremap <leader>` <C-\><C-n><C-w>c
 
 " Quicker 'Go Back' binding
 tnoremap <C-\><C-o> <C-\><C-n><C-o>
