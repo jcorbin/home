@@ -668,12 +668,12 @@ nnoremap <leader>vs :source $MYVIMRC<cr>
 nnoremap du :diffupdate<cr>
 
 " fugitive bindings {{{
+nnoremap <leader>g: :Git<space>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>g: :Git<space>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
+nnoremap <leader>gs :Gstatus<cr>
 
 " }}}
 
