@@ -672,8 +672,8 @@ nnoremap <leader>g: :Git<space>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit -v<cr>
 nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gg :Ghud<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
-nnoremap <leader>gs :Gstatus<cr>
 
 " }}}
 
