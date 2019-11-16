@@ -919,6 +919,8 @@ elseif executable('zsh')
   let g:termhide_default_shell = 'zsh'
 endif
 
+let g:termhide_hud_size = 15
+
 " Create or show existing terminal buffer
 nnoremap <leader>$ :Term<cr>
 
