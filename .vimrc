@@ -908,11 +908,6 @@ if !has_key(environ(), 'TMUX')
   tnoremap <C-u><Esc> <C-\><C-n>
 endif
 
-augroup terminal
-autocmd!
-autocmd TermOpen * startinsert
-augroup END
-
 if has('win32')
   let g:termhide_default_shell = 'powershell.exe'
 elseif executable('zsh')
