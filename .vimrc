@@ -940,7 +940,8 @@ if has('nvim')
     call serverstart()
   endif
   if executable('nvr')
-    let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+    let $EDITOR = 'nvr -cc vsplit --remote-wait'
+    let $GIT_EDITOR = $EDITOR
   endif
 
   augroup delete_git_buffers
