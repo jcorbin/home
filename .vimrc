@@ -202,6 +202,7 @@ set shortmess=atToO
 set cmdheight=1
 
 set jumpoptions=stack
+set nojoinspaces
 
 if has("nvim")
   set inccommand=nosplit
