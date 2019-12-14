@@ -201,6 +201,8 @@ set lazyredraw
 set shortmess=atToO
 set cmdheight=1
 
+set jumpoptions=stack
+
 if has("nvim")
   set inccommand=nosplit
 endif
