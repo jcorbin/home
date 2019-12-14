@@ -926,8 +926,13 @@ tnoremap <leader>` <C-\><C-n><C-w>c
 " Quicker 'Go Back' binding
 tnoremap <C-\><C-o> <C-\><C-n><C-o>
 
-" Quicker 'Close Window' binding
+" Quicker window operations
 tnoremap <C-\><C-c> <C-\><C-n><C-w>c
+tnoremap <C-\><C-w> <C-\><C-n><C-w><C-w>
+tnoremap <C-\><C-h> <C-\><C-n><C-w>h
+tnoremap <C-\><C-j> <C-\><C-n><C-w>j
+tnoremap <C-\><C-k> <C-\><C-n><C-w>k
+tnoremap <C-\><C-l> <C-\><C-n><C-w>l
 
 " Neovim server/remote support
 if has('nvim')
