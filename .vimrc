@@ -68,7 +68,6 @@ Plug 'jcorbin/neovim-termhide'
 Plug 'fatih/vim-go'
 
 " snippets
-Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
@@ -111,7 +110,6 @@ Plug 'w0rp/ale'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'thomasfaingnaert/vim-lsp-snippets'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
@@ -120,6 +118,8 @@ Plug 'Shougo/neoinclude.vim'
 Plug 'wellle/tmux-complete.vim'
 
 if has("nvim")
+  Plug 'SirVer/ultisnips'
+  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
   Plug 'ncm2/ncm2'
   Plug 'ncm2/ncm2-vim-lsp'
   Plug 'roxma/nvim-yarp'
