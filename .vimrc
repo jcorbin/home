@@ -886,6 +886,8 @@ nnoremap <leader>Se :exe 'edit ' . fnameescape(v:this_session)<CR>
 
 " Terminal {{{
 
+if has("nvim")
+
 " open a named tmux session; name argument defaults to name of directory
 " containing Session.vim or just name of cwd when not running in a session.
 function! OpenTmux(...)
@@ -950,6 +952,8 @@ if has('nvim')
     autocmd!
     autocmd FileType gitcommit,gitrebase,gitconfig setlocal bufhidden=delete
   augroup END
+endif
+
 endif
 
 " }}}
