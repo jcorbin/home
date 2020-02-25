@@ -101,6 +101,9 @@
     mark = commit -m mark --allow-empty
     fp = merge-base --fork-point
 
+[commit]
+    verbose = true
+
 # Commiter identity
 [user]
     email = jcorbin@wunjo.org
