@@ -85,9 +85,10 @@
     lobf = log --graph --first-parent --pretty=briefbody
     lbf  = log --graph --first-parent --pretty=brief
     pub = !git push -u origin $(git symbolic-ref HEAD | sed -e 's~^refs/heads/~~')
-    ra = rebase --abort
     rb = rebase
+    ra = rebase --abort
     rc = rebase --continue
+    re = rebase --edit-todo
     redo = reset HEAD^ --mixed
     rem = remote
     remv = remote -v
