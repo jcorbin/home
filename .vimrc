@@ -922,6 +922,7 @@ let g:termhide_hud_size = 15
 
 " Create or show existing terminal buffer
 nnoremap <leader>$ :Term<cr>
+nnoremap <leader># :TermVSplit<cr>
 
 " Easy HUD toggle
 nnoremap <leader>` :TermHUD<cr>
