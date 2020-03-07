@@ -963,6 +963,11 @@ endif
 
 endif
 
+augroup proto_comments
+  autocmd!
+  autocmd FileType proto setlocal commentstring=//\ %s
+augroup END
+
 " }}}
 
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
