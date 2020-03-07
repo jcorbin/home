@@ -1,13 +1,17 @@
 #!/bin/bash
 # after: term
 
-# Want NeoVim
-EDITOR=$(command -v nvim 2>/dev/null)
+# Want NeoVim, using remote if running within
+if [ -n "$NVIM_LISTEN_ADDRESS" ] && $(command -v nvr >/dev/null 2>&1); then
+    export EDITOR='nvr -cc vsplit --remote-wait'
+else
+    EDITOR=$(command -v nvim 2>/dev/null)
 
-# Fallback to Vim
-[ -x "$EDITOR" ] || EDITOR=$(command -v vim 2>/dev/null)
+    # Fallback to Vim
+    [ -x "$EDITOR" ] || EDITOR=$(command -v vim 2>/dev/null)
 
-# Settle for Vi
-[ -x "$EDITOR" ] || EDITOR=$(command -v vi 2>/dev/null)
+    # Settle for Vi
+    [ -x "$EDITOR" ] || EDITOR=$(command -v vi 2>/dev/null)
 
-export EDITOR
+    export EDITOR
+fi
