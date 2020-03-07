@@ -954,6 +954,11 @@ if has('nvim')
     autocmd!
     autocmd FileType gitcommit,gitrebase,gitconfig setlocal bufhidden=delete
   augroup END
+
+  augroup delete_arc_buffers
+    autocmd!
+    autocmd BufRead,BufNewFile,BufEnter **/edit.*/new-commit,**/edit.*/differential-update-comments setlocal bufhidden=delete
+  augroup END
 endif
 
 endif
