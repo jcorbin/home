@@ -938,6 +938,7 @@ tnoremap <C-\><C-h> <C-\><C-n><C-w>h
 tnoremap <C-\><C-j> <C-\><C-n><C-w>j
 tnoremap <C-\><C-k> <C-\><C-n><C-w>k
 tnoremap <C-\><C-l> <C-\><C-n><C-w>l
+tnoremap <C-\>p <C-\><C-n>pi
 
 " Neovim server/remote support
 if has('nvim')
