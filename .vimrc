@@ -113,6 +113,7 @@ Plug 'w0rp/ale'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'mattn/vim-lsp-settings'
 
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
@@ -225,134 +226,6 @@ nnoremap <silent> <leader>R :LspReferences<CR>
 nnoremap <silent> <leader>t :LspPeekTypeDefinition<CR>
 nnoremap <silent> <leader>e :LspNextError<CR>
 nnoremap <silent> <leader>* :LspNextReference<CR>
-
-" npm install -g flow-bin
-if executable('flow')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'flow',
-    \ 'cmd': {server_info->['flow', 'lsp']},
-    \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), '.flowconfig'))},
-    \ 'whitelist': ['javascript', 'javascript.jsx'],
-    \ })
-endif
-
-" npm install -g vscode-css-languageserver-bin
-if executable('css-languageserver')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'css-languageserver',
-    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
-    \ 'whitelist': ['css', 'less', 'sass'],
-    \ })
-endif
-
-" rustup update
-" rustup component add rls rust-analysis rust-src
-if executable('rls')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'rls',
-    \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-    \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-    \ 'whitelist': ['rust'],
-    \ })
-endif
-
-" mkdir -p ~/lsp/java
-" cd ~/lsp/java
-" curl -L https://download.eclipse.org/jdtls/milestones/0.35.0/jdt-language-server-0.35.0-201903142358.tar.gz -O
-" tar xf jdt-language-server-0.35.0-201903142358.tar.gz
-if executable('java') && filereadable(expand('~/lsp/java/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'))
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'eclipse.jdt.ls',
-    \ 'cmd': {server_info->[
-    \     'java',
-    \     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-    \     '-Dosgi.bundles.defaultStartLevel=4',
-    \     '-Declipse.product=org.eclipse.jdt.ls.core.product',
-    \     '-Dlog.level=ALL',
-    \     '-noverify',
-    \     '-Dfile.encoding=UTF-8',
-    \     '-Xmx1G',
-    \     '-jar',
-    \     expand('~/lsp/java/plugins/org.eclipse.equinox.launcher_1.5.300.v20190213-1655.jar'),
-    \     '-configuration',
-    \     expand('~/lsp/java/config_win'),
-    \     '-data',
-    \     getcwd()
-    \ ]},
-    \ 'whitelist': ['java'],
-    \ })
-endif
-
-" brew install llvm (or whatever package manager)
-if executable('clangd')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'clangd',
-    \ 'cmd': {server_info->['clangd', '-background-index']},
-    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-    \ })
-endif
-
-" mkdir -p ~/lsp/kotlin
-" cd ~/lsp/kotlin
-" curl -L https://github.com/fwcd/KotlinLanguageServer/releases/download/0.1.13/server-0.1.13.zip -O
-" unzip server-0.1.13.zip
-if executable(expand('~/lsp/kotlin/server-0.1.13/bin/server'))
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'KotlinLanguageServer',
-    \ 'cmd': {server_info->[
-    \     &shell,
-    \     &shellcmdflag,
-    \     expand('~/lsp/kotlin/server-0.1.13/bin/server')
-    \ ]},
-    \ 'whitelist': ['kotlin']
-    \ })
-endif
-
-" mkdir -p ~/lsp/xml
-" curl -L https://github.com/angelozerr/lsp4xml/releases/download/0.3.0/org.eclipse.lsp4xml-0.3.0-uber.jar -o ~/lsp/xml/org.eclipse.lsp4xml-0.3.0-uber.jar
-if executable('java') && filereadable(expand('~/lsp/xml/org.eclipse.lsp4xml-0.3.0-uber.jar'))
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'lsp4xml',
-    \ 'cmd': {server_info->[
-    \     'java',
-    \     '-noverify',
-    \     '-Xmx1G',
-    \     '-XX:+UseStringDeduplication',
-    \     '-Dfile.encoding=UTF-8',
-    \     '-jar',
-    \     expand('~/lsp/xml/org.eclipse.lsp4xml-0.3.0-uber.jar')
-    \ ]},
-    \ 'whitelist': ['xml']
-    \ })
-endif
-
-" gem install solargraph
-if executable('solargraph')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'solargraph',
-    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
-    \ 'initialization_options': {"diagnostics": "true"},
-    \ 'whitelist': ['ruby'],
-    \ })
-endif
-
-" npm install -g bash-language-server
-if executable('bash-language-server')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'bash-language-server',
-    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
-    \ 'whitelist': ['sh'],
-    \ })
-endif
-
-" npm install -g dockerfile-language-server-nodejs
-if executable('docker-langserver')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'docker-langserver',
-    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
-    \ 'whitelist': ['dockerfile'],
-    \ })
-endif
 
 " }}}
 
@@ -502,20 +375,8 @@ let g:go_info_mode = 'gocode'
 if executable('gopls')
   let g:ale_pattern_options['\.go$'] = {'ale_enabled': 0}
   let g:go_fmt_autosave = 0
-
   let g:go_info_mode = 'gopls'
   let g:go_def_mode = 'gopls'
-
-  augroup golsp
-  autocmd!
-  autocmd User lsp_setup call lsp#register_server({
-    \ 'name': 'gopls',
-    \ 'cmd': {server_info->['gopls']},
-    \ 'whitelist': ['go'],
-    \ })
-
-  autocmd BufWritePre *.go silent LspDocumentFormatSync
-  augroup END
 endif
 
 let g:go_doc_keywordprg_enabled = 0
