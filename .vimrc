@@ -73,6 +73,9 @@ Plug 'honza/vim-snippets'
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+" finder and dispatcher
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+
 " useful starting screen (load MRU file, fortune, etc)
 Plug 'mhinz/vim-startify'
 
@@ -715,6 +718,12 @@ au FileType gitrebase nmap <leader>gbf :g/^exec git branch -f/norm<Space>
 " Undotree
 let g:undotree_ShortIndicators=1
 nnoremap <leader>ut :UndotreeToggle<cr>
+
+" Clap
+let g:clap_disable_run_rooter = v:true
+nnoremap <leader>cc :Clap<cr>
+nnoremap <leader>cb :Clap buffers<cr>
+nnoremap <leader>cf :Clap filer<cr>
 
 " Vista
 let g:vista_default_executive = 'vim_lsp'
