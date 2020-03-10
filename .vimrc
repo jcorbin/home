@@ -85,8 +85,8 @@ Plug 'godlygeek/tabular'
 " Undo history navigation
 Plug 'mbbill/undotree'
 
-" adds a sidebar that displays tags
-Plug 'majutsushi/tagbar'
+" tags from lsp
+Plug 'liuchengxu/vista.vim'
 
 " grep integration (for any grep-like program)
 Plug 'mhinz/vim-grepper'
@@ -716,8 +716,10 @@ au FileType gitrebase nmap <leader>gbf :g/^exec git branch -f/norm<Space>
 let g:undotree_ShortIndicators=1
 nnoremap <leader>ut :UndotreeToggle<cr>
 
-" TagBar
-nnoremap <leader>tg :TagbarToggle<cr>
+" Vista
+let g:vista_default_executive = 'vim_lsp'
+nnoremap <leader>vv :Vista<cr>
+nnoremap <leader>vf :Vista focus<cr>
 
 " Tabular
 nnoremap <leader>tt :Tab<cr>
