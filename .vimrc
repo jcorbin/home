@@ -216,6 +216,11 @@ endif
 
 " LSP {{{
 
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+
+let g:lsp_highlight_references_enabled = 1
+hi link lspReference MatchParen
+
 nnoremap <silent> K :LspHover<CR>
 nnoremap <silent> <leader>a :LspCodeAction<CR>
 nnoremap <silent> <leader>d :LspPeekDefinition<CR>
