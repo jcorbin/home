@@ -304,8 +304,9 @@ endfunction
 
 " airline {{{
 
-" disable mangling of fugitive buffer names
-let g:airline#extensions#fugitiveline#enabled = 0
+let g:airline#extensions#lsp#enabled = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#vista#enabled = 1
 
 " tabline
 let g:airline#extensions#tabline#enabled = 1
@@ -331,22 +332,6 @@ let g:airline#extensions#branch#enabled = 0
 let g:airline_detect_spell = 0
 let g:airline_detect_spelllang = 0
 let g:airline_exclude_preview = 1
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-
-" or copy paste the following into your vimrc for shortform text
-let g:airline_mode_map = {
-    \ '__' : '-',
-    \ 'n'  : 'N',
-    \ 'i'  : 'I',
-    \ 'R'  : 'R',
-    \ 'c'  : 'C',
-    \ 'v'  : 'V',
-    \ 'V'  : 'V',
-    \ '' : 'V',
-    \ 's'  : 'S',
-    \ 'S'  : 'S',
-    \ '' : 'S',
-    \ }
 
 " }}}
 
