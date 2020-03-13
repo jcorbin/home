@@ -119,29 +119,25 @@ Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neoinclude.vim'
 
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
+Plug 'prabirshrestha/asyncomplete-tags.vim'
+Plug 'prabirshrestha/asyncomplete-necovim.vim'
+Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
+Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
+
 Plug 'wellle/tmux-complete.vim'
 
 if has("nvim")
   Plug 'SirVer/ultisnips'
+  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
   Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-  Plug 'ncm2/ncm2'
-  Plug 'ncm2/ncm2-vim-lsp'
-  Plug 'roxma/nvim-yarp'
-  Plug 'ncm2/ncm2-bufword'
-  Plug 'fgrsnau/ncm2-otherbuf'
-  Plug 'ncm2/ncm2-path'
-  Plug 'ncm2/ncm2-tagprefix'
-  Plug 'ncm2/ncm2-ultisnips'
-  Plug 'ncm2/float-preview.nvim'
-
-  Plug 'filipekiss/ncm2-look.vim'
-
-  Plug 'ncm2/ncm2-html-subscope'
-  Plug 'ncm2/ncm2-markdown-subscope'
-
-  Plug 'ncm2/ncm2-vim'
-  Plug 'ncm2/ncm2-syntax'
-  Plug 'ncm2/ncm2-neoinclude'
+else
+  " TODO fix
+  " Plug 'SirVer/ultisnips'
+  " Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 endif
 
 " npm install -g typescript typescript-language-server
@@ -419,27 +415,29 @@ let g:go_term_enabled = 1
 
 " Completion {{{
 
-set completeopt=menuone,noselect,noinsert
+set completeopt=menuone,noselect,noinsert,preview
 set infercase
 set shortmess+=c
 
-if has("nvim")
-  " enable ncm2 for all buffer
-  autocmd BufEnter * call ncm2#enable_for_buffer()
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_popup_delay = 50
+let g:asyncomplete_auto_completeopt = 0
 
-  augroup look_completion
-    autocmd!
-    autocmd FileType markdown let b:ncm2_look_enabled = 1
-    autocmd FileType gitcommit let b:ncm2_look_enabled = 1
-  augroup END
-endif
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<Tab>" :
+  \ asyncomplete#force_refresh()
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
-
-" Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " neovim 0.4.0+ : semi-transparent popup menu
 if has('nvim') && has('termguicolors')
