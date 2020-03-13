@@ -210,6 +210,7 @@ nnoremap <silent> <leader>a :LspCodeAction<CR>
 nnoremap <silent> <leader>d :LspPeekDefinition<CR>
 nnoremap <silent> <leader>] :LspDefinition<CR>
 nnoremap <silent> <leader>f :LspDocumentFormat<CR>
+nnoremap <silent> <leader>l :LspDocumentDiagnostics<CR>
 nnoremap <silent> <leader>r :LspRename<CR>
 nnoremap <silent> <leader>R :LspReferences<CR>
 nnoremap <silent> <leader>t :LspPeekTypeDefinition<CR>
