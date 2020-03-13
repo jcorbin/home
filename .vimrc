@@ -131,6 +131,7 @@ Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 Plug 'prabirshrestha/asyncomplete-necovim.vim'
 Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
 Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
+Plug 'prabirshrestha/asyncomplete-emoji.vim'
 
 Plug 'wellle/tmux-complete.vim'
 
