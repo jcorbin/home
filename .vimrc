@@ -134,12 +134,6 @@ Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
 
 Plug 'wellle/tmux-complete.vim'
 
-" npm install -g typescript typescript-language-server
-Plug 'ryanolsonx/vim-lsp-javascript', {'do': 'npm install -g typescript typescript-language-server'}
-
-" pip install python-language-server
-Plug 'ryanolsonx/vim-lsp-python'
-
 call plug#end()
 " }}}
 
