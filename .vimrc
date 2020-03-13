@@ -110,6 +110,9 @@ Plug 'tpope/vim-speeddating'
 " live linting, no more waiting for write!
 Plug 'w0rp/ale'
 
+Plug 'SirVer/ultisnips'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'thomasfaingnaert/vim-lsp-snippets'
@@ -124,21 +127,12 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
 Plug 'prabirshrestha/asyncomplete-file.vim'
 Plug 'prabirshrestha/asyncomplete-tags.vim'
+Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 Plug 'prabirshrestha/asyncomplete-necovim.vim'
 Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
 Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
 
 Plug 'wellle/tmux-complete.vim'
-
-if has("nvim")
-  Plug 'SirVer/ultisnips'
-  Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-else
-  " TODO fix
-  " Plug 'SirVer/ultisnips'
-  " Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-endif
 
 " npm install -g typescript typescript-language-server
 Plug 'ryanolsonx/vim-lsp-javascript', {'do': 'npm install -g typescript typescript-language-server'}
