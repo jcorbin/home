@@ -68,6 +68,7 @@ Plug 'jcorbin/neovim-termhide'
 Plug 'fatih/vim-go'
 
 " snippets
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
@@ -110,12 +111,11 @@ Plug 'tpope/vim-speeddating'
 " live linting, no more waiting for write!
 Plug 'w0rp/ale'
 
-Plug 'SirVer/ultisnips'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-
+" LSP
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 Plug 'mattn/vim-lsp-settings'
 
 Plug 'Shougo/neco-vim'
