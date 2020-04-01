@@ -516,6 +516,8 @@ nnoremap du :diffupdate<cr>
 
 " fugitive bindings {{{
 nnoremap <leader>G :G<space>
+nnoremap <leader>ga :G add %<cr>
+nnoremap <leader>gA :G add --update<cr>
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
 nnoremap <leader>gC :Gcommit --amend<cr>
