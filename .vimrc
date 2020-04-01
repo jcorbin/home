@@ -525,6 +525,10 @@ nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gg :Ghud<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
 
+nnoremap <leader>g> :G stash<cr>
+nnoremap <leader>g< :G stash pop<cr>
+nnoremap <leader>g! :G stash drop<cr>
+
 " }}}
 
 " go bindings {{{
