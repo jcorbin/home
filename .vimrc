@@ -72,6 +72,10 @@ Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
 
+" Plug 'hrsh7th/vim-vsnip'
+" Plug 'hrsh7th/vim-vsnip-integ'
+" " TODO watch https://github.com/archseer/snippets.nvim
+
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
@@ -117,6 +121,7 @@ Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neoinclude.vim'
 
 Plug 'haorenW1025/completion-nvim'
+" XXX Plug 'haorenW1025/diagnostic-nvim'
 
 call plug#end()
 " }}}
@@ -194,6 +199,19 @@ require'nvim_lsp'.vimls.setup{}
 
 EOF
 
+" autocmd Filetype vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
+" autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+" let g:lsp_signature_help_enabled = 1
+
+" let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+
+" " let g:lsp_semantic_enabled = 1
+" let g:lsp_preview_float = 1
+
+" let g:lsp_highlight_references_enabled = 1
+" hi link lspReference MatchParen
+
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 
@@ -208,6 +226,10 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 nnoremap <silent> <leader>f    <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>a    <cmd>lua vim.lsp.buf.code_action()<CR>
+
+" nnoremap <silent> <leader>l :LspDocumentDiagnostics<CR>
+" nnoremap <silent> <leader>r :LspRename<CR>
+" nnoremap <silent> <leader>e :LspNextError<CR>
 
 " }}}
 
@@ -435,6 +457,15 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 
 " Tell Neosnippet about the other snippets
 let g:neosnippet#snippets_directory=$VIMHOME.'/plugged/vim-snippets/snippets'
+
+" XXX vsnip " You can use other key to expand snippet.
+" imap <expr> <C-j>   vsnip#available(1)  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+" imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+" smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+" imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" smap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" imap <expr> <S-Tab> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+" smap <expr> <S-Tab> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
 " }}}
 
