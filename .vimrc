@@ -108,9 +108,6 @@ Plug 'tpope/vim-unimpaired'
 " allows Ctrl-A/X to inc/dec dates (and more!)
 Plug 'tpope/vim-speeddating'
 
-" live linting, no more waiting for write!
-Plug 'w0rp/ale'
-
 " LSP
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
@@ -335,15 +332,6 @@ let g:airline_exclude_preview = 1
 
 " }}}
 
-" Ale {{{
-
-let g:ale_pattern_options = {}
-
-let g:ale_sign_error='⊘'
-let g:ale_sign_warning='⚠'
-
-" }}}
-
 " Go! {{{
 
 " vim-go {{{
@@ -354,7 +342,6 @@ let g:go_def_mode = 'godef' " guru
 let g:go_info_mode = 'gocode'
 
 if executable('gopls')
-  let g:ale_pattern_options['\.go$'] = {'ale_enabled': 0}
   let g:go_fmt_autosave = 0
   let g:go_info_mode = 'gopls'
   let g:go_def_mode = 'gopls'
