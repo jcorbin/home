@@ -109,28 +109,11 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
 
 " LSP
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'thomasfaingnaert/vim-lsp-snippets'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-Plug 'mattn/vim-lsp-settings'
+Plug 'neovim/nvim-lsp'
 
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neoinclude.vim'
-
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-buffer.vim'
-Plug 'prabirshrestha/asyncomplete-file.vim'
-Plug 'prabirshrestha/asyncomplete-tags.vim'
-Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-Plug 'prabirshrestha/asyncomplete-necovim.vim'
-Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
-Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
-Plug 'prabirshrestha/asyncomplete-emoji.vim'
-
-Plug 'wellle/tmux-complete.vim'
 
 call plug#end()
 " }}}
@@ -198,27 +181,29 @@ endif
 
 " LSP {{{
 
-let g:lsp_signature_help_enabled = 1
+lua << EOF
 
-let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+require'nvim_lsp'.bashls.setup{}
+require'nvim_lsp'.cssls.setup{}
+require'nvim_lsp'.gopls.setup{}
+require'nvim_lsp'.html.setup{}
+require'nvim_lsp'.pyls.setup{}
+require'nvim_lsp'.tsserver.setup{}
+require'nvim_lsp'.vimls.setup{}
 
-" let g:lsp_semantic_enabled = 1
-let g:lsp_preview_float = 1
+EOF
 
-let g:lsp_highlight_references_enabled = 1
-hi link lspReference MatchParen
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 
-nnoremap <silent> K :LspHover<CR>
-nnoremap <silent> <leader>a :LspCodeAction<CR>
-nnoremap <silent> <leader>d :LspPeekDefinition<CR>
-nnoremap <silent> <leader>] :LspDefinition<CR>
-nnoremap <silent> <leader>f :LspDocumentFormat<CR>
-nnoremap <silent> <leader>l :LspDocumentDiagnostics<CR>
-nnoremap <silent> <leader>r :LspRename<CR>
-nnoremap <silent> <leader>R :LspReferences<CR>
-nnoremap <silent> <leader>t :LspPeekTypeDefinition<CR>
-nnoremap <silent> <leader>e :LspNextError<CR>
-nnoremap <silent> <leader>* :LspNextReference<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 " }}}
 
@@ -301,7 +286,6 @@ endfunction
 
 " airline {{{
 
-let g:airline#extensions#lsp#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#vista#enabled = 1
 
@@ -385,23 +369,6 @@ let g:go_term_enabled = 1
 set completeopt=menuone,noselect,noinsert,preview
 set infercase
 set shortmess+=c
-
-let g:asyncomplete_auto_popup = 1
-let g:asyncomplete_popup_delay = 50
-let g:asyncomplete_auto_completeopt = 0
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<Tab>" :
-  \ asyncomplete#force_refresh()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
