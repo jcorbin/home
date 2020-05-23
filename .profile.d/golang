@@ -1,13 +1,12 @@
 #!/bin/sh
 # after: arrayutil
 
-export GOPATH=$HOME/golang
-export PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
+[ -d "$HOME/go/bin" ] && export PATH=$(IFS=:; prepend "$HOME/go/bin" $PATH)
 
 goclone()
 {
     name="$1"
-    dest="$GOPATH/src/$name"
+    dest="$(go env GOPATH)/src/$name"
     [ -d "$dest" ] || mkdir -p "$dest"
     case "$name" in
     gh/*)
