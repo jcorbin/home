@@ -1,9 +1,6 @@
 #!/bin/sh
 # after: arrayutil
 
-# shellcheck source=/dev/null
-[ -s "$HOME/.gvm/scripts/gvm" ] && . "$HOME/.gvm/scripts/gvm"
-
 export GOPATH=$HOME/golang
 export PATH=$(IFS=:; append "$GOPATH/bin" $PATH)
 
