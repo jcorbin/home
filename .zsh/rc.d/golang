@@ -44,10 +44,4 @@ goclone()
     esac
 }
 
-altgopath "$HOME/golang"
-
-hash -d gos="$GOPATH/src"
-hash -d gog="$GOPATH/src/github.com"
-hash -d anansi="$GOPATH/src/github.com/jcorbin/anansi"
-
 # vim:set ft=zsh:
