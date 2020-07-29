@@ -380,7 +380,7 @@ let g:go_term_enabled = 1
 
 " Completion {{{
 
-set completeopt=menuone,noselect,noinsert
+set completeopt=menu,longest
 set infercase
 set shortmess+=c
 
