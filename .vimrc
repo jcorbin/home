@@ -68,7 +68,8 @@ Plug 'jcorbin/neovim-termhide'
 Plug 'fatih/vim-go'
 
 " snippets
-Plug 'SirVer/ultisnips'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
 
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run the install script
@@ -349,7 +350,7 @@ let g:go_highlight_fields = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_generate_tags = 1
 
-let g:go_snippet_engine = "ultisnips"
+let g:go_snippet_engine = "neosnippet"
 let g:go_template_autocreate = 0
 
 let g:go_metalinter_autosave = 0 " XXX disabeld due to failing on fugitive buffers
@@ -399,19 +400,11 @@ endif
 
 " snippets {{{
 
-let g:UltiSnipsExpandTrigger       = "<c-e>"
-let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
-
-let g:UltiSnipsRemoveSelectModeMappings = 0
-
-if !isdirectory($VIMHOME.'/UltiSnips')
-  call mkdir($VIMHOME.'/UltiSnips', "p")
-endif
-let g:UltiSnipsSnippetsDir = $VIMHOME.'/UltiSnips'
-
-let g:UltiSnipsEditSplit = "context"
-nnoremap <leader>es :UltiSnipsEdit<cr>
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-e>     <Plug>(neosnippet_expand_or_jump)
+smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-e>     <Plug>(neosnippet_expand_target)
 
 " For conceal markers.
 set conceallevel=1
@@ -420,6 +413,12 @@ augroup noconceal
   autocmd!
   autocmd FileType markdown setlocal conceallevel=0
 augroup END
+
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory=$VIMHOME.'/plugged/vim-snippets/snippets'
 
 " }}}
 
