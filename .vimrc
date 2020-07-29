@@ -58,6 +58,13 @@ Plug 'robertmeta/nofrils'      " the 'no color' colorscheme
 Plug 'chriskempson/base16-vim' " framework of many 16-color themes
 Plug 'cocopon/iceberg.vim'     " blue theme
 Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
+Plug 'skbolton/embark'
+Plug 'Iron-E/nvim-highlite'
+
+Plug 'chuling/equinusocio-material.vim'
+let g:equinusocio_material_style = 'darker'
+let g:equinusocio_material_hide_vertsplit = 1
+
 
 " Lobster!
 Plug 'jcorbin/vim-lobster'
