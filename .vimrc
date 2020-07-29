@@ -202,10 +202,6 @@ EOF
 " autocmd Filetype vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
 " autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
-" let g:lsp_signature_help_enabled = 1
-
-" let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-
 " " let g:lsp_semantic_enabled = 1
 " let g:lsp_preview_float = 1
 
