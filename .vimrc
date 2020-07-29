@@ -459,22 +459,59 @@ set completeopt=menu,longest
 set infercase
 set shortmess+=c
 
-" Use completion-nvim in every buffer
-autocmd BufEnter * lua require'completion'.on_attach()
+" Use diagnostic-nvim and completion-nvim in every buffer
+lua << EOF
+function on_attach_vim()
+  require'completion'.on_attach()
+  -- require'diagnostic'.on_attach()
+end
+EOF
+
+augroup lsp_nvim
+  autocmd!
+  autocmd BufEnter * lua on_attach_vim()
+augroup END
+
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_show_sign = 1
+" let g:diagnostic_insert_delay = 1
 
 " completion-nvim chained sources
 let g:completion_auto_change_source = 1
+let g:completion_enable_auto_popup = 0
+
+let g:completion_chain_complete_list = [
+    \{'complete_items': ['lsp', 'ts']},
+    \{'complete_items': ['snippet']},
+    \{'complete_items': ['buffers']},
+    \{'mode': '<c-p>'},
+    \{'mode': '<c-n>'}
+\]
+
+" possible value: 'UltiSnips', 'Neosnippet', 'vim-vsnip'
+let g:completion_enable_snippet = 'Neosnippet'
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<Tab>" :
+imap <silent><expr> <Tab>
+  \ pumvisible() ? '<C-n>' :
+  \ neosnippet#jumpable() ? '<Plug>(neosnippet_expand_or_jump)' :
+  \ <SID>check_back_space() ? '<Tab>' :
   \ completion#trigger_completion()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+imap <expr> <S-Tab>
+  \ pumvisible() ? '<C-p>' :
+  \ '<S-Tab>'
+
+smap <expr><Tab>
+  \ neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' :
+  \ '<Tab>'
+
+smap <expr> <S-Tab>
+  \ '<S-Tab>'
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
