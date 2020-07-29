@@ -121,7 +121,8 @@ Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neoinclude.vim'
 
 Plug 'haorenW1025/completion-nvim'
-" XXX Plug 'haorenW1025/diagnostic-nvim'
+Plug 'steelsojka/completion-buffers'
+" Plug 'haorenW1025/diagnostic-nvim'
 
 call plug#end()
 " }}}
@@ -223,7 +224,8 @@ nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> <leader>f    <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>a    <cmd>lua vim.lsp.buf.code_action()<CR>
 
-" nnoremap <silent> <leader>l :LspDocumentDiagnostics<CR>
+" nnoremap <silent> <leader>l :OpenDiagnostic<CR>
+" nnoremap <silent> <leader>e :NextDiagnosticCycle<CR>
 " nnoremap <silent> <leader>r :LspRename<CR>
 " nnoremap <silent> <leader>e :LspNextError<CR>
 
