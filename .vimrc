@@ -325,17 +325,35 @@ let g:go_fmt_autosave = 1
 
 let g:go_def_mode = 'godef' " guru
 let g:go_info_mode = 'gocode'
+let g:go_fmt_command = "goimports"
 
 if executable('gopls')
-  let g:go_fmt_autosave = 0
+  let g:go_fmt_autosave = 1
   let g:go_info_mode = 'gopls'
   let g:go_def_mode = 'gopls'
+  let g:go_fmt_command = 'gopls'
+  let g:go_implements_mode = 'gopls'
+  let g:go_imports_mode = 'gopls'
+
+let g:go_gopls_use_placeholders = v:true
+let g:go_gopls_complete_unimported = v:true
+let g:go_gopls_deep_completion = v:true
+
+let g:go_gopls_config={'fillreturns': v:true}
+
+let g:go_gopls_analyses = {
+  \ 'analyses': v:true,
+  \ 'fillreturns': v:true,
+  \ 'nonewvars': v:true,
+  \ 'undeclaredname': v:true,
+  \ 'unusedparams': v:true,
+  \ }
+
 endif
 
 let g:go_doc_keywordprg_enabled = 0
 let g:go_echo_go_info = 0
 
-let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 0
 
 let g:go_auto_type_info = 0
@@ -352,11 +370,6 @@ let g:go_highlight_generate_tags = 1
 
 let g:go_snippet_engine = "neosnippet"
 let g:go_template_autocreate = 0
-
-let g:go_metalinter_autosave = 0 " XXX disabeld due to failing on fugitive buffers
-" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
-" let g:go_metalinter_autosave_enabled = ['vet', 'golint']
-" let g:go_metalinter_deadline = "5s"
 
 let g:go_term_mode = "split"
 let g:go_term_enabled = 1
