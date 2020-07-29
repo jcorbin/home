@@ -395,7 +395,7 @@ if executable('gopls')
   let g:go_implements_mode = 'gopls'
   let g:go_imports_mode = 'gopls'
 
-let g:go_gopls_use_placeholders = v:true
+let g:go_gopls_use_placeholders = v:false
 let g:go_gopls_complete_unimported = v:true
 let g:go_gopls_deep_completion = v:true
 
