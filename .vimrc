@@ -659,6 +659,20 @@ nnoremap yoS :call ToggleStatus()<CR>
 
 " }}}
 
+" Cursor {{{
+
+" blinking, shape changing, and color changing (requires colorscheme support)
+set guicursor
+      \=a:block-blinkwait400-blinkoff200-blinkon200
+      \,n:nCursor
+      \,c:cCursor
+      \,v:vCursor
+      \,i-ci-ve:ver25-iCursor
+      \,r-cr:hor25-rCursor
+      \,o:hor50-nCursor
+
+" }}}
+
 " Focus {{{
 
 nmap yogg :Goyo<cr>
