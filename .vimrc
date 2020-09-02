@@ -678,7 +678,7 @@ nnoremap yoS :call ToggleStatus()<CR>
 
 " blinking, shape changing, and color changing (requires colorscheme support)
 set guicursor
-      \=a:block-blinkwait400-blinkoff200-blinkon200
+      \=a:block
       \,n:nCursor
       \,c:cCursor
       \,v:vCursor
