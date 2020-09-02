@@ -188,8 +188,8 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " LSP {{{
 
+" Setup servers {{{
 lua << EOF
-
 require'nvim_lsp'.bashls.setup{}
 require'nvim_lsp'.cssls.setup{}
 require'nvim_lsp'.gopls.setup{}
@@ -197,12 +197,13 @@ require'nvim_lsp'.html.setup{}
 require'nvim_lsp'.pyls.setup{}
 require'nvim_lsp'.tsserver.setup{}
 require'nvim_lsp'.vimls.setup{}
-
 EOF
 
+" register omnifuncs that have no larger language plugin
 autocmd Filetype vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
+" }}}
 
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
