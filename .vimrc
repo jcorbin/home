@@ -48,6 +48,9 @@ Plug 'vim-airline/vim-airline-themes'
 " focus
 Plug 'junegunn/goyo.vim'
 
+" better affordance for fF and tT movements
+Plug 'unblevable/quick-scope'
+
 " unicode
 Plug 'chrisbra/unicode.vim'
 
@@ -177,6 +180,9 @@ if has("nvim")
   set jumpoptions=stack
   set inccommand=nosplit
 endif
+
+" quick-scope when fFtT moves are pending
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " }}}
 
