@@ -418,9 +418,10 @@ endif
 
 " Plugin key-mappings.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-e>     <Plug>(neosnippet_expand_or_jump)
-smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+imap <C-e>     <Plug>(neosnippet_expand)
+smap <C-e>     <Plug>(neosnippet_expand)
 xmap <C-e>     <Plug>(neosnippet_expand_target)
+imap <C-j>     <Plug>(neosnippet_jump)
 
 " For conceal markers.
 set conceallevel=1
