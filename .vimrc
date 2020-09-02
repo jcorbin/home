@@ -216,6 +216,8 @@ nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
+nnoremap <silent> g!    <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
+
 nnoremap <silent> <leader>f    <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>a    <cmd>lua vim.lsp.buf.code_action()<CR>
 
