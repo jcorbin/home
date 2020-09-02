@@ -205,6 +205,43 @@ autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 " }}}
 
+" Load diagnostics into the location list {{{
+lua << EOF
+local severity_map = { "E", "W", "I", "H" }
+
+local parse_diagnostics = function(diagnostics)
+  if not diagnostics then return end
+  local items = {}
+  for _, diagnostic in ipairs(diagnostics) do
+    local fname = vim.fn.bufname()
+    local position = diagnostic.range.start
+    local severity = diagnostic.severity
+    table.insert(items, {
+      filename = fname,
+      type = severity_map[severity],
+      lnum = position.line + 1,
+      col = position.character + 1,
+      text = diagnostic.message:gsub("\r", ""):gsub("\n", " ")
+    })
+  end
+  return items
+end
+
+update_diagnostics_loclist = function()
+  bufnr = vim.fn.bufnr()
+  diagnostics = vim.lsp.util.diagnostics_by_buf[bufnr]
+
+  items = parse_diagnostics(diagnostics)
+  vim.lsp.util.set_loclist(items)
+
+  vim.api.nvim_command("doautocmd QuickFixCmdPost")
+end
+
+vim.api.nvim_command [[autocmd! User LspDiagnosticsChanged lua update_diagnostics_loclist()]]
+
+EOF
+" }}}
+
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 
