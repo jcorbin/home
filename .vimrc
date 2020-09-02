@@ -221,6 +221,15 @@ nnoremap <silent> g!    <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
 nnoremap <silent> <leader>f    <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>a    <cmd>lua vim.lsp.buf.code_action()<CR>
 
+" highlight references on cursor hold/move
+set updatetime=300
+augroup lsp_refs
+  autocmd!
+  autocmd CursorHold  * lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI * lua vim.lsp.buf.document_highlight()
+  autocmd CursorMoved * lua vim.lsp.buf.clear_references()
+augroup END
+
 " }}}
 
 " File Browsing {{{
