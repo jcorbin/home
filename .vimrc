@@ -200,6 +200,10 @@ require'nvim_lsp'.vimls.setup{}
 
 EOF
 
+autocmd Filetype vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+
 nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 
