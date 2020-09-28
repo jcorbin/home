@@ -533,9 +533,19 @@ let g:grepper.pt = {
 
 " }}}
 
-" vimrc {{{
-nnoremap <leader>ve :vsplit $MYVIMRC<cr>
+" global shortcuts for quick edits {{{
+
+function! SplitTmp(name) abort
+  execute 'vsplit ' . a:name
+  setlocal bufhidden=delete
+endfunction
+
+command! -nargs=1 SplitTmp call SplitTmp(<f-args>)
+
+" vimrc
+nnoremap <leader>ve :SplitTmp $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
+
 " }}}
 
 " easier re-sync for lazy diff algorithm
