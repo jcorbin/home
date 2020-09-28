@@ -93,9 +93,6 @@ Plug 'godlygeek/tabular'
 " Undo history navigation
 Plug 'mbbill/undotree'
 
-" tags from lsp
-Plug 'liuchengxu/vista.vim'
-
 " grep integration (for any grep-like program)
 Plug 'mhinz/vim-grepper'
 
@@ -349,7 +346,6 @@ endfunction
 " airline {{{
 
 let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#vista#enabled = 1
 
 " tabline
 let g:airline#extensions#tabline#enabled = 1
@@ -613,11 +609,6 @@ let g:clap_disable_run_rooter = v:true
 nnoremap <leader>cc :Clap<cr>
 nnoremap <leader>cb :Clap buffers<cr>
 nnoremap <leader>cf :Clap filer<cr>
-
-" Vista
-let g:vista_default_executive = 'vim_lsp'
-nnoremap <leader>vv :Vista<cr>
-nnoremap <leader>vf :Vista focus<cr>
 
 " Tabular
 nnoremap <leader>tt :Tab<cr>
