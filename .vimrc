@@ -62,6 +62,11 @@ Plug 'chriskempson/base16-vim' " framework of many 16-color themes
 Plug 'cocopon/iceberg.vim'     " blue theme
 Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
 
+" Telescope
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/telescope.nvim'
+
 " Lobster!
 Plug 'jcorbin/vim-lobster'
 
@@ -175,6 +180,15 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " }}}
 
+" Telescope {{{
+
+nnoremap <Leader>en <cmd>lua require'telescope.builtin'.find_files{ cwd = "~/.config/nvim/" }<CR>
+nnoremap <Leader>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
+" nnoremap <Leader>p <cmd>lua require'telescope.builtin'.find_files{}<CR>
+" require'telescope.builtin'.buffers{)
+
+" }}}
+
 " LSP {{{
 
 " Setup servers {{{
@@ -240,9 +254,13 @@ nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 
 nnoremap <silent> gR    <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+" nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+" nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+" nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+
+nnoremap <silent> gr    <cmd>lua require'telescope.builtin'.lsp_references{}<CR>
+nnoremap <silent> g0    <cmd>lua require'telescope.builtin'.lsp_document_symbols{}<CR>
+nnoremap <silent> gW    <cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<CR>
 
 nnoremap <silent> g!    <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
 
