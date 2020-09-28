@@ -113,7 +113,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-speeddating'
 
 " LSP
-Plug 'neovim/nvim-lsp'
+Plug 'neovim/nvim-lspconfig'
 
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
