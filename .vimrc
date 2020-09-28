@@ -625,6 +625,9 @@ command! -nargs=1 SplitTmp call SplitTmp(<f-args>)
 nnoremap <leader>ve :SplitTmp $MYVIMRC<cr>
 nnoremap <leader>vs :source $MYVIMRC<cr>
 
+" stream "journal"
+nnoremap <leader>vj :SplitTmp ~/keynotes/stream.md<cr>
+
 " }}}
 
 " easier re-sync for lazy diff algorithm
