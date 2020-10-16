@@ -887,6 +887,7 @@ endif " Neovim Terminal }}}
 augroup auto_delete_buffers
   autocmd!
   autocmd FileType gitcommit,gitrebase,gitconfig setlocal bufhidden=delete
+  autocmd FileType man setlocal bufhidden=delete
   autocmd BufRead,BufNewFile,BufEnter **/edit.*/new-commit,**/edit.*/differential-update-comments setlocal bufhidden=delete
 augroup END
 " }}}
