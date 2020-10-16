@@ -327,7 +327,7 @@ augroup END
 
 " Folding {{{
 
-set foldmethod=indent " default to indent folding
+set foldmethod=marker " default to marker folding
 set foldlevelstart=1  " with one level open
 
 " syntax folding for some filetypes {{{
