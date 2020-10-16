@@ -817,8 +817,7 @@ nnoremap <leader>Se :exe 'edit ' . fnameescape(v:this_session)<CR>
 
 " }}}
 
-" Terminal {{{
-
+" Neovim Terminal {{{
 if has("nvim")
 
 " open a named tmux session; name argument defaults to name of directory
@@ -873,8 +872,7 @@ tnoremap <C-\><C-k> <C-\><C-n><C-w>k
 tnoremap <C-\><C-l> <C-\><C-n><C-w>l
 tnoremap <C-\>p <C-\><C-n>pi
 
-" Neovim server/remote support
-if has('nvim')
+  " server/remote support
   if !exists("$NVIM_LISTEN_ADDRESS")
     call serverstart()
   endif
@@ -883,24 +881,20 @@ if has('nvim')
     let $GIT_EDITOR = $EDITOR
   endif
 
-  augroup delete_git_buffers
-    autocmd!
-    autocmd FileType gitcommit,gitrebase,gitconfig setlocal bufhidden=delete
-  augroup END
+endif " Neovim Terminal }}}
 
-  augroup delete_arc_buffers
-    autocmd!
-    autocmd BufRead,BufNewFile,BufEnter **/edit.*/new-commit,**/edit.*/differential-update-comments setlocal bufhidden=delete
-  augroup END
-endif
-
-endif
+" Auto delete ephemeral buffers when hidden {{{
+augroup auto_delete_buffers
+  autocmd!
+  autocmd FileType gitcommit,gitrebase,gitconfig setlocal bufhidden=delete
+  autocmd BufRead,BufNewFile,BufEnter **/edit.*/new-commit,**/edit.*/differential-update-comments setlocal bufhidden=delete
+augroup END
+" }}}
 
 augroup proto_comments
   autocmd!
   autocmd FileType proto setlocal commentstring=//\ %s
 augroup END
 
-" }}}
 
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
