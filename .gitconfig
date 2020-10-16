@@ -109,6 +109,9 @@
     email = jcorbin@wunjo.org
     name = Joshua T Corbin
 
+[init]
+    defaultBranch = main
+
 [advice]
     detachedHead = false
     pushNonFastForward = false
