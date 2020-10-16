@@ -4,13 +4,14 @@ setopt transientrprompt
 autoload -U promptinit
 promptinit
 
-if [ -e ~/.demo-mode ]; then
-    prompt off
-    export PS1='$ '
-elif [ -f ~/.promptline.sh ]; then
-    source ~/.promptline.sh
-else
-    prompt wunjo
-fi
+prompt off
+export PS1='$ '
+
+# if [ -e ~/.demo-mode ]; then
+# elif [ -f ~/.promptline.sh ]; then
+#     source ~/.promptline.sh
+# else
+#     prompt wunjo
+# fi
 
 # vim:set ft=zsh:
