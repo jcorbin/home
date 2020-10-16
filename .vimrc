@@ -78,6 +78,7 @@ Plug 'fatih/vim-go'
 " Modern Java/typescript support
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
+Plug 'jonsmithers/vim-html-template-literals'
 
 " snippets
 Plug 'Shougo/neosnippet.vim'
@@ -905,5 +906,6 @@ augroup proto_comments
   autocmd FileType proto setlocal commentstring=//\ %s
 augroup END
 
+let g:htl_css_templates=1
 
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
