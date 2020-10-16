@@ -75,6 +75,10 @@ Plug 'jcorbin/neovim-termhide'
 " Golang support
 Plug 'fatih/vim-go'
 
+" Modern Java/typescript support
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+
 " snippets
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
@@ -205,6 +209,8 @@ EOF
 " register omnifuncs that have no larger language plugin
 autocmd Filetype vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype javascript setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 " }}}
 
@@ -337,6 +343,8 @@ augroup syntax_folding
   autocmd FileType go setlocal foldmethod=syntax
   autocmd FileType json setlocal foldmethod=syntax
   autocmd FileType javascript setlocal foldmethod=syntax
+  autocmd FileType typescript setlocal foldmethod=syntax
+  autocmd FileType css setlocal foldmethod=syntax
 
   " this kludge is the best we can do for markdown (due to inadequate syntax definition)
   autocmd FileType markdown setlocal foldmethod=expr foldexpr=MarkdownLevel()
