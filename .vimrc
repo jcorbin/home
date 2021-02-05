@@ -286,7 +286,7 @@ lspconfig.efm.setup{
 lspconfig.gopls.setup{}
 lspconfig.html.setup{}
 lspconfig.jsonls.setup{}
-lspconfig.pyls.setup{}
+lspconfig.pyright.setup{}
 lspconfig.tsserver.setup{}
 lspconfig.vimls.setup{}
 lspconfig.yamlls.setup{}
