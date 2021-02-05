@@ -179,6 +179,12 @@ set nojoinspaces
 if has("nvim")
   set jumpoptions=stack
   set inccommand=nosplit
+
+  augroup hl_on_yank
+  autocmd!
+  autocmd TextYankPost * silent! lua vim.highlight.on_yank {timeout=250}
+  augroup END
+
 endif
 
 " quick-scope when fFtT moves are pending
