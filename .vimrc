@@ -251,6 +251,7 @@ require'lspconfig'.jsonls.setup{}
 require'lspconfig'.pyls.setup{}
 require'lspconfig'.tsserver.setup{}
 require'lspconfig'.vimls.setup{}
+require'lspconfig'.yamlls.setup{}
 EOF
 
 " register omnifuncs that have no larger language plugin
