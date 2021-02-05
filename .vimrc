@@ -692,6 +692,7 @@ set background=dark
 
 let g:nofrils_strbackgrounds=1
 
+let g:darkula_emphasis = 3
 let g:hot_colors_name = 'darkula'
 let g:cool_colors_name = 'nofrils-dark'
 
