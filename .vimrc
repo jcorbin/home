@@ -887,5 +887,6 @@ augroup proto_comments
 augroup END
 
 let g:htl_css_templates=1
+let g:javascript_plugin_jsdoc = 1
 
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
