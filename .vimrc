@@ -491,9 +491,11 @@ imap <C-j>     <Plug>(neosnippet_jump)
 " For conceal markers.
 set conceallevel=1
 set concealcursor=niv
+
 augroup noconceal
   autocmd!
   autocmd FileType markdown setlocal conceallevel=0
+  autocmd FileType json setlocal conceallevel=0
 augroup END
 
 " Enable snipMate compatibility feature.
@@ -678,10 +680,6 @@ augroup filetype_abbrs
   autocmd!
   autocmd FileType javascript :iabbrev <buffer> vst var self = this;
 augroup END
-" }}}
-
-" JSON {{{
-let g:vim_json_syntax_conceal = 0
 " }}}
 
 " colorscheme {{{
