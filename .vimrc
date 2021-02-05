@@ -120,6 +120,9 @@ Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
 Plug 'Shougo/neoinclude.vim'
 
+" Treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 call plug#end()
 " }}}
 
@@ -198,6 +201,41 @@ nnoremap <Leader>en <cmd>lua require'telescope.builtin'.find_files{ cwd = "~/.co
 nnoremap <Leader>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
 " nnoremap <Leader>p <cmd>lua require'telescope.builtin'.find_files{}<CR>
 " require'telescope.builtin'.buffers{)
+
+" }}}
+
+" Treesitter {{{
+
+lua <<EOF
+
+require'nvim-treesitter.configs'.setup {
+
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+
+  highlight = {
+    enable = true,             -- false will disable the whole extension
+    -- disable = { "c", "rust" }, -- list of language that will be disabled
+  },
+
+  incremental_selection = {
+    enable = false,
+    keymaps = {                       -- mappings for incremental selection (visual mappings)
+      init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
+      node_incremental = "grn",       -- increment to the upper named parent
+      scope_incremental = "grc",      -- increment to the upper scope (as defined in locals.scm)
+      node_decremental = "grm",       -- decrement to the previous node
+    },
+  },
+
+  indent = {
+    enable = false
+  },
+
+}
+EOF
+
+" TODO treesitter statusline integration
+" require'nvim-treesitter'.statusline(size)
 
 " }}}
 
