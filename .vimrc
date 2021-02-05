@@ -323,9 +323,9 @@ nnoremap <silent> <leader>a    <cmd>lua vim.lsp.buf.code_action()<CR>
 set updatetime=300
 augroup lsp_refs
   autocmd!
-  autocmd CursorHold  * lua vim.lsp.buf.document_highlight()
-  autocmd CursorHoldI * lua vim.lsp.buf.document_highlight()
-  autocmd CursorMoved * lua vim.lsp.buf.clear_references()
+  autocmd CursorHold  * silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorHoldI * silent! lua vim.lsp.buf.document_highlight()
+  autocmd CursorMoved * silent! lua vim.lsp.buf.clear_references()
 augroup END
 
 " }}}
