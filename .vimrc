@@ -691,28 +691,9 @@ endif
 set background=dark
 
 let g:nofrils_strbackgrounds=1
-
 let g:darkula_emphasis = 3
-let g:hot_colors_name = 'darkula'
-let g:cool_colors_name = 'nofrils-dark'
 
-try
-    if g:colors_name == "default"
-        execute 'colorscheme ' . g:hot_colors_name
-    endif
-catch E121
-    execute 'colorscheme ' . g:hot_colors_name
-endtry
-
-function! ToggleHotCold()
-  if g:colors_name == g:hot_colors_name
-      execute 'colorscheme ' . g:cool_colors_name
-  else
-      execute 'colorscheme ' . g:hot_colors_name
-  endif
-endfunction
-
-nnoremap yof :call ToggleHotCold()<CR>
+colorscheme darkula
 
 " }}}
 
