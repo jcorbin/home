@@ -716,28 +716,6 @@ nnoremap yof :call ToggleHotCold()<CR>
 
 " }}}
 
-" Toggle Statusline {{{
-
-function! ToggleStatus()
-  if &laststatus == 0
-    set showmode
-    set ruler
-    set showcmd
-    set laststatus=2
-    AirlineToggle
-  else
-    AirlineToggle
-    set laststatus=0
-    set noshowmode
-    set noruler
-    set noshowcmd
-  endif
-endfunction
-
-nnoremap yoS :call ToggleStatus()<CR>
-
-" }}}
-
 " Cursor {{{
 
 " blinking, shape changing, and color changing (requires colorscheme support)
