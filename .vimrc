@@ -405,6 +405,9 @@ set foldlevelstart=1
 " default to indent folding
 set foldmethod=indent
 
+" " default to treesitter folding
+" set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+
 " syntax folding for some filetypes {{{
 augroup syntax_folding
   autocmd!
