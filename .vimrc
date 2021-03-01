@@ -243,15 +243,19 @@ EOF
 
 " Setup servers {{{
 lua << EOF
-require'lspconfig'.bashls.setup{}
-require'lspconfig'.cssls.setup{}
-require'lspconfig'.gopls.setup{}
-require'lspconfig'.html.setup{}
-require'lspconfig'.jsonls.setup{}
-require'lspconfig'.pyls.setup{}
-require'lspconfig'.tsserver.setup{}
-require'lspconfig'.vimls.setup{}
-require'lspconfig'.yamlls.setup{}
+
+local lspconfig = require'lspconfig'
+
+lspconfig.bashls.setup{}
+lspconfig.cssls.setup{}
+lspconfig.gopls.setup{}
+lspconfig.html.setup{}
+lspconfig.jsonls.setup{}
+lspconfig.pyls.setup{}
+lspconfig.tsserver.setup{}
+lspconfig.vimls.setup{}
+lspconfig.yamlls.setup{}
+
 EOF
 
 " register omnifuncs that have no larger language plugin
