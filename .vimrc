@@ -397,8 +397,11 @@ augroup END
 
 " Folding {{{
 
-set foldmethod=marker " default to marker folding
-set foldlevelstart=1  " with one level open
+" open one fold level initially, rather than all closed or open
+set foldlevelstart=1
+
+" default to marker folding
+set foldmethod=marker
 
 " syntax folding for some filetypes {{{
 augroup syntax_folding
