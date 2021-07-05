@@ -259,7 +259,7 @@ local eslint = {
   formatStdin = true
 }
 
-lspconfig.bashls.setup{}
+-- lspconfig.bashls.setup{}
 lspconfig.cssls.setup{}
 lspconfig.efm.setup{
   init_options = {documentFormatting = true},
