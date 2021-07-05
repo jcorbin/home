@@ -297,8 +297,10 @@ EOF
 autocmd Filetype vim setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype sh setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype bash setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype python setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype javascript setlocal omnifunc=v:lua.vim.lsp.omnifunc
 autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype html setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 " }}}
 
