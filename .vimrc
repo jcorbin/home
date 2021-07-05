@@ -204,6 +204,8 @@ nnoremap <Leader>p <cmd>lua require'telescope.builtin'.git_files{}<CR>
 
 " }}}
 
+if has("nvim")
+
 " Treesitter {{{
 
 lua <<EOF
@@ -343,6 +345,8 @@ augroup END
 " nnoremap <silent> <leader>e :LspNextError<CR>
 
 " }}}
+
+endif
 
 " File Browsing {{{
 
