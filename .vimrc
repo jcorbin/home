@@ -931,7 +931,4 @@ augroup proto_comments
   autocmd FileType proto setlocal commentstring=//\ %s
 augroup END
 
-let g:htl_css_templates=1
-let g:javascript_plugin_jsdoc = 1
-
 " vim:set foldmethod=marker ts=2 sw=2 expandtab:
