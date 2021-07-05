@@ -727,13 +727,6 @@ augroup END
 
 " }}}
 
-" abbreviations {{{
-augroup filetype_abbrs
-  autocmd!
-  autocmd FileType javascript :iabbrev <buffer> vst var self = this;
-augroup END
-" }}}
-
 " colorscheme {{{
 
 if has("termguicolors")
