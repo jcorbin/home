@@ -400,8 +400,8 @@ augroup END
 " open one fold level initially, rather than all closed or open
 set foldlevelstart=1
 
-" default to marker folding
-set foldmethod=marker
+" default to indent folding
+set foldmethod=indent
 
 " syntax folding for some filetypes {{{
 augroup syntax_folding
