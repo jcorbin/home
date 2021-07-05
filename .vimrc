@@ -284,7 +284,13 @@ lspconfig.efm.setup{
   },
 }
 lspconfig.gopls.setup{}
-lspconfig.html.setup{}
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+lspconfig.html.setup {
+  capabilities = capabilities,
+}
+
 lspconfig.jsonls.setup{}
 lspconfig.pyright.setup{}
 lspconfig.tsserver.setup{}
