@@ -10,13 +10,13 @@ without()
 {
     arg="$1"
     shift
-    out=()
+    out=
     for part in "$@"; do
         if [ -n "$part" ] && [ "$part" != "$arg" ]; then
-            out+=($part)
+            out="${out:+${out}${IFS}}${part}"
         fi
     done
-    echo "${out[*]}"
+    echo "$out"
 }
 
 # prepend adds a component to the head of its argument array, echoing the new
@@ -35,13 +35,13 @@ prepend()
 {
     arg="$1"
     shift
-    out=($arg)
+    out="$arg"
     for part in "$@"; do
         if [ -n "$part" ] && [ "$part" != "$arg" ]; then
-            out+=($part)
+            out="${out:+${out}${IFS}}${part}"
         fi
     done
-    echo "${out[*]}"
+    echo "$out"
 }
 
 # append adds a component to the tail of its argument array, echoing the new
@@ -60,12 +60,12 @@ append()
 {
     arg="$1"
     shift
-    out=()
+    out=""
     for part in "$@"; do
         if [ -n "$part" ] && [ "$part" != "$arg" ]; then
-            out+=($part)
+            out="${out:+${out}${IFS}}${part}"
         fi
     done
-    out+=($arg)
-    echo "${out[*]}"
+    out="${out:+${out}${IFS}}${arg}"
+    echo "$out"
 }
