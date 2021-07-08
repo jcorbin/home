@@ -15,13 +15,15 @@ add_home_paths()
     # shellcheck disable=2086
     [ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
 
-    for python_lib in "$HOME"/Library/Python/3*; do
-        if [ -d "$python_lib/bin" ]; then
-            # shellcheck disable=2086
-            PATH=$(prepend "$python_lib/bin" $PATH)
-            break
-        fi
-    done
+    if [ -d "$HOME"/Library ]; then
+        for python_lib in "$HOME"/Library/Python/3*; do
+            if [ -d "$python_lib/bin" ]; then
+                # shellcheck disable=2086
+                PATH=$(prepend "$python_lib/bin" $PATH)
+                break
+            fi
+        done
+    fi
 
     export PATH
 }
