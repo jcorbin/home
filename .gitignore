@@ -8,6 +8,8 @@
 # XDG home, allow further whitelisting
 !/.config
 /.config/*
+
+# Python lint config apparently? TODO why do I care?
 !/.config/flake8
 
 # File types that need to be ignored anywhere:
