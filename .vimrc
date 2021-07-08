@@ -62,11 +62,6 @@ Plug 'chriskempson/base16-vim' " framework of many 16-color themes
 Plug 'cocopon/iceberg.vim'     " blue theme
 Plug 'w0ng/vim-hybrid'         " lower contrast, tomorrow-esque scheme (feels like a muted molokai)
 
-" Telescope
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-lua/telescope.nvim'
-
 " Lobster!
 Plug 'jcorbin/vim-lobster'
 
@@ -113,6 +108,13 @@ Plug 'tpope/vim-unimpaired'
 " allows Ctrl-A/X to inc/dec dates (and more!)
 Plug 'tpope/vim-speeddating'
 
+if has("nvim")
+
+" Telescope
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/telescope.nvim'
+
 " LSP
 Plug 'neovim/nvim-lspconfig'
 
@@ -122,6 +124,8 @@ Plug 'Shougo/neoinclude.vim'
 
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+endif
 
 call plug#end()
 " }}}
