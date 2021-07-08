@@ -55,6 +55,9 @@
 !/.config/nvim/init.vim
 !/.config/nvim/snippets/
 
+# kitty config
+!/.config/kitty
+
 # Vim Config
 !.vimrc
 !/.vim
