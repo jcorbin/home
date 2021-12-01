@@ -406,36 +406,36 @@ augroup END
 " open one fold level initially, rather than all closed or open
 set foldlevelstart=1
 
-" default to indent folding
-set foldmethod=indent
+" " default to indent folding
+" set foldmethod=indent
 
-" " default to treesitter folding
-" set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
+" default to treesitter folding
+set foldmethod=expr foldexpr=nvim_treesitter#foldexpr()
 
-" syntax folding for some filetypes {{{
-augroup syntax_folding
-  autocmd!
+" " syntax folding for some filetypes {{{
+" augroup syntax_folding
+"   autocmd!
 
-  autocmd FileType go setlocal foldmethod=syntax
-  autocmd FileType json setlocal foldmethod=syntax
-  autocmd FileType javascript setlocal foldmethod=syntax
-  autocmd FileType typescript setlocal foldmethod=syntax
-  autocmd FileType css setlocal foldmethod=syntax
+"   autocmd FileType go setlocal foldmethod=syntax
+"   autocmd FileType json setlocal foldmethod=syntax
+"   autocmd FileType javascript setlocal foldmethod=syntax
+"   autocmd FileType typescript setlocal foldmethod=syntax
+"   autocmd FileType css setlocal foldmethod=syntax
 
-  " this kludge is the best we can do for markdown (due to inadequate syntax definition)
-  autocmd FileType markdown setlocal foldmethod=expr foldexpr=MarkdownLevel()
-augroup END
+"   " this kludge is the best we can do for markdown (due to inadequate syntax definition)
+"   autocmd FileType markdown setlocal foldmethod=expr foldexpr=MarkdownLevel()
+" augroup END
 
-function! MarkdownLevel()
-    let h = matchstr(getline(v:lnum), '^#\+')
-    if empty(h)
-        return "="
-    else
-        return ">" . len(h)
-    endif
-endfunction
+" function! MarkdownLevel()
+"     let h = matchstr(getline(v:lnum), '^#\+')
+"     if empty(h)
+"         return "="
+"     else
+"         return ">" . len(h)
+"     endif
+" endfunction
 
-" }}}
+" " }}}
 
 " }}}
 
