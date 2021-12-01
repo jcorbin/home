@@ -650,9 +650,9 @@ nnoremap du :diffupdate<cr>
 nnoremap <leader>G :G<space>
 nnoremap <leader>ga :G add %<cr>
 nnoremap <leader>gA :G add --update<cr>
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gC :Gcommit --amend<cr>
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gc :Git commit<cr>
+nnoremap <leader>gC :Git commit --amend<cr>
 nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gg :Ghud<cr>
 nnoremap <leader>go yaw:Gsplit <C-r>"<cr>
