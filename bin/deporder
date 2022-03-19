@@ -24,8 +24,8 @@ class Graph(object):
         return set(self.H).difference(self.G)
 
     def itertopo(self):
-        G = dict((a, set(bs)) for a, bs in self.G.iteritems())
-        H = dict((a, set(bs)) for a, bs in self.H.iteritems())
+        G = dict((a, set(bs)) for a, bs in self.G.items())
+        H = dict((a, set(bs)) for a, bs in self.H.items())
         S = set(G).difference(H)
         while S:
             n = min(S)
@@ -35,7 +35,7 @@ class Graph(object):
                 H[m].remove(n)
                 if not H[m]:
                     S.add(m)
-        cycles = dict((node, out) for node, out in G.iteritems() if out)
+        cycles = dict((node, out) for node, out in G.items() if out)
         if cycles:
             raise CycleError(cycles)
 
@@ -103,7 +103,7 @@ def main(argv=None):
     if args.full:
         parts = [os.path.join(G.path, part) for part in parts]
     for part in parts:
-        print part
+        print(part)
 
 if __name__ == '__main__':
     main()
