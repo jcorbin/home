@@ -37,6 +37,9 @@ paq { -- {{{
 
 	"rafcamlet/nvim-luapad";
 
+	"fatih/vim-go";
+	"tpope/vim-fugitive";
+
 } -- }}}
 
 local keymap = vim.keymap
