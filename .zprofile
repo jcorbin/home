@@ -10,3 +10,7 @@ if [ -z ${SSH_AUTH_SOCK} ]; then
     systemctl --user import-environment SSH_AUTH_SOCK
   fi
 fi
+
+if [ -z ${DISPLAY} ] && [ -z ${WAYLAND_DISPLAY} ] && [ ${XDG_VTNR} -eq 1 ]; then
+  exec river >! ${XDG_RUNTIME_DIR}/river.log 2>&1
+fi
