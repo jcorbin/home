@@ -19,7 +19,9 @@ paq { -- {{{
 	"nvim-lua/plenary.nvim";
 	"nvim-telescope/telescope.nvim";
 
-	"nvim-treesitter/nvim-treesitter";
+  { "nvim-treesitter/nvim-treesitter",
+    run=function() vim.cmd('TSUpdate') end };
+
 	"neovim/nvim-lspconfig";
 
   "hrsh7th/cmp-nvim-lsp";
