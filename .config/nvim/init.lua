@@ -102,13 +102,20 @@ keymap.set('n', '<leader>ts', MiniTrailspace.trim)
 require('nvim-treesitter.configs').setup { -- {{{
 	ensure_installed = 'all',
 	highlight = {
-		enable = true,              -- false will disable the whole extension
-    incremental_selection = { enable = true },
-    textobjects = { enable = true },
-    indent = {
-      enable = true
+		enable = true,
+		additional_vim_regex_highlighting = false,
+	},
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
     },
 	},
+	textobjects = { enable = true },
+	indent = { enable = true },
 } -- }}}
 
 vim.diagnostic.config { -- {{{
