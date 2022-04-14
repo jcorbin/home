@@ -358,6 +358,8 @@ opt.smartcase = true
 
 opt.virtualedit = 'all'
 
+opt.laststatus = 3
+
 -- TODO listchars
 -- opt.listchars = {
 -- eol = '↲',
