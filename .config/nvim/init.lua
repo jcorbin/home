@@ -13,8 +13,6 @@ local paq = require('paq')
 paq { -- {{{
 	"savq/paq-nvim";
 
-	'tjdevries/astronauta.nvim'; -- until https://github.com/neovim/neovim/pull/13823 resolves
-
 	"rcarriga/nvim-notify";
 	"echasnovski/mini.nvim";
 
@@ -41,10 +39,7 @@ paq { -- {{{
 
 } -- }}}
 
--- use astronauta for vim.keymap until https://github.com/neovim/neovim/pull/13823 resolves
-cmd [[runtime plugin/astronauta.vim]]
-
-local key = vim.keymap
+local keymap = vim.keymap
 
 -- prettier toast-style notifications {{{
 require('notify').setup {
@@ -61,11 +56,11 @@ local notify = vim.notify;
 g.mapleader = ' '
 
 -- init.lua iteration {{{
-key.nnoremap {'<leader>ev', ':vsplit $MYVIMRC<cr>'}
-key.nnoremap {'<leader>sv', function()
+keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
+keymap.set('n', '<leader>sv', function()
 	dofile(fn.stdpath('config') .. '/init.lua')
 	notify('Reloaded init.lua')
-end }
+end)
 -- }}}
 
 -- startify/dashboard "mini" alternative {{{
@@ -74,7 +69,7 @@ require('mini.sessions').setup {
 	autoread = true,
 }
 
-key.nnoremap {'<leader>:', MiniStarter.open}
+keymap.set('n', '<leader>:', MiniStarter.open)
 -- TODO session management mappings
 
 -- }}}
@@ -93,12 +88,12 @@ require('mini.surround').setup {}
 require('mini.fuzzy').setup {}
 
 -- line exchange mappings ; TODO mini.exchange is a planned module {{{
-key.nnoremap {'[e', ':move--<cr>'} -- TODO repeatable
-key.nnoremap {']e', ':move+<cr>'} -- TODO repeatable
+keymap.set('n', '[e', ':move--<cr>') -- TODO repeatable
+keymap.set('n', ']e', ':move+<cr>') -- TODO repeatable
 -- }}}
 
 require('mini.trailspace').setup {} -- {{{
-key.nnoremap {'<leader>ts', MiniTrailspace.trim}
+keymap.set('n', '<leader>ts', MiniTrailspace.trim)
 -- }}}
 
 require('nvim-treesitter.configs').setup { -- {{{
@@ -122,7 +117,7 @@ vim.diagnostic.config { -- {{{
 	},
 }
 
-key.nnoremap {'<leader>dg', vim.diagnostic.open_float} -- }}}
+keymap.set('n', '<leader>dg', vim.diagnostic.open_float) -- }}}
 
 -- LSP capabilities to pass around
 -- ... currently just to enable LSP snippet completion
@@ -198,13 +193,9 @@ cmp.setup.cmdline(':', {
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Let tab key advance completion items
-key.inoremap {
-	'<Tab>',
-	function()
-		return fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
-	end,
-	expr = true
-}
+keymap.set('i', '<Tab>', function()
+	return fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
+end, { expr = true })
 
 -- }}}
 
@@ -214,13 +205,13 @@ require('telescope').setup { -- {{{
 	},
 }
 
-key.nnoremap {'<leader>tt', ':Telescope<cr>'}
+keymap.set('n', '<leader>tt', ':Telescope<cr>')
 
 local telescopes = require('telescope.builtin')
-key.nnoremap {'<leader>ff', telescopes.find_files}
-key.nnoremap {'<leader>gr', telescopes.live_grep}
-key.nnoremap {'<leader>bs', telescopes.buffers}
-key.nnoremap {'<leader>??', telescopes.help_tags}
+keymap.set('n', '<leader>ff', telescopes.find_files)
+keymap.set('n', '<leader>gr', telescopes.live_grep)
+keymap.set('n', '<leader>bs', telescopes.buffers)
+keymap.set('n', '<leader>??', telescopes.help_tags)
 
 -- }}}
 
@@ -303,7 +294,7 @@ local function recolor(options)
 	end
 end
 
-key.nnoremap {'<leader>hi', function()
+keymap.set('n', '<leader>hi', function()
 	vim.ui.input({
 		prompt = 'Accent Color Chroma: ',
 		default = tostring(minihi),
@@ -316,9 +307,9 @@ key.nnoremap {'<leader>hi', function()
 			notify('Set accent color chroma=' .. tostring(minihi))
 		end
 	end)
-end}
+end)
 
-key.nnoremap {'<leader>bg', function()
+keymap.set('n', '<leader>bg', function()
 	vim.ui.input({
 		prompt = 'Background Color: ',
 		default = minibg,
@@ -328,9 +319,9 @@ key.nnoremap {'<leader>bg', function()
 			notify('Set background color=' .. minibg)
 		end
 	end)
-end}
+end)
 
-key.nnoremap {'<leader>fg', function()
+keymap.set('n', '<leader>fg', function()
 	vim.ui.input({
 		prompt = 'Foreground Color: ',
 		default = minifg,
@@ -340,16 +331,16 @@ key.nnoremap {'<leader>fg', function()
 			notify('Set foreground color=' .. minifg)
 		end
 	end)
-end}
+end)
 
-key.nnoremap {'<leader>li', function()
+keymap.set('n', '<leader>li', function()
 	if opt.background:get() == 'light' then
 		opt.background = 'dark'
 	else
 		opt.background = 'light'
 	end
 	recolor()
-end}
+end)
 
 recolor()
 
@@ -399,11 +390,12 @@ local function option_toggler(name)
 	end
 end
 
-key.nnoremap {'<leader>ci', option_toggler 'ignorecase'}
-key.nnoremap {'<leader>ln', option_toggler 'number'}
-key.nnoremap {'<leader>rc', option_toggler 'relativenumber'}
-key.nnoremap {'<leader>cl', option_toggler 'cursorline'}
-key.nnoremap {'<leader>cc', option_toggler 'cursorcolumn'}
+keymap.set('n', '<leader>ci', option_toggler 'ignorecase')
+keymap.set('n', '<leader>ln', option_toggler 'number')
+keymap.set('n', '<leader>rc', option_toggler 'relativenumber')
+keymap.set('n', '<leader>cl', option_toggler 'cursorline')
+keymap.set('n', '<leader>cc', option_toggler 'cursorcolumn')
+keymap.set('n', '<leader>lw', option_toggler 'wrap')
 -- TODO other toggles ala unimpaired
 
 -- }}}
