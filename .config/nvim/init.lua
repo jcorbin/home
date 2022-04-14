@@ -21,6 +21,13 @@ paq { -- {{{
 
   { "nvim-treesitter/nvim-treesitter",
     run = function() vim.cmd('TSUpdate') end };
+  "nvim-treesitter/nvim-treesitter-textobjects";
+  "nvim-treesitter/nvim-treesitter-refactor";
+  "romgrk/nvim-treesitter-context";
+  -- maybe "theHamsta/nvim-treesitter-pairs";
+  "lewis6991/spellsitter.nvim";
+
+  "mfussenegger/nvim-ts-hint-textobject";
 
   "neovim/nvim-lspconfig";
 
@@ -183,9 +190,145 @@ require('nvim-treesitter.configs').setup { -- {{{
       node_decremental = "grm",
     },
   },
-  textobjects = { enable = true },
   indent = { enable = true },
-} -- }}}
+
+  textobjects = {
+
+    select = {
+      enable = true,
+
+      -- Automatically jump forward to textobj, similar to targets.vim
+      lookahead = true,
+
+      keymaps = {
+        -- You can use the capture groups defined in textobjects.scm
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+      },
+    },
+
+    lsp_interop = {
+      enable = true,
+      border = 'none',
+      peek_definition_code = {
+        ["<leader>df"] = "@function.outer",
+        ["<leader>dF"] = "@class.outer",
+      },
+    },
+
+    move = {
+      enable = true,
+      set_jumps = true, -- whether to set jumps in the jumplist
+      goto_next_start = {
+        ["]m"] = "@function.outer",
+        ["]]"] = "@class.outer",
+      },
+      goto_next_end = {
+        ["]M"] = "@function.outer",
+        ["]["] = "@class.outer",
+      },
+      goto_previous_start = {
+        ["[m"] = "@function.outer",
+        ["[["] = "@class.outer",
+      },
+      goto_previous_end = {
+        ["[M"] = "@function.outer",
+        ["[]"] = "@class.outer",
+      },
+    },
+
+    swap = {
+      enable = true,
+      swap_next = {
+        ["<leader>a"] = "@parameter.inner",
+      },
+      swap_previous = {
+        ["<leader>A"] = "@parameter.inner",
+      },
+    },
+
+  },
+
+  refactor = {
+
+    highlight_definitions = {
+      enable = true,
+      -- Set to false if you have an `updatetime` of ~100.
+      clear_on_cursor_move = true,
+    },
+
+    highlight_current_scope = {
+      enable = false,
+    },
+
+    smart_rename = {
+      enable = true,
+      keymaps = {
+        smart_rename = "grr",
+      },
+    },
+
+    navigation = {
+      enable = true,
+      keymaps = {
+        goto_definition = "gnd",
+        list_definitions = "gnD",
+        list_definitions_toc = "gO",
+        goto_next_usage = "<a-*>",
+        goto_previous_usage = "<a-#>",
+      },
+    },
+
+  },
+
+}
+
+opt.foldmethod = 'expr'
+opt.foldexpr = 'nvim_treesitter#foldexpr()'
+
+require 'treesitter-context'.setup {
+  enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+  throttle = true, -- Throttles plugin updates (may improve performance)
+  max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+  patterns = { -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+    -- For all filetypes
+    -- Note that setting an entry here replaces all other patterns for this entry.
+    -- By setting the 'default' entry below, you can control which nodes you want to
+    -- appear in the context window.
+    default = {
+      'class',
+      'function',
+      'method',
+      'for',
+      'while',
+      'if',
+      'switch',
+      'case',
+    },
+    -- Example for a specific filetype.
+    -- If a pattern is missing, *open a PR* so everyone can benefit.
+    --   rust = {
+    --       'impl_item',
+    --   },
+  },
+  exact_patterns = {
+    -- Example for a specific filetype with Lua patterns
+    -- Treat patterns.rust as a Lua pattern (i.e "^impl_item$" will
+    -- exactly match "impl_item" only)
+    -- rust = true,
+  }
+}
+
+require('spellsitter').setup {
+  -- Whether enabled, can be a list of filetypes, e.g. {'python', 'lua'}
+  enable = true,
+}
+
+keymap.set({ 'o', 'v' }, 'm', require('tsht').nodes, { silent = true })
+
+-- }}}
 
 vim.diagnostic.config { -- {{{
   signs = true,
