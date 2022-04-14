@@ -227,6 +227,33 @@ keymap.set('n', '<leader>??', telescopes.help_tags)
 
 -- }}}
 
+local custom_lsp_attach = function(client)
+	-- TODO can we use keymap.set*?
+	-- See `:help nvim_buf_set_keymap()` for more information
+	vim.api.nvim_buf_set_keymap(0, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
+	vim.api.nvim_buf_set_keymap(0, 'n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true})
+	-- ... and other keymappings for LSP
+
+	vim.api.nvim_command[[
+	autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
+	]]
+
+	-- autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+	-- autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+	-- autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+
+	-- Use LSP as the handler for omnifunc.
+	--    See `:help omnifunc` and `:help ins-completion` for more information.
+	vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+	-- -- Use LSP as the handler for formatexpr.
+	-- --    See `:help formatexpr` for more information.
+	-- vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+
+	-- For plugins with an `on_attach` callback, call them here. For example:
+	-- require('completion').on_attach()
+end
+
 -- LUA Langauge Server {{{
 local sumneko_binary = vim.env.HOME .. '/.local/lua-language-server/bin/macOS/lua-language-server'
 local sumneko_path = vim.split(package.path, ';')
@@ -259,6 +286,10 @@ require'lspconfig'.sumneko_lua.setup {
     },
   },
 } -- }}}
+
+require'lspconfig'.gopls.setup{
+	on_attach = custom_lsp_attach,
+}
 
 -- TODO typescript lang server
 
