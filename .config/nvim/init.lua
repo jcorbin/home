@@ -360,6 +360,8 @@ opt.virtualedit = 'all'
 
 opt.laststatus = 3
 
+opt.guifont = 'JetBrains Mono ExtraLight:h12'
+
 -- TODO listchars
 -- opt.listchars = {
 -- eol = '↲',
