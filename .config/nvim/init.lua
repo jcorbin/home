@@ -431,8 +431,8 @@ opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- option toggles {{{
 
-local function option_toggler(name)
-  return function()
+local function map_opt_toggle(keys, name)
+  keymap.set('n', keys, function()
     if opt[name]:get() then
       opt[name] = false
       vim.notify('set no' .. name)
@@ -440,16 +440,15 @@ local function option_toggler(name)
       opt[name] = true
       vim.notify('set ' .. name)
     end
-  end
+  end)
 end
 
-keymap.set('n', '<leader>ci', option_toggler 'ignorecase')
-keymap.set('n', '<leader>ln', option_toggler 'number')
-keymap.set('n', '<leader>rc', option_toggler 'relativenumber')
-keymap.set('n', '<leader>cl', option_toggler 'cursorline')
-keymap.set('n', '<leader>cc', option_toggler 'cursorcolumn')
-keymap.set('n', '<leader>lw', option_toggler 'wrap')
--- TODO other toggles ala unimpaired
+map_opt_toggle('<leader>ci', 'ignorecase')
+map_opt_toggle('<leader>ln', 'number')
+map_opt_toggle('<leader>rc', 'relativenumber')
+map_opt_toggle('<leader>cl', 'cursorline')
+map_opt_toggle('<leader>cc', 'cursorcolumn')
+map_opt_toggle('<leader>lw', 'wrap')
 
 -- }}}
 
