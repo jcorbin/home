@@ -210,7 +210,10 @@ end, { expr = true })
 
 -- }}}
 
-require('telescope').setup { -- {{{
+local telescope = require 'telescope' -- {{{
+local telescopes = require 'telescope.builtin'
+
+telescope.setup {
   defaults = {
     generic_sorter = require('mini.fuzzy').get_telescope_sorter
   },
@@ -218,7 +221,6 @@ require('telescope').setup { -- {{{
 
 keymap.set('n', '<leader>tt', ':Telescope<cr>')
 
-local telescopes = require('telescope.builtin')
 keymap.set('n', '<leader>ff', telescopes.find_files)
 keymap.set('n', '<leader>gr', telescopes.live_grep)
 keymap.set('n', '<leader>bs', telescopes.buffers)
