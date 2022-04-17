@@ -502,7 +502,32 @@ end
 
 -- Langauge Servers {{{
 
+lspconfig.bashls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
+lspconfig.cssls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
+lspconfig.dockerls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
 lspconfig.gopls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
+lspconfig.html.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
+lspconfig.jsonls.setup {
   on_attach = custom_lsp_attach,
   capabilities = capabilities,
 }
@@ -539,9 +564,22 @@ lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
 }
 
--- }}}
+lspconfig.tsserver.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
 
--- TODO typescript lang server
+lspconfig.yamlls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
+lspconfig.vimls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
+-- }}}
 
 -- TODO folke/trouble.nvim
 
