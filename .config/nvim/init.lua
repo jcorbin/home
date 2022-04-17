@@ -45,6 +45,8 @@ paq { -- {{{
 } -- }}}
 
 local keymap = vim.keymap
+g.mapleader = ' ' -- set mapleader early so that it applies to all mappings defined
+
 
 -- prettier toast-style notifications {{{
 require('notify').setup {
@@ -56,9 +58,6 @@ vim.notify = require('notify');
 -- }}}
 
 local notify = vim.notify;
-
--- set mapleader early so that it applies to all mappings defined
-g.mapleader = ' '
 
 -- init.lua iteration {{{
 keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
