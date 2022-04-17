@@ -507,7 +507,9 @@ local telescopes = require 'telescope.builtin'
 
 telescope.setup {
   defaults = {
-    generic_sorter = require('mini.fuzzy').get_telescope_sorter
+    generic_sorter = require('mini.fuzzy').get_telescope_sorter,
+    i = { ["<c-t>"] = trouble.open_with_trouble },
+    n = { ["<c-t>"] = trouble.open_with_trouble },
   },
 }
 
