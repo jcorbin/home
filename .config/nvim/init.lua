@@ -33,6 +33,8 @@ paq { -- {{{
   'hrsh7th/cmp-vsnip';
   'hrsh7th/vim-vsnip';
 
+  'jcorbin/neovim-termhide';
+
   -- " For luasnip users.
   -- " 'L3MON4D3/LuaSnip';
   -- " 'saadparwaiz1/cmp_luasnip';
@@ -47,6 +49,38 @@ paq { -- {{{
 local keymap = vim.keymap
 g.mapleader = ' ' -- set mapleader early so that it applies to all mappings defined
 
+local function cmd_fn(cmd_str)
+  return function() vim.cmd(cmd_str) end
+end
+
+-- termhide {{{
+
+g.termhide_default_shell = 'zsh'
+g.termhide_hud_size = 15
+
+-- Create or show existing terminal buffer
+keymap.set('n', '<leader>$', cmd_fn 'Term')
+keymap.set('n', '<leader>#', cmd_fn 'TermVSplit')
+
+-- Easy HUD toggle
+keymap.set('n', '<leader>`', cmd_fn 'TermHUD')
+
+-- Quicker 'Go Back' binding
+-- tnoremap <C-\><C-o> <C-\><C-n><C-o>
+
+-- Quicker window operations
+keymap.set('t', '<C-\\>`', cmd_fn 'close')
+
+keymap.set('t', '<C-\\><C-w>', '<C-\\><C-n><C-w><C-w>')
+keymap.set('t', '<C-\\><C-h>', '<C-\\><C-n><C-w>h')
+keymap.set('t', '<C-\\><C-j>', '<C-\\><C-n><C-w>j')
+keymap.set('t', '<C-\\><C-k>', '<C-\\><C-n><C-w>k')
+keymap.set('t', '<C-\\><C-l>', '<C-\\><C-n><C-w>l')
+
+-- Easy 'paste inside terminal' map
+keymap.set('t', '<C-\\>p', '<C-\\><C-n>pi')
+
+-- }}}
 
 -- prettier toast-style notifications {{{
 require('notify').setup {
