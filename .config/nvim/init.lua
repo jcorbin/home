@@ -401,7 +401,7 @@ opt.smartcase = true
 
 opt.virtualedit = 'all'
 
-opt.laststatus = 3
+opt.laststatus = 2
 
 opt.guifont = 'JetBrains Mono ExtraLight:h12'
 
