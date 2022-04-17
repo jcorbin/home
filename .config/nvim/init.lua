@@ -30,6 +30,7 @@ paq { -- {{{
   "mfussenegger/nvim-ts-hint-textobject";
 
   "neovim/nvim-lspconfig";
+  'folke/lsp-colors.nvim';
 
   "hrsh7th/cmp-nvim-lsp";
   "hrsh7th/cmp-buffer";
@@ -348,6 +349,14 @@ local lspconfig = require 'lspconfig'
 -- ... currently just to enable LSP snippet completion
 -- ... but left here since it may prove to be more general
 local capabilities = lsp.protocol.make_client_capabilities()
+
+-- adds missing highlights if the current colorscheme does not support LSP
+require 'lsp-colors'.setup {
+  Error = "#db4b4b",
+  Warning = "#e0af68",
+  Information = "#0db9d7",
+  Hint = "#10B981"
+}
 
 -- Auto completion framework {{{
 local cmp = require('cmp')
