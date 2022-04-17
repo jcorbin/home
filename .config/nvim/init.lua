@@ -130,10 +130,12 @@ vim.diagnostic.config { -- {{{
 
 keymap.set('n', '<leader>dg', vim.diagnostic.open_float) -- }}}
 
+local lsp = vim.lsp
+
 -- LSP capabilities to pass around
 -- ... currently just to enable LSP snippet completion
 -- ... but left here since it may prove to be more general
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = lsp.protocol.make_client_capabilities()
 
 -- Auto completion framework {{{
 local cmp = require('cmp')
