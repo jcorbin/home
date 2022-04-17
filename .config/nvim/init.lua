@@ -44,6 +44,11 @@ paq { -- {{{
   "fatih/vim-go";
   "tpope/vim-fugitive";
 
+  -- file browsing
+  'justinmk/vim-dirvish';
+  'kristijanhusak/vim-dirvish-git';
+  -- TODO maybe 'tpope/vim-eunuch' or a lua replacement
+
 } -- }}}
 
 local keymap = vim.keymap
@@ -399,8 +404,6 @@ lspconfig.sumneko_lua.setup {
 
 -- TODO glepnir/lspsaga.nvim
 -- TODO jose-elias-alvarez/null-ls.nvim
-
--- TODO kyazdani42/nvim-tree.lua vs lambdalisue/fern.vim
 
 -- TODO lewis6991/gitsigns.nvim
 -- TODO TimUntersberger/neogit
