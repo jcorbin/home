@@ -5,24 +5,24 @@ local opt = vim.opt
 
 local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim' -- {{{
 if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', install_path})
+  fn.system({ 'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', install_path })
 end
 local paq = require('paq')
 -- }}}
 
 paq { -- {{{
-	"savq/paq-nvim";
+  "savq/paq-nvim";
 
-	"rcarriga/nvim-notify";
-	"echasnovski/mini.nvim";
+  "rcarriga/nvim-notify";
+  "echasnovski/mini.nvim";
 
-	"nvim-lua/plenary.nvim";
-	"nvim-telescope/telescope.nvim";
+  "nvim-lua/plenary.nvim";
+  "nvim-telescope/telescope.nvim";
 
   { "nvim-treesitter/nvim-treesitter",
-    run=function() vim.cmd('TSUpdate') end };
+    run = function() vim.cmd('TSUpdate') end };
 
-	"neovim/nvim-lspconfig";
+  "neovim/nvim-lspconfig";
 
   "hrsh7th/cmp-nvim-lsp";
   "hrsh7th/cmp-buffer";
@@ -37,10 +37,10 @@ paq { -- {{{
   -- " 'L3MON4D3/LuaSnip';
   -- " 'saadparwaiz1/cmp_luasnip';
 
-	"rafcamlet/nvim-luapad";
+  "rafcamlet/nvim-luapad";
 
-	"fatih/vim-go";
-	"tpope/vim-fugitive";
+  "fatih/vim-go";
+  "tpope/vim-fugitive";
 
 } -- }}}
 
@@ -48,9 +48,9 @@ local keymap = vim.keymap
 
 -- prettier toast-style notifications {{{
 require('notify').setup {
-	stages = 'slide',
-	render = 'minimal',
-	timeout = 3000,
+  stages = 'slide',
+  render = 'minimal',
+  timeout = 3000,
 }
 vim.notify = require('notify');
 -- }}}
@@ -63,15 +63,15 @@ g.mapleader = ' '
 -- init.lua iteration {{{
 keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
 keymap.set('n', '<leader>sv', function()
-	dofile(fn.stdpath('config') .. '/init.lua')
-	notify('Reloaded init.lua')
+  dofile(fn.stdpath('config') .. '/init.lua')
+  notify('Reloaded init.lua')
 end)
 -- }}}
 
 -- startify/dashboard "mini" alternative {{{
 require('mini.starter').setup {}
 require('mini.sessions').setup {
-	autoread = true,
+  autoread = true,
 }
 
 keymap.set('n', '<leader>:', MiniStarter.open)
@@ -82,7 +82,7 @@ keymap.set('n', '<leader>:', MiniStarter.open)
 -- "mini" alternative to statusline and tabline plugins {{{
 require('mini.statusline').setup {}
 require('mini.tabline').setup {
-	show_icons = false,
+  show_icons = false,
 }
 -- }}}
 
@@ -102,31 +102,31 @@ keymap.set('n', '<leader>ts', MiniTrailspace.trim)
 -- }}}
 
 require('nvim-treesitter.configs').setup { -- {{{
-	ensure_installed = 'all',
-	highlight = {
-		enable = true,
-		additional_vim_regex_highlighting = false,
-	},
-	incremental_selection = {
-		enable = true,
-		keymaps = {
+  ensure_installed = 'all',
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
       init_selection = "gnn",
       node_incremental = "grn",
       scope_incremental = "grc",
       node_decremental = "grm",
     },
-	},
-	textobjects = { enable = true },
-	indent = { enable = true },
+  },
+  textobjects = { enable = true },
+  indent = { enable = true },
 } -- }}}
 
 vim.diagnostic.config { -- {{{
-	signs = true,
-	virtual_text = true,
-	underline = true,
-	float = {
-		source = 'if_many',
-	},
+  signs = true,
+  virtual_text = true,
+  underline = true,
+  float = {
+    source = 'if_many',
+  },
 }
 
 keymap.set('n', '<leader>dg', vim.diagnostic.open_float) -- }}}
@@ -141,80 +141,80 @@ local cmp = require('cmp')
 
 cmp.setup {
 
-	sources = cmp.config.sources({
-		{ name = 'nvim_lsp' },
-		{ name = 'vsnip' }, -- For vsnip users.
-		-- { name = 'luasnip' }, -- For luasnip users.
-		-- { name = 'snippy' }, -- For snippy users.
-		-- { name = 'ultisnips' }, -- For ultisnips users.
-	}, {
-		{ name = 'buffer' },
-	}),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' }, -- For vsnip users.
+    -- { name = 'luasnip' }, -- For luasnip users.
+    -- { name = 'snippy' }, -- For snippy users.
+    -- { name = 'ultisnips' }, -- For ultisnips users.
+  }, {
+    { name = 'buffer' },
+  }),
 
-	mapping = {
-		['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-		['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-		['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-		['<C-e>'] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
-		['<CR>'] = cmp.mapping.confirm({ select = true }),
+  mapping = {
+    ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
 
-		-- ['<C-s>'] = cmp.mapping.complete({ sources = { { name = 'vsnip' } } })
-		-- inoremap <C-S> <Cmd>lua require('cmp').complete({ sources = { { name = 'vsnip' } } })<CR>
+    -- ['<C-s>'] = cmp.mapping.complete({ sources = { { name = 'vsnip' } } })
+    -- inoremap <C-S> <Cmd>lua require('cmp').complete({ sources = { { name = 'vsnip' } } })<CR>
 
-	},
+  },
 
-	snippet = {
-		expand = function(args)
-			vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-			-- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-			-- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
-			-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-		end,
-	},
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+    end,
+  },
 
-	-- completion.autocomplete
-	experimental = {
-		ghost_text = true,
-	},
+  -- completion.autocomplete
+  experimental = {
+    ghost_text = true,
+  },
 
-	-- TODO can se use mini.fuzzy?
-	-- sorting.comparators~
-	--   `(fun(entry1: cmp.Entry, entry2: cmp.Entry): boolean | nil)`
+  -- TODO can se use mini.fuzzy?
+  -- sorting.comparators~
+  --   `(fun(entry1: cmp.Entry, entry2: cmp.Entry): boolean | nil)`
 
 }
 
 -- `/` cmdline setup.
 cmp.setup.cmdline('/', {
-	sources = {
-		{ name = 'buffer' }
-	}
+  sources = {
+    { name = 'buffer' }
+  }
 })
 
 -- `:` cmdline setup.
 cmp.setup.cmdline(':', {
-	sources = cmp.config.sources({
-		{ name = 'path' }
-	}, {
-		{ name = 'cmdline' }
-	})
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
 })
 
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Let tab key advance completion items
 keymap.set('i', '<Tab>', function()
-	return fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
+  return fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
 end, { expr = true })
 
 -- }}}
 
 require('telescope').setup { -- {{{
-	defaults = {
-		generic_sorter = require('mini.fuzzy').get_telescope_sorter
-	},
+  defaults = {
+    generic_sorter = require('mini.fuzzy').get_telescope_sorter
+  },
 }
 
 keymap.set('n', '<leader>tt', ':Telescope<cr>')
@@ -228,30 +228,30 @@ keymap.set('n', '<leader>??', telescopes.help_tags)
 -- }}}
 
 local custom_lsp_attach = function(client)
-	-- TODO can we use keymap.set*?
-	-- See `:help nvim_buf_set_keymap()` for more information
-	vim.api.nvim_buf_set_keymap(0, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
-	vim.api.nvim_buf_set_keymap(0, 'n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true})
-	-- ... and other keymappings for LSP
+  -- TODO can we use keymap.set*?
+  -- See `:help nvim_buf_set_keymap()` for more information
+  vim.api.nvim_buf_set_keymap(0, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true })
+  vim.api.nvim_buf_set_keymap(0, 'n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true })
+  -- ... and other keymappings for LSP
 
-	vim.api.nvim_command[[
+  vim.api.nvim_command [[
 	autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
 	]]
 
-	-- autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-	-- autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-	-- autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+  -- autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+  -- autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+  -- autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
 
-	-- Use LSP as the handler for omnifunc.
-	--    See `:help omnifunc` and `:help ins-completion` for more information.
-	vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  -- Use LSP as the handler for omnifunc.
+  --    See `:help omnifunc` and `:help ins-completion` for more information.
+  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-	-- -- Use LSP as the handler for formatexpr.
-	-- --    See `:help formatexpr` for more information.
-	-- vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+  -- -- Use LSP as the handler for formatexpr.
+  -- --    See `:help formatexpr` for more information.
+  -- vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
-	-- For plugins with an `on_attach` callback, call them here. For example:
-	-- require('completion').on_attach()
+  -- For plugins with an `on_attach` callback, call them here. For example:
+  -- require('completion').on_attach()
 end
 
 -- LUA Langauge Server {{{
@@ -259,21 +259,21 @@ local sumneko_binary = vim.env.HOME .. '/.local/lua-language-server/bin/macOS/lu
 local sumneko_path = vim.split(package.path, ';')
 table.insert(sumneko_path, "lua/?.lua")
 table.insert(sumneko_path, "lua/?/init.lua")
-require'lspconfig'.sumneko_lua.setup {
-  cmd = {sumneko_binary};
-	capabilities = capabilities,
+require 'lspconfig'.sumneko_lua.setup {
+  cmd = { sumneko_binary };
+  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
-				-- Tell the language server which version of Lua you're using (most
-				-- likely LuaJIT in the case of Neovim)
-				version = 'LuaJIT',
+        -- Tell the language server which version of Lua you're using (most
+        -- likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
         -- Setup your lua path
         path = sumneko_path,
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
+        globals = { 'vim' },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -287,8 +287,8 @@ require'lspconfig'.sumneko_lua.setup {
   },
 } -- }}}
 
-require'lspconfig'.gopls.setup{
-	on_attach = custom_lsp_attach,
+require 'lspconfig'.gopls.setup {
+  on_attach = custom_lsp_attach,
 }
 
 -- TODO typescript lang server
@@ -324,65 +324,65 @@ local minifg = '#a0a8b0'
 local minihi = 66
 
 local function recolor(options)
-	if options ~= nil then
-		if options.bg ~= nil then minibg = options.bg end
-		if options.fg ~= nil then minifg = options.fg end
-		if options.hi ~= nil then minihi = options.hi end
-	end
-	opt.termguicolors = true
-	if opt.background:get() == 'light' then
-		base16.setup { palette = base16.mini_palette(minifg, minibg, minihi) }
-	else
-		base16.setup { palette = base16.mini_palette(minibg, minifg, minihi) }
-	end
+  if options ~= nil then
+    if options.bg ~= nil then minibg = options.bg end
+    if options.fg ~= nil then minifg = options.fg end
+    if options.hi ~= nil then minihi = options.hi end
+  end
+  opt.termguicolors = true
+  if opt.background:get() == 'light' then
+    base16.setup { palette = base16.mini_palette(minifg, minibg, minihi) }
+  else
+    base16.setup { palette = base16.mini_palette(minibg, minifg, minihi) }
+  end
 end
 
 keymap.set('n', '<leader>hi', function()
-	vim.ui.input({
-		prompt = 'Accent Color Chroma: ',
-		default = tostring(minihi),
-	}, function(input)
-		local hi = tonumber(input)
-		if hi == nil or hi < 0 or hi > 100 then
-			notify('Invalid chroma, expected number in range 0-100', 'error')
-		else
-			recolor {hi = hi}
-			notify('Set accent color chroma=' .. tostring(minihi))
-		end
-	end)
+  vim.ui.input({
+    prompt = 'Accent Color Chroma: ',
+    default = tostring(minihi),
+  }, function(input)
+    local hi = tonumber(input)
+    if hi == nil or hi < 0 or hi > 100 then
+      notify('Invalid chroma, expected number in range 0-100', 'error')
+    else
+      recolor { hi = hi }
+      notify('Set accent color chroma=' .. tostring(minihi))
+    end
+  end)
 end)
 
 keymap.set('n', '<leader>bg', function()
-	vim.ui.input({
-		prompt = 'Background Color: ',
-		default = minibg,
-	}, function(input)
-		if input ~= nil then
-			recolor {bg = input}
-			notify('Set background color=' .. minibg)
-		end
-	end)
+  vim.ui.input({
+    prompt = 'Background Color: ',
+    default = minibg,
+  }, function(input)
+    if input ~= nil then
+      recolor { bg = input }
+      notify('Set background color=' .. minibg)
+    end
+  end)
 end)
 
 keymap.set('n', '<leader>fg', function()
-	vim.ui.input({
-		prompt = 'Foreground Color: ',
-		default = minifg,
-	}, function(input)
-		if input ~= nil then
-			recolor {fg = input}
-			notify('Set foreground color=' .. minifg)
-		end
-	end)
+  vim.ui.input({
+    prompt = 'Foreground Color: ',
+    default = minifg,
+  }, function(input)
+    if input ~= nil then
+      recolor { fg = input }
+      notify('Set foreground color=' .. minifg)
+    end
+  end)
 end)
 
 keymap.set('n', '<leader>li', function()
-	if opt.background:get() == 'light' then
-		opt.background = 'dark'
-	else
-		opt.background = 'light'
-	end
-	recolor()
+  if opt.background:get() == 'light' then
+    opt.background = 'dark'
+  else
+    opt.background = 'light'
+  end
+  recolor()
 end)
 
 recolor()
@@ -416,7 +416,7 @@ opt.guifont = 'JetBrains Mono ExtraLight:h12'
 -- nbsp
 -- }
 
-opt.completeopt = {'menu', 'menuone', 'noselect'}
+opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- TODO audit old vimrc for more
 -- TODO swap dir
@@ -426,15 +426,15 @@ opt.completeopt = {'menu', 'menuone', 'noselect'}
 -- option toggles {{{
 
 local function option_toggler(name)
-	return function()
-		if opt[name]:get() then
-			opt[name] = false
-			vim.notify('set no' .. name)
-		else
-			opt[name] = true
-			vim.notify('set ' .. name)
-		end
-	end
+  return function()
+    if opt[name]:get() then
+      opt[name] = false
+      vim.notify('set no' .. name)
+    else
+      opt[name] = true
+      vim.notify('set ' .. name)
+    end
+  end
 end
 
 keymap.set('n', '<leader>ci', option_toggler 'ignorecase')
