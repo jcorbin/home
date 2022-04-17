@@ -131,6 +131,7 @@ vim.diagnostic.config { -- {{{
 keymap.set('n', '<leader>dg', vim.diagnostic.open_float) -- }}}
 
 local lsp = vim.lsp
+local lspconfig = require 'lspconfig'
 
 -- LSP capabilities to pass around
 -- ... currently just to enable LSP snippet completion
@@ -262,8 +263,9 @@ local sumneko_binary = vim.env.HOME .. '/.local/lua-language-server/bin/macOS/lu
 local sumneko_path = vim.split(package.path, ';')
 table.insert(sumneko_path, "lua/?.lua")
 table.insert(sumneko_path, "lua/?/init.lua")
-require 'lspconfig'.sumneko_lua.setup {
-  cmd = { sumneko_binary };
+
+lspconfig.sumneko_lua.setup {
+  cmd = {sumneko_binary};
   capabilities = capabilities,
   settings = {
     Lua = {
@@ -290,7 +292,7 @@ require 'lspconfig'.sumneko_lua.setup {
   },
 } -- }}}
 
-require 'lspconfig'.gopls.setup {
+lspconfig.gopls.setup {
   on_attach = custom_lsp_attach,
 }
 
