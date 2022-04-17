@@ -296,13 +296,11 @@ lspconfig.gopls.setup {
   capabilities = capabilities,
 }
 
-local sumneko_binary = vim.env.HOME .. '/.local/lua-language-server/bin/macOS/lua-language-server'
 local sumneko_path = vim.split(package.path, ';')
 table.insert(sumneko_path, "lua/?.lua")
 table.insert(sumneko_path, "lua/?/init.lua")
 
 lspconfig.sumneko_lua.setup {
-  cmd = {sumneko_binary};
   settings = {
     Lua = {
       runtime = {
