@@ -289,7 +289,13 @@ local custom_lsp_attach = function()
 end
 -- }}}
 
--- LUA Langauge Server {{{
+-- Langauge Servers {{{
+
+lspconfig.gopls.setup {
+  on_attach = custom_lsp_attach,
+  capabilities = capabilities,
+}
+
 local sumneko_binary = vim.env.HOME .. '/.local/lua-language-server/bin/macOS/lua-language-server'
 local sumneko_path = vim.split(package.path, ';')
 table.insert(sumneko_path, "lua/?.lua")
@@ -297,7 +303,6 @@ table.insert(sumneko_path, "lua/?/init.lua")
 
 lspconfig.sumneko_lua.setup {
   cmd = {sumneko_binary};
-  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
@@ -321,11 +326,11 @@ lspconfig.sumneko_lua.setup {
       },
     },
   },
-} -- }}}
-
-lspconfig.gopls.setup {
   on_attach = custom_lsp_attach,
+  capabilities = capabilities,
 }
+
+-- }}}
 
 -- TODO typescript lang server
 
