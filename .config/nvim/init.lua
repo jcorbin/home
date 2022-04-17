@@ -59,6 +59,20 @@ vim.notify = require('notify');
 
 local notify = vim.notify;
 
+-- fugitive keymaps {{{
+keymap.set('n', '<leader>gg', ':G<cr>')
+keymap.set('n', '<leader>gd', ':Gdiff<cr>')
+keymap.set('n', '<leader>ga', ':G add %<cr>')
+keymap.set('n', '<leader>gA', ':G add --update<cr>')
+keymap.set('n', '<leader>gr', ':G reset<cr>')
+keymap.set('n', '<leader>gb', ':G blame<cr>')
+keymap.set('n', '<leader>gc', ':G commit<cr>')
+keymap.set('n', '<leader>gC', ':G commit --amend<cr>')
+keymap.set('n', '<leader>go',
+  -- TODO implement a function that avoids clobbering the default register
+  'yaw:Gsplit <C-r>"<cr>')
+-- }}}
+
 -- init.lua iteration {{{
 keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
 keymap.set('n', '<leader>sv', function()
