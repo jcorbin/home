@@ -231,32 +231,63 @@ keymap.set('n', '<leader>??', telescopes.help_tags)
 
 -- }}}
 
-local custom_lsp_attach = function(client)
-  -- TODO can we use keymap.set*?
-  -- See `:help nvim_buf_set_keymap()` for more information
-  vim.api.nvim_buf_set_keymap(0, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true })
-  vim.api.nvim_buf_set_keymap(0, 'n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true })
-  -- ... and other keymappings for LSP
+-- per-buffer LSP setup {{{
+local custom_lsp_attach = function()
 
-  vim.api.nvim_command [[
-	autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
-	]]
+  -- hookup omnifunc
+  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
+  keymap.set('n', 'K', lsp.buf.hover)
+  keymap.set('n', '<c-]>', lsp.buf.definition)
+
+  -- auto formatting
+  -- TODO how do autocmds work... this yield an error at runtime
+  -- vim.api.nvim_command [[
+  -- augroup LSPAutoFormat
+  -- autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
+  -- augroup END
+  -- ]]
+
+  -- cursor hold highlighting
+  -- TODO how do autocmds work... this yield an error at runtime
+  -- vim.api.nvim_command [[
+  -- augroup LSPDocHighlight
   -- autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
   -- autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
   -- autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-
-  -- Use LSP as the handler for omnifunc.
-  --    See `:help omnifunc` and `:help ins-completion` for more information.
-  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  -- augroup END
+  -- ]]
 
   -- -- Use LSP as the handler for formatexpr.
   -- --    See `:help formatexpr` for more information.
   -- vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
+  -- TODO explore usefulness of code lens ala
+  -- autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+
+  -- keymaps to act on code
+  keymap.set('n', '<leader>a', lsp.buf.code_action)
+  keymap.set('n', '<leader>f', lsp.buf.formatting)
+  -- TODO format range/object
+
+  -- TODO other typical LSP keymaps, like:
+  -- keymap.set('n', '<leader>gd',    lsp.buf.declaration)
+  -- keymap.set('n', '<leader>gD',    lsp.buf.implementation)
+  -- keymap.set('n', '<leader>1gD',   lsp.buf.type_definition)
+  -- keymap.set('n', '<leader>gR',  lsp.buf.rename)
+  -- keymap.set('n', '<leader>gr',  telescopes.lsp_references)
+  -- keymap.set('n', '<leader>g0',  telescopes.lsp_document_symbols)
+  -- keymap.set('n', '<leader>gW',  telescopes.lsp_workspace_symbols)
+  -- keymap.set('n', 'g!', lsp.util.show_line_diagnostics)
+  -- nnoremap <silent> <leader>l :LspDocumentDiagnostics<CR>
+  -- nnoremap <silent> <leader>r :LspRename<CR>
+  -- nnoremap <silent> <leader>e :LspNextError<CR>
+
   -- For plugins with an `on_attach` callback, call them here. For example:
   -- require('completion').on_attach()
+
 end
+-- }}}
 
 -- LUA Langauge Server {{{
 local sumneko_binary = vim.env.HOME .. '/.local/lua-language-server/bin/macOS/lua-language-server'
