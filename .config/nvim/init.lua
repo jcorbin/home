@@ -582,41 +582,28 @@ end
 
 -- Langauge Servers {{{
 
-lspconfig.bashls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
+local initls = function(name, opts)
+  if opts == nil then
+    opts = {}
+  end
+  lspconfig[name].setup(vim.tbl_extend('keep', opts, {
+    on_attach = custom_lsp_attach,
+    capabilities = capabilities,
+  }))
+end
 
-lspconfig.cssls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.dockerls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.gopls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.html.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.jsonls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
+initls 'bashls'
+initls 'cssls'
+initls 'dockerls'
+initls 'gopls'
+initls 'html'
+initls 'jsonls'
 
 local sumneko_path = vim.split(package.path, ';')
 table.insert(sumneko_path, "lua/?.lua")
 table.insert(sumneko_path, "lua/?/init.lua")
 
-lspconfig.sumneko_lua.setup {
+initls('sumneko_lua', {
   settings = {
     Lua = {
       runtime = {
@@ -640,24 +627,11 @@ lspconfig.sumneko_lua.setup {
       },
     },
   },
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
+})
 
-lspconfig.tsserver.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.yamlls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.vimls.setup {
-  on_attach = custom_lsp_attach,
-  capabilities = capabilities,
-}
+initls 'tsserver'
+initls 'yamlls'
+initls 'vimls'
 
 -- }}}
 
