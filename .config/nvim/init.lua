@@ -523,7 +523,7 @@ keymap.set('n', '<leader>??', telescopes.help_tags)
 -- }}}
 
 -- per-buffer LSP setup {{{
-local custom_lsp_attach = function()
+local on_lsp_attach = function()
 
   -- hookup omnifunc
   vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -587,7 +587,7 @@ local initls = function(name, opts)
     opts = {}
   end
   lspconfig[name].setup(vim.tbl_extend('keep', opts, {
-    on_attach = custom_lsp_attach,
+    on_attach = on_lsp_attach,
     capabilities = capabilities,
   }))
 end
