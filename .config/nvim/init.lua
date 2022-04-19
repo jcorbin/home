@@ -73,10 +73,24 @@ keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 g.mapleader = ' '
 g.maplocalleader = ' '
 
-local function map_pair(mode, key, prev, next)
+-- creates a pair of mappings under the [ and ] family
+local map_pair = function(mode, key, prev, next)
   keymap.set(mode, '[' .. key, prev)
   keymap.set(mode, ']' .. key, next)
 end
+
+-- keymap.set combinator that adds a LHS prefix
+local keymap_prefix = function(prefix, mapper)
+  if mapper == nil then
+    mapper = keymap.set
+  end
+  return function(mode, key, rhs, opts)
+    local lhs = prefix .. key
+    mapper(mode, lhs, rhs, opts)
+  end
+end
+
+local map_leader = keymap_prefix '<Leader>'
 
 -- termhide {{{
 
@@ -84,11 +98,11 @@ g.termhide_default_shell = 'zsh'
 g.termhide_hud_size = 15
 
 -- Create or show existing terminal buffer
-keymap.set('n', '<leader>$', bind(cmd, 'Term'))
-keymap.set('n', '<leader>#', bind(cmd, 'TermVSplit'))
+map_leader('n', '$', bind(cmd, 'Term'))
+map_leader('n', '#', bind(cmd, 'TermVSplit'))
 
 -- Easy HUD toggle
-keymap.set('n', '<leader>`', bind(cmd, 'TermHUD'))
+map_leader('n', '`', bind(cmd, 'TermHUD'))
 
 -- Quicker 'Go Back' binding
 -- tnoremap <C-\><C-o> <C-\><C-n><C-o>
@@ -119,22 +133,22 @@ vim.notify = require('notify');
 local notify = vim.notify;
 
 -- fugitive keymaps {{{
-keymap.set('n', '<leader>gg', ':G<cr>')
-keymap.set('n', '<leader>gd', ':Gdiff<cr>')
-keymap.set('n', '<leader>ga', ':G add %<cr>')
-keymap.set('n', '<leader>gA', ':G add --update<cr>')
-keymap.set('n', '<leader>gr', ':G reset<cr>')
-keymap.set('n', '<leader>gb', ':G blame<cr>')
-keymap.set('n', '<leader>gc', ':G commit<cr>')
-keymap.set('n', '<leader>gC', ':G commit --amend<cr>')
-keymap.set('n', '<leader>go',
+map_leader('n', 'gg', ':G<cr>')
+map_leader('n', 'gd', ':Gdiff<cr>')
+map_leader('n', 'ga', ':G add %<cr>')
+map_leader('n', 'gA', ':G add --update<cr>')
+map_leader('n', 'gr', ':G reset<cr>')
+map_leader('n', 'gb', ':G blame<cr>')
+map_leader('n', 'gc', ':G commit<cr>')
+map_leader('n', 'gC', ':G commit --amend<cr>')
+map_leader('n', 'go',
   -- TODO implement a function that avoids clobbering the default register
   'yaw:Gsplit <C-r>"<cr>')
 -- }}}
 
 -- init.lua iteration {{{
-keymap.set('n', '<leader>ev', ':vsplit $MYVIMRC<cr>')
-keymap.set('n', '<leader>sv', function()
+map_leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
+map_leader('n', 'sv', function()
   dofile(fn.stdpath('config') .. '/init.lua')
   notify('Reloaded init.lua')
 end)
@@ -146,7 +160,7 @@ require('mini.sessions').setup {
   autoread = true,
 }
 
-keymap.set('n', '<leader>ss', function()
+map_leader('n', 'ss', function()
   vim.ui.input({
     prompt = 'write new session named: ',
     -- default = TODO basename of cwd
@@ -157,9 +171,9 @@ keymap.set('n', '<leader>ss', function()
   end)
 end)
 
-keymap.set('n', '<leader>sc', bind(MiniSessions.select, 'read'))
+map_leader('n', 'sc', bind(MiniSessions.select, 'read'))
 
-keymap.set('n', '<leader>:', MiniStarter.open)
+map_leader('n', ':', MiniStarter.open)
 -- TODO session management mappings
 
 -- }}}
@@ -183,7 +197,7 @@ keymap.set('n', ']e', ':move+<cr>') -- TODO repeatable
 -- }}}
 
 require('mini.trailspace').setup {} -- {{{
-keymap.set('n', '<leader>ts', MiniTrailspace.trim)
+map_leader('n', 'ts', MiniTrailspace.trim)
 -- }}}
 
 require('nvim-treesitter.configs').setup { -- {{{
@@ -350,7 +364,7 @@ vim.diagnostic.config { -- {{{
   },
 }
 
-keymap.set('n', '<leader>dg', vim.diagnostic.open_float) -- }}}
+map_leader('n', 'dg', vim.diagnostic.open_float) -- }}}
 
 local lsp = vim.lsp
 local lspconfig = require 'lspconfig'
@@ -419,15 +433,15 @@ trouble.setup {
   use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
 }
 
-keymap.set('n', '<leader>xx', bind(cmd, 'TroubleToggle'))
-keymap.set('n', '<leader>xw', bind(cmd, 'TroubleToggle workspace_diagnostics'))
-keymap.set('n', '<leader>xd', bind(cmd, 'TroubleToggle document_diagnostics'))
+map_leader('n', 'xx', bind(cmd, 'TroubleToggle'))
+map_leader('n', 'xw', bind(cmd, 'TroubleToggle workspace_diagnostics'))
+map_leader('n', 'xd', bind(cmd, 'TroubleToggle document_diagnostics'))
 
 map_pair('n', 'x',
   bind(trouble.previous, { skip_groups = true, jump = true }),
   bind(trouble.next, { skip_groups = true, jump = true }))
 
-keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+map_leader('n', 'e', vim.diagnostic.open_float)
 
 map_pair('n', 'd',
   vim.diagnostic.goto_prev,
@@ -528,15 +542,15 @@ telescope.setup {
   },
 }
 
-keymap.set('n', '<leader><Space>', telescopes.buffers)
-keymap.set('n', '<leader>sf', bind(telescopes.find_files, {previewer = false}))
-keymap.set('n', '<leader>sb', telescopes.current_buffer_fuzzy_find)
-keymap.set('n', '<leader>sh', telescopes.help_tags)
-keymap.set('n', '<leader>st', telescopes.tags)
-keymap.set('n', '<leader>ss', telescopes.grep_string)
-keymap.set('n', '<leader>sg', telescopes.live_grep)
-keymap.set('n', '<leader>so', bind(telescopes.tags, {only_current_buffer = true}))
-keymap.set('n', '<leader>?', telescopes.oldfiles)
+map_leader('n', '<Space>', telescopes.buffers)
+map_leader('n', 'sf', bind(telescopes.find_files, { previewer = false }))
+map_leader('n', 'sb', telescopes.current_buffer_fuzzy_find)
+map_leader('n', 'sh', telescopes.help_tags)
+map_leader('n', 'st', telescopes.tags)
+map_leader('n', 'ss', telescopes.grep_string)
+map_leader('n', 'sg', telescopes.live_grep)
+map_leader('n', 'so', bind(telescopes.tags, { only_current_buffer = true }))
+map_leader('n', '?', telescopes.oldfiles)
 
 -- }}}
 
@@ -693,7 +707,7 @@ local function recolor(options)
   end
 end
 
-keymap.set('n', '<leader>hi', function()
+map_leader('n', 'hi', function()
   vim.ui.input({
     prompt = 'Accent Color Chroma: ',
     default = tostring(minihi),
@@ -708,7 +722,7 @@ keymap.set('n', '<leader>hi', function()
   end)
 end)
 
-keymap.set('n', '<leader>bg', function()
+map_leader('n', 'bg', function()
   vim.ui.input({
     prompt = 'Background Color: ',
     default = minibg,
@@ -720,7 +734,7 @@ keymap.set('n', '<leader>bg', function()
   end)
 end)
 
-keymap.set('n', '<leader>fg', function()
+map_leader('n', 'fg', function()
   vim.ui.input({
     prompt = 'Foreground Color: ',
     default = minifg,
@@ -732,7 +746,7 @@ keymap.set('n', '<leader>fg', function()
   end)
 end)
 
-keymap.set('n', '<leader>li', function()
+map_leader('n', 'li', function()
   if opt.background:get() == 'light' then
     opt.background = 'dark'
   else
