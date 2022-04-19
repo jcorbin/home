@@ -1,7 +1,12 @@
--- local cmd = vim.cmd
+local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
+
+local bind = function(f, ...)
+  local args = { ... }
+  return function(...) return f(unpack(args), ...) end
+end
 
 local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim' -- {{{
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -20,7 +25,7 @@ paq { -- {{{
   "nvim-telescope/telescope.nvim";
 
   { "nvim-treesitter/nvim-treesitter",
-    run = function() vim.cmd('TSUpdate') end };
+    run = bind(cmd, 'TSUpdate')};
   "nvim-treesitter/nvim-treesitter-textobjects";
   "nvim-treesitter/nvim-treesitter-refactor";
   "romgrk/nvim-treesitter-context";
@@ -68,10 +73,6 @@ keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 g.mapleader = ' '
 g.maplocalleader = ' '
 
-local function cmd_fn(cmd_str)
-  return function() vim.cmd(cmd_str) end
-end
-
 local function map_pair(mode, key, prev, next)
   keymap.set(mode, '[' .. key, prev)
   keymap.set(mode, ']' .. key, next)
@@ -83,17 +84,17 @@ g.termhide_default_shell = 'zsh'
 g.termhide_hud_size = 15
 
 -- Create or show existing terminal buffer
-keymap.set('n', '<leader>$', cmd_fn 'Term')
-keymap.set('n', '<leader>#', cmd_fn 'TermVSplit')
+keymap.set('n', '<leader>$', bind(cmd, 'Term'))
+keymap.set('n', '<leader>#', bind(cmd, 'TermVSplit'))
 
 -- Easy HUD toggle
-keymap.set('n', '<leader>`', cmd_fn 'TermHUD')
+keymap.set('n', '<leader>`', bind(cmd, 'TermHUD'))
 
 -- Quicker 'Go Back' binding
 -- tnoremap <C-\><C-o> <C-\><C-n><C-o>
 
 -- Quicker window operations
-keymap.set('t', '<C-\\>`', cmd_fn 'close')
+keymap.set('t', '<C-\\>`', bind(cmd, 'close'))
 
 keymap.set('t', '<C-\\><C-w>', '<C-\\><C-n><C-w><C-w>')
 keymap.set('t', '<C-\\><C-h>', '<C-\\><C-n><C-w>h')
@@ -156,9 +157,7 @@ keymap.set('n', '<leader>ss', function()
   end)
 end)
 
-keymap.set('n', '<leader>sc', function()
-  MiniSessions.select('read')
-end)
+keymap.set('n', '<leader>sc', bind(MiniSessions.select, 'read'))
 
 keymap.set('n', '<leader>:', MiniStarter.open)
 -- TODO session management mappings
@@ -420,14 +419,13 @@ trouble.setup {
   use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
 }
 
-keymap.set('n', '<leader>xx', cmd_fn 'TroubleToggle')
-keymap.set('n', '<leader>xw', cmd_fn 'TroubleToggle workspace_diagnostics')
-keymap.set('n', '<leader>xd', cmd_fn 'TroubleToggle document_diagnostics')
+keymap.set('n', '<leader>xx', bind(cmd, 'TroubleToggle'))
+keymap.set('n', '<leader>xw', bind(cmd, 'TroubleToggle workspace_diagnostics'))
+keymap.set('n', '<leader>xd', bind(cmd, 'TroubleToggle document_diagnostics'))
 
 map_pair('n', 'x',
-  function() trouble.previous { skip_groups = true, jump = true } end,
-  function() trouble.next { skip_groups = true, jump = true } end
-)
+  bind(trouble.previous, { skip_groups = true, jump = true }),
+  bind(trouble.next, { skip_groups = true, jump = true }))
 
 keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 
@@ -531,17 +529,13 @@ telescope.setup {
 }
 
 keymap.set('n', '<leader><Space>', telescopes.buffers)
-keymap.set('n', '<leader>sf', function()
-  telescopes.find_files {previewer = false}
-end)
+keymap.set('n', '<leader>sf', bind(telescopes.find_files, {previewer = false}))
 keymap.set('n', '<leader>sb', telescopes.current_buffer_fuzzy_find)
 keymap.set('n', '<leader>sh', telescopes.help_tags)
 keymap.set('n', '<leader>st', telescopes.tags)
 keymap.set('n', '<leader>ss', telescopes.grep_string)
 keymap.set('n', '<leader>sg', telescopes.live_grep)
-keymap.set('n', '<leader>so', function()
-  telescopes.tags {only_current_buffer = true}
-end)
+keymap.set('n', '<leader>so', bind(telescopes.tags, {only_current_buffer = true}))
 keymap.set('n', '<leader>?', telescopes.oldfiles)
 
 -- }}}
