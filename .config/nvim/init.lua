@@ -775,6 +775,8 @@ opt.virtualedit = 'all'
 
 opt.laststatus = 2
 
+opt.updatetime = 250
+
 opt.guifont = 'JetBrains Mono ExtraLight:h12'
 
 -- TODO listchars
