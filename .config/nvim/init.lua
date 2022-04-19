@@ -94,6 +94,8 @@ local map_leader = keymap_prefix '<Leader>'
 
 -- termhide {{{
 
+local tmap = bind(keymap_prefix('<C-\\>'), 't')
+
 g.termhide_default_shell = 'zsh'
 g.termhide_hud_size = 15
 
@@ -108,16 +110,20 @@ map_leader('n', '`', bind(cmd, 'TermHUD'))
 -- tnoremap <C-\><C-o> <C-\><C-n><C-o>
 
 -- Quicker window operations
-keymap.set('t', '<C-\\>`', bind(cmd, 'close'))
+tmap('`', bind(cmd, 'close'))
 
-keymap.set('t', '<C-\\><C-w>', '<C-\\><C-n><C-w><C-w>')
-keymap.set('t', '<C-\\><C-h>', '<C-\\><C-n><C-w>h')
-keymap.set('t', '<C-\\><C-j>', '<C-\\><C-n><C-w>j')
-keymap.set('t', '<C-\\><C-k>', '<C-\\><C-n><C-w>k')
-keymap.set('t', '<C-\\><C-l>', '<C-\\><C-n><C-w>l')
+tmap('<C-w>', bind(cmd, 'wincmd '))
+tmap('<C-h>', bind(cmd, 'wincmd h'))
+tmap('<C-j>', bind(cmd, 'wincmd j'))
+tmap('<C-k>', bind(cmd, 'wincmd k'))
+tmap('<C-l>', bind(cmd, 'wincmd l'))
 
--- Easy 'paste inside terminal' map
-keymap.set('t', '<C-\\>p', '<C-\\><C-n>pi')
+local paste_from = function(reg)
+  vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
+end
+
+tmap('p', bind(paste_from, '"')) -- vim "clipboard"
+tmap('p', bind(paste_from, '+')) -- os clipboard
 
 -- }}}
 
