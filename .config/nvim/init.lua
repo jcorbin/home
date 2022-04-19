@@ -45,6 +45,7 @@ paq { -- {{{
   "hrsh7th/nvim-cmp";
   "hrsh7th/cmp-nvim-lsp-signature-help";
   "hrsh7th/cmp-emoji";
+  "ray-x/cmp-treesitter";
 
   'folke/trouble.nvim';
 
@@ -468,6 +469,7 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' }, -- For luasnip users.
   }, {
+    { name = 'treesitter' },
     { name = 'buffer' },
   }),
 
@@ -541,6 +543,7 @@ cmp.setup {
 cmp.setup.cmdline('/', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
+    { name = 'treesitter' },
     { name = 'buffer' },
   }
 })
