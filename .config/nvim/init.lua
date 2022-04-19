@@ -514,12 +514,19 @@ end, { expr = true })
 
 local telescope = require 'telescope' -- {{{
 local telescopes = require 'telescope.builtin'
+local teleactions = require 'telescope.actions'
 
 telescope.setup {
   defaults = {
     generic_sorter = require('mini.fuzzy').get_telescope_sorter,
     i = { ["<c-t>"] = trouble.open_with_trouble },
     n = { ["<c-t>"] = trouble.open_with_trouble },
+    mappings = {
+      i = {
+        ["<C-u>"] = false,
+        ["<C-h>"] = teleactions.which_key,
+      },
+    },
   },
 }
 
