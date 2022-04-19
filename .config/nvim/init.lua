@@ -519,6 +519,14 @@ cmp.setup {
     ghost_text = true,
   },
 
+  view = {
+    entries = { name = 'custom', selection_order = 'near_cursor' },
+  },
+
+  -- formatting = {
+  --   format = lspkind.cmp_format(),
+  -- },
+
   -- TODO can se use mini.fuzzy?
   -- sorting.comparators~
   --   `(fun(entry1: cmp.Entry, entry2: cmp.Entry): boolean | nil)`
