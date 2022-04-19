@@ -62,7 +62,11 @@ paq { -- {{{
 } -- }}}
 
 local keymap = vim.keymap
-g.mapleader = ' ' -- set mapleader early so that it applies to all mappings defined
+
+-- use <Space> for mapleader
+keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+g.mapleader = ' '
+g.maplocalleader = ' '
 
 local function cmd_fn(cmd_str)
   return function() vim.cmd(cmd_str) end
