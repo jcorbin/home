@@ -429,6 +429,12 @@ map_pair('n', 'x',
   function() trouble.next { skip_groups = true, jump = true } end
 )
 
+keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+
+map_pair('n', 'd',
+  vim.diagnostic.goto_prev,
+  vim.diagnostic.goto_next)
+
 -- }}}
 
 -- Auto completion framework {{{
