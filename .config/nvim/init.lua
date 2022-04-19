@@ -599,9 +599,9 @@ initls 'gopls'
 initls 'html'
 initls 'jsonls'
 
-local sumneko_path = vim.split(package.path, ';')
-table.insert(sumneko_path, "lua/?.lua")
-table.insert(sumneko_path, "lua/?/init.lua")
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
 
 initls('sumneko_lua', {
   settings = {
@@ -611,7 +611,7 @@ initls('sumneko_lua', {
         -- likely LuaJIT in the case of Neovim)
         version = 'LuaJIT',
         -- Setup your lua path
-        path = sumneko_path,
+        path = runtime_path,
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
