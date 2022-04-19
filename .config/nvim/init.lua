@@ -72,9 +72,9 @@ local function cmd_fn(cmd_str)
   return function() vim.cmd(cmd_str) end
 end
 
-local function map_pair(mode, base, prev, next)
-  keymap.set(mode, base .. '[', prev)
-  keymap.set(mode, base .. ']', next)
+local function map_pair(mode, key, prev, next)
+  keymap.set(mode, '[' .. key, prev)
+  keymap.set(mode, ']' .. key, next)
 end
 
 -- termhide {{{
@@ -424,7 +424,7 @@ keymap.set('n', '<leader>xx', cmd_fn 'TroubleToggle')
 keymap.set('n', '<leader>xw', cmd_fn 'TroubleToggle workspace_diagnostics')
 keymap.set('n', '<leader>xd', cmd_fn 'TroubleToggle document_diagnostics')
 
-map_pair('n', '<leader>x',
+map_pair('n', 'x',
   function() trouble.previous { skip_groups = true, jump = true } end,
   function() trouble.next { skip_groups = true, jump = true } end
 )
