@@ -585,9 +585,6 @@ map_leader('n', '?', telescopes.oldfiles)
 -- per-buffer LSP setup {{{
 local on_lsp_attach = function()
 
-  -- hookup omnifunc
-  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   keymap.set('n', 'K', lsp.buf.hover)
   keymap.set('n', '<c-]>', lsp.buf.definition)
 
