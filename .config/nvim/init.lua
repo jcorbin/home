@@ -40,7 +40,7 @@ paq { -- {{{
   "hrsh7th/cmp-nvim-lsp";
   "hrsh7th/cmp-buffer";
   "hrsh7th/cmp-path";
-  -- "hrsh7th/cmp-cmdline";
+  "hrsh7th/cmp-cmdline";
   "hrsh7th/nvim-cmp";
 
   'folke/trouble.nvim';
@@ -525,21 +525,23 @@ cmp.setup {
 
 }
 
--- -- `/` cmdline setup.
--- cmp.setup.cmdline('/', {
---   sources = {
---     { name = 'buffer' }
---   }
--- })
+-- `/` cmdline setup.
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' },
+  }
+})
 
--- -- `:` cmdline setup.
--- cmp.setup.cmdline(':', {
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     { name = 'cmdline' }
---   })
--- })
+-- `:` cmdline setup.
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' },
+  }, {
+    { name = 'cmdline' },
+  })
+})
 
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
