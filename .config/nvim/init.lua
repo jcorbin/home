@@ -530,12 +530,19 @@ telescope.setup {
   },
 }
 
-keymap.set('n', '<leader>tt', ':Telescope<cr>')
-
-keymap.set('n', '<leader>ff', telescopes.find_files)
-keymap.set('n', '<leader>gr', telescopes.live_grep)
-keymap.set('n', '<leader>bs', telescopes.buffers)
-keymap.set('n', '<leader>??', telescopes.help_tags)
+keymap.set('n', '<leader><Space>', telescopes.buffers)
+keymap.set('n', '<leader>sf', function()
+  telescopes.find_files {previewer = false}
+end)
+keymap.set('n', '<leader>sb', telescopes.current_buffer_fuzzy_find)
+keymap.set('n', '<leader>sh', telescopes.help_tags)
+keymap.set('n', '<leader>st', telescopes.tags)
+keymap.set('n', '<leader>ss', telescopes.grep_string)
+keymap.set('n', '<leader>sg', telescopes.live_grep)
+keymap.set('n', '<leader>so', function()
+  telescopes.tags {only_current_buffer = true}
+end)
+keymap.set('n', '<leader>?', telescopes.oldfiles)
 
 -- }}}
 
