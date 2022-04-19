@@ -90,6 +90,21 @@ local keymap_prefix = function(prefix, mapper)
   end
 end
 
+-- keymap.set combinator that forces some options
+local keymap_options = function(forced_opts, mapper)
+  if mapper == nil then
+    mapper = keymap.set
+  end
+  return function(mode, lhs, rhs, opts)
+    if opts == nil then
+      opts = forced_opts
+    else
+      opts = vim.tbl_extend('force', opts, forced_opts)
+    end
+    mapper(mode, lhs, rhs, opts)
+  end
+end
+
 local map_leader = keymap_prefix '<Leader>'
 
 -- termhide {{{
@@ -593,10 +608,29 @@ map_leader('n', '?', telescopes.oldfiles)
 -- }}}
 
 -- per-buffer LSP setup {{{
-local on_lsp_attach = function()
+local on_lsp_attach = function(_, bufnr)
+  local map_buffer = keymap_options { buffer = bufnr }
+  local map_local = keymap_prefix('<LocalLeader>', map_buffer)
 
-  keymap.set('n', 'K', lsp.buf.hover)
-  keymap.set('n', '<c-]>', lsp.buf.definition)
+  map_buffer('n', 'K', lsp.buf.hover)
+  map_buffer('n', '<C-k>', lsp.buf.signature_help)
+
+  -- keymaps to jump
+  map_buffer('n', '<c-]>', lsp.buf.definition)
+  map_local('n', 'gD', lsp.buf.declaration)
+  map_local('n', 'gI', lsp.buf.implementation)
+  map_local('n', 'gT', lsp.buf.type_definition)
+
+  -- keymaps to act on code
+  map_local('n', 'a', lsp.buf.code_action)
+  map_local('n', 'f', lsp.buf.formatting)
+  map_local('n', 'gR', lsp.buf.rename)
+  -- TODO format range/object
+
+  -- telescope invocations
+  map_local('n', 'sr', telescopes.lsp_references)
+  map_local('n', 'so', telescopes.lsp_document_symbols)
+  map_local('n', 'sw', telescopes.lsp_workspace_symbols)
 
   -- auto formatting
   -- TODO how do autocmds work... this yield an error at runtime
@@ -622,27 +656,6 @@ local on_lsp_attach = function()
 
   -- TODO explore usefulness of code lens ala
   -- autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-
-  -- keymaps to act on code
-  keymap.set('n', '<leader>a', lsp.buf.code_action)
-  keymap.set('n', '<leader>f', lsp.buf.formatting)
-  -- TODO format range/object
-
-  -- TODO other typical LSP keymaps, like:
-  -- keymap.set('n', '<leader>gd',    lsp.buf.declaration)
-  -- keymap.set('n', '<leader>gD',    lsp.buf.implementation)
-  -- keymap.set('n', '<leader>1gD',   lsp.buf.type_definition)
-  -- keymap.set('n', '<leader>gR',  lsp.buf.rename)
-  -- keymap.set('n', '<leader>gr',  telescopes.lsp_references)
-  -- keymap.set('n', '<leader>g0',  telescopes.lsp_document_symbols)
-  -- keymap.set('n', '<leader>gW',  telescopes.lsp_workspace_symbols)
-  -- keymap.set('n', 'g!', lsp.util.show_line_diagnostics)
-  -- nnoremap <silent> <leader>l :LspDocumentDiagnostics<CR>
-  -- nnoremap <silent> <leader>r :LspRename<CR>
-  -- nnoremap <silent> <leader>e :LspNextError<CR>
-
-  -- For plugins with an `on_attach` callback, call them here. For example:
-  -- require('completion').on_attach()
 
 end
 -- }}}
