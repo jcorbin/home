@@ -759,6 +759,8 @@ map_leader('n', 'sm', telescopes.man_pages)
 
 -- per-buffer LSP setup {{{
 local on_lsp_attach = function(_, bufnr)
+  local autocmd_local = autocmd.buffer(bufnr)
+
   local map_buffer = keymap_options { buffer = bufnr }
   local map_local = keymap_prefix('<LocalLeader>', map_buffer)
 
@@ -783,29 +785,25 @@ local on_lsp_attach = function(_, bufnr)
   map_local('n', 'sw', telescopes.lsp_workspace_symbols)
 
   -- auto formatting
-  -- TODO how do autocmds work... this yield an error at runtime
-  -- vim.api.nvim_command [[
-  -- augroup LSPAutoFormat
-  -- autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
-  -- augroup END
-  -- ]]
+  autocmd_local('BufWritePre', function()
+    lsp.buf.formatting_sync(nil, 1000)
+  end)
 
   -- cursor hold highlighting
-  -- TODO how do autocmds work... this yield an error at runtime
-  -- vim.api.nvim_command [[
-  -- augroup LSPDocHighlight
-  -- autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-  -- autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-  -- autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-  -- augroup END
-  -- ]]
+  autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
+    lsp.buf.document_highlight()
+  end)
+  autocmd_local('CursorMoved', function()
+    lsp.buf.clear_references()
+  end)
 
   -- -- Use LSP as the handler for formatexpr.
   -- --    See `:help formatexpr` for more information.
   -- vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
-  -- TODO explore usefulness of code lens ala
-  -- autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+  autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
+    lsp.codelens.refresh()
+  end)
 
 end
 -- }}}
