@@ -66,6 +66,8 @@ require 'paq' {
   'kristijanhusak/vim-dirvish-git';
   -- TODO maybe 'tpope/vim-eunuch' or a lua replacement
 
+  'norcalli/nvim-colorizer.lua';
+
 } -- }}}
 
 -- autocmd helper object until upstreams ships something like this like say vim.autocmd
@@ -865,6 +867,8 @@ initls 'yamlls'
 initls 'vimls'
 
 -- }}}
+
+require 'colorizer'.setup()
 
 -- TODO glepnir/lspsaga.nvim
 -- TODO jose-elias-alvarez/null-ls.nvim
