@@ -196,9 +196,9 @@ map_leader('n', ':', MiniStarter.open)
 
 -- "mini" alternative to statusline and tabline plugins {{{
 require('mini.statusline').setup {}
-require('mini.tabline').setup {
-  show_icons = false,
-}
+-- require('mini.tabline').setup {
+--   show_icons = false,
+-- }
 -- }}}
 
 require('mini.comment').setup {}
