@@ -2,6 +2,7 @@ local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
+local env = vim.env
 
 local bind = function(f, ...)
   local args = { ... }
@@ -164,11 +165,17 @@ map_leader('n', 'Go',
 -- }}}
 
 -- init.lua iteration {{{
+
+local file_doer = function(path)
+  return function()
+    dofile(path)
+    notify('Reloaded ' .. path)
+  end
+end
+
 map_leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
-map_leader('n', 'sv', function()
-  dofile(fn.stdpath('config') .. '/init.lua')
-  notify('Reloaded init.lua')
-end)
+map_leader('n', 'sv', file_doer(env.MYVIMRC))
+
 -- }}}
 
 -- startify/dashboard "mini" alternative {{{
