@@ -588,6 +588,10 @@ telescope.setup {
       i = {
         ["<C-u>"] = false,
         ["<C-h>"] = teleactions.which_key,
+        ['<c-d>'] = require('telescope.actions').delete_buffer,
+      },
+      n = {
+        ['<c-d>'] = require('telescope.actions').delete_buffer,
       },
     },
     layout_strategy = 'cursor',
