@@ -33,7 +33,6 @@ require 'paq' {
   "mfussenegger/nvim-ts-hint-textobject";
 
   "neovim/nvim-lspconfig";
-  "ii14/lsp-command";
   'folke/lsp-colors.nvim';
 
   "hrsh7th/cmp-nvim-lsp";
