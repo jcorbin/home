@@ -933,7 +933,22 @@ opt.scrolloff = 2
 opt.incsearch = true
 opt.smartcase = true
 
-opt.spell = true
+opt.spell = true -- on by default... {{{
+-- ...off by exception
+autocmd('FileType', {
+  'help',
+  'man',
+  'startify',
+  'godoc',
+  'qf',
+  'netrw',
+  'fugitiveblame',
+  'goterm',
+  'godebug*',
+  'dirvish',
+}, 'setlocal nospell')
+autocmd('TermOpen', 'setlocal nospell')
+-- }}}
 
 opt.virtualedit = 'all'
 
