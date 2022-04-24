@@ -757,6 +757,9 @@ map_leader('n', 'sm', telescopes.man_pages)
 
 -- }}}
 
+-- highlight yanks
+autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
+
 -- per-buffer LSP setup {{{
 local on_lsp_attach = function(_, bufnr)
   local autocmd_local = autocmd.buffer(bufnr)
