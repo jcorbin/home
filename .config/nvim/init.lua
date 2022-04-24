@@ -77,7 +77,7 @@ require 'paq' {
 
 } -- }}}
 
--- autocmd helper object until upstreams ships something like this like say vim.autocmd
+-- autocmd helper object around lower level vim.api.nvim_create_augroup etc functions
 --
 -- usage:
 --
@@ -92,7 +92,7 @@ require 'paq' {
 --   group('BufEnter', '*.js', do_stuff, {desc = 'bla'})
 --
 --   -- can create a buffer-local sub group
---   group('BufEnter', '*.java', function(opts)
+--   group('FileType', 'java', function(opts)
 --     local group_local = group.buffer(opts.buf)
 --     group_local('CursorHoldI', function()
 --       vim.notify('Keep Typing! You're getting paid by the character!')
