@@ -213,6 +213,24 @@ keymap.set('n', '[e', ':move--<cr>') -- TODO repeatable
 keymap.set('n', ']e', ':move+<cr>') -- TODO repeatable
 -- }}}
 
+-- ex command convenience maps {{{
+map_leader({ 'n', 'v' }, 'nn', ':norm ')
+
+map_leader({ 'n', 'v' }, 'gn', ':g\\/ norm ')
+map_leader({ 'n', 'v' }, 'vn', ':v\\/ norm ')
+
+map_leader({ 'n', 'v' }, 'mm', ':move ')
+map_leader({ 'n', 'v' }, 'gm', ':g\\/ move ')
+map_leader({ 'n', 'v' }, 'vm', ':v\\/ move ')
+
+map_leader({ 'n', 'v' }, 'cc', 'copy ')
+map_leader({ 'n', 'v' }, 'gc', ':g\\/ copy ')
+map_leader({ 'n', 'v' }, 'vc', ':v\\/ copy ')
+
+map_leader({ 'n', 'v' }, 'gd', ':g\\/ delete<cr>')
+map_leader({ 'n', 'v' }, 'vd', ':v\\/ delete<cr>')
+-- }}}
+
 require('mini.trailspace').setup {} -- {{{
 map_leader('n', 'ts', MiniTrailspace.trim)
 -- }}}
