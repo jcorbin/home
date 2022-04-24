@@ -149,15 +149,16 @@ vim.notify = require('notify');
 local notify = vim.notify;
 
 -- fugitive keymaps {{{
-map_leader('n', 'gg', ':G<cr>')
-map_leader('n', 'gd', ':Gdiff<cr>')
-map_leader('n', 'ga', ':G add %<cr>')
-map_leader('n', 'gA', ':G add --update<cr>')
-map_leader('n', 'gr', ':G reset<cr>')
-map_leader('n', 'gb', ':G blame<cr>')
-map_leader('n', 'gc', ':G commit<cr>')
-map_leader('n', 'gC', ':G commit --amend<cr>')
-map_leader('n', 'go',
+map_leader('n', 'Gg', ':G<cr>')
+map_leader('n', 'GG', ':G<cr>')
+map_leader('n', 'Gd', ':Gdiff<cr>')
+map_leader('n', 'Ga', ':G add %<cr>')
+map_leader('n', 'GA', ':G add --update<cr>')
+map_leader('n', 'Gr', ':G reset<cr>')
+map_leader('n', 'Gb', ':G blame<cr>')
+map_leader('n', 'Gc', ':G commit<cr>')
+map_leader('n', 'GC', ':G commit --amend<cr>')
+map_leader('n', 'Go',
   -- TODO implement a function that avoids clobbering the default register
   'yaw:Gsplit <C-r>"<cr>')
 -- }}}
