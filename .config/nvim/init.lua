@@ -68,6 +68,13 @@ require 'paq' {
 
   'norcalli/nvim-colorizer.lua';
 
+  -- colorschemes
+  'rktjmp/lush.nvim';
+  'tanvirtin/monokai.nvim';
+  'folke/tokyonight.nvim';
+  'Mofiqul/vscode.nvim';
+  'shaunsingh/moonlight.nvim';
+
 } -- }}}
 
 -- autocmd helper object until upstreams ships something like this like say vim.autocmd
@@ -895,79 +902,18 @@ require 'lsp-colors'.setup {
 --   h('TelescopeMatching', {link = 'Boolean'})
 -- end)
 
--- TODO maybe break out into nvim/colors/mine.lua
+opt.background = 'dark'
 
-local base16 = require('mini.base16')
+-- require 'monokai'.setup {
+--   -- palette = require 'monokai'.pro
+--   -- palette = require 'monokai'.soda
+--   -- palette = require 'monokai'.ristretto
+-- }
 
-local minibg = '#101018'
-local minifg = '#a0a8b0'
-local minihi = 66
+g.vscode_style = 'dark'
+vim.cmd [[colorscheme vscode]]
 
-local function recolor(options)
-  if options ~= nil then
-    if options.bg ~= nil then minibg = options.bg end
-    if options.fg ~= nil then minifg = options.fg end
-    if options.hi ~= nil then minihi = options.hi end
-  end
-  opt.termguicolors = true
-  if opt.background:get() == 'light' then
-    base16.setup { palette = base16.mini_palette(minifg, minibg, minihi) }
-  else
-    base16.setup { palette = base16.mini_palette(minibg, minifg, minihi) }
-  end
-end
-
-map_leader('n', 'hi', function()
-  vim.ui.input({
-    prompt = 'Accent Color Chroma: ',
-    default = tostring(minihi),
-  }, function(input)
-    local hi = tonumber(input)
-    if hi == nil or hi < 0 or hi > 100 then
-      notify('Invalid chroma, expected number in range 0-100', 'error')
-    else
-      recolor { hi = hi }
-      notify('Set accent color chroma=' .. tostring(minihi))
-    end
-  end)
-end)
-
-map_leader('n', 'bg', function()
-  vim.ui.input({
-    prompt = 'Background Color: ',
-    default = minibg,
-  }, function(input)
-    if input ~= nil then
-      recolor { bg = input }
-      notify('Set background color=' .. minibg)
-    end
-  end)
-end)
-
-map_leader('n', 'fg', function()
-  vim.ui.input({
-    prompt = 'Foreground Color: ',
-    default = minifg,
-  }, function(input)
-    if input ~= nil then
-      recolor { fg = input }
-      notify('Set foreground color=' .. minifg)
-    end
-  end)
-end)
-
-map_leader('n', 'li', function()
-  if opt.background:get() == 'light' then
-    opt.background = 'dark'
-  else
-    opt.background = 'light'
-  end
-  recolor()
-end)
-
-recolor()
-
--- g.colors_name = 'mine'
+-- require 'lush'
 
 -- }}}
 
