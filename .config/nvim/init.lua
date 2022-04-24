@@ -873,6 +873,8 @@ opt.scrolloff = 2
 opt.incsearch = true
 opt.smartcase = true
 
+opt.spell = true
+
 opt.virtualedit = 'all'
 
 opt.laststatus = 2
