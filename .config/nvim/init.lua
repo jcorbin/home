@@ -632,6 +632,7 @@ map_leader('n', 'ss', telescopes.grep_string)
 map_leader('n', 'sg', telescopes.live_grep)
 map_leader('n', 'so', bind(telescopes.tags, { only_current_buffer = true }))
 map_leader('n', '?', telescopes.oldfiles)
+map_leader('n', 'sm', telescopes.man_pages)
 
 -- }}}
 
