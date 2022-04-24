@@ -537,6 +537,11 @@ cmp.setup {
     entries = { name = 'custom', selection_order = 'near_cursor' },
   },
 
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
+
   -- formatting = {
   --   format = lspkind.cmp_format(),
   -- },
