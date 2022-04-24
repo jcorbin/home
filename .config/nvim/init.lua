@@ -12,10 +12,8 @@ local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim' -- {
 if fn.empty(fn.glob(install_path)) > 0 then
   fn.system({ 'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', install_path })
 end
-local paq = require('paq')
--- }}}
 
-paq { -- {{{
+require 'paq' {
   "savq/paq-nvim";
 
   "rcarriga/nvim-notify";
@@ -25,7 +23,7 @@ paq { -- {{{
   "nvim-telescope/telescope.nvim";
 
   { "nvim-treesitter/nvim-treesitter",
-    run = bind(cmd, 'TSUpdate')};
+    run = bind(cmd, 'TSUpdate') };
   "nvim-treesitter/nvim-treesitter-textobjects";
   "nvim-treesitter/nvim-treesitter-refactor";
   "romgrk/nvim-treesitter-context";
