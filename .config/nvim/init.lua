@@ -888,6 +888,13 @@ require 'lsp-colors'.setup {
   Hint = "#10B981"
 }
 
+-- NOTE: useful pattern for patching colorschemes
+-- autocmd('ColorScheme', 'onedark', function()
+--   local h = function(...) vim.api.nvim_set_hl(0, ...) end
+--   h('String', {fg = '#FFEB95'})
+--   h('TelescopeMatching', {link = 'Boolean'})
+-- end)
+
 -- TODO maybe break out into nvim/colors/mine.lua
 
 local base16 = require('mini.base16')
