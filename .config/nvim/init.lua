@@ -591,6 +591,7 @@ telescope.setup {
         ['<c-d>'] = require('telescope.actions').delete_buffer,
       },
       n = {
+        ["<C-h>"] = teleactions.which_key,
         ['<c-d>'] = require('telescope.actions').delete_buffer,
       },
     },
