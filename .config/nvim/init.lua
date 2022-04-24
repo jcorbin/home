@@ -511,14 +511,6 @@ local lspconfig = require 'lspconfig'
 -- ... but left here since it may prove to be more general
 local capabilities = lsp.protocol.make_client_capabilities()
 
--- adds missing highlights if the current colorscheme does not support LSP
-require 'lsp-colors'.setup {
-  Error = "#db4b4b",
-  Warning = "#e0af68",
-  Information = "#0db9d7",
-  Hint = "#10B981"
-}
-
 local trouble = require 'trouble' -- {{{
 trouble.setup {
   position = "bottom", -- position of the list can be: bottom, top, left, right
@@ -887,6 +879,14 @@ require 'colorizer'.setup()
 -- TODO vinegar like mappings for netrw, or a replacement above
 
 -- colorscheme {{{
+
+-- adds missing highlights if the current colorscheme does not support LSP
+require 'lsp-colors'.setup {
+  Error = "#db4b4b",
+  Warning = "#e0af68",
+  Information = "#0db9d7",
+  Hint = "#10B981"
+}
 
 -- TODO maybe break out into nvim/colors/mine.lua
 
