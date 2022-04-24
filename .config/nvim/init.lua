@@ -30,8 +30,6 @@ require 'paq' {
   -- maybe "theHamsta/nvim-treesitter-pairs";
   "lewis6991/spellsitter.nvim";
 
-  "mfussenegger/nvim-ts-hint-textobject";
-
   "neovim/nvim-lspconfig";
   'folke/lsp-colors.nvim';
 
@@ -368,8 +366,6 @@ require('spellsitter').setup {
   -- Whether enabled, can be a list of filetypes, e.g. {'python', 'lua'}
   enable = true,
 }
-
-keymap.set({ 'o', 'v' }, 'm', require('tsht').nodes, { silent = true })
 
 -- }}}
 
