@@ -590,6 +590,23 @@ telescope.setup {
         ["<C-h>"] = teleactions.which_key,
       },
     },
+    layout_strategy = 'cursor',
+    layout_config = {
+      cursor = {
+        width = 0.8,
+        height = 0.5,
+      },
+      horizontal = {
+        anchor = 'SE',
+        width = 0.8,
+        height = 0.5,
+      },
+      vertical = {
+        anchor = 'SE',
+        width = 0.5,
+        height = 0.8,
+      },
+    },
   },
 }
 
