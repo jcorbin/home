@@ -756,7 +756,11 @@ telescope.setup {
 map_leader('n', '<Space>', telescopes.buffers)
 tmap('<Space>', bind(telescopes.buffers, { ignore_current_buffer = true }))
 
-map_leader('n', 'sf', bind(telescopes.find_files, { previewer = false }))
+map_leader('n', 'sf', bind(telescopes.find_files, {
+  previewer = false,
+  hidden = true,
+  no_ignore = true,
+}))
 map_leader('n', 'sb', telescopes.current_buffer_fuzzy_find)
 map_leader('n', 'sh', telescopes.help_tags)
 map_leader('n', 'st', telescopes.tags)
