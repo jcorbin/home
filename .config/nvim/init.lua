@@ -962,6 +962,7 @@ autocmd('FileType', {
   'qf',
   'netrw',
   'fugitiveblame',
+  'gitrebase',
   'goterm',
   'godebug*',
   'dirvish',
