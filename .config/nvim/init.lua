@@ -587,6 +587,10 @@ map_pair('n', 'x',
   bind(trouble.previous, { skip_groups = true, jump = true }),
   bind(trouble.next, { skip_groups = true, jump = true }))
 
+map_pair('n', 'q',
+  bind(cmd, 'cprev'),
+  bind(cmd, 'cnext'))
+
 map_leader('n', 'e', vim.diagnostic.open_float)
 
 map_pair('n', 'd',
