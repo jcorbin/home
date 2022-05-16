@@ -1016,6 +1016,7 @@ map_opt_toggle('<leader>rc', 'relativenumber')
 map_opt_toggle('<leader>cl', 'cursorline')
 map_opt_toggle('<leader>cc', 'cursorcolumn')
 map_opt_toggle('<leader>lw', 'wrap')
+map_opt_toggle('<leader>sp', 'spell')
 
 -- }}}
 
