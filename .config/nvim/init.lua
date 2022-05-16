@@ -198,6 +198,12 @@ end
 
 local map_leader = keymap_prefix '<Leader>'
 
+-- context marker motion
+local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
+map_pair('n', 'n',
+  bind(fn.search, context_marker, 'bW'),
+  bind(fn.search, context_marker, 'W'))
+
 -- termhide {{{
 
 local tmap = bind(keymap_prefix('<C-\\>'), 't')
