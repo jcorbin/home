@@ -808,7 +808,8 @@ local on_lsp_attach = function(_, bufnr)
 
   -- auto formatting
   autocmd_local('BufWritePre', function()
-    lsp.buf.formatting_sync(nil, 1000)
+    -- NOTE: sync 1s timeout is the default, may pass {timeout_ms} or {async}
+    lsp.buf.format()
   end)
 
   -- cursor hold highlighting
