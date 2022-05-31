@@ -219,6 +219,9 @@ map_leader('n', '#', bind(cmd, 'TermVSplit'))
 -- Easy HUD toggle
 map_leader('n', '`', bind(cmd, 'TermHUD'))
 
+-- Easy run in :terminal map
+map_leader('n', '!', ':vsplit | term ')
+
 -- Quicker 'Go Back' binding
 -- tnoremap <C-\><C-o> <C-\><C-n><C-o>
 
