@@ -825,7 +825,7 @@ local on_lsp_attach = function(_, bufnr)
 
   -- keymaps to act on code
   map_local('n', 'a', lsp.buf.code_action)
-  map_local('n', 'f', lsp.buf.formatting)
+  map_local('n', 'f', lsp.buf.format)
   map_local('n', 'gR', lsp.buf.rename)
   -- TODO format range/object
 
