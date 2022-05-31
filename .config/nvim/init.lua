@@ -28,6 +28,7 @@ require 'paq' {
 
   "nvim-lua/plenary.nvim";
   "nvim-telescope/telescope.nvim";
+  "nvim-telescope/telescope-ui-select.nvim";
 
   { "nvim-treesitter/nvim-treesitter",
     run = bind(cmd, 'TSUpdate') };
@@ -755,7 +756,31 @@ telescope.setup {
       sort_mru = true,
     },
   },
+
+  extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {
+        -- even more opts
+      },
+
+      -- pseudo code / specification for writing custom displays, like the one
+      -- for "codeactions"
+      -- specific_opts = {
+      --   [kind] = {
+      --     make_indexed = function(items) -> indexed_items, width,
+      --     make_displayer = function(widths) -> displayer
+      --     make_display = function(displayer) -> function(e)
+      --     make_ordinal = function(e) -> string
+      --   },
+      --   -- for example to disable the custom builtin "codeactions" display
+      --      do the following
+      --   codeactions = false,
+      -- },
+    },
+  },
 }
+
+telescope.load_extension("ui-select")
 
 map_leader('n', '<Space>', telescopes.buffers)
 tmap('<Space>', bind(telescopes.buffers, { ignore_current_buffer = true }))
