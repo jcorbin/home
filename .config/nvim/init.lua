@@ -1048,4 +1048,58 @@ map_opt_toggle('<leader>sp', 'spell')
 
 -- }}}
 
+local find_term = function(findCmd)
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    local i, _, termcmd = bufname:find('term://.*//%d+:(.*)')
+    -- TODO expand termcwd with something like a realpath() that supports ~
+    -- expansion, compare against session dir / workspace dir / cwd
+    if i and termcmd == findCmd then
+      return bufnr
+    end
+  end
+  return nil
+end
+
+local find_dev_services = function(yield)
+  local fh = io.open('package.json')
+  if fh == nil then
+    vim.notify('no package.json found', 'warn')
+    return
+  end
+
+  local contents = fh:read('a')
+  fh:close()
+
+  local nodePkg = vim.json.decode(contents)
+
+  if nodePkg.devServices then
+    for _, devService in ipairs(nodePkg.devServices) do
+      yield('npx ' .. devService)
+    end
+  elseif nodePkg.scripts then
+    for _, script in ipairs({ 'dev', 'start' }) do
+      if nodePkg.scripts[script] then
+        yield('npm run ' .. script)
+        break
+      end
+    end
+  end
+
+end
+
+vim.api.nvim_create_user_command('DevServices', function()
+  find_dev_services(function(svcCmd)
+    print(svcCmd)
+  end)
+end, {})
+
+vim.api.nvim_create_user_command('RunDevServices', function()
+  find_dev_services(function(svcCmd)
+    if not find_term(svcCmd) then
+      vim.cmd('split | terminal ' .. svcCmd)
+    end
+  end)
+end, {})
+
 -- vim: set ts=2 sw=2 foldmethod=marker:
