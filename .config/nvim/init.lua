@@ -294,18 +294,18 @@ require('mini.sessions').setup {
   autoread = true,
 }
 
-map_leader('n', 'ss', function()
+map_leader('n', 'Sw', function()
   vim.ui.input({
     prompt = 'write new session named: ',
     -- default = TODO basename of cwd
   }, function(session_name)
     if session_name ~= nil then
-      MiniSessions.write(session_name)
+      MiniSessions.write(session_name, {})
     end
   end)
 end)
 
-map_leader('n', 'sc', bind(MiniSessions.select, 'read'))
+map_leader('n', 'Sr', bind(MiniSessions.select, 'read'))
 
 map_leader('n', ':', MiniStarter.open)
 -- TODO session management mappings
