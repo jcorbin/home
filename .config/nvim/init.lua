@@ -52,8 +52,6 @@ require 'paq' {
 
   'folke/trouble.nvim';
 
-  'jcorbin/neovim-termhide';
-
   'L3MON4D3/LuaSnip';
   'saadparwaiz1/cmp_luasnip';
 
@@ -205,19 +203,9 @@ map_pair('n', 'n',
   bind(fn.search, context_marker, 'bW'),
   bind(fn.search, context_marker, 'W'))
 
--- termhide {{{
+-- terminal {{{
 
 local tmap = bind(keymap_prefix('<C-\\>'), 't')
-
-g.termhide_default_shell = 'zsh'
-g.termhide_hud_size = 15
-
--- Create or show existing terminal buffer
-map_leader('n', '$', bind(cmd, 'Term'))
-map_leader('n', '#', bind(cmd, 'TermVSplit'))
-
--- Easy HUD toggle
-map_leader('n', '`', bind(cmd, 'TermHUD'))
 
 -- Easy run in :terminal map
 map_leader('n', '!', ':vsplit | term ')
@@ -239,7 +227,6 @@ local paste_from = function(reg)
 end
 
 tmap('p', bind(paste_from, '"')) -- vim "clipboard"
-tmap('p', bind(paste_from, '+')) -- os clipboard
 
 -- }}}
 
