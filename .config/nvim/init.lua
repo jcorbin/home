@@ -211,10 +211,10 @@ local tmap = bind(keymap_prefix('<C-\\>'), 't')
 map_leader('n', '!', ':vsplit | term ')
 
 -- Quicker 'Go Back' binding
--- tnoremap <C-\><C-o> <C-\><C-n><C-o>
+-- tmap('<C-o>', <C-\><C-n><C-o>)
 
 -- Quicker window operations
-tmap('`', bind(cmd, 'close'))
+tmap('c', bind(cmd, 'close'))
 
 tmap('<C-w>', bind(cmd, 'wincmd '))
 tmap('<C-h>', bind(cmd, 'wincmd h'))
