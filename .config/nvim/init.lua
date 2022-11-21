@@ -37,6 +37,8 @@ require 'paq' {
 
   "neovim/nvim-lspconfig";
   'folke/lsp-colors.nvim';
+  {url = 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'},
+
 
   "hrsh7th/cmp-nvim-lsp";
   "hrsh7th/cmp-buffer";
@@ -381,6 +383,10 @@ map_leader('n', 'dg', vim.diagnostic.open_float) -- }}}
 
 local lsp = vim.lsp
 local lspconfig = require 'lspconfig'
+
+require("lsp_lines").setup()
+vim.diagnostic.config({ virtual_text = false, })
+map_leader('n', 'l', require("lsp_lines").toggle)
 
 local trouble = require 'trouble' -- {{{
 trouble.setup {
