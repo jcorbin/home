@@ -382,11 +382,6 @@ map_leader('n', 'dg', vim.diagnostic.open_float) -- }}}
 local lsp = vim.lsp
 local lspconfig = require 'lspconfig'
 
--- LSP capabilities to pass around
--- ... currently just to enable LSP snippet completion
--- ... but left here since it may prove to be more general
-local capabilities = lsp.protocol.make_client_capabilities()
-
 local trouble = require 'trouble' -- {{{
 trouble.setup {
   position = "bottom", -- position of the list can be: bottom, top, left, right
@@ -566,7 +561,7 @@ cmp.setup.cmdline(':', {
   })
 })
 
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- }}}
 
