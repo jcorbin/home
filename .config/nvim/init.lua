@@ -575,18 +575,20 @@ local telescope = require 'telescope' -- {{{
 local telescopes = require 'telescope.builtin'
 local teleactions = require 'telescope.actions'
 
+local open_with_trouble = require("trouble.providers.telescope").open_with_trouble
+
 telescope.setup {
   defaults = {
     generic_sorter = require('mini.fuzzy').get_telescope_sorter,
-    i = { ["<c-t>"] = trouble.open_with_trouble },
-    n = { ["<c-t>"] = trouble.open_with_trouble },
     mappings = {
       i = {
+        ["<c-t>"] = open_with_trouble,
         ["<C-u>"] = false,
         ["<C-h>"] = teleactions.which_key,
         ['<c-d>'] = require('telescope.actions').delete_buffer,
       },
       n = {
+        ["<c-t>"] = open_with_trouble,
         ["<C-h>"] = teleactions.which_key,
         ['<c-d>'] = require('telescope.actions').delete_buffer,
       },
