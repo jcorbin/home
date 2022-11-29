@@ -5,13 +5,6 @@
 !.gitignore
 !.gitmodules
 
-# XDG home, allow further whitelisting
-!/.config
-/.config/*
-
-# Python lint config apparently? TODO why do I care?
-!/.config/flake8
-
 # File types that need to be ignored anywhere:
 .DS_Store
 .*.sw?
@@ -46,16 +39,18 @@
 !.gitconfig
 
 # SSH Config
-!.ssh/config
+!/.ssh
+/.ssh/*
+!/.ssh/config
 
 # TMux config
 !.tmux*.conf
 
-# NeoVim Config
-!/.config/nvim
-
-# kitty config
+!/.config
+/.config/*
+!/.config/flake8
 !/.config/kitty
+!/.config/nvim
 
 # Vim Config
 !.vimrc
@@ -63,9 +58,6 @@
 /.vim/*
 !/.vim/snippets
 
-!.xinitrc
-!.xsession
-!.Xresources
 !.screenrc
 !.terminfo.src/
 !.ipython/
