@@ -54,6 +54,7 @@
 !/.config/systemd
 !/.config/tmux
 !/.config/waybar
+!/.config/wofi
 
 # Vim Config
 !.vimrc
