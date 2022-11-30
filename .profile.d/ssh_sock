@@ -1,0 +1,39 @@
+#!/bin/sh
+# before: bootstrap
+
+find_ssh_sock()
+{
+  if [ -n "$SSH_AUTH_SOCK" ]; then
+    echo 'SSH_AUTH_SOCK already set'
+    return
+  fi
+
+  local systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
+
+  if [ -n "$systemd_sock" ]; then
+    export SSH_AUTH_SOCK=$systemd_sock
+    echo 'Set SSH_AUTH_SOCK from systemd'
+  fi
+
+  if [ -z "$SSH_AUTH_SOCK" ]; then
+    local gpg_sock=$(gpgconf --list-dirs agent-ssh-socket)
+    if [ -n "$gpg_sock" ]; then
+      export SSH_AUTH_SOCK=$gpg_sock
+      echo 'Set SSH_AUTH_SOCK from gpg-agent'
+    fi
+  fi
+
+  if [ -z "$systemd_sock" ]; then
+    systemctl --user import-environment SSH_AUTH_SOCK
+    echo 'Exported SSH_AUTH_SOCK into systemd'
+  fi
+
+  if [ -n "$TMUX" ]; then
+    tmux setenv -g SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+    tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+    echo 'Exported SSH_AUTH_SOCK into tmux'
+  fi
+}
+
+find_ssh_sock
+
