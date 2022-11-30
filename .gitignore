@@ -50,6 +50,7 @@
 !/.config/kitty
 !/.config/nvim
 !/.config/paru
+!/.config/river
 !/.config/systemd
 !/.config/tmux
 
