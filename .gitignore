@@ -47,6 +47,7 @@
 /.config/*
 !/.config/flake8
 !/.config/foot
+!/.config/hypr
 !/.config/kitty
 !/.config/nvim
 !/.config/paru
