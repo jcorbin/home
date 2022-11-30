@@ -48,6 +48,7 @@
 !/.config/flake8
 !/.config/kitty
 !/.config/nvim
+!/.config/paru
 !/.config/systemd
 !/.config/tmux
 
