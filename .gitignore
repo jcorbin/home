@@ -51,8 +51,7 @@
 !/.config/nvim
 !/.config/paru
 !/.config/river
-!/.config/swayidle
-!/.config/swaylock
+!/.config/sway
 !/.config/systemd
 !/.config/tmux
 !/.config/waybar
