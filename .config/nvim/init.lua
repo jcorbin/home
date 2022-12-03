@@ -37,7 +37,7 @@ require 'paq' {
 
   "neovim/nvim-lspconfig";
   'folke/lsp-colors.nvim';
-  {url = 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'},
+  { url = 'https://git.sr.ht/~whynothugo/lsp_lines.nvim' },
 
 
   "hrsh7th/cmp-nvim-lsp";
@@ -666,7 +666,7 @@ map_leader('n', 'sm', telescopes.man_pages)
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 
 -- per-buffer LSP setup {{{
-local on_lsp_attach = function(_, bufnr)
+local on_lsp_attach = function(caps, bufnr)
   local autocmd_local = autocmd.buffer(bufnr)
 
   local map_buffer = keymap_options { buffer = bufnr }
@@ -699,12 +699,14 @@ local on_lsp_attach = function(_, bufnr)
   end)
 
   -- cursor hold highlighting
-  autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
-    lsp.buf.document_highlight()
-  end)
-  autocmd_local('CursorMoved', function()
-    lsp.buf.clear_references()
-  end)
+  if caps['textDocument/documentHighlight'] ~= nil then
+    autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
+      lsp.buf.document_highlight()
+    end)
+    autocmd_local('CursorMoved', function()
+      lsp.buf.clear_references()
+    end)
+  end
 
   -- -- Use LSP as the handler for formatexpr.
   -- --    See `:help formatexpr` for more information.
@@ -769,6 +771,7 @@ initls('sumneko_lua', {
 initls 'tsserver'
 initls 'yamlls'
 initls 'vimls'
+initls 'zls'
 
 -- }}}
 
