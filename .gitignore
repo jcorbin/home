@@ -43,14 +43,13 @@
 /.ssh/*
 !/.ssh/config
 
-# TMux config
-!.tmux*.conf
-
 !/.config
 /.config/*
 !/.config/flake8
 !/.config/kitty
 !/.config/nvim
+!/.config/systemd
+!/.config/tmux
 
 # Vim Config
 !.vimrc
