@@ -53,6 +53,7 @@
 !/.config/river
 !/.config/systemd
 !/.config/tmux
+!/.config/waybar
 
 # Vim Config
 !.vimrc

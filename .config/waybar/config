@@ -1,0 +1,166 @@
+{
+  "mode": "dock",
+    "layer": "top",
+    "position": "top",
+
+    // "height": 24,
+    // "width": 1280, // Waybar width
+    "spacing": 4,
+
+    "fixed-center": false,
+
+    "modules-left": [
+      "clock",
+      "river/tags",
+    ],
+
+    "modules-center": [
+      "river/window",
+    ],
+
+    "modules-right": [
+      "tray",
+
+      // "custom/pacman",
+      "idle_inhibitor",
+
+      "pulseaudio",
+      "bluetooth",
+      "network",
+
+      "cpu",
+      // "memory",
+      // "temperature",
+      // "backlight",
+
+      "battery",
+    ],
+
+     // "custom/pacman": {
+     //    "format": "{}  ",
+     //    "interval": 3600,                     // every hour
+     //    "exec": "checkupdates | wc -l",       // # of updates
+     //    "exec-if": "exit 0",                  // always run; consider advanced run conditions
+     //    "on-click": "foot sudo pacman -Syu",  // update system
+     //    "signal": 8
+     // },
+
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10,
+      // "show-passive-items": true,
+    },
+
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "interval": 1,
+        "format": "{:%Y-%m-%d %H:%M:%S %z}"
+    },
+
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false,
+        "on-click": "foot htop",
+    },
+
+    "memory": {
+        "format": "{}% "
+    },
+
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+
+    "battery": {
+        //"bat": "BAT1"
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "",
+        "format-ethernet": "",
+        "format-linked": "X",
+        "format-disconnected": "⚠",
+        "interval": 15,
+
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) {ifname} via {gwaddr}",
+        "tooltip-format-ethernet": "{ifname} via {gwaddr}",
+        "tooltip-format-disconnected": "{ifname} (No IP)",
+        "tooltip-format-disabled": "{ifname} (disabled)",
+
+        "on-click": "foot iwctl",
+
+    },
+
+    "bluetooth": {
+      "on-click": "foot bluetuith",
+      "format": "",
+      "format-disabled": "X",
+      "format-off": "-",
+      "format-connected": "+",
+    },
+
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        // "on-click": "pavucontrol"
+        "on-click": "foot pulsemixer"
+    }
+
+}
