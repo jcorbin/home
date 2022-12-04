@@ -712,9 +712,11 @@ local on_lsp_attach = function(caps, bufnr)
   -- --    See `:help formatexpr` for more information.
   -- vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
-  autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
-    lsp.codelens.refresh()
-  end)
+  if caps['textDocument/codeLens'] ~= nil then
+    autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
+      lsp.codelens.refresh()
+    end)
+  end
 
 end
 -- }}}
