@@ -195,7 +195,12 @@ riverctl float-filter-add title "popup title with spaces"
 # Set app-ids and titles of views which should use client side decorations
 riverctl csd-filter-add app-id "gedit"
 
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/river/local" ]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}/river/local"
+fi
+
 waybar &
+
 # Set and exec into the default layout generator, rivertile.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
