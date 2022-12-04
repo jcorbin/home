@@ -861,6 +861,10 @@ autocmd('FileType', {
 autocmd('TermOpen', 'setlocal nospell')
 -- }}}
 
+autocmd('FileType', {
+  'zig',
+}, 'setlocal commentstring=//\\ %s')
+
 opt.virtualedit = 'all'
 
 opt.laststatus = 2
