@@ -867,7 +867,7 @@ opt.laststatus = 2
 
 opt.updatetime = 250
 
-opt.guifont = 'JetBrains Mono ExtraLight:h12'
+opt.guifont = 'JetBrains Mono:h12'
 
 -- TODO listchars
 -- opt.listchars = {
@@ -885,6 +885,22 @@ opt.completeopt = { 'menu', 'menuone', 'noselect' }
 -- TODO audit old vimrc for more
 -- TODO swap dir
 
+-- }}}
+
+-- neovide specific config {{{
+if g.neovide then
+
+  g.neovide_scale_factor = 1.0
+
+  local scale_step = 0.05
+  keymap.set({ 'n' }, '<C-=>', function() g.neovide_scale_factor = g.neovide_scale_factor * (1 + scale_step) end)
+  keymap.set({ 'n' }, '<C-->', function() g.neovide_scale_factor = g.neovide_scale_factor / (1 + scale_step) end)
+  keymap.set({ 'n' }, '<C-0>', function() g.neovide_scale_factor = 1.0 end)
+
+  g.neovide_hide_mouse_when_typing = true
+
+  g.neovide_cursor_vfx_mode = 'railgun'
+end
 -- }}}
 
 -- option toggles {{{
