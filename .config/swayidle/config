@@ -1,0 +1,6 @@
+before-sleep swaylock -f
+lock swaylock -f
+unlock pkill -USR1 swaylock
+timeout 300 swaylock -f
+timeout 600 wlopm --off * resume wlopm --on *
+idlehint 900
