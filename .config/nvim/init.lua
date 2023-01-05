@@ -729,6 +729,43 @@ local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
+require 'lspconfig'.pylsp.setup {
+  settings = {
+    -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = {
+            -- NOTE these don't actually work for pylint... what even is the point of pycodestyle?
+            'C0114', -- missing-module-docstring
+            'C0115', -- missing-class-docstring
+            'C0116', -- missing-function-docstring
+          },
+          maxLineLength = 100
+        },
+        jedi_completion = {
+          fuzzy = true,
+          eager = true,
+        },
+
+        -- TODO useful or not w/ pycodestyle?
+        pylint = {
+          enabled = false,
+        },
+
+        -- TODO decide on black vs yapf
+        black = {
+          enabled = false,
+          line_length = 100,
+        },
+        yapf = {
+          enabled = true,
+        },
+      }
+    }
+  }
+}
+
 initls('sumneko_lua', {
   settings = {
     Lua = {
