@@ -54,6 +54,8 @@ require 'paq' {
   "fatih/vim-go";
   "tpope/vim-fugitive";
 
+  "ziglang/zig.vim";
+
   -- file browsing
   'justinmk/vim-dirvish';
   'kristijanhusak/vim-dirvish-git';
