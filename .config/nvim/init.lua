@@ -423,6 +423,8 @@ trouble.setup {
 }
 
 map_leader('n', 'xx', bind(cmd, 'TroubleToggle'))
+map_leader('n', 'xq', bind(cmd, 'TroubleToggle quickfix'))
+map_leader('n', 'xl', bind(cmd, 'TroubleToggle loclist'))
 map_leader('n', 'xw', bind(cmd, 'TroubleToggle workspace_diagnostics'))
 map_leader('n', 'xd', bind(cmd, 'TroubleToggle document_diagnostics'))
 
