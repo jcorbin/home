@@ -11,12 +11,6 @@ local bind = function(f, ...)
   return function(...) return f(unpack(args), ...) end
 end
 
-local defered = function(callback)
-  return function()
-    vim.schedule(callback)
-  end
-end
-
 opt.termguicolors = true
 
 local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim' -- {{{
@@ -269,14 +263,9 @@ end
 map_leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
 map_leader('n', 'sv', file_doer(env.MYVIMRC))
 
-autocmd('BufWritePost', env.MYVIMRC,
-  -- defered because sourcing a file inside an autocmd callback seems to work less good
-  defered(file_doer(env.MYVIMRC))
-
--- another option that generalizes, since it takes the path from the autocmd callback
---   function(opts) vim.schedule(file_doer(opts.file)) end
-
-)
+autocmd('BufWritePost', env.MYVIMRC, function(opts)
+  vim.schedule(file_doer(opts.file))
+end)
 
 -- }}}
 
