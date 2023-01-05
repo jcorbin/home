@@ -932,7 +932,7 @@ end
 local find_dev_services = function(yield)
   local fh = io.open('package.json')
   if fh == nil then
-    vim.notify('no package.json found', 'warn')
+    vim.notify('no package.json found', vim.log.levels.WARN)
     return
   end
 
