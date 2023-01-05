@@ -24,6 +24,17 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 return require('packer').startup { function(use)
   use { packer_github }
 
+  -- prettier toast-style notifications {{{
+  use { 'rcarriga/nvim-notify', config = function()
+    local notify = require('notify')
+    notify.setup {
+      stages = 'slide',
+      render = 'minimal',
+      timeout = 3000,
+    }
+    vim.notify = notify
+  end } -- }}}
+
   if packer_bootstrap then
     require('packer').sync()
   end

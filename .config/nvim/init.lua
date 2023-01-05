@@ -21,7 +21,6 @@ end
 require 'paq' {
   "savq/paq-nvim";
 
-  "rcarriga/nvim-notify";
   "echasnovski/mini.nvim";
 
   "nvim-lua/plenary.nvim";
@@ -225,17 +224,6 @@ tmap('p', bind(paste_from, '"')) -- vim "clipboard"
 
 -- }}}
 
--- prettier toast-style notifications {{{
-require('notify').setup {
-  stages = 'slide',
-  render = 'minimal',
-  timeout = 3000,
-}
-vim.notify = require('notify');
--- }}}
-
-local notify = vim.notify;
-
 -- fugitive keymaps {{{
 map_leader('n', 'Gg', ':G<cr>')
 map_leader('n', 'GG', ':G<cr>')
@@ -256,7 +244,7 @@ map_leader('n', 'Go',
 local file_doer = function(path)
   return function()
     dofile(path)
-    notify('Reloaded ' .. path)
+    vim.notify('Reloaded ' .. path)
   end
 end
 
