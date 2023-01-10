@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# See the river(1), riverctl(1), and rivertile(1) man pages for complete
+# documentation.
+
 set -x
 set -e
 
@@ -7,14 +10,11 @@ systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
 
 source ~/.profile.d/ssh_sock
 
-# TODO: shift these out into systemd user units
 kanshi &
-wl-paste --watch clipman store &
-waybar &
+
 swayidle &
 
-# See the river(1), riverctl(1), and rivertile(1) man pages for complete
-# documentation.
+wl-paste --watch clipman store &
 
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
@@ -185,6 +185,7 @@ riverctl float-filter-add title "popup title with spaces"
 # Set app-ids and titles of views which should use client side decorations
 riverctl csd-filter-add app-id "gedit"
 
+waybar &
 # Set and exec into the default layout generator, rivertile.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
