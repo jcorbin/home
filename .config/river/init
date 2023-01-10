@@ -14,6 +14,16 @@ kanshi &
 
 swayidle &
 
+if [ -n "$AUTOLOGIN" ]; then
+  sleep 0.25 # to give kanshi and swaylock a beat to initialize before locking
+  {
+    swaylock
+    if [ -f "$AUTOLOGIN" ]; then
+      rm -fv "$AUTOLOGIN"
+    fi
+  } &
+fi
+
 wl-paste --watch clipman store &
 
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
