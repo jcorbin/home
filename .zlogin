@@ -47,6 +47,8 @@ exec_session() {
   fi
 
   local logfile="${state_dir}/vt${XDG_VTNR}-$(date -Iseconds).log"
+  export XDG_SESSION_LOG=$logfile
+
   ln -svf "$logfile" "${state_dir}/vt${XDG_VTNR}.log"
 
   echo "Executing $@"
