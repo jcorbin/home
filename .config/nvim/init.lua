@@ -1,10 +1,11 @@
 require 'plugins'
 
+require 'my.init'
+
 local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
-local env = vim.env
 
 local bind = function(f, ...)
   local args = { ... }
@@ -125,24 +126,6 @@ mykeymap.leader('n', 'GC', ':G commit --amend<cr>')
 mykeymap.leader('n', 'Go',
   -- TODO implement a function that avoids clobbering the default register
   'yaw:Gsplit <C-r>"<cr>')
--- }}}
-
--- init.lua iteration {{{
-
-local file_doer = function(path)
-  return function()
-    dofile(path)
-    vim.notify('Reloaded ' .. path)
-  end
-end
-
-mykeymap.leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
-mykeymap.leader('n', 'sv', file_doer(env.MYVIMRC))
-
-autocmd('BufWritePost', env.MYVIMRC, function(opts)
-  vim.schedule(file_doer(opts.file))
-end)
-
 -- }}}
 
 -- startify/dashboard "mini" alternative {{{
