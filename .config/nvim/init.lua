@@ -22,8 +22,6 @@ end
 require 'paq' {
   "savq/paq-nvim";
 
-  "echasnovski/mini.nvim";
-
   "nvim-lua/plenary.nvim";
   "nvim-telescope/telescope.nvim";
   "nvim-telescope/telescope-ui-select.nvim";
@@ -128,44 +126,6 @@ mykeymap.leader('n', 'Go',
   'yaw:Gsplit <C-r>"<cr>')
 -- }}}
 
--- startify/dashboard "mini" alternative {{{
-require('mini.starter').setup {}
-require('mini.sessions').setup {
-  autoread = true,
-}
-
-mykeymap.leader('n', 'Sc', function()
-  vim.ui.input({
-    prompt = 'Create new session named: ',
-    default = vim.fs.basename(vim.fn.getcwd()),
-  }, function(session_name)
-    if session_name ~= nil then
-      MiniSessions.write(session_name, {})
-    end
-  end)
-end)
-
-mykeymap.leader('n', 'Sr', bind(MiniSessions.select, 'read'))
-mykeymap.leader('n', 'Sw', bind(MiniSessions.select, 'write'))
-mykeymap.leader('n', 'Sd', bind(MiniSessions.select, 'delete'))
-
-mykeymap.leader('n', ':', MiniStarter.open)
--- TODO session management mappings
-
--- }}}
-
--- "mini" alternative to statusline and tabline plugins {{{
-require('mini.statusline').setup {}
--- require('mini.tabline').setup {
---   show_icons = false,
--- }
--- }}}
-
-require('mini.comment').setup {}
--- require('mini.pairs').setup {}
-require('mini.surround').setup {}
-require('mini.fuzzy').setup {}
-
 -- line exchange mappings ; TODO mini.exchange is a planned module {{{
 -- TODO repeatable
 mykeymap.pair('n', 'e', ':move--<cr>', ':move+<cr>')
@@ -191,10 +151,6 @@ mykeymap.leader({ 'n', 'v' }, 'vm', [[:v\/ move ]])
 mykeymap.leader({ 'n', 'v' }, 'vc', [[:v\/ copy ]])
 mykeymap.leader({ 'n', 'v' }, 'vd', [[:v\/ delete<cr>]])
 
--- }}}
-
-require('mini.trailspace').setup {} -- {{{
-mykeymap.leader('n', 'ts', MiniTrailspace.trim)
 -- }}}
 
 require('nvim-treesitter.configs').setup { -- {{{
