@@ -102,6 +102,8 @@ riverctl map normal Super Semicolon spawn 'pkill -USR1 waybar'
 riverctl map normal Super+Shift Return spawn foot
 
 riverctl map normal Super S spawn 'slurp | grim -g - - | wl-copy'
+riverctl map normal Super R spawn 'slurp | grim -g - - | tesseract - - | wl-copy'
+
 riverctl map normal Super+Shift S spawn 'slurp -r -o | grim -g - - | wl-copy'
 # riverctl map normal Super+Control S spawn 'TODO-LIST-RECTS | slurp -r | grim -g - - | wl-copy'
 riverctl map normal Super+Alt S spawn 'slurp -p | grim -g - -t ppm - | convert - -format "%[pixel:p{0,0}]" txt:-'
