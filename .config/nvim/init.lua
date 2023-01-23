@@ -152,59 +152,20 @@ end
 -- group for ungrouped autocmds so that they are deduped when reloading
 local autocmd = augroup('myvimrc-autocmd')
 
-local keymap = vim.keymap
-
--- use <Space> for mapleader
-keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-g.mapleader = ' '
-g.maplocalleader = ' '
-
--- creates a pair of mappings under the [ and ] family
-local map_pair = function(mode, key, prev, next)
-  keymap.set(mode, '[' .. key, prev)
-  keymap.set(mode, ']' .. key, next)
-end
-
--- keymap.set combinator that adds a LHS prefix
-local keymap_prefix = function(prefix, mapper)
-  if mapper == nil then
-    mapper = keymap.set
-  end
-  return function(mode, key, rhs, opts)
-    local lhs = prefix .. key
-    mapper(mode, lhs, rhs, opts)
-  end
-end
-
--- keymap.set combinator that forces some options
-local keymap_options = function(forced_opts, mapper)
-  if mapper == nil then
-    mapper = keymap.set
-  end
-  return function(mode, lhs, rhs, opts)
-    if opts == nil then
-      opts = forced_opts
-    else
-      opts = vim.tbl_extend('force', opts, forced_opts)
-    end
-    mapper(mode, lhs, rhs, opts)
-  end
-end
-
-local map_leader = keymap_prefix '<Leader>'
+local mykeymap = require 'my.keymap'
 
 -- context marker motion
 local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
-map_pair('n', 'n',
+mykeymap.pair('n', 'n',
   bind(fn.search, context_marker, 'bW'),
   bind(fn.search, context_marker, 'W'))
 
 -- terminal {{{
 
-local tmap = bind(keymap_prefix('<C-\\>'), 't')
+local tmap = bind(mykeymap.prefix('<C-\\>'), 't')
 
 -- Easy run in :terminal map
-map_leader('n', '!', ':vsplit | term ')
+mykeymap.leader('n', '!', ':vsplit | term ')
 
 -- Quicker 'Go Back' binding
 -- tmap('<C-o>', <C-\><C-n><C-o>)
@@ -227,16 +188,16 @@ tmap('p', bind(paste_from, '"')) -- vim "clipboard"
 -- }}}
 
 -- fugitive keymaps {{{
-map_leader('n', 'Gg', ':G<cr>')
-map_leader('n', 'GG', ':G<cr>')
-map_leader('n', 'Gd', ':Gdiff<cr>')
-map_leader('n', 'Ga', ':G add %<cr>')
-map_leader('n', 'GA', ':G add --update<cr>')
-map_leader('n', 'Gr', ':G reset<cr>')
-map_leader('n', 'Gb', ':G blame<cr>')
-map_leader('n', 'Gc', ':G commit<cr>')
-map_leader('n', 'GC', ':G commit --amend<cr>')
-map_leader('n', 'Go',
+mykeymap.leader('n', 'Gg', ':G<cr>')
+mykeymap.leader('n', 'GG', ':G<cr>')
+mykeymap.leader('n', 'Gd', ':Gdiff<cr>')
+mykeymap.leader('n', 'Ga', ':G add %<cr>')
+mykeymap.leader('n', 'GA', ':G add --update<cr>')
+mykeymap.leader('n', 'Gr', ':G reset<cr>')
+mykeymap.leader('n', 'Gb', ':G blame<cr>')
+mykeymap.leader('n', 'Gc', ':G commit<cr>')
+mykeymap.leader('n', 'GC', ':G commit --amend<cr>')
+mykeymap.leader('n', 'Go',
   -- TODO implement a function that avoids clobbering the default register
   'yaw:Gsplit <C-r>"<cr>')
 -- }}}
@@ -250,8 +211,8 @@ local file_doer = function(path)
   end
 end
 
-map_leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
-map_leader('n', 'sv', file_doer(env.MYVIMRC))
+mykeymap.leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
+mykeymap.leader('n', 'sv', file_doer(env.MYVIMRC))
 
 autocmd('BufWritePost', env.MYVIMRC, function(opts)
   vim.schedule(file_doer(opts.file))
@@ -265,7 +226,7 @@ require('mini.sessions').setup {
   autoread = true,
 }
 
-map_leader('n', 'Sc', function()
+mykeymap.leader('n', 'Sc', function()
   vim.ui.input({
     prompt = 'Create new session named: ',
     default = vim.fs.basename(vim.fn.getcwd()),
@@ -276,11 +237,11 @@ map_leader('n', 'Sc', function()
   end)
 end)
 
-map_leader('n', 'Sr', bind(MiniSessions.select, 'read'))
-map_leader('n', 'Sw', bind(MiniSessions.select, 'write'))
-map_leader('n', 'Sd', bind(MiniSessions.select, 'delete'))
+mykeymap.leader('n', 'Sr', bind(MiniSessions.select, 'read'))
+mykeymap.leader('n', 'Sw', bind(MiniSessions.select, 'write'))
+mykeymap.leader('n', 'Sd', bind(MiniSessions.select, 'delete'))
 
-map_leader('n', ':', MiniStarter.open)
+mykeymap.leader('n', ':', MiniStarter.open)
 -- TODO session management mappings
 
 -- }}}
@@ -298,34 +259,34 @@ require('mini.surround').setup {}
 require('mini.fuzzy').setup {}
 
 -- line exchange mappings ; TODO mini.exchange is a planned module {{{
-keymap.set('n', '[e', ':move--<cr>') -- TODO repeatable
-keymap.set('n', ']e', ':move+<cr>') -- TODO repeatable
+-- TODO repeatable
+mykeymap.pair('n', 'e', ':move--<cr>', ':move+<cr>')
 -- }}}
 
 -- ex command convenience maps {{{
 
 -- marginally quicker path to norm/move/copy a range
 -- ... this mapping is barely useful in normal mode fwiw
-map_leader({ 'n', 'v' }, 'nn', ':norm ')
-map_leader({ 'n', 'v' }, 'mm', ':move ')
-map_leader({ 'n', 'v' }, 'cc', ':copy ')
+mykeymap.leader({ 'n', 'v' }, 'nn', ':norm ')
+mykeymap.leader({ 'n', 'v' }, 'mm', ':move ')
+mykeymap.leader({ 'n', 'v' }, 'cc', ':copy ')
 
 -- gre* family mappings that reuse the last search pattern
-map_leader({ 'n', 'v' }, 'gn', [[:g\/ norm ]])
-map_leader({ 'n', 'v' }, 'gm', [[:g\/ move ]])
-map_leader({ 'n', 'v' }, 'gc', [[:g\/ copy ]])
-map_leader({ 'n', 'v' }, 'gd', [[:g\/ delete<cr>]])
+mykeymap.leader({ 'n', 'v' }, 'gn', [[:g\/ norm ]])
+mykeymap.leader({ 'n', 'v' }, 'gm', [[:g\/ move ]])
+mykeymap.leader({ 'n', 'v' }, 'gc', [[:g\/ copy ]])
+mykeymap.leader({ 'n', 'v' }, 'gd', [[:g\/ delete<cr>]])
 
 -- negative match versions of those
-map_leader({ 'n', 'v' }, 'vn', [[:v\/ norm ]])
-map_leader({ 'n', 'v' }, 'vm', [[:v\/ move ]])
-map_leader({ 'n', 'v' }, 'vc', [[:v\/ copy ]])
-map_leader({ 'n', 'v' }, 'vd', [[:v\/ delete<cr>]])
+mykeymap.leader({ 'n', 'v' }, 'vn', [[:v\/ norm ]])
+mykeymap.leader({ 'n', 'v' }, 'vm', [[:v\/ move ]])
+mykeymap.leader({ 'n', 'v' }, 'vc', [[:v\/ copy ]])
+mykeymap.leader({ 'n', 'v' }, 'vd', [[:v\/ delete<cr>]])
 
 -- }}}
 
 require('mini.trailspace').setup {} -- {{{
-map_leader('n', 'ts', MiniTrailspace.trim)
+mykeymap.leader('n', 'ts', MiniTrailspace.trim)
 -- }}}
 
 require('nvim-treesitter.configs').setup { -- {{{
@@ -362,14 +323,14 @@ vim.diagnostic.config { -- {{{
   },
 }
 
-map_leader('n', 'dg', vim.diagnostic.open_float) -- }}}
+mykeymap.leader('n', 'dg', vim.diagnostic.open_float) -- }}}
 
 local lsp = vim.lsp
 local lspconfig = require 'lspconfig'
 
 require("lsp_lines").setup()
 vim.diagnostic.config({ virtual_text = false, })
-map_leader('n', 'l', require("lsp_lines").toggle)
+mykeymap.leader('n', 'l', require("lsp_lines").toggle)
 
 local trouble = require 'trouble' -- {{{
 trouble.setup {
@@ -422,23 +383,23 @@ trouble.setup {
   use_diagnostic_signs = true -- enabling this will use the signs defined in your lsp client
 }
 
-map_leader('n', 'xx', bind(cmd, 'TroubleToggle'))
-map_leader('n', 'xq', bind(cmd, 'TroubleToggle quickfix'))
-map_leader('n', 'xl', bind(cmd, 'TroubleToggle loclist'))
-map_leader('n', 'xw', bind(cmd, 'TroubleToggle workspace_diagnostics'))
-map_leader('n', 'xd', bind(cmd, 'TroubleToggle document_diagnostics'))
+mykeymap.leader('n', 'xx', bind(cmd, 'TroubleToggle'))
+mykeymap.leader('n', 'xq', bind(cmd, 'TroubleToggle quickfix'))
+mykeymap.leader('n', 'xl', bind(cmd, 'TroubleToggle loclist'))
+mykeymap.leader('n', 'xw', bind(cmd, 'TroubleToggle workspace_diagnostics'))
+mykeymap.leader('n', 'xd', bind(cmd, 'TroubleToggle document_diagnostics'))
 
-map_pair('n', 'x',
+mykeymap.pair('n', 'x',
   bind(trouble.previous, { skip_groups = true, jump = true }),
   bind(trouble.next, { skip_groups = true, jump = true }))
 
-map_pair('n', 'q',
+mykeymap.pair('n', 'q',
   bind(cmd, 'cprev'),
   bind(cmd, 'cnext'))
 
-map_leader('n', 'e', vim.diagnostic.open_float)
+mykeymap.leader('n', 'e', vim.diagnostic.open_float)
 
-map_pair('n', 'd',
+mykeymap.pair('n', 'd',
   vim.diagnostic.goto_prev,
   vim.diagnostic.goto_next)
 
@@ -628,25 +589,25 @@ telescope.setup {
 
 telescope.load_extension("ui-select")
 
-map_leader('n', '<Space>', telescopes.buffers)
+mykeymap.leader('n', '<Space>', telescopes.buffers)
 tmap('<Space>', bind(telescopes.buffers, { ignore_current_buffer = true }))
 
-map_leader('n', 'sf', bind(telescopes.find_files, {
+mykeymap.leader('n', 'sf', bind(telescopes.find_files, {
   previewer = false,
   hidden = true,
   no_ignore = true,
 }))
-map_leader('n', 'sb', telescopes.current_buffer_fuzzy_find)
-map_leader('n', 'sh', telescopes.help_tags)
-map_leader('n', 'st', telescopes.tags)
-map_leader('n', 'ss', telescopes.grep_string)
-map_leader('n', 'sg', telescopes.live_grep)
-map_leader('n', 'so', bind(telescopes.tags, { only_current_buffer = true }))
-map_leader('n', '?', telescopes.oldfiles)
-map_leader('n', 'sm', telescopes.man_pages)
-map_leader('n', 'st', telescopes.treesitter)
-map_leader('n', 'sd', telescopes.diagnostics)
-map_leader('n', 's.', telescopes.resume)
+mykeymap.leader('n', 'sb', telescopes.current_buffer_fuzzy_find)
+mykeymap.leader('n', 'sh', telescopes.help_tags)
+mykeymap.leader('n', 'st', telescopes.tags)
+mykeymap.leader('n', 'ss', telescopes.grep_string)
+mykeymap.leader('n', 'sg', telescopes.live_grep)
+mykeymap.leader('n', 'so', bind(telescopes.tags, { only_current_buffer = true }))
+mykeymap.leader('n', '?', telescopes.oldfiles)
+mykeymap.leader('n', 'sm', telescopes.man_pages)
+mykeymap.leader('n', 'st', telescopes.treesitter)
+mykeymap.leader('n', 'sd', telescopes.diagnostics)
+mykeymap.leader('n', 's.', telescopes.resume)
 
 -- }}}
 
@@ -657,8 +618,8 @@ autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 local on_lsp_attach = function(caps, bufnr)
   local autocmd_local = autocmd.buffer(bufnr)
 
-  local map_buffer = keymap_options { buffer = bufnr }
-  local map_local = keymap_prefix('<LocalLeader>', map_buffer)
+  local map_buffer = mykeymap.options { buffer = bufnr }
+  local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
   map_buffer('n', 'K', lsp.buf.hover)
   map_buffer('n', '<C-k>', lsp.buf.signature_help)
@@ -922,9 +883,9 @@ if g.neovide then
   g.neovide_scale_factor = 1.0
 
   local scale_step = 0.05
-  keymap.set({ 'n' }, '<C-=>', function() g.neovide_scale_factor = g.neovide_scale_factor * (1 + scale_step) end)
-  keymap.set({ 'n' }, '<C-->', function() g.neovide_scale_factor = g.neovide_scale_factor / (1 + scale_step) end)
-  keymap.set({ 'n' }, '<C-0>', function() g.neovide_scale_factor = 1.0 end)
+  vim.keymap.set({ 'n' }, '<C-=>', function() g.neovide_scale_factor = g.neovide_scale_factor * (1 + scale_step) end)
+  vim.keymap.set({ 'n' }, '<C-->', function() g.neovide_scale_factor = g.neovide_scale_factor / (1 + scale_step) end)
+  vim.keymap.set({ 'n' }, '<C-0>', function() g.neovide_scale_factor = 1.0 end)
 
   g.neovide_hide_mouse_when_typing = true
 
@@ -935,7 +896,7 @@ end
 -- option toggles {{{
 
 local function map_opt_toggle(keys, name)
-  keymap.set('n', keys, function()
+  vim.keymap.set('n', keys, function()
     if opt[name]:get() then
       opt[name] = false
       vim.notify('set no' .. name)
