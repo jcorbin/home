@@ -20,7 +20,7 @@ delay_attempt() {
     <"$pending_file" read prior
     local backoff=$(( 2 ** prior - 1 ))
 
-    if [ $pend_since -gte $backoff ]; then
+    if [ $pend_since -ge $backoff ]; then
       echo >&2 ".zlogin resetting stale $pending_file prior $prior since $prior_time"
       prior=0
     else
