@@ -178,7 +178,9 @@ require('nvim-treesitter.configs').setup { -- {{{
 
 -- }}}
 
-vim.diagnostic.config { -- {{{
+-- diagnostics and quickfix {{{
+
+vim.diagnostic.config {
   signs = true,
   virtual_text = true,
   underline = true,
@@ -187,7 +189,19 @@ vim.diagnostic.config { -- {{{
   },
 }
 
-mykeymap.leader('n', 'dg', vim.diagnostic.open_float) -- }}}
+mykeymap.pair('n', 'q',
+  bind(cmd, 'cprev'),
+  bind(cmd, 'cnext'))
+
+mykeymap.pair('n', 'd',
+  vim.diagnostic.goto_prev,
+  vim.diagnostic.goto_next)
+
+-- TODO dedupe diagnostic open mappings
+mykeymap.leader('n', 'e', vim.diagnostic.open_float)
+mykeymap.leader('n', 'dg', vim.diagnostic.open_float)
+
+-- }}}
 
 local lsp = vim.lsp
 local lspconfig = require 'lspconfig'
@@ -256,16 +270,6 @@ mykeymap.leader('n', 'xd', bind(cmd, 'TroubleToggle document_diagnostics'))
 mykeymap.pair('n', 'x',
   bind(trouble.previous, { skip_groups = true, jump = true }),
   bind(trouble.next, { skip_groups = true, jump = true }))
-
-mykeymap.pair('n', 'q',
-  bind(cmd, 'cprev'),
-  bind(cmd, 'cnext'))
-
-mykeymap.leader('n', 'e', vim.diagnostic.open_float)
-
-mykeymap.pair('n', 'd',
-  vim.diagnostic.goto_prev,
-  vim.diagnostic.goto_next)
 
 -- }}}
 
