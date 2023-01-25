@@ -12,8 +12,6 @@ local bind = function(f, ...)
   return function(...) return f(unpack(args), ...) end
 end
 
-opt.termguicolors = true
-
 local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim' -- {{{
 if fn.empty(fn.glob(install_path)) > 0 then
   fn.system({ 'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', install_path })
@@ -633,23 +631,9 @@ initls 'zls'
 
 require 'colorizer'.setup()
 
--- TODO glepnir/lspsaga.nvim
--- TODO jose-elias-alvarez/null-ls.nvim
-
--- TODO lewis6991/gitsigns.nvim
--- TODO TimUntersberger/neogit
-
 -- TODO mfussenegger/nvim-dap
 
--- TODO more from https://github.com/rockerBOO/awesome-neovim
-
--- TODO snippets
--- TODO term support: float, quake, etc
--- TODO tab detection
-
 -- TODO vinegar like mappings for netrw, or a replacement above
-
--- colorscheme {{{
 
 -- adds missing highlights if the current colorscheme does not support LSP
 require 'lsp-colors'.setup {
@@ -659,29 +643,19 @@ require 'lsp-colors'.setup {
   Hint = "#10B981"
 }
 
--- NOTE: useful pattern for patching colorschemes
--- autocmd('ColorScheme', 'onedark', function()
---   local h = function(...) vim.api.nvim_set_hl(0, ...) end
---   h('String', {fg = '#FFEB95'})
---   h('TelescopeMatching', {link = 'Boolean'})
--- end)
-
-opt.background = 'dark'
-
--- require 'monokai'.setup {
---   -- palette = require 'monokai'.pro
---   -- palette = require 'monokai'.soda
---   -- palette = require 'monokai'.ristretto
--- }
+-- colorscheme {{{
 
 g.vscode_style = 'dark'
 vim.cmd [[colorscheme vscode]]
 
--- require 'lush'
-
 -- }}}
 
 -- Options {{{
+
+opt.guifont = 'JetBrains Mono:h12'
+
+opt.termguicolors = true
+opt.background = 'dark'
 
 opt.shiftwidth = 2
 opt.tabstop = 2
@@ -696,6 +670,10 @@ opt.scrolloff = 2
 
 opt.incsearch = true
 opt.smartcase = true
+
+opt.virtualedit = 'all'
+opt.laststatus = 2
+opt.updatetime = 250
 
 opt.spell = true -- on by default... {{{
 -- ...off by exception
@@ -719,14 +697,6 @@ autocmd('FileType', {
   'zig',
 }, 'setlocal commentstring=//\\ %s')
 
-opt.virtualedit = 'all'
-
-opt.laststatus = 2
-
-opt.updatetime = 250
-
-opt.guifont = 'JetBrains Mono:h12'
-
 -- TODO listchars
 -- opt.listchars = {
 -- eol = '↲',
@@ -741,7 +711,6 @@ opt.guifont = 'JetBrains Mono:h12'
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- TODO audit old vimrc for more
--- TODO swap dir
 
 -- }}}
 
