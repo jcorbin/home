@@ -1,5 +1,6 @@
 require 'my.init'
 require 'my.lazy'
+require 'my.terminal'
 
 local cmd = vim.cmd
 local fn = vim.fn
@@ -27,33 +28,6 @@ local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
 mykeymap.pair('n', 'n',
   bind(fn.search, context_marker, 'bW'),
   bind(fn.search, context_marker, 'W'))
-
--- terminal {{{
-
-local tmap = bind(mykeymap.prefix('<C-\\>'), 't')
-
--- Easy run in :terminal map
-mykeymap.leader('n', '!', ':vsplit | term ')
-
--- Quicker 'Go Back' binding
--- tmap('<C-o>', <C-\><C-n><C-o>)
-
--- Quicker window operations
-tmap('c', bind(cmd, 'close'))
-
-tmap('<C-w>', bind(cmd, 'wincmd '))
-tmap('<C-h>', bind(cmd, 'wincmd h'))
-tmap('<C-j>', bind(cmd, 'wincmd j'))
-tmap('<C-k>', bind(cmd, 'wincmd k'))
-tmap('<C-l>', bind(cmd, 'wincmd l'))
-
-local paste_from = function(reg)
-  vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
-end
-
-tmap('p', bind(paste_from, '"')) -- vim "clipboard"
-
--- }}}
 
 -- line exchange mappings ; TODO mini.exchange is a planned module {{{
 -- TODO repeatable
@@ -220,19 +194,6 @@ map_opt_toggle('<leader>sp', 'spell')
 
 -- }}}
 
-local find_term = function(findCmd)
-  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-    local bufname = vim.api.nvim_buf_get_name(bufnr)
-    local i, _, termcmd = bufname:find('term://.*//%d+:(.*)')
-    -- TODO expand termcwd with something like a realpath() that supports ~
-    -- expansion, compare against session dir / workspace dir / cwd
-    if i and termcmd == findCmd then
-      return bufnr
-    end
-  end
-  return nil
-end
-
 local find_dev_services = function(yield)
   local fh = io.open('package.json')
   if fh == nil then
@@ -268,7 +229,7 @@ end, {})
 
 vim.api.nvim_create_user_command('RunDevServices', function()
   find_dev_services(function(svcCmd)
-    if not find_term(svcCmd) then
+    if not require('my.terminal').find_term(svcCmd) then
       vim.cmd('split | terminal ' .. svcCmd)
     end
   end)
