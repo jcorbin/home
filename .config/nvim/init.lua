@@ -115,24 +115,6 @@ opt.virtualedit = 'all'
 opt.laststatus = 2
 opt.updatetime = 250
 
-opt.spell = true -- on by default... {{{
--- ...off by exception
-autocmd('FileType', {
-  'help',
-  'man',
-  'startify',
-  'godoc',
-  'qf',
-  'netrw',
-  'fugitiveblame',
-  'gitrebase',
-  'goterm',
-  'godebug*',
-  'dirvish',
-}, 'setlocal nospell')
-autocmd('TermOpen', 'setlocal nospell')
--- }}}
-
 autocmd('FileType', {
   'zig',
 }, 'setlocal commentstring=//\\ %s')
