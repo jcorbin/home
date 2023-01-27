@@ -1,9 +1,8 @@
 require 'my.init'
 require 'my.lazy'
 require 'my.terminal'
+require 'my.diagnostics'
 
-local cmd = vim.cmd
-local fn = vim.fn
 local g = vim.g
 local opt = vim.opt
 
@@ -12,29 +11,20 @@ local bind = function(f, ...)
   return function(...) return f(unpack(args), ...) end
 end
 
--- TODO restore language plugins
--- * fatih/vim-go
--- * ziglang/zig.vim
-
+local mykeymap = require 'my.keymap'
 local augroup = require 'my.augroup'
 
 -- group for ungrouped autocmds so that they are deduped when reloading
 local autocmd = augroup 'myvimrc'
 
-local mykeymap = require 'my.keymap'
-
 -- context marker motion
 local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
 mykeymap.pair('n', 'n',
-  bind(fn.search, context_marker, 'bW'),
-  bind(fn.search, context_marker, 'W'))
+  bind(vim.fn.search, context_marker, 'bW'),
+  bind(vim.fn.search, context_marker, 'W'))
 
--- line exchange mappings ; TODO mini.exchange is a planned module {{{
--- TODO repeatable
+-- line exchange mappings
 mykeymap.pair('n', 'e', ':move--<cr>', ':move+<cr>')
--- }}}
-
--- ex command convenience maps {{{
 
 -- marginally quicker path to norm/move/copy a range
 -- ... this mapping is barely useful in normal mode fwiw
@@ -54,41 +44,10 @@ mykeymap.leader({ 'n', 'v' }, 'vm', [[:v\/ move ]])
 mykeymap.leader({ 'n', 'v' }, 'vc', [[:v\/ copy ]])
 mykeymap.leader({ 'n', 'v' }, 'vd', [[:v\/ delete<cr>]])
 
--- }}}
-
--- diagnostics and quickfix {{{
-
-vim.diagnostic.config {
-  signs = true,
-  virtual_text = true,
-  underline = true,
-  float = {
-    source = 'if_many',
-  },
-}
-
-mykeymap.pair('n', 'q',
-  bind(cmd, 'cprev'),
-  bind(cmd, 'cnext'))
-
-mykeymap.pair('n', 'd',
-  vim.diagnostic.goto_prev,
-  vim.diagnostic.goto_next)
-
--- TODO dedupe diagnostic open mappings
-mykeymap.leader('n', 'e', vim.diagnostic.open_float)
-mykeymap.leader('n', 'dg', vim.diagnostic.open_float)
-
--- }}}
-
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 
 require 'my.language_servers'
-
--- TODO glepnir/lspsaga.nvim
--- TODO jose-elias-alvarez/null-ls.nvim
--- TODO mfussenegger/nvim-dap
 
 -- Options {{{
 
@@ -132,8 +91,6 @@ autocmd('FileType', {
 
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
--- TODO audit old vimrc for more
-
 -- neovide specific config
 if g.neovide then
   g.neovide_scale_factor = 1.0
@@ -158,5 +115,16 @@ mykeymap.opt_toggle('<leader>lw', 'wrap')
 mykeymap.opt_toggle('<leader>sp', 'spell')
 
 -- }}}
+
+-- TODO mini.exchange? mini.move? to repalce line exchange pair mapping
+-- TODO glepnir/lspsaga.nvim
+-- TODO jose-elias-alvarez/null-ls.nvim
+-- TODO mfussenegger/nvim-dap
+
+-- TODO restore language plugins
+-- * fatih/vim-go
+-- * ziglang/zig.vim
+
+-- TODO audit old vimrc for more
 
 -- vim: set ts=2 sw=2 foldmethod=marker:
