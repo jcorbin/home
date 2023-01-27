@@ -1,6 +1,7 @@
+-- prettier toast-style notifications
 return {
-  -- prettier toast-style notifications
   'rcarriga/nvim-notify',
+  lazy = false,
   config = function()
     local notify = require('notify')
     notify.setup {
