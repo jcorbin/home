@@ -167,26 +167,13 @@ if g.neovide then
 end
 
 -- option toggles
-
-local function map_opt_toggle(keys, name)
-  vim.keymap.set('n', keys, function()
-    if opt[name]:get() then
-      opt[name] = false
-      vim.notify('set no' .. name)
-    else
-      opt[name] = true
-      vim.notify('set ' .. name)
-    end
-  end)
-end
-
-map_opt_toggle('<leader>ci', 'ignorecase')
-map_opt_toggle('<leader>ln', 'number')
-map_opt_toggle('<leader>rc', 'relativenumber')
-map_opt_toggle('<leader>cl', 'cursorline')
-map_opt_toggle('<leader>cc', 'cursorcolumn')
-map_opt_toggle('<leader>lw', 'wrap')
-map_opt_toggle('<leader>sp', 'spell')
+mykeymap.opt_toggle('<leader>ci', 'ignorecase')
+mykeymap.opt_toggle('<leader>ln', 'number')
+mykeymap.opt_toggle('<leader>rc', 'relativenumber')
+mykeymap.opt_toggle('<leader>cl', 'cursorline')
+mykeymap.opt_toggle('<leader>cc', 'cursorcolumn')
+mykeymap.opt_toggle('<leader>lw', 'wrap')
+mykeymap.opt_toggle('<leader>sp', 'spell')
 
 -- }}}
 

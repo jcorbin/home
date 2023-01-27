@@ -45,4 +45,16 @@ end
 
 mykeymap.leader = mykeymap.prefix '<Leader>'
 
+mykeymap.opt_toggle = function(keys, name)
+  vim.keymap.set('n', keys, function()
+    if vim.opt[name]:get() then
+      vim.opt[name] = false
+      vim.notify('set no' .. name)
+    else
+      vim.opt[name] = true
+      vim.notify('set ' .. name)
+    end
+  end)
+end
+
 return mykeymap
