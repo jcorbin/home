@@ -152,11 +152,8 @@ opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- TODO audit old vimrc for more
 
--- }}}
-
--- neovide specific config {{{
+-- neovide specific config
 if g.neovide then
-
   g.neovide_scale_factor = 1.0
 
   local scale_step = 0.05
@@ -168,9 +165,8 @@ if g.neovide then
 
   g.neovide_cursor_vfx_mode = 'railgun'
 end
--- }}}
 
--- option toggles {{{
+-- option toggles
 
 local function map_opt_toggle(keys, name)
   vim.keymap.set('n', keys, function()
