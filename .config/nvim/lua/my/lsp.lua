@@ -16,22 +16,21 @@ local on_lsp_attach = function(caps, bufnr)
   map_buffer('n', '<C-k>', lsp.buf.signature_help)
 
   -- keymaps to jump
-  map_buffer('n', '<c-]>', lsp.buf.definition)
-  map_local('n', 'gD', lsp.buf.declaration)
-  map_local('n', 'gI', lsp.buf.implementation)
-  map_local('n', 'gT', lsp.buf.type_definition)
+  map_buffer('n', '<c-]>', lsp.buf.definition, { desc = 'jump to definition (lsp)' })
+  map_local('n', 'gD', lsp.buf.declaration, { desc = 'jump to declaration (lsp)' })
+  map_local('n', 'gI', lsp.buf.implementation, { desc = 'jump to implementation (lsp)' })
+  map_local('n', 'gT', lsp.buf.type_definition, { desc = 'jump to type definition (lsp)' })
 
   -- keymaps to act on code
-  map_local('n', 'a', lsp.buf.code_action)
-  map_local('n', 'f', lsp.buf.format)
-  map_local('n', 'gR', lsp.buf.rename)
+  map_local('n', 'a', lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
+  map_local('n', 'f', lsp.buf.format, { desc = 'format buffer (lsp)' })
+  map_local('n', 'gR', lsp.buf.rename, { desc = 'rename symbol (lsp)' })
   -- TODO format range/object
 
   -- telescope invocations
-  local telescopes = require 'telescope.builtin'
-  map_local('n', 'sr', telescopes.lsp_references)
-  map_local('n', 'so', telescopes.lsp_document_symbols)
-  map_local('n', 'sw', telescopes.lsp_workspace_symbols)
+  map_local('n', 'sr', telescopes.lsp_references, { desc = 'search lsp references' })
+  map_local('n', 'so', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
+  map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
 
   -- auto formatting
   autocmd_local('BufWritePre', function()
