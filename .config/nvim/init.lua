@@ -21,7 +21,8 @@ local autocmd = augroup 'myvimrc'
 local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
 mykeymap.pair('n', 'n',
   bind(vim.fn.search, context_marker, 'bW'),
-  bind(vim.fn.search, context_marker, 'W'))
+  bind(vim.fn.search, context_marker, 'W'),
+  { desc = 'conflict marker' })
 
 -- line exchange mappings
 mykeymap.pair('n', 'e', ':move--<cr>', ':move+<cr>')
