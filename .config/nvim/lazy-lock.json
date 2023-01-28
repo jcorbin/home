@@ -1,5 +1,5 @@
 {
-  "LuaSnip": { "branch": "master", "commit": "500981ff6cefc7343e3959ef0f939bd0bfd49ba9" },
+  "LuaSnip": { "branch": "master", "commit": "94f192cf5f0a1931b3035c2d8affdebec460968c" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-cmdline": { "branch": "main", "commit": "23c51b2a3c00f6abc4e922dbd7c3b9aca6992063" },
   "cmp-emoji": { "branch": "main", "commit": "19075c36d5820253d32e2478b6aaf3734aeaafa0" },
@@ -25,5 +25,6 @@
   "vim-dirvish": { "branch": "master", "commit": "6233243f0caa71d27d27ea102540a88bce8eb6ea" },
   "vim-dirvish-git": { "branch": "master", "commit": "1d938c826503059660d89f186d2e8affc686a0e8" },
   "vim-fugitive": { "branch": "master", "commit": "2febbe1f00be04f16daa6464cb39214a8566ec4b" },
-  "vscode.nvim": { "branch": "main", "commit": "fd92b55f75f1f6a2b94d34ed4f926bf5d032bdd4" }
+  "vscode.nvim": { "branch": "main", "commit": "fd92b55f75f1f6a2b94d34ed4f926bf5d032bdd4" },
+  "which-key.nvim": { "branch": "main", "commit": "684e96c5e8477f1ee9b3f2e9a12d802fd12c5531" }
 }
