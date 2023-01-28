@@ -13,7 +13,6 @@ local file_doer = function(path)
 end
 
 mykeymap.leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
-mykeymap.leader('n', 'sv', file_doer(vim.env.MYVIMRC))
 
 autocmd('BufWritePost', vim.env.MYVIMRC, function(opts)
   vim.schedule(file_doer(opts.file))
