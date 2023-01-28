@@ -62,13 +62,14 @@ return {
     local trouble = require 'trouble'
     trouble.setup(opts)
 
-    mykeymap.leader('n', 'xx', trouble.toggle)
-    mykeymap.leader('n', 'xq', bind(trouble.toggle, 'quickfix'))
-    mykeymap.leader('n', 'xl', bind(trouble.toggle, 'loclist'))
-    mykeymap.leader('n', 'xw', bind(trouble.toggle, 'workspace_diagnostics'))
-    mykeymap.leader('n', 'xd', bind(trouble.toggle, 'document_diagnostics'))
+    mykeymap.leader('n', 'xx', trouble.toggle, { desc = 'Trouble' })
+    mykeymap.leader('n', 'xq', bind(trouble.toggle, 'quickfix'), { desc = 'Errors (quickfix)' })
+    mykeymap.leader('n', 'xl', bind(trouble.toggle, 'loclist'), { desc = 'Matches (loclist)' })
+    mykeymap.leader('n', 'xw', bind(trouble.toggle, 'workspace_diagnostics'), { desc = 'Workspace Diagnostics' })
+    mykeymap.leader('n', 'xd', bind(trouble.toggle, 'document_diagnostics'), { desc = 'Document Diagnostics' })
     mykeymap.pair('n', 'x',
       bind(trouble.previous, { skip_groups = true, jump = true }),
-      bind(trouble.next, { skip_groups = true, jump = true }))
+      bind(trouble.next, { skip_groups = true, jump = true }),
+      { desc = 'trouble' })
   end
 }
