@@ -16,18 +16,18 @@ mykeymap.leader('n', '!', ':vsplit | term ')
 -- myterm.keymap('<C-o>', <C-\><C-n><C-o>)
 
 -- Quicker window operations
-myterm.keymap('c', bind(vim.cmd, 'close'))
+myterm.keymap('c', bind(vim.cmd, 'close'), { desc = 'Close buffer' })
 
-myterm.keymap('<C-w>', bind(vim.cmd, 'wincmd '))
-myterm.keymap('<C-h>', bind(vim.cmd, 'wincmd h'))
-myterm.keymap('<C-j>', bind(vim.cmd, 'wincmd j'))
-myterm.keymap('<C-k>', bind(vim.cmd, 'wincmd k'))
-myterm.keymap('<C-l>', bind(vim.cmd, 'wincmd l'))
+myterm.keymap('<C-w>', bind(vim.cmd, 'wincmd '), { desc = 'Last window' })
+myterm.keymap('<C-h>', bind(vim.cmd, 'wincmd h'), { desc = 'Window ←' })
+myterm.keymap('<C-j>', bind(vim.cmd, 'wincmd j'), { desc = 'Window ↓' })
+myterm.keymap('<C-k>', bind(vim.cmd, 'wincmd k'), { desc = 'Window ↑' })
+myterm.keymap('<C-l>', bind(vim.cmd, 'wincmd l'), { desc = 'Window →' })
 
 myterm.keymap('p', function()
   local reg = '"' -- vim "clipboard"
   vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
-end)
+end, { desc = 'Paste Internal' })
 
 myterm.find_term = function(findCmd)
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
