@@ -5,7 +5,7 @@ local bind = function(f, ...)
   return function(...) return f(unpack(args), ...) end
 end
 
-local tmap = bind(mykeymap.prefix('<C-\\>'), 't')
+local tmap = require('my.terminal').keymap
 
 return {
   'nvim-telescope/telescope.nvim',
@@ -91,24 +91,25 @@ return {
     telescope.setup(opts)
     telescope.load_extension('ui-select')
 
-    mykeymap.leader('n', '<Space>', telescopes.buffers)
-    tmap('<Space>', bind(telescopes.buffers, { ignore_current_buffer = true }))
+    local other_buffer = bind(telescopes.buffers, { ignore_current_buffer = true })
+    mykeymap.leader('n', '<Space>', other_buffer, { desc = 'search buffers' })
+    tmap('<Space>', other_buffer, { desc = 'search buffers' })
 
     mykeymap.leader('n', 'sf', bind(telescopes.find_files, {
       previewer = false,
       hidden = true,
       no_ignore = true,
-    }))
-    mykeymap.leader('n', 'sb', telescopes.current_buffer_fuzzy_find)
-    mykeymap.leader('n', 'sh', telescopes.help_tags)
-    mykeymap.leader('n', 'st', telescopes.tags)
-    mykeymap.leader('n', 'ss', telescopes.grep_string)
-    mykeymap.leader('n', 'sg', telescopes.live_grep)
-    mykeymap.leader('n', 'so', bind(telescopes.tags, { only_current_buffer = true }))
-    mykeymap.leader('n', '?', telescopes.oldfiles)
-    mykeymap.leader('n', 'sm', telescopes.man_pages)
-    mykeymap.leader('n', 'st', telescopes.treesitter)
-    mykeymap.leader('n', 'sd', telescopes.diagnostics)
-    mykeymap.leader('n', 's.', telescopes.resume)
+    }), { desc = 'search files' })
+
+    mykeymap.leader('n', 's.', telescopes.resume, { desc = 'resume last search' })
+
+    mykeymap.leader('n', 'sb', telescopes.current_buffer_fuzzy_find, { desc = 'search in current buffer' })
+    mykeymap.leader('n', 'sh', telescopes.help_tags, { desc = 'search help' })
+    mykeymap.leader('n', 'ss', telescopes.grep_string, { desc = 'grep string search' })
+    mykeymap.leader('n', 'sg', telescopes.live_grep, { desc = 'live grep search' })
+    mykeymap.leader('n', 'so', telescopes.oldfiles, { desc = 'search old files' })
+    mykeymap.leader('n', 'sm', telescopes.man_pages, { desc = 'search man pages' })
+    mykeymap.leader('n', 'st', telescopes.treesitter, { desc = 'search syntax tree' })
+    mykeymap.leader('n', 'sd', telescopes.diagnostics, { desc = 'search diagnostics' })
   end
 }
