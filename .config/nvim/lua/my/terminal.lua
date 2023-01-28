@@ -29,6 +29,13 @@ myterm.keymap('p', function()
   vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
 end, { desc = 'Paste Internal' })
 
+myterm.keymap('P', function()
+  local reg = '+' -- os clipboard
+  vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
+end, {
+  desc = 'Paste OS'
+})
+
 myterm.find_term = function(findCmd)
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     local bufname = vim.api.nvim_buf_get_name(bufnr)
