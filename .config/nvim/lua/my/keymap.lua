@@ -10,9 +10,20 @@ local mykeymap = {}
 -- TODO desc support
 
 -- creates a pair of mappings under the [ and ] family
-mykeymap.pair = function(mode, key, prev, next)
-  vim.keymap.set(mode, '[' .. key, prev)
-  vim.keymap.set(mode, ']' .. key, next)
+mykeymap.pair = function(mode, key, prev, next, opts)
+  local prev_opts = {}
+  local next_opts = {}
+  if opts then
+    prev_opts = vim.tbl_extend('force', prev_opts, opts)
+    next_opts = vim.tbl_extend('force', next_opts, opts)
+    local desc = opts.desc
+    if desc then
+      prev_opts = vim.tbl_extend('force', prev_opts, { desc = 'Previous ' .. desc })
+      next_opts = vim.tbl_extend('force', next_opts, { desc = 'Next ' .. desc })
+    end
+  end
+  vim.keymap.set(mode, '[' .. key, prev, prev_opts)
+  vim.keymap.set(mode, ']' .. key, next, next_opts)
 end
 
 -- keymap.set combinator that adds a LHS prefix
@@ -55,7 +66,9 @@ mykeymap.opt_toggle = function(keys, name)
       vim.opt[name] = true
       vim.notify('set ' .. name)
     end
-  end)
+  end, {
+    desc = "toggle '" .. name .. "' option"
+  })
 end
 
 return mykeymap
