@@ -3,9 +3,6 @@ require 'my.lazy'
 require 'my.terminal'
 require 'my.diagnostics'
 
-local g = vim.g
-local opt = vim.opt
-
 local bind = function(f, ...)
   local args = { ... }
   return function(...) return f(unpack(args), ...) end
@@ -52,6 +49,8 @@ require 'my.language_servers'
 
 -- Options {{{
 
+local opt = vim.opt
+
 opt.guifont = 'JetBrains Mono:h12'
 
 opt.termguicolors = true
@@ -93,17 +92,17 @@ autocmd('FileType', {
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- neovide specific config
-if g.neovide then
-  g.neovide_scale_factor = 1.0
+if vim.g.neovide then
+  vim.g.neovide_scale_factor = 1.0
 
   local scale_step = 0.05
-  vim.keymap.set({ 'n' }, '<C-=>', function() g.neovide_scale_factor = g.neovide_scale_factor * (1 + scale_step) end)
-  vim.keymap.set({ 'n' }, '<C-->', function() g.neovide_scale_factor = g.neovide_scale_factor / (1 + scale_step) end)
-  vim.keymap.set({ 'n' }, '<C-0>', function() g.neovide_scale_factor = 1.0 end)
+  vim.keymap.set({ 'n' }, '<C-=>', function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * (1 + scale_step) end)
+  vim.keymap.set({ 'n' }, '<C-->', function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / (1 + scale_step) end)
+  vim.keymap.set({ 'n' }, '<C-0>', function() vim.g.neovide_scale_factor = 1.0 end)
 
-  g.neovide_hide_mouse_when_typing = true
+  vim.g.neovide_hide_mouse_when_typing = true
 
-  g.neovide_cursor_vfx_mode = 'railgun'
+  vim.g.neovide_cursor_vfx_mode = 'railgun'
 end
 
 -- option toggles
