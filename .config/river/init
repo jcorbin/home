@@ -18,9 +18,14 @@ if [ -n "$AUTOLOGIN" ]; then
   sleep 0.25 # to give kanshi and swaylock a beat to initialize before locking
   {
     swaylock
+
+    # remove any autologin file after unlock, marking the session as successfully started
     if [ -f "$AUTOLOGIN" ]; then
       rm -fv "$AUTOLOGIN"
     fi
+
+    # refresh waybar, particularly so that the bluetooth module will activate
+    pkill -USR2 waybar
   } &
 fi
 
