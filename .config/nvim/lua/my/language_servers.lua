@@ -49,6 +49,9 @@ initls('pylsp', {
     }
 })
 
+initls 'rust_analyzer'
+-- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
+
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
