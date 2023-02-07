@@ -23,6 +23,8 @@ return {
 
     indent = { enable = true },
 
+    textobjects = { enable = true },
+
   },
 
   config = function(_, opts)
