@@ -28,6 +28,8 @@ opt.virtualedit = 'all'
 opt.laststatus = 2
 opt.updatetime = 250
 
+opt.foldlevelstart = 1
+
 -- TODO break this out into a zig-specific module
 autocmd('FileType', {
   'zig',
