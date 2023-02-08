@@ -5,6 +5,10 @@ local filename = {
     path = 1, -- relative path
 }
 
+local function cwd()
+  return vim.fn.getcwd()
+end
+
 return {
     'nvim-lualine/lualine.nvim',
     opts = {
@@ -17,7 +21,7 @@ return {
             section_separators = { left = '', right = '' },
 
             always_divide_middle = false,
-            globalstatus = false,
+            globalstatus = true,
 
             refresh = {
                 statusline = 1000,
@@ -27,6 +31,25 @@ return {
         },
 
         sections = {
+            lualine_a = {
+                'mode',
+            },
+            lualine_b = {
+            },
+            lualine_c = {
+            },
+            lualine_x = {
+                'diff',
+            },
+            lualine_y = {
+                cwd,
+            },
+            lualine_z = {
+                'branch',
+            }
+        },
+
+        winbar = {
             lualine_a = {
                 filename,
             },
@@ -40,19 +63,16 @@ return {
                 'diagnostics',
             },
             lualine_x = {
-                'branch',
-                'diff',
             },
             lualine_y = {
                 'progress',
                 'location',
             },
             lualine_z = {
-                'mode',
             }
         },
 
-        inactive_sections = {
+        inactive_winbar = {
             lualine_a = {
                 filename,
             },
@@ -72,4 +92,9 @@ return {
         },
 
     },
+    config = function(_, opts)
+      vim.opt.laststatus = 3
+      vim.opt.cmdheight = 0
+      require('lualine').setup(opts)
+    end,
 }

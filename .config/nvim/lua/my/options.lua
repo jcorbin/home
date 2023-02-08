@@ -25,7 +25,6 @@ opt.incsearch = true
 opt.smartcase = true
 
 opt.virtualedit = 'all'
-opt.laststatus = 2
 opt.updatetime = 250
 
 opt.foldlevelstart = 1
