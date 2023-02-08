@@ -38,7 +38,5 @@ return {
 
     require('mini.fuzzy').setup {}
 
-    require('mini.statusline').setup {}
-
   end
 }
