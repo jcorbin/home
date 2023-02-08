@@ -1,0 +1,4 @@
+#!/bin/sh
+# after: arrayutil
+
+[ -d "$HOME/.cargo/bin" ] && export PATH=$(IFS=:; prepend "$HOME/.cargo/bin" $PATH)
