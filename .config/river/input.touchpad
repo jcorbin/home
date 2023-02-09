@@ -1,0 +1,11 @@
+events enabled
+accel‐profile adaptive
+pointer-accel 0.5
+disable-while-typing enabled
+tap enabled
+tap‐button‐map left‐right‐middle
+click-method clickfinger
+drag enabled
+drag-lock enabled
+scroll‐method two‐finger
+natural-scroll enabled
