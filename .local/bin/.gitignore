@@ -16,7 +16,6 @@
 !git-shell-pack
 !git-sit
 !git-subtree
-!git-work
 !githook-update-worktree-post-receive
 !githook-update-worktree-post-receive
 !githook-update-worktree-update
