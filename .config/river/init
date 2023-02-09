@@ -29,8 +29,6 @@ if [ -n "$AUTOLOGIN" ]; then
   } &
 fi
 
-wl-paste --watch clipman store &
-
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
 # Super+backtick to idle-lock
@@ -206,6 +204,7 @@ if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/river/local" ]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}/river/local"
 fi
 
+wl-paste --watch clipman store &
 waybar &
 
 # Set and exec into the default layout generator, rivertile.
