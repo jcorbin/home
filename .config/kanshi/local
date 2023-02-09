@@ -1,6 +1,5 @@
 # local machine-specific display config goes here
 
-# TODO uncomment and adapt
-# profile {
-#   output NAME scale 3.14 # XXX change factor
-# }
+profile {
+  output eDP-1 scale 1.25
+}
