@@ -12,9 +12,6 @@ add_home_paths()
     # shellcheck disable=2086
     [ -d "$HOME/.local/bin" ] && PATH=$(prepend "$HOME/.local/bin" $PATH)
 
-    # shellcheck disable=2086
-    [ -d "$HOME/bin" ] && PATH=$(prepend "$HOME/bin" $PATH)
-
     if [ -d "$HOME"/Library ]; then
         for python_lib in "$HOME"/Library/Python/3*; do
             if [ -d "$python_lib/bin" ]; then

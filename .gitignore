@@ -10,8 +10,7 @@
 .*.sw?
 # TODO: incomplete, needs more?
 
-# ~/bins is a good place for random utility scripts; see bin/.gitignore.
-!bin/
+!.local/bin/
 
 # Common shell environment and configuration
 !.profile
