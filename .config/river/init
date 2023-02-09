@@ -24,8 +24,7 @@ if [ -n "$AUTOLOGIN" ]; then
       rm -fv "$AUTOLOGIN"
     fi
 
-    # refresh waybar, particularly so that the bluetooth module will activate
-    pkill -USR2 waybar
+    waybar &
   } &
 fi
 
@@ -241,7 +240,10 @@ config_inputs() {
 
 config_inputs &
 wl-paste --watch clipman store &
-waybar &
+
+if [ -z "$AUTOLOGIN" ]; then
+  waybar &
+fi
 
 # Set and exec into the default layout generator, rivertile.
 # River will send the process group of the init executable SIGTERM on exit.
