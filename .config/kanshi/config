@@ -1,0 +1,3 @@
+# include /etc/kanshi/config.d/*
+
+include ${HOME}/.config/kanshi/local

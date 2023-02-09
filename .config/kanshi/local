@@ -1,0 +1,6 @@
+# local machine-specific display config goes here
+
+# TODO uncomment and adapt
+# profile {
+#   output NAME scale 3.14 # XXX change factor
+# }

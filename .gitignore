@@ -47,6 +47,7 @@
 /.config/*
 !/.config/flake8
 !/.config/foot
+!/.config/kanshi
 !/.config/kitty
 !/.config/nvim
 !/.config/paru
