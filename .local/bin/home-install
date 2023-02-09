@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+set -e
+
+SCRIPT_DIR=$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+LOCAL_DIR=$( dirname "$SCRIPT_DIR" )
+
+if
+  [ $(basename "$SCRIPT_DIR") != bin ] &&
+  [ $(basename "$LOCAL_DIR") != .local ]; then
+  echo "home-install expected to be running from .local/bin/home-install" >&2
+  exit 1
+fi
+
+DATA_DIR="$LOCAL_DIR/share/home-install"
+
+setup_system() {
+  dest=${1}
+  do=${2:-sudo}
+
+  if [ -d "$dest/etc/systemd" ] && [ -e "$dest/usr/lib/systemd/system/getty@.service" ]; then
+    set -x
+    $do install -D "$DATA_DIR/autologin.conf" "$dest/etc/systemd/system/getty@tty1.service.d/autologin.conf"
+    $do install -d $dest/etc/systemd/system/getty.target.wants
+    $do ln -sf $dest/usr/lib/systemd/system/getty@.service $dest/etc/systemd/system/getty.target.wants/getty@tty1.service
+    set +x
+  fi
+
+}
+
+REPO_DIR=$( dirname "$LOCAL_DIR" )
+
+if [ "$REPO_DIR" == $(git rev-parse --show-toplevel) ]; then
+
+  setup_dest() {
+    dest=${1:-$HOME}
+    remote_name=${2:-local}
+    branch_name=${3:-local}
+
+    if local_url=$(git remote get-url $remote_name 2>/dev/null); then
+      echo "$remote_name remote already exists, skipping $dest git setup"
+      return 1
+    fi
+
+    set -x
+
+    if ! [ -d "$dest/.git" ]; then
+      pushd "$dest"
+      [ -f .gitignore ] || cp "$REPO_DIR/.gitignore" .
+      git init -b prior
+      git add .
+      git commit -m 'Add prior $dest files'
+      popd
+    fi
+
+    git remote add $remote_name "$dest"
+    git fetch $remote_name
+    git branch $branch_name main
+    git push -u $remote_name $branch_name
+
+    pushd "$dest"
+    git checkout $branch_name
+    "$SCRIPT_DIR/git-setup-worktree-push"
+    popd
+
+    set +x
+  }
+
+  if [ "$1" == test ]; then
+    fake=$(mktemp -t -d home.XXX)
+    nom=$(basename "$fake")
+    echo "=== Testing home-install in $fake"
+    echo '# some cargo' > $fake/.bashrc
+    setup_dest "$fake" "$nom" "$nom"
+    exit 0
+  elif [ "$REPO_DIR" != "$HOME" ]; then
+    if setup_dest; then
+      setup_system
+    fi
+  fi
+fi
+
+just() {
+  "$@"
+}
+
+usage() {
+  echo "usage: home-install system"
+  echo "       home-install test-system"
+}
+
+case "$1" in
+  test-system)
+    fake=$(mktemp -t -d system.XXX)
+    echo "=== Testing home-install system setup in $fake"
+    set -x
+
+    install -d "$fake/etc/systemd"
+    install -d "$fake/usr/lib/systemd/system"
+    echo 'nonesense' > "$fake/usr/lib/systemd/system/getty@.service"
+
+    setup_system $fake just
+    ;;
+
+  system)
+    setup_system
+    ;;
+
+  *)
+    usage >&2
+    ;;
+
+esac

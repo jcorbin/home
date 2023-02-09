@@ -17,4 +17,5 @@
 !githook-update-worktree-post-receive
 !githook-update-worktree-update
 !githook-update-worktree-update
+!home-install
 !quotecmd

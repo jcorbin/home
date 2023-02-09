@@ -10,7 +10,15 @@
 .*.sw?
 # TODO: incomplete, needs more?
 
-!.local/bin/
+!.local/
+.local/*
+
+!.local/bin
+# NOTE see .local/bin/.gitignore
+
+!.local/share
+.local/share/*
+!.local/share/home-install
 
 # Common shell environment and configuration
 !.profile
