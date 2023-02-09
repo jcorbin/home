@@ -2,26 +2,25 @@
 *
 !.gitignore
 
-# git-setup-worktree-push and ancillary
-!git-setup-worktree-push
-!githook-update-worktree-post-receive
-!githook-update-worktree-update
-
 !atmux
-
+!atmux.py
+!colorize
+!deporder
 !git-branch-base
-!git-clique
+!git-commit-patch-ids
 !git-current-branch
+!git-fit
 !git-fix-userid
 !git-rewrite-branch
+!git-setup-worktree-push
 !git-shell-pack
+!git-sit
 !git-subtree
 !git-work
+!githook-update-worktree-post-receive
+!githook-update-worktree-post-receive
+!githook-update-worktree-update
+!githook-update-worktree-update
 !pkgit
 !quotecmd
-!sshscreen
-
-# Scripts from https://github.com/brendangregg/FlameGraph
-stackcollapse*
-flamegraph.pl
-difffolded.pl
+!smux
