@@ -2,8 +2,6 @@
 *
 !.gitignore
 
-!atmux
-!atmux.py
 !colorize
 !deporder
 !git-branch-base
