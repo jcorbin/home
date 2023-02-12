@@ -12,7 +12,6 @@ local on_lsp_attach = function(caps, bufnr)
   local map_buffer = mykeymap.options { buffer = bufnr }
   local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
-  map_buffer('n', 'K', lsp.buf.hover)
   map_buffer('n', '<C-k>', lsp.buf.signature_help)
 
   -- keymaps to jump
@@ -57,7 +56,6 @@ local on_lsp_attach = function(caps, bufnr)
       lsp.codelens.refresh()
     end)
   end
-
 end
 
 local function setup_server(name, opts)
@@ -67,11 +65,11 @@ local function setup_server(name, opts)
   local lspconfig = require 'lspconfig'
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
   lspconfig[name].setup(vim.tbl_extend('keep', opts, {
-    on_attach = on_lsp_attach,
-    capabilities = capabilities,
+      on_attach = on_lsp_attach,
+      capabilities = capabilities,
   }))
 end
 
 return {
-  setup_server = setup_server,
+    setup_server = setup_server,
 }
