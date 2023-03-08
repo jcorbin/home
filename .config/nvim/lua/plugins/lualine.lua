@@ -21,7 +21,7 @@ return {
             section_separators = { left = '', right = '' },
 
             always_divide_middle = false,
-            globalstatus = true,
+            globalstatus = false,
 
             refresh = {
                 statusline = 1000,
@@ -91,10 +91,55 @@ return {
             }
         },
 
+        -- sections = {
+        --     lualine_a = {
+        --         filename,
+        --     },
+        --     lualine_b = {
+        --         'filesize',
+        --         'encoding',
+        --         'fileformat',
+        --     },
+        --     lualine_c = {
+        --         'searchcount',
+        --         'diagnostics',
+        --     },
+        --     lualine_x = {
+        --         'branch',
+        --         'diff',
+        --     },
+        --     lualine_y = {
+        --         'progress',
+        --         'location',
+        --     },
+        --     lualine_z = {
+        --         'mode',
+        --     }
+        -- },
+
+        -- inactive_sections = {
+        --     lualine_a = {
+        --         filename,
+        --     },
+        --     lualine_b = {
+        --     },
+        --     lualine_c = {
+        --         'searchcount',
+        --         'diagnostics',
+        --     },
+        --     lualine_x = {
+        --     },
+        --     lualine_y = {
+        --         'location',
+        --     },
+        --     lualine_z = {
+        --     }
+        -- },
+
     },
     config = function(_, opts)
-      vim.opt.laststatus = 3
-      vim.opt.cmdheight = 0
+      vim.opt.laststatus = 2
+      vim.opt.cmdheight = 1
       require('lualine').setup(opts)
     end,
 }
