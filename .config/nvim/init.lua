@@ -13,7 +13,6 @@ local autocmd = augroup 'myvimrc'
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 
--- TODO mini.exchange? mini.move? to repalce line exchange pair mapping
 -- TODO glepnir/lspsaga.nvim
 -- TODO jose-elias-alvarez/null-ls.nvim
 -- TODO mfussenegger/nvim-dap
