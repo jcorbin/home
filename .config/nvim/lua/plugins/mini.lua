@@ -5,7 +5,6 @@ local mykeymap = require 'my.keymap'
 return {
   "echasnovski/mini.nvim",
   config = function()
-
     local mini_starter = require('mini.starter')
     mini_starter.setup {}
     mykeymap.leader('n', ':', mini_starter.open, { desc = 'Start screen' })
@@ -32,11 +31,16 @@ return {
     mini_trailspace.setup {}
     mykeymap.leader('n', 'ts', mini_trailspace.trim, { desc = 'Trim trailing space' })
 
+    require('mini.align').setup {}
+
+    require('mini.bracketed').setup {}
+
     require('mini.comment').setup {}
 
     require('mini.surround').setup {}
 
     require('mini.fuzzy').setup {}
 
+    require('mini.move').setup {}
   end
 }
