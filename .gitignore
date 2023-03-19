@@ -74,6 +74,10 @@
 !.screenrc
 !.terminfo.src/
 !.ipython/
+!.jupyter/
+
+# contains hashed password
+.jupyter/jupyter_server_config.json
 
 !README.md
 !TODO.md
