@@ -74,10 +74,13 @@
 !.screenrc
 !.terminfo.src/
 !.ipython/
-!.jupyter/
 
-# contains hashed password
-.jupyter/jupyter_server_config.json
+# Jupyter Config
+!/.jupyter/
+# ...contains hashed password
+/.jupyter/jupyter_server_config.json
+# ...churns with usage
+/.jupyter/lab/workspaces
 
 !README.md
 !TODO.md
