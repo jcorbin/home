@@ -1,2 +1,4 @@
 -- TODO neodev
-return 'rafcamlet/nvim-luapad'
+return {
+  'rafcamlet/nvim-luapad'
+};
