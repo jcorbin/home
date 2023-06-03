@@ -1,5 +1,6 @@
 [Unit]
 Description=Jupyter Notebook Server
+Slice=background.slice
 
 [Install]
 WantedBy=default.target
