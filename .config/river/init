@@ -17,6 +17,8 @@ swayidle &
 if [ -n "$AUTOLOGIN" ]; then
   sleep 0.25 # to give kanshi and swaylock a beat to initialize before locking
   {
+    systemctl --user start river-session.target
+
     swaylock
 
     # remove any autologin file after unlock, marking the session as successfully started
@@ -239,9 +241,13 @@ config_inputs() {
 }
 
 config_inputs &
+
+# TODO shift into autostart desktop files
 wl-paste --watch clipman store &
 
 if [ -z "$AUTOLOGIN" ]; then
+  systemctl --user start river-session.target
+
   waybar &
 fi
 
