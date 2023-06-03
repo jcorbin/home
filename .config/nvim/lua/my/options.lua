@@ -31,7 +31,7 @@ opt.foldlevelstart = 1
 
 -- TODO break this out into a zig-specific module
 autocmd('FileType', {
-    'zig',
+  'zig',
 }, 'setlocal commentstring=//\\ %s')
 
 -- TODO listchars
@@ -53,9 +53,9 @@ if vim.g.neovide then
 
   local scale_step = 0.05
   vim.keymap.set({ 'n' }, '<C-=>',
-      function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * (1 + scale_step) end)
+    function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * (1 + scale_step) end)
   vim.keymap.set({ 'n' }, '<C-->',
-      function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / (1 + scale_step) end)
+    function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / (1 + scale_step) end)
   vim.keymap.set({ 'n' }, '<C-0>', function() vim.g.neovide_scale_factor = 1.0 end)
 
   vim.g.neovide_hide_mouse_when_typing = true

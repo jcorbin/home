@@ -68,11 +68,11 @@ local function setup_server(name, opts)
   local lspconfig = require 'lspconfig'
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
   lspconfig[name].setup(vim.tbl_extend('keep', opts, {
-      on_attach = on_lsp_attach,
-      capabilities = capabilities,
+    on_attach = on_lsp_attach,
+    capabilities = capabilities,
   }))
 end
 
 return {
-    setup_server = setup_server,
+  setup_server = setup_server,
 }
