@@ -79,7 +79,7 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false,
-        "on-click": "foot htop",
+        "on-click": "systemd-run --user foot htop",
     },
 
     "memory": {
@@ -130,12 +130,12 @@
         "tooltip-format-disconnected": "{ifname} (No IP)",
         "tooltip-format-disabled": "{ifname} (disabled)",
 
-        "on-click": "foot iwctl",
+        "on-click": "systemd-run --user foot iwctl",
 
     },
 
     "bluetooth": {
-      "on-click": "foot bluetuith",
+      "on-click": "systemd-run --user foot bluetuith",
       "format": "",
       "format-disabled": "X",
       "format-off": "-",
@@ -160,7 +160,7 @@
             "default": ["", "", ""]
         },
         // "on-click": "pavucontrol"
-        "on-click": "foot pulsemixer"
+        "on-click": "systemd-run --user foot pulsemixer"
     }
 
 }
