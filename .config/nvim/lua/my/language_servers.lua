@@ -35,6 +35,10 @@ initls('lua_ls', {
     },
 })
 
+initls('openscad_lsp', {
+  cmd = { "openscad-lsp", "--stdio", "--fmt-style", "file" },
+})
+
 initls('pylsp', {
     settings = {
         -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
