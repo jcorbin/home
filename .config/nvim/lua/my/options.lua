@@ -5,7 +5,7 @@ local autocmd = augroup 'my.options'
 
 local opt = vim.opt
 
-opt.guifont = 'JetBrains Mono:h12'
+opt.guifont = 'JetBrains Mono:h8'
 
 opt.termguicolors = true
 opt.background = 'dark'
