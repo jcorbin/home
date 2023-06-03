@@ -31,11 +31,14 @@ local on_lsp_attach = function(caps, bufnr)
   map_local('n', 'so', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
   map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
 
+  local ft = vim.opt_local.filetype:get()
   -- auto formatting
-  autocmd_local('BufWritePre', function()
-    -- NOTE: sync 1s timeout is the default, may pass {timeout_ms} or {async}
-    lsp.buf.format()
-  end)
+  if ft ~= "openscad" then
+    autocmd_local('BufWritePre', function()
+      -- NOTE: sync 1s timeout is the default, may pass {timeout_ms} or {async}
+      lsp.buf.format()
+    end)
+  end
 
   -- cursor hold highlighting
   if caps['textDocument/documentHighlight'] ~= nil then
