@@ -173,8 +173,8 @@ for mode in normal locked; do
     riverctl map $mode None XF86AudioNext  spawn 'playerctl next'
 
     # Control screen backlight brighness with light (https://github.com/haikarainen/light)
-    riverctl map $mode None XF86MonBrightnessUp   spawn 'light -A 5'
-    riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
+    riverctl map $mode None XF86MonBrightnessUp   spawn 'light -T 1.1'
+    riverctl map $mode None XF86MonBrightnessDown spawn 'light -T 0.9'
 
 done
 
