@@ -10,9 +10,17 @@ systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
 
 source ~/.profile.d/ssh_sock
 
-kanshi &
+run() {
+  systemd-run --user \
+    --unit="$1@$WAYLAND_DISPLAY" \
+    --service-type=exec \
+    --slice app.slice \
+    "$@"
+}
 
-swayidle &
+run kanshi
+
+run swayidle
 
 if [ -n "$AUTOLOGIN" ]; then
   sleep 0.25 # to give kanshi and swaylock a beat to initialize before locking
@@ -26,7 +34,7 @@ if [ -n "$AUTOLOGIN" ]; then
       rm -fv "$AUTOLOGIN"
     fi
 
-    waybar &
+    run waybar
   } &
 fi
 
@@ -95,15 +103,15 @@ riverctl map-pointer normal Super BTN_RIGHT resize-view
 
 # Super+Shift+Space for launcher (https://codeberg.org/dnkl/fuzzel)
 # riverctl map normal Super+Shift Space spawn 'fuzzel -T foot -w 50 -l 30 -B 3 -b 002b3699 -t 93a1a1ff -C 586e75cc -m c1c1a1ff -s 93a1a199 -S 002b36ff'
-riverctl map normal Super+Shift Space spawn 'wofi -S drun'
-riverctl map normal Super+Shift Semicolon spawn 'wofi -S run'
+riverctl map normal Super+Shift Space spawn 'systemd-run --user $(wofi -S drun -D drun-print_command=true)'
+riverctl map normal Super+Shift Semicolon spawn 'systemd-run --user $(wofi -S run -D run-print_command=true)'
 riverctl map normal Super+Shift Slash spawn 'clipman pick --tool=wofi'
 
 # Super+Semicolon to show/hide waybar
 riverctl map normal Super Semicolon spawn 'pkill -USR1 waybar'
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super+Shift Return spawn foot
+riverctl map normal Super+Shift Return spawn 'systemd-run --user foot'
 
 riverctl map normal Super S spawn 'slurp | grim -g - - | wl-copy'
 riverctl map normal Super R spawn 'slurp | grim -g - - | tesseract - - | wl-copy'
@@ -243,12 +251,12 @@ config_inputs() {
 config_inputs &
 
 # TODO shift into autostart desktop files
-wl-paste --watch clipman store &
+run wl-paste --watch clipman store
 
 if [ -z "$AUTOLOGIN" ]; then
   systemctl --user start river-session.target
 
-  waybar &
+  run waybar
 fi
 
 # Set and exec into the default layout generator, rivertile.
