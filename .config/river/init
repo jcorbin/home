@@ -3,7 +3,6 @@
 # See the river(1), riverctl(1), and rivertile(1) man pages for complete
 # documentation.
 
-set -x
 set -e
 
 systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
