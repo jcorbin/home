@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+match=$1
+[ -n "$match" ]
+
+input=$(riverctl list-inputs | grep -i -m1 "$match")
+[ -n "$input" ]
+echo "INFO: found $match input $input, configuring" >&2
+
+while read line; do
+  echo -n "$line: "
+  if riverctl input "$input" $line; then
+    echo "ok"
+  fi |& head -n1
+done

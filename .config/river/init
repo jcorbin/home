@@ -8,7 +8,6 @@ set -e
 systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
 
 source ~/.profile.d/ssh_sock
-
 run() {
   systemd-run --user \
     --unit="$1@$WAYLAND_DISPLAY" \
@@ -217,17 +216,9 @@ config_input() {
   local attempt=${2:-0}
   attempt=$(( attempt + 1 ))
 
-  if local input=$(riverctl list-inputs | grep -i -m1 "$match"); then
-    if [ -n "$input" ]; then
-      echo "INFO: found $match input $input, configuring" >&2
-      while read -a line; do
-        echo riverctl input "$input" $line
-      done
-      return 0
-    fi
-  fi
-
-  if [ $attempt -ge $max_attempts ]; then
+  if river-config-input "$match"; then
+    return 0
+  elif [ $attempt -ge $max_attempts ]; then
     echo "WARN: no $match input present after $attempt attempts, giving up" >&2
     return 1
   fi
