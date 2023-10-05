@@ -264,3 +264,5 @@ fi
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
 rivertile -view-padding 0 -outer-padding 0 &
+
+wait
