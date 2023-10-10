@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+systemd-run --user \
+  --service-type=exec \
+  --slice app.slice \
+  "$@"
