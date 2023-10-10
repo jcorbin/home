@@ -248,7 +248,6 @@ config_inputs() {
 config_inputs &
 
 # TODO shift into autostart desktop files
-svc wl-paste --watch clipman store
 svc udiskie --smart-tray --automount --terminal foot --menu flat
 
 if [ -z "$AUTOLOGIN" ]; then
