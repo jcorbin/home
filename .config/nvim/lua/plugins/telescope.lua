@@ -19,12 +19,13 @@ return {
     local telescope = require 'telescope'
     local telescopes = require 'telescope.builtin'
     local actions = require 'telescope.actions'
+    local themes = require 'telescope.themes'
 
     local open_with_trouble = require('trouble.providers.telescope').open_with_trouble
 
     -- TODO rework and hoist into the plugin spec
     local opts = {
-      defaults = {
+      defaults = themes.get_ivy {
         generic_sorter = require('mini.fuzzy').get_telescope_sorter,
         mappings = {
           i = {
@@ -39,51 +40,21 @@ return {
             ['<c-d>'] = actions.delete_buffer,
           },
         },
-        layout_strategy = 'cursor',
-        layout_config = {
-          cursor = {
-            width = 0.8,
-            height = 0.5,
-          },
-          horizontal = {
-            anchor = 'SE',
-            width = 0.8,
-            height = 0.5,
-          },
-          vertical = {
-            anchor = 'SE',
-            width = 0.5,
-            height = 0.8,
-          },
-        },
       },
+
       pickers = {
         buffers = {
           sort_lastused = true,
           sort_mru = true,
         },
       },
+
       extensions = {
         ["ui-select"] = {
-          require("telescope.themes").get_dropdown {
-            -- even more opts
-          },
-
-          -- pseudo code / specification for writing custom displays, like the one
-          -- for "codeactions"
-          -- specific_opts = {
-          --   [kind] = {
-          --     make_indexed = function(items) -> indexed_items, width,
-          --     make_displayer = function(widths) -> displayer
-          --     make_display = function(displayer) -> function(e)
-          --     make_ordinal = function(e) -> string
-          --   },
-          --   -- for example to disable the custom builtin "codeactions" display
-          --      do the following
-          --   codeactions = false,
-          -- },
+          themes.get_dropdown(),
         },
       },
+
     }
 
     telescope.setup(opts)
