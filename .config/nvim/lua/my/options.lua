@@ -61,6 +61,12 @@ if vim.g.neovide then
   vim.g.neovide_hide_mouse_when_typing = true
 
   vim.g.neovide_cursor_vfx_mode = 'railgun'
+  vim.g.neovide_cursor_animation_length = 0.1
+
+  vim.g.neovide_scroll_animation_length = 0.2
+
+  vim.g.neovide_remember_window_size = false
+  vim.g.neovide_remember_window_position = false
 end
 
 -- option toggles
