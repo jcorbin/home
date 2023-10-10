@@ -8,7 +8,7 @@ _G.get_foldtext = function()
     res = { { line, "Normal" } }
   end
 
-  local suffix = string.format(" ☰ %s lines", foldend - foldstart + 1)
+  local suffix = string.format(" +%s lines ☰", foldend - foldstart + 1)
   table.insert(res, { suffix, "Folded" })
 
   return res
