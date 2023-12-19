@@ -26,3 +26,15 @@ mykeymap.pair('n', 'd',
 
 -- TODO dedupe diagnostic open mappings
 mykeymap.leader('n', 'dg', vim.diagnostic.open_float, { desc = 'Open diagnostics float' })
+
+mykeymap.leader('n', 'dh', vim.diagnostic.hide, { desc = 'Hide diagnostics' })
+mykeymap.leader('n', 'dd', function()
+  if vim.diagnostic.is_disabled() then
+    vim.diagnostic.enable()
+  else
+    vim.diagnostic.disable()
+  end
+end, { desc = 'Toggle diagnostics' })
+
+-- vim.diagnostic.config { virtual_text = true }
+-- vim.diagnostic.set(ns, 0, diagnostics, { virtual_text = false })
