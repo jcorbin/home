@@ -31,8 +31,6 @@ return {
     mini_trailspace.setup {}
     mykeymap.leader('n', 'ts', mini_trailspace.trim, { desc = 'Trim trailing space' })
 
-    require('mini.align').setup {}
-
     require('mini.bracketed').setup {}
 
     require('mini.comment').setup {}
