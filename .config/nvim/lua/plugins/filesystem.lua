@@ -1,5 +1,5 @@
--- TODO maybe 'tpope/vim-eunuch' or a lua replacement
 return {
+
   {
     'stevearc/oil.nvim',
 
@@ -46,4 +46,10 @@ return {
         oil.open, { desc = "Open parent directory" })
     end,
   },
+
+  {
+    'chrisgrieser/nvim-genghis',
+    -- dependencies = "stevearc/dressing.nvim"
+  },
+
 }
