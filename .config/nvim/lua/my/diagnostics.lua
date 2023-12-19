@@ -1,5 +1,3 @@
-local mykeymap = require 'my.keymap'
-
 local bind = function(f, ...)
   local args = { ... }
   return function(...) return f(unpack(args), ...) end
@@ -14,27 +12,28 @@ vim.diagnostic.config {
   },
 }
 
-mykeymap.pair('n', 'q',
-  bind(vim.cmd, 'cprev'),
-  bind(vim.cmd, 'cnext'),
-  { desc = 'error (quickfix)' })
+vim.keymap.set('n', '[q', bind(vim.cmd, 'cprev'), { desc = 'Previous error (quickfix)' })
+vim.keymap.set('n', ']q', bind(vim.cmd, 'cnext'), { desc = 'Next error (quickfix)' })
 
-mykeymap.pair('n', 'd',
-  vim.diagnostic.goto_prev,
-  vim.diagnostic.goto_next,
-  { desc = 'diagnostic' })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
 
 -- TODO dedupe diagnostic open mappings
-mykeymap.leader('n', 'dg', vim.diagnostic.open_float, { desc = 'Open diagnostics float' })
+vim.keymap.set('n', '<leader>dg',
+  vim.diagnostic.open_float, { desc = 'Open diagnostics float' })
 
-mykeymap.leader('n', 'dh', vim.diagnostic.hide, { desc = 'Hide diagnostics' })
-mykeymap.leader('n', 'dd', function()
-  if vim.diagnostic.is_disabled() then
-    vim.diagnostic.enable()
-  else
-    vim.diagnostic.disable()
-  end
-end, { desc = 'Toggle diagnostics' })
+vim.keymap.set('n', '<leader>dh',
+  vim.diagnostic.hide, { desc = 'Hide diagnostics' })
+
+vim.keymap.set('n', '<leader>dd',
+  function()
+    if vim.diagnostic.is_disabled() then
+      vim.diagnostic.enable()
+    else
+      vim.diagnostic.disable()
+    end
+  end,
+  { desc = 'Toggle diagnostics' })
 
 -- vim.diagnostic.config { virtual_text = true }
 -- vim.diagnostic.set(ns, 0, diagnostics, { virtual_text = false })
