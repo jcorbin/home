@@ -1,3 +1,6 @@
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
 local mykeymap = require 'my.keymap'
 
 -- context marker motion
