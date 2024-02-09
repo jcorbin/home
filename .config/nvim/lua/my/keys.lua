@@ -9,32 +9,36 @@ vim.keymap.set('n', '<leader>ec', function()
   vim.cmd.vsplit(vim.fs.dirname(vim.env.MYVIMRC))
 end, { desc = 'edit directory of $MYVIMRC' })
 
-local mykeymap = require 'my.keymap'
-
 -- context marker motion
 local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
-mykeymap.pair('n', 'n',
+
+vim.keymap.set('n', '<leader>[n',
   function() vim.fn.search(context_marker, 'bW') end,
+  { desc = 'prev conflict marker' })
+
+vim.keymap.set('n', '<leader>]n',
   function() vim.fn.search(context_marker, 'W') end,
-  { desc = 'conflict marker' })
+  { desc = 'next conflict marker' })
 
 -- line exchange mappings
-mykeymap.pair('n', 'e', ':move--<cr>', ':move+<cr>')
+vim.keymap.set('n', '[e', '<leader>:move--<cr>')
+vim.keymap.set('n', ']e', '<leader>:move+<cr>')
 
 -- marginally quicker path to norm/move/copy a range
 -- ... this mapping is barely useful in normal mode fwiw
-mykeymap.leader({ 'n', 'v' }, 'nn', ':norm ')
-mykeymap.leader({ 'n', 'v' }, 'mm', ':move ')
-mykeymap.leader({ 'n', 'v' }, 'cc', ':copy ')
+vim.keymap.set({ 'n', 'v' }, '<leader>nn', ':norm ')
+vim.keymap.set({ 'n', 'v' }, '<leader>nn', ':norm ')
+vim.keymap.set({ 'n', 'v' }, '<leader>mm', ':move ')
+vim.keymap.set({ 'n', 'v' }, '<leader>cc', ':copy ')
 
 -- gre* family mappings that reuse the last search pattern
-mykeymap.leader({ 'n', 'v' }, 'gn', [[:g\/ norm ]])
-mykeymap.leader({ 'n', 'v' }, 'gm', [[:g\/ move ]])
-mykeymap.leader({ 'n', 'v' }, 'gc', [[:g\/ copy ]])
-mykeymap.leader({ 'n', 'v' }, 'gd', [[:g\/ delete<cr>]])
+vim.keymap.set({ 'n', 'v' }, '<leader>gn', [[:g\/ norm ]], { desc = 'gren last search' })
+vim.keymap.set({ 'n', 'v' }, '<leader>gm', [[:g\/ move ]], { desc = 'grem last search' })
+vim.keymap.set({ 'n', 'v' }, '<leader>gc', [[:g\/ copy ]], { desc = 'grec last search' })
+vim.keymap.set({ 'n', 'v' }, '<leader>gd', [[:g\/ delete<cr>]], { desc = 'gred last search' })
 
 -- negative match versions of those
-mykeymap.leader({ 'n', 'v' }, 'vn', [[:v\/ norm ]])
-mykeymap.leader({ 'n', 'v' }, 'vm', [[:v\/ move ]])
-mykeymap.leader({ 'n', 'v' }, 'vc', [[:v\/ copy ]])
-mykeymap.leader({ 'n', 'v' }, 'vd', [[:v\/ delete<cr>]])
+vim.keymap.set({ 'n', 'v' }, '<leader>vn', [[:v\/ norm ]], { desc = 'vren last search' })
+vim.keymap.set({ 'n', 'v' }, '<leader>vm', [[:v\/ move ]], { desc = 'vrem last search' })
+vim.keymap.set({ 'n', 'v' }, '<leader>vc', [[:v\/ copy ]], { desc = 'vrec last search' })
+vim.keymap.set({ 'n', 'v' }, '<leader>vd', [[:v\/ delete<cr>]], { desc = 'vred last search' })
