@@ -12,7 +12,9 @@ local file_doer = function(path)
   end
 end
 
-mykeymap.leader('n', 'ev', ':vsplit $MYVIMRC<cr>')
+mykeymap.leader('n', 'ev', function()
+  vim.cmd.vsplit(vim.env.MYVIMRC)
+end, { desc = 'edit $MYVIMRC' })
 
 autocmd('BufWritePost', vim.env.MYVIMRC, function(opts)
   vim.schedule(file_doer(opts.file))
