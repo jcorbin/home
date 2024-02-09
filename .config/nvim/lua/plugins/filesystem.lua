@@ -27,6 +27,7 @@ return {
         ["gx"] = "actions.open_external",
         ["g."] = "actions.toggle_hidden",
         ["g\\"] = "actions.toggle_trash",
+        ["K"] = "actions.preview",
       },
     },
 
