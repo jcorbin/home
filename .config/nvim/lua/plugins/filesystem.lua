@@ -29,6 +29,8 @@ return {
         ["g\\"] = "actions.toggle_trash",
         ["K"] = "actions.preview",
         ["g$"] = "actions.open_terminal",
+        ["g:"] = "actions.open_cmdline",
+        ["g/"] = "actions.open_cmdline_dir",
       },
     },
 
