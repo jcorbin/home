@@ -1,5 +1,3 @@
-local mykeymap = require 'my.keymap'
-
 local bind = function(f, ...)
   local args = { ... }
   return function(...) return f(unpack(args), ...) end
@@ -7,34 +5,27 @@ end
 
 local myterm = {}
 
-myterm.keymap = bind(mykeymap.prefix('<C-\\>'), 't')
-
 -- Easy run in :terminal map
-mykeymap.leader('n', '!', ':vsplit | term ')
-
--- Quicker 'Go Back' binding
--- myterm.keymap('<C-o>', <C-\><C-n><C-o>)
+vim.keymap.set('n', '<leader>!', ':vsplit | term ')
 
 -- Quicker window operations
-myterm.keymap('c', bind(vim.cmd, 'close'), { desc = 'Close buffer' })
+vim.keymap.set('t', '<C-\\>c', vim.cmd.close, { desc = 'Close buffer' })
 
-myterm.keymap('<C-w>', bind(vim.cmd, 'wincmd '), { desc = 'Last window' })
-myterm.keymap('<C-h>', bind(vim.cmd, 'wincmd h'), { desc = 'Window ←' })
-myterm.keymap('<C-j>', bind(vim.cmd, 'wincmd j'), { desc = 'Window ↓' })
-myterm.keymap('<C-k>', bind(vim.cmd, 'wincmd k'), { desc = 'Window ↑' })
-myterm.keymap('<C-l>', bind(vim.cmd, 'wincmd l'), { desc = 'Window →' })
+vim.keymap.set('t', '<C-\\><C-w>', bind(vim.cmd.wincmd, ''), { desc = 'Last window' })
+vim.keymap.set('t', '<C-\\><C-h>', bind(vim.cmd.wincmd, 'h'), { desc = 'Window ←' })
+vim.keymap.set('t', '<C-\\><C-j>', bind(vim.cmd.wincmd, 'j'), { desc = 'Window ↓' })
+vim.keymap.set('t', '<C-\\><C-k>', bind(vim.cmd.wincmd, 'k'), { desc = 'Window ↑' })
+vim.keymap.set('t', '<C-\\><C-l>', bind(vim.cmd.wincmd, 'l'), { desc = 'Window →' })
 
-myterm.keymap('p', function()
+vim.keymap.set('t', '<C-\\>p', function()
   local reg = '"' -- vim "clipboard"
   vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
 end, { desc = 'Paste Internal' })
 
-myterm.keymap('P', function()
+vim.keymap.set('t', '<C-\\>P', function()
   local reg = '+' -- os clipboard
   vim.api.nvim_paste(vim.fn.getreg(reg), false, -1)
-end, {
-  desc = 'Paste OS'
-})
+end, { desc = 'Paste OS' })
 
 myterm.find_term = function(findCmd)
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
