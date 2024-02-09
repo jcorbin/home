@@ -10,6 +10,6 @@ return {
     vim.o.timeoutlen = 300
     local which_key = require('which-key')
     which_key.setup(opts)
-    vim.keymap.set('n', '<leader>h', ':WhichKey<cr>', { desc = 'Keymap Help' })
+    vim.keymap.set('n', '<leader>h', vim.cmd.WhichKey, { desc = 'Keymap Help' })
   end,
 }
