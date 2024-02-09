@@ -28,7 +28,7 @@ local on_lsp_attach = function(caps, bufnr)
 
   -- telescope invocations
   map_local('n', 'sr', telescopes.lsp_references, { desc = 'search lsp references' })
-  map_local('n', 'so', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
+  map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
   map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
 
   local ft = vim.opt_local.filetype:get()
