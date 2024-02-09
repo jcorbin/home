@@ -72,6 +72,13 @@ return {
       no_ignore = true,
     }), { desc = 'search files' })
 
+    mykeymap.leader('n', 'sc', bind(telescopes.find_files, {
+      cwd = vim.fs.dirname(vim.env.MYVIMRC),
+      previewer = false,
+      hidden = true,
+      no_ignore = true,
+    }), { desc = 'search files near $MYVIMRC' })
+
     mykeymap.leader('n', 'sh', telescopes.help_tags, { desc = 'search help' })
     mykeymap.leader('n', 'sm', telescopes.man_pages, { desc = 'search man pages' })
 
