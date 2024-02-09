@@ -1,6 +1,14 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.keymap.set('n', '<leader>ev', function()
+  vim.cmd.vsplit(vim.env.MYVIMRC)
+end, { desc = 'edit $MYVIMRC' })
+
+vim.keymap.set('n', '<leader>ec', function()
+  vim.cmd.vsplit(vim.fs.dirname(vim.env.MYVIMRC))
+end, { desc = 'edit directory of $MYVIMRC' })
+
 local mykeymap = require 'my.keymap'
 
 -- context marker motion
