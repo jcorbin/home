@@ -1,19 +1,3 @@
-_G.get_foldtext = function()
-  local res = vim.treesitter.foldtext()
-
-  local foldstart = vim.v.foldstart
-  local foldend = vim.v.foldend
-  if type(res) == "string" then
-    local line = vim.api.nvim_buf_get_lines(0, foldstart - 1, foldstart, false)[1]
-    res = { { line, "Normal" } }
-  end
-
-  local suffix = string.format(" +%s lines ☰", foldend - foldstart + 1)
-  table.insert(res, { suffix, "Folded" })
-
-  return res
-end
-
 return {
   {
     'nvim-treesitter/nvim-treesitter',
@@ -95,7 +79,6 @@ return {
 
       vim.opt.foldmethod = 'expr'
       vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-      vim.opt.foldtext = "v:lua.get_foldtext()"
     end,
   },
   'nvim-treesitter/nvim-treesitter-textobjects',
