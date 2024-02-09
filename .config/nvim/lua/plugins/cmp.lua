@@ -2,7 +2,6 @@ return {
   'hrsh7th/nvim-cmp',
 
   dependencies = {
-    'L3MON4D3/LuaSnip',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-emoji',
@@ -10,7 +9,6 @@ return {
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-path',
     'ray-x/cmp-treesitter',
-    'saadparwaiz1/cmp_luasnip';
   },
 
   config = function()
@@ -25,7 +23,6 @@ return {
         { name = 'nvim_lsp_signature_help' },
       }, {
         { name = 'nvim_lsp' },
-        { name = 'luasnip' },
       }, {
         { name = 'treesitter' },
         { name = 'buffer' },
@@ -46,24 +43,16 @@ return {
         ['<CR>'] = cmp.mapping.confirm({ select = true }),
 
         ['<Tab>'] = cmp.mapping(function(fallback)
-          local luasnip = require 'luasnip'
           if cmp.visible() then
             cmp.select_next_item()
-          elseif luasnip.expandable() then
-            luasnip.expand {}
-          elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
           else
             fallback()
           end
         end, { 'i', 's' }),
 
         ['<S-Tab>'] = cmp.mapping(function(fallback)
-          local luasnip = require 'luasnip'
           if cmp.visible() then
             cmp.select_prev_item()
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
           else
             fallback()
           end
@@ -72,12 +61,6 @@ return {
         -- ['<C-s>'] = cmp.mapping.complete({ sources = { { name = 'vsnip' } } })
         -- inoremap <C-S> <Cmd>lua require('cmp').complete({ sources = { { name = 'vsnip' } } })<CR>
 
-      },
-
-      snippet = {
-        expand = function(args)
-          require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        end,
       },
 
       -- completion.autocomplete
@@ -124,6 +107,5 @@ return {
         { name = 'cmdline' },
       })
     })
-
   end
 }
