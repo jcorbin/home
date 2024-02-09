@@ -1,5 +1,3 @@
-local mykeymap = require 'my.keymap'
-
 return {
   url = 'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
 
@@ -14,6 +12,6 @@ return {
       virtual_lines = { only_current_line = true },
     })
 
-    mykeymap.leader('n', 'l', lsp_lines.toggle)
+    vim.keymap.set('n', '<leader>l', lsp_lines.toggle)
   end
 }
