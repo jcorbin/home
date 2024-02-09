@@ -36,7 +36,5 @@ return {
     require('mini.surround').setup {}
 
     require('mini.fuzzy').setup {}
-
-    require('mini.move').setup {}
   end
 }
