@@ -1,10 +1,10 @@
 require 'my.init'
+require 'my.keys'
+require 'my.options'
 require 'my.lazy'
 require 'my.terminal'
 require 'my.diagnostics'
-require 'my.keys'
 require 'my.language_servers'
-require 'my.options'
 
 -- group for ungrouped autocmds so that they are deduped when reloading
 local augroup = require 'my.augroup'
