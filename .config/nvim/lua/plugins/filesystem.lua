@@ -28,6 +28,7 @@ return {
         ["g."] = "actions.toggle_hidden",
         ["g\\"] = "actions.toggle_trash",
         ["K"] = "actions.preview",
+        ["g$"] = "actions.open_terminal",
       },
     },
 
