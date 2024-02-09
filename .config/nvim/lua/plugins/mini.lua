@@ -27,10 +27,6 @@ return {
     mykeymap.leader('n', 'Sw', function() mini_sessions.select('write', {}) end, { desc = 'Write session' })
     mykeymap.leader('n', 'Sd', function() mini_sessions.select('delete', {}) end, { desc = 'Delete session' })
 
-    local mini_trailspace = require('mini.trailspace')
-    mini_trailspace.setup {}
-    mykeymap.leader('n', 'ts', mini_trailspace.trim, { desc = 'Trim trailing space' })
-
     require('mini.comment').setup {}
 
     require('mini.fuzzy').setup {}
