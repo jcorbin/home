@@ -1,5 +1,3 @@
-local mykeymap = require 'my.keymap'
-
 local augroup = require 'my.augroup'
 local autocmd = augroup 'my.options'
 
@@ -73,11 +71,25 @@ if vim.g.neovide then
   vim.g.neovide_remember_window_position = false
 end
 
+local opt_toggle = function(keys, name)
+  vim.keymap.set('n', keys, function()
+    if vim.opt[name]:get() then
+      vim.opt[name] = false
+      vim.notify('set no' .. name)
+    else
+      vim.opt[name] = true
+      vim.notify('set ' .. name)
+    end
+  end, {
+    desc = "toggle '" .. name .. "' option"
+  })
+end
+
 -- option toggles
-mykeymap.opt_toggle('<leader>ci', 'ignorecase')
-mykeymap.opt_toggle('<leader>ln', 'number')
-mykeymap.opt_toggle('<leader>rc', 'relativenumber')
-mykeymap.opt_toggle('<leader>cl', 'cursorline')
-mykeymap.opt_toggle('<leader>cc', 'cursorcolumn')
-mykeymap.opt_toggle('<leader>lw', 'wrap')
-mykeymap.opt_toggle('<leader>sp', 'spell')
+opt_toggle('<leader>ci', 'ignorecase')
+opt_toggle('<leader>ln', 'number')
+opt_toggle('<leader>rc', 'relativenumber')
+opt_toggle('<leader>cl', 'cursorline')
+opt_toggle('<leader>cc', 'cursorcolumn')
+opt_toggle('<leader>lw', 'wrap')
+opt_toggle('<leader>sp', 'spell')
