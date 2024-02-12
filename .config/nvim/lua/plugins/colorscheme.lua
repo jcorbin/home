@@ -1,8 +1,7 @@
 return {
+
   {
     'folke/tokyonight.nvim',
-    lazy = false,
-    priority = 1000,
     opts = {
       -- your configuration comes here
       -- or leave it empty to use the default settings
@@ -27,9 +26,16 @@ return {
       dim_inactive = true,              -- dims inactive windows
       lualine_bold = false,             -- When `true`, section headers in the lualine theme will be bold
     },
-    config = function(_, opts)
-      require('tokyonight').setup(opts)
-      vim.cmd [[colorscheme tokyonight]]
-    end
   },
+
+  {
+    'rebelot/kanagawa.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function(_, opts)
+      require('kanagawa').setup(opts)
+      vim.cmd.colorscheme 'kanagawa'
+    end,
+  },
+
 }
