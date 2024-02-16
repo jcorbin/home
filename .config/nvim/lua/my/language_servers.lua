@@ -88,7 +88,28 @@ initls('pylsp', {
 initls 'rust_analyzer'
 -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
 
-initls 'tsserver'
+initls('tsserver', {
+  init_options = {
+    preferences = {
+
+      includeInlayParameterNameHints = 'all',
+      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+
+      -- works, but too noisy imo
+      -- includeInlayFunctionParameterTypeHints = true,
+
+      -- broken
+      -- includeInlayFunctionLikeReturnTypeHints = true,
+      -- includeInlayVariableTypeHints = true,
+
+      -- untested
+      -- includeInlayPropertyDeclarationTypeHints = true,
+      -- includeInlayEnumMemberValueHints = true,
+      -- importModuleSpecifierPreference = 'non-relative',
+
+    },
+  },
+})
 
 initls 'yamlls'
 
