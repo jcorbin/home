@@ -27,6 +27,7 @@ return {
         }, {
           { name = 'treesitter' },
           { name = 'buffer' },
+          { name = 'path' },
         }),
 
         mapping = {
