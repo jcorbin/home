@@ -22,23 +22,12 @@ local on_lsp_attach = function(caps, bufnr)
 
   -- keymaps to act on code
   map_local('n', 'a', lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
-  map_local('n', 'f', lsp.buf.format, { desc = 'format buffer (lsp)' })
   map_local('n', 'gR', lsp.buf.rename, { desc = 'rename symbol (lsp)' })
-  -- TODO format range/object
 
   -- telescope invocations
   map_local('n', 'sr', telescopes.lsp_references, { desc = 'search lsp references' })
   map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
   map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
-
-  local ft = vim.opt_local.filetype:get()
-  -- auto formatting
-  if ft ~= "openscad" then
-    autocmd_local('BufWritePre', function()
-      -- NOTE: sync 1s timeout is the default, may pass {timeout_ms} or {async}
-      lsp.buf.format()
-    end)
-  end
 
   -- cursor hold highlighting
   if caps['textDocument/documentHighlight'] ~= nil then
@@ -49,10 +38,6 @@ local on_lsp_attach = function(caps, bufnr)
       lsp.buf.clear_references()
     end)
   end
-
-  -- Use LSP as the handler for formatexpr.
-  --    See `:help formatexpr` for more information.
-  vim.bo.formatexpr = 'v:lua.vim.lsp.formatexpr()'
 
   if caps['textDocument/codeLens'] ~= nil then
     autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
