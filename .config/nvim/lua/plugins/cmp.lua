@@ -11,6 +11,7 @@ return {
       'hrsh7th/cmp-path',
       'ray-x/cmp-treesitter',
       'petertriho/cmp-git',
+      'PhilRunninger/cmp-rpncalc',
     },
 
     config = function()
@@ -21,6 +22,7 @@ return {
 
         sources = cmp.config.sources({
           { name = 'emoji' },
+          { name = 'rpncalc' },
         }, {
           { name = 'nvim_lsp_signature_help' },
           { name = 'nvim_lsp' },
