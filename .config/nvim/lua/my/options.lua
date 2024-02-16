@@ -43,7 +43,7 @@ autocmd('FileType', {
 -- nbsp
 -- }
 
-opt.completeopt = { 'menu', 'menuone', 'noselect' }
+opt.completeopt = { 'menuone', 'noselect' }
 
 -- neovide specific config
 if vim.g.neovide then
