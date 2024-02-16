@@ -27,10 +27,6 @@ opt.updatetime = 250
 
 opt.foldlevelstart = 1
 
--- TODO would be nice to add back elided line count
-opt.foldtext = ''
-opt.fillchars = 'fold: '
-
 -- TODO break this out into a zig-specific module
 autocmd('FileType', {
   'zig',
