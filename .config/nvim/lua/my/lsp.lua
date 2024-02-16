@@ -29,6 +29,11 @@ local on_lsp_attach = function(caps, bufnr)
   map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
   map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
 
+  lsp.inlay_hint.enable(bufnr, true)
+  map_local('n', 'hh',
+    function() lsp.inlay_hint.enable(bufnr, not lsp.inlay_hint.is_enabled()) end,
+    { desc = 'toggle inlay hints' })
+
   -- cursor hold highlighting
   if caps['textDocument/documentHighlight'] ~= nil then
     autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
