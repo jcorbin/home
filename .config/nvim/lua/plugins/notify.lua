@@ -2,13 +2,13 @@
 return {
   'rcarriga/nvim-notify',
   lazy = false,
-  config = function()
+  opts = {
+    render = 'minimal',
+    timeout = 3000,
+  },
+  config = function(_, opts)
     local notify = require('notify')
-    notify.setup {
-      stages = 'fade_in_slide_out',
-      render = 'minimal',
-      timeout = 3000,
-    }
+    notify.setup(opts)
     vim.notify = notify
   end
 }
