@@ -2,7 +2,8 @@ return {
   'dcampos/nvim-snippy',
 
   dependencies = {
-    'honza/vim-snippets',
+    -- 'honza/vim-snippets',
+    'rafamadriz/friendly-snippets',
   },
 
   opts = {
