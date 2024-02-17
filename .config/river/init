@@ -13,12 +13,12 @@ systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
 
 source ~/.profile.d/ssh_sock
 svc() {
-  systemd-run --user \
-    --unit="$1@$WAYLAND_DISPLAY" \
-    --service-type=exec \
-    --slice app.slice \
-    --remain-after-exit \
-    "$@"
+	systemd-run --user \
+		--unit="$1@$WAYLAND_DISPLAY" \
+		--service-type=exec \
+		--slice app.slice \
+		--remain-after-exit \
+		"$@"
 }
 
 svc kanshi
@@ -26,19 +26,19 @@ svc kanshi
 svc swayidle
 
 if [ -n "$AUTOLOGIN" ]; then
-  sleep 0.25 # to give kanshi and swaylock a beat to initialize before locking
-  {
-    systemctl --user start river-session.target
+	sleep 0.25 # to give kanshi and swaylock a beat to initialize before locking
+	{
+		systemctl --user start river-session.target
 
-    swaylock
+		swaylock
 
-    # remove any autologin file after unlock, marking the session as successfully started
-    if [ -f "$AUTOLOGIN" ]; then
-      rm -fv "$AUTOLOGIN"
-    fi
+		# remove any autologin file after unlock, marking the session as successfully started
+		if [ -f "$AUTOLOGIN" ]; then
+			rm -fv "$AUTOLOGIN"
+		fi
 
-    svc waybar
-  } &
+		svc waybar
+	} &
 fi
 
 riverctl set-cursor-warp on-output-change
@@ -126,19 +126,19 @@ riverctl map normal Super+Shift S spawn 'slurp -r -o | grim -g - - | wl-copy'
 riverctl map normal Super+Alt S spawn 'slurp -p | grim -g - -t ppm - | convert - -format "%[pixel:p{0,0}]" txt:-'
 
 for i in $(seq 1 9); do
-    tags=$((1 << ($i - 1)))
+	tags=$((1 << (i - 1)))
 
-    # Super+[1-9] to focus tag [0-8]
-    riverctl map normal Super $i set-focused-tags $tags
+	# Super+[1-9] to focus tag [0-8]
+	riverctl map normal Super "$i" set-focused-tags $tags
 
-    # Super+Shift+[1-9] to tag focused view with tag [0-8]
-    riverctl map normal Super+Shift $i set-view-tags $tags
+	# Super+Shift+[1-9] to tag focused view with tag [0-8]
+	riverctl map normal Super+Shift "$i" set-view-tags $tags
 
-    # Super+Ctrl+[1-9] to toggle focus of tag [0-8]
-    riverctl map normal Super+Control $i toggle-focused-tags $tags
+	# Super+Ctrl+[1-9] to toggle focus of tag [0-8]
+	riverctl map normal Super+Control "$i" toggle-focused-tags $tags
 
-    # Super+Shift+Ctrl+[1-9] to toggle tag [0-8] of focused view
-    riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
+	# Super+Shift+Ctrl+[1-9] to toggle tag [0-8] of focused view
+	riverctl map normal Super+Shift+Control "$i" toggle-view-tags $tags
 done
 
 # Super+0 to focus all tags
@@ -154,10 +154,10 @@ riverctl map normal Super Space toggle-float
 riverctl map normal Super F toggle-fullscreen
 
 # Super+{Up,Right,Down,Left} to change layout orientation
-riverctl map normal Super Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal Super Up send-layout-cmd rivertile "main-location top"
 riverctl map normal Super Right send-layout-cmd rivertile "main-location right"
-riverctl map normal Super Down  send-layout-cmd rivertile "main-location bottom"
-riverctl map normal Super Left  send-layout-cmd rivertile "main-location left"
+riverctl map normal Super Down send-layout-cmd rivertile "main-location bottom"
+riverctl map normal Super Left send-layout-cmd rivertile "main-location left"
 
 # Declare a passthrough mode. This mode has only a single mapping to return to
 # normal mode. This makes it useful for testing a nested wayland compositor
@@ -173,23 +173,23 @@ riverctl map passthrough Super F13 enter-mode normal
 # not have a modifier
 for mode in normal locked; do
 
-    # # Eject the optical drive (well if you still have one that is)
-    # riverctl map $mode None XF86Eject spawn 'eject -T'
+	# # Eject the optical drive (well if you still have one that is)
+	# riverctl map $mode None XF86Eject spawn 'eject -T'
 
-    # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
-    riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
-    riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
-    riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute'
+	# Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
+	riverctl map $mode None XF86AudioRaiseVolume spawn 'pamixer -i 5'
+	riverctl map $mode None XF86AudioLowerVolume spawn 'pamixer -d 5'
+	riverctl map $mode None XF86AudioMute spawn 'pamixer --toggle-mute'
 
-    # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
-    riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
-    riverctl map $mode None XF86AudioPlay  spawn 'playerctl play-pause'
-    riverctl map $mode None XF86AudioPrev  spawn 'playerctl previous'
-    riverctl map $mode None XF86AudioNext  spawn 'playerctl next'
+	# Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
+	riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
+	riverctl map $mode None XF86AudioPlay spawn 'playerctl play-pause'
+	riverctl map $mode None XF86AudioPrev spawn 'playerctl previous'
+	riverctl map $mode None XF86AudioNext spawn 'playerctl next'
 
-    # Control screen backlight brighness with light (https://github.com/haikarainen/light)
-    riverctl map $mode None XF86MonBrightnessUp   spawn 'light -T 1.1'
-    riverctl map $mode None XF86MonBrightnessDown spawn 'light -T 0.9'
+	# Control screen backlight brighness with light (https://github.com/haikarainen/light)
+	riverctl map $mode None XF86MonBrightnessUp spawn 'light -T 1.1'
+	riverctl map $mode None XF86MonBrightnessDown spawn 'light -T 0.9'
 
 done
 
@@ -215,34 +215,34 @@ riverctl float-filter-add title "popup title with spaces"
 riverctl csd-filter-add app-id "gedit"
 
 config_input() {
-  local max_attempts=9
-  local match=${1}
-  local attempt=${2:-0}
-  attempt=$(( attempt + 1 ))
+	local max_attempts=9
+	local match=${1}
+	local attempt=${2:-0}
+	attempt=$((attempt + 1))
 
-  if river-config-input "$match"; then
-    return 0
-  elif [ $attempt -ge $max_attempts ]; then
-    echo "WARN: no $match input present after $attempt attempts, giving up" >&2
-    return 1
-  fi
+	if river-config-input "$match"; then
+		return 0
+	elif [ $attempt -ge $max_attempts ]; then
+		echo "WARN: no $match input present after $attempt attempts, giving up" >&2
+		return 1
+	fi
 
-  local delay_ms=$(( 100 * 2 ** ( attempt - 1 ) ))
-  local delay_s=$(( delay_ms / 1000 ))
-  delay_ms=$(( delay_ms % 1000 ))
+	local delay_ms=$((100 * 2 ** (attempt - 1)))
+	local delay_s=$((delay_ms / 1000))
+	delay_ms=$((delay_ms % 1000))
 
-  echo "WARN: no $match input present attempt $attempt/$max_attempts, waiting ${delay_s}s ${delay_ms}ms"
-  sleep ${delay_s} 0.$delay_ms
-  config_input "$match" $attempt
+	echo "WARN: no $match input present attempt $attempt/$max_attempts, waiting ${delay_s}s ${delay_ms}ms"
+	sleep ${delay_s} 0.$delay_ms
+	config_input "$match" $attempt
 }
 
 config_inputs() {
-  local config_file
-  local config_name
-  for config_file in "${XDG_CONFIG_HOME:-$HOME/.config}"/river/input.*; do
-    config_name=$(basename $config_file)
-    config_input "${config_name#input.*}" <"$config_file" &
-  done
+	local config_file
+	local config_name
+	for config_file in "${XDG_CONFIG_HOME:-$HOME/.config}"/river/input.*; do
+		config_name=$(basename "$config_file")
+		config_input "${config_name#input.*}" <"$config_file" &
+	done
 }
 
 config_inputs &
@@ -251,9 +251,9 @@ config_inputs &
 svc udiskie --smart-tray --automount --terminal foot --menu flat
 
 if [ -z "$AUTOLOGIN" ]; then
-  systemctl --user start river-session.target
+	systemctl --user start river-session.target
 
-  svc waybar
+	svc waybar
 fi
 
 # Set and exec into the default layout generator, rivertile.
