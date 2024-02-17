@@ -120,6 +120,7 @@ riverctl map normal Super+Shift Return spawn 'run foot'
 
 riverctl map normal Super S spawn 'slurp | grim -g - - | wl-copy'
 riverctl map normal Super R spawn 'slurp | grim -g - - | tesseract - - | wl-copy'
+riverctl map normal Super V spawn 'recshot'
 
 riverctl map normal Super+Shift S spawn 'slurp -r -o | grim -g - - | wl-copy'
 # riverctl map normal Super+Control S spawn 'TODO-LIST-RECTS | slurp -r | grim -g - - | wl-copy'
