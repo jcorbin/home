@@ -89,6 +89,10 @@ initls 'rust_analyzer'
 -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
 
 initls('tsserver', {
+  completions = {
+    completeFunctionCalls = true,
+  },
+
   init_options = {
     preferences = {
 
