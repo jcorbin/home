@@ -396,11 +396,8 @@ autocmd('FileType', {
 }, 'setlocal commentstring=//\\ %s')
 
 -- TODO glepnir/lspsaga.nvim
--- TODO jose-elias-alvarez/null-ls.nvim
 -- TODO mfussenegger/nvim-dap
 
 -- TODO restore language plugins
 -- * fatih/vim-go
 -- * ziglang/zig.vim
-
--- TODO audit old vimrc for more
