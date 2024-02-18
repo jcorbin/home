@@ -10,6 +10,11 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local bind = function(f, ...)
+  local args = { ... }
+  return function(...) return f(unpack(args), ...) end
+end
+
 -- general ui options
 vim.opt.guifont = 'JetBrains Mono:h14'
 vim.opt.termguicolors = true
@@ -142,10 +147,28 @@ vim.keymap.set('n', '<leader>sp',
   function() vim.opt.spell = not vim.opt.spell:get() end,
   { desc = 'toggle spellchecking' })
 
+-- Easy run in :terminal keymap
+vim.keymap.set('n', '<leader>!', ':vsplit | term ')
+
+-- Easy terminal window operations
+vim.keymap.set('t', '<C-\\>c', vim.cmd.close, { desc = 'Close buffer' })
+vim.keymap.set('t', '<C-\\><C-w>', bind(vim.cmd.wincmd, ''), { desc = 'Last window' })
+vim.keymap.set('t', '<C-\\><C-h>', bind(vim.cmd.wincmd, 'h'), { desc = 'Window ←' })
+vim.keymap.set('t', '<C-\\><C-j>', bind(vim.cmd.wincmd, 'j'), { desc = 'Window ↓' })
+vim.keymap.set('t', '<C-\\><C-k>', bind(vim.cmd.wincmd, 'k'), { desc = 'Window ↑' })
+vim.keymap.set('t', '<C-\\><C-l>', bind(vim.cmd.wincmd, 'l'), { desc = 'Window →' })
+
+-- Easy terminal paste operations
+vim.keymap.set('t', '<C-\\>p',
+  function() vim.api.nvim_paste(vim.fn.getreg('"'), false, -1) end,
+  { desc = 'Paste Internal' })
+vim.keymap.set('t', '<C-\\>P',
+  function() vim.api.nvim_paste(vim.fn.getreg('+'), false, -1) end,
+  { desc = 'Paste OS' })
+
 -- TODO hoist to be nearly first thing after we pull all keymaps and other order-sensitive settings out
 require('lazy').setup('plugins')
 
-require 'my.terminal'
 require 'my.diagnostics'
 require 'my.language_servers'
 
