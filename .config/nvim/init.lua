@@ -1,3 +1,15 @@
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.uv.fs_stat(lazypath) then
+  vim.fn.system {
+    'git', 'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  }
+end
+vim.opt.rtp:prepend(lazypath)
+
 -- general ui options
 vim.opt.guifont = 'JetBrains Mono:h14'
 vim.opt.termguicolors = true
@@ -130,7 +142,9 @@ vim.keymap.set('n', '<leader>sp',
   function() vim.opt.spell = not vim.opt.spell:get() end,
   { desc = 'toggle spellchecking' })
 
-require 'my.lazy'
+-- TODO hoist to be nearly first thing after we pull all keymaps and other order-sensitive settings out
+require('lazy').setup('plugins')
+
 require 'my.terminal'
 require 'my.diagnostics'
 require 'my.language_servers'
