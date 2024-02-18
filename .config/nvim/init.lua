@@ -144,10 +144,25 @@ vim.keymap.set('n', '<leader>cc',
   function() vim.opt.cursorcolumn = not vim.opt.cursorcolumn:get() end,
   { desc = 'toggle cursor column highlight' })
 
--- toggle spellchecking
+-- spellchecking
 vim.keymap.set('n', '<leader>sp',
   function() vim.opt.spell = not vim.opt.spell:get() end,
   { desc = 'toggle spellchecking' })
+vim.opt.spell = true  -- spellchecking on by default...
+autocmd('FileType', { -- ...off by exception
+  'help',
+  'man',
+  'startify',
+  'godoc',
+  'qf',
+  'netrw',
+  'fugitiveblame',
+  'gitrebase',
+  'goterm',
+  'godebug*',
+  'dirvish',
+}, 'setlocal nospell')
+autocmd('TermOpen', 'setlocal nospell')
 
 -- Easy run in :terminal keymap
 vim.keymap.set('n', '<leader>!', ':vsplit | term ')
