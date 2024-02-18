@@ -1,14 +1,22 @@
-require 'my.init'
+-- group for ungrouped autocmds so that they are deduped when reloading
+local augroup = require 'my.augroup'
+local autocmd = augroup 'myvimrc'
+
+-- auto reload $MYVIMRC after write
+autocmd('BufWritePost', vim.env.MYVIMRC, function(opts)
+  local path = opts.file
+  vim.schedule(function()
+    dofile(path)
+    vim.notify('Reloaded ' .. path)
+  end)
+end)
+
 require 'my.keys'
 require 'my.options'
 require 'my.lazy'
 require 'my.terminal'
 require 'my.diagnostics'
 require 'my.language_servers'
-
--- group for ungrouped autocmds so that they are deduped when reloading
-local augroup = require 'my.augroup'
-local autocmd = augroup 'myvimrc'
 
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
