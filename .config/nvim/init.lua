@@ -73,6 +73,8 @@ local autocmd = augroup 'myvimrc'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+local mykeymap = require 'my.keymap'
+
 -- easy editing of/around $MYVIMRC
 vim.keymap.set('n', '<leader>ev', function()
   vim.cmd.vsplit(vim.env.MYVIMRC)
@@ -205,17 +207,76 @@ autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 -- TODO hoist to be nearly first thing after we pull all keymaps and other order-sensitive settings out
 require('lazy').setup('plugins')
 
--- language server setups
+-- language server setup routine
+local lsp_autocmd = augroup 'plugins.lsp'
 
-local initls = require('my.lsp').setup_server
+local function on_lsp_attach(caps, bufnr)
+  local lsp = vim.lsp
+  local telescopes = require 'telescope.builtin'
+  local autocmd_local = lsp_autocmd.buffer(bufnr)
+  local map_buffer = mykeymap.options { buffer = bufnr }
+  local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
-initls 'bashls'
+  map_buffer('n', '<C-k>', lsp.buf.signature_help)
 
-initls 'cssls'
+  -- keymaps to jump
+  map_buffer('n', '<c-]>', lsp.buf.definition, { desc = 'jump to definition (lsp)' })
+  map_local('n', 'gD', lsp.buf.declaration, { desc = 'jump to declaration (lsp)' })
+  map_local('n', 'gI', lsp.buf.implementation, { desc = 'jump to implementation (lsp)' })
+  map_local('n', 'gT', lsp.buf.type_definition, { desc = 'jump to type definition (lsp)' })
 
-initls 'dockerls'
+  -- keymaps to act on code
+  map_local('n', 'a', lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
+  map_local('n', 'gR', lsp.buf.rename, { desc = 'rename symbol (lsp)' })
 
-initls('glslls', {
+  -- telescope invocations
+  map_local('n', 'sr', telescopes.lsp_references, { desc = 'search lsp references' })
+  map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
+  map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
+
+  -- inlay hints (uses virtual text to display parameter names and such)
+  lsp.inlay_hint.enable(bufnr, true)
+  map_local('n', 'hh',
+    function() lsp.inlay_hint.enable(bufnr, not lsp.inlay_hint.is_enabled()) end,
+    { desc = 'toggle inlay hints' })
+
+  -- cursor hold highlighting
+  if caps['textDocument/documentHighlight'] ~= nil then
+    autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
+      lsp.buf.document_highlight()
+    end)
+    autocmd_local('CursorMoved', function()
+      lsp.buf.clear_references()
+    end)
+  end
+
+  if caps['textDocument/codeLens'] ~= nil then
+    autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
+      lsp.codelens.refresh()
+    end)
+  end
+end
+
+local function setup_lsp(name, opts)
+  if opts == nil then
+    opts = {}
+  end
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  require('lspconfig')[name].setup(vim.tbl_extend('keep', opts, {
+    on_attach = on_lsp_attach,
+    capabilities = capabilities,
+  }))
+end
+
+-- setup language servers
+
+setup_lsp 'bashls'
+
+setup_lsp 'cssls'
+
+setup_lsp 'dockerls'
+
+setup_lsp('glslls', {
   cmd = {
     "glslls",
     "--stdin",
@@ -224,13 +285,13 @@ initls('glslls', {
   },
 })
 
-initls 'gopls'
+setup_lsp 'gopls'
 
-initls 'html'
+setup_lsp 'html'
 
-initls 'jsonls'
+setup_lsp 'jsonls'
 
-initls('lua_ls', {
+setup_lsp('lua_ls', {
   settings = {
     Lua = {
       runtime = {
@@ -253,11 +314,11 @@ initls('lua_ls', {
   },
 })
 
-initls('openscad_lsp', {
+setup_lsp('openscad_lsp', {
   cmd = { "openscad-lsp", "--stdio", "--fmt-style", "file" },
 })
 
-initls('pylsp', {
+setup_lsp('pylsp', {
   settings = {
     -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     pylsp = {
@@ -294,10 +355,10 @@ initls('pylsp', {
   },
 })
 
-initls 'rust_analyzer'
+setup_lsp 'rust_analyzer'
 -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
 
-initls('tsserver', {
+setup_lsp('tsserver', {
   completions = {
     completeFunctionCalls = true,
   },
@@ -323,11 +384,11 @@ initls('tsserver', {
   },
 })
 
-initls 'yamlls'
+setup_lsp 'yamlls'
 
-initls 'vimls'
+setup_lsp 'vimls'
 
-initls 'zls'
+setup_lsp 'zls'
 
 -- TODO break this out into a zig-specific module
 autocmd('FileType', {
