@@ -1,3 +1,54 @@
+-- general ui options
+vim.opt.guifont = 'JetBrains Mono:h14'
+vim.opt.termguicolors = true
+vim.opt.background = 'dark'
+vim.opt.mouse = 'a'
+
+-- neovide gui-specifics
+if vim.g.neovide then
+  vim.g.neovide_hide_mouse_when_typing = true
+  vim.g.neovide_cursor_vfx_mode = 'railgun'
+  vim.g.neovide_cursor_animation_length = 0.1
+  vim.g.neovide_scroll_animation_length = 0.2
+  vim.g.neovide_remember_window_size = false
+  vim.g.neovide_remember_window_position = false
+  vim.g.neovide_scale_factor = 1.0
+  local scale_step = 0.05
+  vim.keymap.set({ 'n' }, '<C-=>',
+    function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * (1 + scale_step) end)
+  vim.keymap.set({ 'n' }, '<C-->',
+    function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / (1 + scale_step) end)
+  vim.keymap.set({ 'n' }, '<C-0>', function() vim.g.neovide_scale_factor = 1.0 end)
+end
+
+-- allow placing cursor in virtual space (past end of line)
+vim.opt.virtualedit = 'all'
+
+-- searching
+vim.opt.incsearch = true
+vim.opt.smartcase = true
+vim.keymap.set('n', '<leader>ci',
+  function() vim.opt.ignorecase = not vim.opt.ignorecase:get() end,
+  { desc = 'toggle search case sensitivity' })
+
+-- use completion popup menu with manual seleection
+vim.opt.completeopt = { 'menuone', 'popup', 'noselect' }
+
+-- display 2 lines of context top/bottom when scrolling
+vim.opt.scrolloff = 2
+
+-- start out with level 1 folds open
+vim.opt.foldlevelstart = 1
+
+-- set for CursorHold purposes
+vim.opt.updatetime = 250
+
+-- indent settings and defaults
+vim.opt.breakindent = true
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.expandtab = true
+
 -- group for ungrouped autocmds so that they are deduped when reloading
 local augroup = require 'my.augroup'
 local autocmd = augroup 'myvimrc'
@@ -54,7 +105,31 @@ vim.keymap.set({ 'n', 'v' }, '<leader>vm', [[:v\/ move ]], { desc = 'vrem last s
 vim.keymap.set({ 'n', 'v' }, '<leader>vc', [[:v\/ copy ]], { desc = 'vrec last search' })
 vim.keymap.set({ 'n', 'v' }, '<leader>vd', [[:v\/ delete<cr>]], { desc = 'vred last search' })
 
-require 'my.options'
+-- line option toggles
+vim.keymap.set('n', '<leader>ln',
+  function() vim.opt.number = not vim.opt.number:get() end,
+  { desc = 'toggle line numbers' })
+vim.keymap.set('n', '<leader>lr',
+  function() vim.opt.relativenumber = not vim.opt.relativenumber:get() end,
+  { desc = 'toggle relative line numbers' })
+vim.keymap.set('n', '<leader>lw',
+  function() vim.opt.wrap = not vim.opt.wrap:get() end,
+  { desc = 'toggle virtual line wrapping' })
+
+-- cursor column/line toggles
+vim.opt.cursorline = true
+vim.keymap.set('n', '<leader>cl',
+  function() vim.opt.cursorline = not vim.opt.cursorline:get() end,
+  { desc = 'toggle cursor line highlight' })
+vim.keymap.set('n', '<leader>cc',
+  function() vim.opt.cursorcolumn = not vim.opt.cursorcolumn:get() end,
+  { desc = 'toggle cursor column highlight' })
+
+-- toggle spellchecking
+vim.keymap.set('n', '<leader>sp',
+  function() vim.opt.spell = not vim.opt.spell:get() end,
+  { desc = 'toggle spellchecking' })
+
 require 'my.lazy'
 require 'my.terminal'
 require 'my.diagnostics'
@@ -62,6 +137,11 @@ require 'my.language_servers'
 
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
+
+-- TODO break this out into a zig-specific module
+autocmd('FileType', {
+  'zig',
+}, 'setlocal commentstring=//\\ %s')
 
 -- TODO glepnir/lspsaga.nvim
 -- TODO jose-elias-alvarez/null-ls.nvim
