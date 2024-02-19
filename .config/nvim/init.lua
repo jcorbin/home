@@ -88,12 +88,15 @@ vim.opt.completeopt = { 'menuone', 'popup', 'noselect' }
 -- display 2 lines of context top/bottom when scrolling
 vim.opt.scrolloff = 2
 
--- start out with level 1 folds open
-vim.opt.foldlevelstart = 1
-
 -- set for CursorHold purposes
 vim.opt.updatetime = 250
 
+-- }}}
+
+--- Folding {{{
+vim.opt.foldlevelstart = 1 -- start out with level 1 folds open
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 -- }}}
 
 --- Indentation
