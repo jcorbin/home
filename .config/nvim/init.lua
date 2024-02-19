@@ -1,3 +1,23 @@
+--- use <Space> for mapleader {{{
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+-- }}}
+
+--- utilities {{{
+local bind = function(f, ...)
+  local args = { ... }
+  return function(...) return f(unpack(args), ...) end
+end
+
+-- group for ungrouped autocmds so that they are deduped when reloading
+local augroup = require 'my.augroup'
+local autocmd = augroup 'myvimrc'
+
+local mykeymap = require 'my.keymap'
+-- }}}
+
+--- Lazy plugin manager {{{
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
   vim.fn.system {
@@ -10,12 +30,29 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local bind = function(f, ...)
-  local args = { ... }
-  return function(...) return f(unpack(args), ...) end
-end
+-- NOTE needs to happen AFTER mapleader option is set, since plugins' setup may define leader mappings
+require('lazy').setup('plugins')
+-- }}}
 
--- general ui options
+--- easy editing of/around $MYVIMRC {{{
+vim.keymap.set('n', '<leader>ev', function()
+  vim.cmd.vsplit(vim.env.MYVIMRC)
+end, { desc = 'edit $MYVIMRC' })
+vim.keymap.set('n', '<leader>ec', function()
+  vim.cmd.vsplit(vim.fs.dirname(vim.env.MYVIMRC))
+end, { desc = 'edit directory of $MYVIMRC' })
+
+-- auto reload $MYVIMRC after write
+autocmd('BufWritePost', vim.env.MYVIMRC, function(opts)
+  local path = opts.file
+  vim.schedule(function()
+    dofile(path)
+    vim.notify('Reloaded ' .. path)
+  end)
+end)
+-- }}}
+
+--- UI options {{{
 vim.opt.guifont = 'JetBrains Mono:h14'
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
@@ -37,16 +74,11 @@ if vim.g.neovide then
     function() vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / (1 + scale_step) end)
   vim.keymap.set({ 'n' }, '<C-0>', function() vim.g.neovide_scale_factor = 1.0 end)
 end
+-- }}}
 
+--- Various options {{{
 -- allow placing cursor in virtual space (past end of line)
 vim.opt.virtualedit = 'all'
-
--- searching
-vim.opt.incsearch = true
-vim.opt.smartcase = true
-vim.keymap.set('n', '<leader>ci',
-  function() vim.opt.ignorecase = not vim.opt.ignorecase:get() end,
-  { desc = 'toggle search case sensitivity' })
 
 -- use completion popup menu with manual seleection
 vim.opt.completeopt = { 'menuone', 'popup', 'noselect' }
@@ -60,41 +92,23 @@ vim.opt.foldlevelstart = 1
 -- set for CursorHold purposes
 vim.opt.updatetime = 250
 
--- indent settings and defaults
+-- }}}
+
+--- Indentation
 vim.opt.breakindent = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.expandtab = true
 
--- group for ungrouped autocmds so that they are deduped when reloading
-local augroup = require 'my.augroup'
-local autocmd = augroup 'myvimrc'
+--- Searching {{{
+vim.opt.incsearch = true
+vim.opt.smartcase = true
+vim.keymap.set('n', '<leader>ci',
+  function() vim.opt.ignorecase = not vim.opt.ignorecase:get() end,
+  { desc = 'toggle search case sensitivity' })
+-- }}}
 
--- use <Space> for mapleader
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
-local mykeymap = require 'my.keymap'
-
--- easy editing of/around $MYVIMRC
-vim.keymap.set('n', '<leader>ev', function()
-  vim.cmd.vsplit(vim.env.MYVIMRC)
-end, { desc = 'edit $MYVIMRC' })
-vim.keymap.set('n', '<leader>ec', function()
-  vim.cmd.vsplit(vim.fs.dirname(vim.env.MYVIMRC))
-end, { desc = 'edit directory of $MYVIMRC' })
-
--- auto reload $MYVIMRC after write
-autocmd('BufWritePost', vim.env.MYVIMRC, function(opts)
-  local path = opts.file
-  vim.schedule(function()
-    dofile(path)
-    vim.notify('Reloaded ' .. path)
-  end)
-end)
-
--- context marker motion
+--- context marker motion {{{
 local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
 vim.keymap.set('n', '<leader>[n',
   function() vim.fn.search(context_marker, 'bW') end,
@@ -102,12 +116,13 @@ vim.keymap.set('n', '<leader>[n',
 vim.keymap.set('n', '<leader>]n',
   function() vim.fn.search(context_marker, 'W') end,
   { desc = 'next conflict marker' })
+-- }}}
 
 -- line exchange mappings
 vim.keymap.set('n', '[e', '<leader>:move--<cr>')
 vim.keymap.set('n', ']e', '<leader>:move+<cr>')
 
--- marginally quicker path to norm/move/copy a range
+--- marginally quicker path to norm/move/copy a range {{{
 -- ... this mapping is barely useful in normal mode fwiw
 vim.keymap.set({ 'n', 'v' }, '<leader>nn', ':norm ')
 vim.keymap.set({ 'n', 'v' }, '<leader>nn', ':norm ')
@@ -125,8 +140,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>vn', [[:v\/ norm ]], { desc = 'vren last s
 vim.keymap.set({ 'n', 'v' }, '<leader>vm', [[:v\/ move ]], { desc = 'vrem last search' })
 vim.keymap.set({ 'n', 'v' }, '<leader>vc', [[:v\/ copy ]], { desc = 'vrec last search' })
 vim.keymap.set({ 'n', 'v' }, '<leader>vd', [[:v\/ delete<cr>]], { desc = 'vred last search' })
+-- }}}
 
--- line option toggles
+--- Line numbering and wrapping toggles {{{
 vim.keymap.set('n', '<leader>ln',
   function() vim.opt.number = not vim.opt.number:get() end,
   { desc = 'toggle line numbers' })
@@ -136,8 +152,9 @@ vim.keymap.set('n', '<leader>lr',
 vim.keymap.set('n', '<leader>lw',
   function() vim.opt.wrap = not vim.opt.wrap:get() end,
   { desc = 'toggle virtual line wrapping' })
+-- }}}
 
--- cursor column/line toggles
+--- Cursor reticle toggles {{{
 vim.opt.cursorline = true
 vim.keymap.set('n', '<leader>cl',
   function() vim.opt.cursorline = not vim.opt.cursorline:get() end,
@@ -145,8 +162,9 @@ vim.keymap.set('n', '<leader>cl',
 vim.keymap.set('n', '<leader>cc',
   function() vim.opt.cursorcolumn = not vim.opt.cursorcolumn:get() end,
   { desc = 'toggle cursor column highlight' })
+-- }}}
 
--- spellchecking
+--- Spellchecking {{{
 vim.keymap.set('n', '<leader>sp',
   function() vim.opt.spell = not vim.opt.spell:get() end,
   { desc = 'toggle spellchecking' })
@@ -165,8 +183,10 @@ autocmd('FileType', { -- ...off by exception
   'dirvish',
 }, 'setlocal nospell')
 autocmd('TermOpen', 'setlocal nospell')
+-- }}}
 
--- Easy run in :terminal keymap
+--- :terminal Quality of Life {{{
+-- Analog of :!
 vim.keymap.set('n', '<leader>!', ':vsplit | term ')
 
 -- Easy terminal window operations
@@ -184,8 +204,9 @@ vim.keymap.set('t', '<C-\\>p',
 vim.keymap.set('t', '<C-\\>P',
   function() vim.api.nvim_paste(vim.fn.getreg('+'), false, -1) end,
   { desc = 'Paste OS' })
+-- }}}
 
--- diagnostic config and mappings
+--- vim.diagnostic setup {{{
 vim.diagnostic.config {
   signs = true,
   virtual_text = true,
@@ -217,14 +238,12 @@ vim.keymap.set('n', '<leader>dd',
     end
   end,
   { desc = 'Toggle diagnostics' })
+-- }}}
 
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 
--- TODO hoist to be nearly first thing after we pull all keymaps and other order-sensitive settings out
-require('lazy').setup('plugins')
-
--- language server setup routine
+--- Language Server setup routine {{{
 local lsp_autocmd = augroup 'plugins.lsp'
 
 local function on_lsp_attach(caps, bufnr)
@@ -284,8 +303,9 @@ local function setup_lsp(name, opts)
     capabilities = capabilities,
   }))
 end
+-- }}}
 
--- setup language servers
+--- Specific Language Servers {{{
 
 setup_lsp 'bashls'
 
@@ -406,8 +426,9 @@ setup_lsp 'yamlls'
 setup_lsp 'vimls'
 
 setup_lsp 'zls'
+-- }}}
 
--- TODO break this out into a zig-specific module
+-- TODO break this out into a zig ftplugin
 autocmd('FileType', {
   'zig',
 }, 'setlocal commentstring=//\\ %s')
@@ -418,3 +439,5 @@ autocmd('FileType', {
 -- TODO restore language plugins
 -- * fatih/vim-go
 -- * ziglang/zig.vim
+
+-- vim:foldmethod=marker
