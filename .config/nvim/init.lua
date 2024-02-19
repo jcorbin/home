@@ -216,8 +216,8 @@ vim.diagnostic.config {
   },
 }
 
-vim.keymap.set('n', '[q', bind(vim.cmd, 'cprev'), { desc = 'Previous error (quickfix)' })
-vim.keymap.set('n', ']q', bind(vim.cmd, 'cnext'), { desc = 'Next error (quickfix)' })
+vim.keymap.set('n', '[q', vim.cmd.cprev, { desc = 'Previous error (quickfix)' })
+vim.keymap.set('n', ']q', vim.cmd.cnext, { desc = 'Next error (quickfix)' })
 
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
