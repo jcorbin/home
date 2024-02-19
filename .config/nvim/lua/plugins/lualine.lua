@@ -69,9 +69,4 @@ return {
       }
     },
   },
-  config = function(_, opts)
-    vim.opt.laststatus = 2
-    vim.opt.cmdheight = 1
-    require('lualine').setup(opts)
-  end,
 }
