@@ -99,11 +99,12 @@ vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 -- }}}
 
---- Indentation
+--- Indentation {{{
 vim.opt.breakindent = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 vim.opt.expandtab = true
+-- }}}
 
 --- Searching {{{
 vim.opt.incsearch = true
