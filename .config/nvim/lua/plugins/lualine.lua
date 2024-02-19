@@ -1,14 +1,3 @@
-local filename = {
-  'filename',
-  newfile_status = true,
-  file_status = true,
-  path = 1,   -- relative path
-}
-
-local function cwd()
-  return vim.fn.getcwd()
-end
-
 return {
   'nvim-lualine/lualine.nvim',
   opts = {
@@ -27,7 +16,12 @@ return {
     },
     sections = {
       lualine_a = {
-        filename,
+        {
+          'filename',
+          newfile_status = true,
+          file_status = true,
+          path = 1, -- relative path
+        },
       },
       lualine_b = {
         'filesize',
@@ -52,7 +46,12 @@ return {
     },
     inactive_sections = {
       lualine_a = {
-        filename,
+        {
+          'filename',
+          newfile_status = true,
+          file_status = true,
+          path = 1, -- relative path
+        },
       },
       lualine_b = {
       },
