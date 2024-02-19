@@ -57,6 +57,7 @@ vim.opt.guifont = 'JetBrains Mono:h14'
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
 vim.opt.mouse = 'a'
+vim.cmd.colorscheme 'kanagawa'
 
 -- neovide gui-specifics
 if vim.g.neovide then
