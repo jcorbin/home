@@ -249,55 +249,60 @@ vim.keymap.set('n', '<leader>dd',
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 
---- Language Server setup routine {{{
-local lsp_autocmd = augroup 'plugins.lsp'
+autocmd('LspAttach', function(args)
+  local client = vim.lsp.get_client_by_id(args.data.client_id)
+  if client == nil then return end
 
-local function on_lsp_attach(caps, bufnr)
-  local lsp = vim.lsp
-  local telescopes = require 'telescope.builtin'
-  local autocmd_local = lsp_autocmd.buffer(bufnr)
+  local bufnr = args.buf
+  local caps = client.server_capabilities or {}
+
+  local autocmd_local = autocmd.buffer(bufnr)
   local map_buffer = mykeymap.options { buffer = bufnr }
   local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
-  map_buffer('n', '<C-k>', lsp.buf.signature_help)
+  map_buffer('n', '<C-k>', vim.lsp.buf.signature_help)
 
   -- keymaps to jump
-  map_buffer('n', '<c-]>', lsp.buf.definition, { desc = 'jump to definition (lsp)' })
-  map_local('n', 'gD', lsp.buf.declaration, { desc = 'jump to declaration (lsp)' })
-  map_local('n', 'gI', lsp.buf.implementation, { desc = 'jump to implementation (lsp)' })
-  map_local('n', 'gT', lsp.buf.type_definition, { desc = 'jump to type definition (lsp)' })
+  map_buffer('n', '<c-]>', vim.lsp.buf.definition, { desc = 'jump to definition (lsp)' })
+  map_local('n', 'gD', vim.lsp.buf.declaration, { desc = 'jump to declaration (lsp)' })
+  map_local('n', 'gI', vim.lsp.buf.implementation, { desc = 'jump to implementation (lsp)' })
+  map_local('n', 'gT', vim.lsp.buf.type_definition, { desc = 'jump to type definition (lsp)' })
 
   -- keymaps to act on code
-  map_local('n', 'a', lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
-  map_local('n', 'gR', lsp.buf.rename, { desc = 'rename symbol (lsp)' })
+  map_local('n', 'a', vim.lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
+  map_local('n', 'gR', vim.lsp.buf.rename, { desc = 'rename symbol (lsp)' })
 
   -- telescope invocations
+  local telescopes = require 'telescope.builtin'
   map_local('n', 'sr', telescopes.lsp_references, { desc = 'search lsp references' })
   map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
   map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
 
   -- inlay hints (uses virtual text to display parameter names and such)
-  lsp.inlay_hint.enable(bufnr, true)
+  vim.lsp.inlay_hint.enable(bufnr, true)
   map_local('n', 'hh',
-    function() lsp.inlay_hint.enable(bufnr, not lsp.inlay_hint.is_enabled()) end,
+    function() vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled()) end,
     { desc = 'toggle inlay hints' })
 
   -- cursor hold highlighting
-  if caps['textDocument/documentHighlight'] ~= nil then
+  if caps.documentHighlightProvider then
     autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
-      lsp.buf.document_highlight()
+      vim.lsp.buf.document_highlight()
     end)
     autocmd_local('CursorMoved', function()
-      lsp.buf.clear_references()
+      vim.lsp.buf.clear_references()
     end)
   end
 
-  if caps['textDocument/codeLens'] ~= nil then
+  if caps.codeLensProvider ~= nil and caps.codeLensProvider.resolveProvider then
     autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
-      lsp.codelens.refresh()
+      vim.lsp.codelens.refresh({ bufnr = 0 })
     end)
   end
-end
+
+end)
+
+--- Language Server setup routine {{{
 
 local function setup_lsp(name, opts)
   if opts == nil then
@@ -305,7 +310,6 @@ local function setup_lsp(name, opts)
   end
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
   require('lspconfig')[name].setup(vim.tbl_extend('keep', opts, {
-    on_attach = on_lsp_attach,
     capabilities = capabilities,
   }))
 end
