@@ -249,6 +249,42 @@ vim.keymap.set('n', '<leader>dd',
 -- highlight yanks
 autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
 
+--- Inspects any value in a floating window scratch buffer.
+--- Focus is transferred to the new floating window.
+---
+--- TODO add an easy Q/<Esc> keymap to dismiss
+--- TODO is there a better standard-ish way of doing this? surely?
+---
+--- @param v any
+local function popup(v)
+  local mess = type(v) == "string" and v or vim.inspect(v)
+  local lines = vim.split(mess, "\n")
+  local width = vim.iter(lines)
+      :map(function(line) return #line end)
+      :fold(1, function(a, b) return a > b and a or b end)
+  local height = #lines
+
+  local winheight = vim.fn.winheight(0)
+  local winwidth = vim.fn.winwidth(0)
+  local remheight = winheight - vim.fn.winline() - 1
+  local remwidth = winwidth - vim.fn.wincol()
+  if width > remwidth then width = remwidth end
+  if height > remheight then height = remheight end
+
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
+
+  vim.api.nvim_open_win(buf, true, {
+    relative = 'cursor',
+    anchor = 'NW',
+    col = 0,
+    row = 1,
+    width = width,
+    height = height,
+    style = 'minimal'
+  })
+end
+
 autocmd('LspAttach', function(args)
   local client = vim.lsp.get_client_by_id(args.data.client_id)
   if client == nil then return end
@@ -296,6 +332,13 @@ autocmd('LspAttach', function(args)
     end)
   end
 
+  map_local('n', 'lc', function()
+    popup({ server_capabilities = vim.lsp.get_clients()[1].server_capabilities })
+  end)
+
+  map_local('n', 'lt', function()
+    popup({ semantic_tokens = vim.lsp.semantic_tokens.get_at_pos() })
+  end)
 end)
 
 --- Setup Language Servers {{{
