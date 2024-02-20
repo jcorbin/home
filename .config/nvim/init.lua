@@ -262,12 +262,6 @@ autocmd('LspAttach', function(args)
 
   map_buffer('n', '<C-k>', vim.lsp.buf.signature_help)
 
-  -- keymaps to jump
-  map_buffer('n', '<c-]>', vim.lsp.buf.definition, { desc = 'jump to definition (lsp)' })
-  map_local('n', 'gD', vim.lsp.buf.declaration, { desc = 'jump to declaration (lsp)' })
-  map_local('n', 'gI', vim.lsp.buf.implementation, { desc = 'jump to implementation (lsp)' })
-  map_local('n', 'gT', vim.lsp.buf.type_definition, { desc = 'jump to type definition (lsp)' })
-
   -- keymaps to act on code
   map_local('n', 'a', vim.lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
   map_local('n', 'gR', vim.lsp.buf.rename, { desc = 'rename symbol (lsp)' })
