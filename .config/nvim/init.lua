@@ -298,20 +298,17 @@ autocmd('LspAttach', function(args)
 
 end)
 
---- Language Server setup routine {{{
+--- Setup Language Servers {{{
 
 local function setup_lsp(name, opts)
   if opts == nil then
     opts = {}
   end
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  require('lspconfig')[name].setup(vim.tbl_extend('keep', opts, {
-    capabilities = capabilities,
-  }))
+  opts = vim.tbl_extend('keep', opts, {
+    capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  })
+  require('lspconfig')[name].setup(opts)
 end
--- }}}
-
---- Specific Language Servers {{{
 
 setup_lsp 'bashls'
 
