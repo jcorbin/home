@@ -296,7 +296,8 @@ autocmd('LspAttach', function(args)
   local map_buffer = mykeymap.options { buffer = bufnr }
   local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
-  map_buffer('n', '<C-k>', vim.lsp.buf.signature_help)
+  map_local('n', 'K', vim.lsp.buf.hover, { desc = 'lsp hover' })
+  map_buffer('n', '<C-k>', vim.lsp.buf.signature_help, { desc = 'lsp signature help' })
 
   -- keymaps to act on code
   map_local('n', 'a', vim.lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
