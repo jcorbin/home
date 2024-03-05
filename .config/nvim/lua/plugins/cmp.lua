@@ -94,11 +94,12 @@ return {
 
         view = {
           entries = { name = 'custom', selection_order = 'near_cursor' },
+          docs = { auto_open = false },
         },
 
         window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
+          -- completion = cmp.config.window.bordered(),
+          -- documentation = cmp.config.window.bordered(),
         },
 
         -- formatting = {
