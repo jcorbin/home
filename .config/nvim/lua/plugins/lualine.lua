@@ -54,6 +54,23 @@ return {
     },
 
     sections = {
+      lualine_a = { filename },
+      lualine_b = { 'location' },
+      lualine_c = { 'diagnostics' },
+      lualine_x = { 'branch', 'diff' },
+      lualine_y = { showcmd },
+      lualine_z = { 'mode' }
+    },
+    inactive_sections = {
+      lualine_a = { filename },
+      lualine_b = { 'location' },
+      lualine_c = { 'diagnostics' },
+      lualine_x = { 'branch', 'diff' },
+      lualine_y = {},
+      lualine_z = {},
+    },
+
+    winbar = {
       lualine_a = {},
       lualine_b = {},
       lualine_c = {},
@@ -61,28 +78,11 @@ return {
       lualine_y = {},
       lualine_z = {}
     },
-    inactive_sections = {
+    inactive_winbar = {
       lualine_a = {},
       lualine_b = {},
       lualine_c = {},
       lualine_x = {},
-      lualine_y = {},
-      lualine_z = {},
-    },
-
-    winbar = {
-      lualine_a = { filename, 'location' },
-      lualine_b = { 'branch' },
-      lualine_c = { 'diff' },
-      lualine_x = { 'searchcount', 'diagnostics' },
-      lualine_y = { showcmd },
-      lualine_z = { 'mode' }
-    },
-    inactive_winbar = {
-      lualine_a = { filename, 'location' },
-      lualine_b = { 'branch' },
-      lualine_c = { 'diff' },
-      lualine_x = { 'searchcount', 'diagnostics' },
       lualine_y = {},
       lualine_z = {}
     },
