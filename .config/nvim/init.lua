@@ -234,24 +234,43 @@ vim.keymap.set('n', '<leader>C', telescopes.colorscheme, { desc = 'select colors
 --- }}}
 
 --- :terminal Quality of Life {{{
+
 -- Analog of :!
 vim.keymap.set('n', '<leader>!', ':vsplit | term ')
 
--- Easy terminal window operations
-vim.keymap.set('t', '<C-\\>c', vim.cmd.close, { desc = 'Close buffer' })
-vim.keymap.set('t', '<C-\\><C-w>', bind(vim.cmd.wincmd, ''), { desc = 'Last window' })
-vim.keymap.set('t', '<C-\\><C-h>', bind(vim.cmd.wincmd, 'h'), { desc = 'Window ←' })
-vim.keymap.set('t', '<C-\\><C-j>', bind(vim.cmd.wincmd, 'j'), { desc = 'Window ↓' })
-vim.keymap.set('t', '<C-\\><C-k>', bind(vim.cmd.wincmd, 'k'), { desc = 'Window ↑' })
-vim.keymap.set('t', '<C-\\><C-l>', bind(vim.cmd.wincmd, 'l'), { desc = 'Window →' })
+-- more natural prefix for terminal mode mappings than the awkward <C-\\> default
+-- this is like a tmux prefix, but instead we choose C-w for alignment with normal mode's window command map
+local tleader = '<C-w>'
 
--- Easy terminal paste operations
-vim.keymap.set('t', '<C-\\>p',
+--- less awkward escape from terminal mode back to normal mode
+vim.keymap.set('t', tleader .. 'n', '<C-\\><C-n>')     -- N for Normal
+vim.keymap.set('t', tleader .. '<Esc>', '<C-\\><C-n>') -- or <Escape> because reflex
+
+-- double leader for literal
+vim.keymap.set('t', tleader .. tleader, tleader)
+
+-- wincmd without needing to bounce to normal mode
+for _, key in ipairs({
+  -- now '<C-w>' because that's "literal leader"... fortunately, idgaf wincmd('<C-w>')
+  'c',
+  'r', '<C-r>', 'R',
+  'x', '<C-x>',
+  'h', 'j', 'k', 'l',
+  'H', 'J', 'K', 'L',
+  'T',
+  '=', '-', '+', '<', '>',
+}) do
+  vim.keymap.set('t', tleader .. key, bind(vim.cmd.wincmd, key))
+end
+
+-- easy paste without bouncing out to normal mode
+vim.keymap.set('t', tleader .. 'p',
   function() vim.api.nvim_paste(vim.fn.getreg('"'), false, -1) end,
   { desc = 'Paste Internal' })
-vim.keymap.set('t', '<C-\\>P',
+vim.keymap.set('t', tleader .. 'P',
   function() vim.api.nvim_paste(vim.fn.getreg('+'), false, -1) end,
   { desc = 'Paste OS' })
+
 -- }}}
 
 --- Buffer management Quality of Life {{{
@@ -259,7 +278,7 @@ vim.keymap.set('t', '<C-\\>P',
 -- far better UX than needing to use :buffer or :bdelete directly
 local other_buffer = bind(telescopes.buffers, { ignore_current_buffer = true })
 vim.keymap.set('n', '<leader><Space>', other_buffer, { desc = 'search buffers' })
-vim.keymap.set('t', '<C-\\><Space>', other_buffer, { desc = 'search buffers' })
+vim.keymap.set('t', tleader .. '<Space>', other_buffer, { desc = 'search buffers' })
 
 -- }}}
 
