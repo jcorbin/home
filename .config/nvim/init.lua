@@ -442,31 +442,33 @@ setup_lsp('pylsp', {
 setup_lsp 'rust_analyzer'
 -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
 
-setup_lsp('tsserver', {
-  completions = {
-    completeFunctionCalls = true,
-  },
+setup_lsp 'tsserver'
 
-  init_options = {
-    preferences = {
-      includeInlayParameterNameHints = 'all',
-      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-
-      -- works, but too noisy imo
-      -- includeInlayFunctionParameterTypeHints = true,
-
-      -- broken
-      -- includeInlayFunctionLikeReturnTypeHints = true,
-      -- includeInlayVariableTypeHints = true,
-
-      -- untested
-      -- includeInlayPropertyDeclarationTypeHints = true,
-      -- includeInlayEnumMemberValueHints = true,
-      -- importModuleSpecifierPreference = 'non-relative',
-
-    },
-  },
-})
+-- setup_lsp('tsserver', {
+--   completions = {
+--     completeFunctionCalls = true,
+--   },
+--
+--   init_options = {
+--     preferences = {
+--       includeInlayParameterNameHints = 'all',
+--       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+--
+--       -- works, but too noisy imo
+--       -- includeInlayFunctionParameterTypeHints = true,
+--
+--       -- broken
+--       -- includeInlayFunctionLikeReturnTypeHints = true,
+--       -- includeInlayVariableTypeHints = true,
+--
+--       -- untested
+--       -- includeInlayPropertyDeclarationTypeHints = true,
+--       -- includeInlayEnumMemberValueHints = true,
+--       -- importModuleSpecifierPreference = 'non-relative',
+--
+--     },
+--   },
+-- })
 
 setup_lsp 'yamlls'
 
