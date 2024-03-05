@@ -211,10 +211,6 @@ autocmd('TermOpen', 'setlocal nospell')
 
 vim.keymap.set('n', '<leader>s.', telescopes.resume, { desc = 'resume last search' })
 
-local other_buffer = bind(telescopes.buffers, { ignore_current_buffer = true })
-vim.keymap.set('n', '<leader><Space>', other_buffer, { desc = 'search buffers' })
-vim.keymap.set('t', '<C-\\><Space>', other_buffer, { desc = 'search buffers' })
-
 vim.keymap.set('n', '<leader>sf', bind(telescopes.find_files, {
   previewer = false,
   hidden = true,
@@ -256,6 +252,15 @@ vim.keymap.set('t', '<C-\\>p',
 vim.keymap.set('t', '<C-\\>P',
   function() vim.api.nvim_paste(vim.fn.getreg('+'), false, -1) end,
   { desc = 'Paste OS' })
+-- }}}
+
+--- Buffer management Quality of Life {{{
+
+-- far better UX than needing to use :buffer or :bdelete directly
+local other_buffer = bind(telescopes.buffers, { ignore_current_buffer = true })
+vim.keymap.set('n', '<leader><Space>', other_buffer, { desc = 'search buffers' })
+vim.keymap.set('t', '<C-\\><Space>', other_buffer, { desc = 'search buffers' })
+
 -- }}}
 
 --- vim.diagnostic setup {{{
