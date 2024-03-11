@@ -252,7 +252,7 @@ vim.keymap.set('t', tleader .. tleader, tleader)
 -- wincmd without needing to bounce to normal mode
 for _, key in ipairs({
   -- now '<C-w>' because that's "literal leader"... fortunately, idgaf wincmd('<C-w>')
-  'c',
+  'c', 'o', 'q',
   'r', '<C-r>', 'R',
   'x', '<C-x>',
   'h', 'j', 'k', 'l',
