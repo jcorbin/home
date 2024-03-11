@@ -275,6 +275,34 @@ vim.keymap.set('t', tleader .. 'P',
 
 -- }}}
 
+--- Easy Fixed Width Windows {{{
+
+-- pin a window to 10x col increments
+for _, n in ipairs({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }) do
+  local width = 10 * n
+  local setem = function()
+    vim.cmd('vertical resize ' .. width)
+    vim.o.winfixwidth = true
+  end
+  local opts = {
+    desc = 'Fix Width to ' .. width .. ' columns',
+  }
+  vim.keymap.set('t', tleader .. n, setem, opts)
+  vim.keymap.set('n', '<C-w>' .. n, setem, opts)
+end
+
+-- clear winfixwidth and equalize layout thereafter
+local clear_winfixwidth = function()
+  if vim.o.winfixwidth then
+    vim.o.winfixwidth = false
+    vim.cmd.wincmd '='
+  end
+end
+vim.keymap.set('t', tleader .. '*', clear_winfixwidth, { desc = 'Clear winfixwidth' })
+vim.keymap.set('n', '<C-w>*', clear_winfixwidth, { desc = 'Clear winfixwidth' })
+
+-- }}}
+
 --- Buffer management Quality of Life {{{
 
 -- far better UX than needing to use :buffer or :bdelete directly
