@@ -20,7 +20,7 @@ return {
 
     -- TODO rework and hoist into the plugin spec
     local opts = {
-      defaults = themes.get_ivy {
+      defaults = themes.get_dropdown {
         generic_sorter = require('mini.fuzzy').get_telescope_sorter,
         mappings = {
           i = {
