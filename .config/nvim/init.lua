@@ -454,7 +454,9 @@ local function setup_lsp(name, opts)
   require('lspconfig')[name].setup(opts)
 end
 
-setup_lsp 'bashls'
+setup_lsp('bashls', {
+  filetypes = { 'sh', 'bash', 'zsh' },
+})
 
 setup_lsp 'cssls'
 
