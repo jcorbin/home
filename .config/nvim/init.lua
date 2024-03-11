@@ -251,16 +251,18 @@ vim.keymap.set('t', tleader .. tleader, tleader)
 
 -- wincmd without needing to bounce to normal mode
 for _, key in ipairs({
-  -- now '<C-w>' because that's "literal leader"... fortunately, idgaf wincmd('<C-w>')
   'c', 'o', 'q',
   'r', '<C-r>', 'R',
   'x', '<C-x>',
+  '<C-w>', -- NOTE probably not unless you change tleader to something else
   'h', 'j', 'k', 'l',
   'H', 'J', 'K', 'L',
   'T',
   '=', '-', '+', '<', '>',
 }) do
-  vim.keymap.set('t', tleader .. key, bind(vim.cmd.wincmd, key))
+  if key ~= tleader then
+    vim.keymap.set('t', tleader .. key, bind(vim.cmd.wincmd, key))
+  end
 end
 
 -- easy paste without bouncing out to normal mode
