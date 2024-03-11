@@ -1,14 +1,3 @@
-exec_first_session() {
-  local session_prog
-  for session_prog in "$@"; do
-    # TODO resolve $session_prog as a desktop file before falling back to bare command
-    if whence $session_prog >/dev/null; then
-      exec_session "$session_prog"
-      break
-    fi
-  done
-}
-
 delay_attempt() {
   local pending_file=$1
 
@@ -64,7 +53,14 @@ case "$XDG_SESSION_TYPE" in
     if [ -n "$DISPLAY" ]; then
       echo "x11 already seems to be running ( wanted wayland? )"
     elif [ -z "$WAYLAND_DISPLAY" ]; then
-      exec_first_session river sway
+      config_desktop_session=$(cat ~/.config/desktop_session)
+      desktop_session=${config_desktop_session:-sway}
+      case "$desktop_session" in
+        *)
+          exec_session "$desktop_session"
+          ;;
+      esac
+
       echo "Unable to start wayland session ( install a compositor? )"
     fi
     ;;
