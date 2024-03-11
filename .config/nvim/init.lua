@@ -58,14 +58,6 @@ vim.keymap.set('n', '<leader>sl', bind(telescopes.find_files, {
   no_ignore = true,
 }), { desc = 'search files near $MYVIMRC' })
 
--- auto reload $MYVIMRC after write
-autocmd('BufWritePost', vim.env.MYVIMRC, function(opts)
-  local path = opts.file
-  vim.schedule(function()
-    dofile(path)
-    vim.notify('Reloaded ' .. path)
-  end)
-end)
 -- }}}
 
 --- UI options {{{
