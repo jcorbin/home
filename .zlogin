@@ -56,6 +56,9 @@ case "$XDG_SESSION_TYPE" in
       config_desktop_session=$(cat ~/.config/desktop_session)
       desktop_session=${config_desktop_session:-sway}
       case "$desktop_session" in
+        plasma)
+          exec_session /usr/lib/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland
+          ;;
         *)
           exec_session "$desktop_session"
           ;;
