@@ -17,6 +17,7 @@
 !githook-update-worktree-post-receive
 !githook-update-worktree-update
 !githook-update-worktree-update
+!home-backup
 !home-install
 !quotecmd
 !recshot
