@@ -33,7 +33,7 @@ do_snapshot() {
 
 	if [ -d "$backup_dir" ]; then
 		backup_prior=$(
-			find "$backup_dir" -mindepth $snapshot_fsdepth -maxdepth $snapshot_fsdepth -type d |
+			find "$backup_dir/" -mindepth $snapshot_fsdepth -maxdepth $snapshot_fsdepth -type d |
 				sort | tail -n1
 		)
 		if [ -n "$backup_prior" ]; then
