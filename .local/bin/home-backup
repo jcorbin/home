@@ -83,6 +83,53 @@ do_snapshot() {
 
 }
 
+list_json() {
+	find "$backup_dir/" -mindepth $snapshot_fsdepth -maxdepth $snapshot_fsdepth -type f -name '*.log' |
+		while read -r backup_log; do
+			printf '{'
+
+			printf '"log":"%s"' "$backup_log"
+
+			start_t=$(date --date="$(grep -om1 '^[^ ]* [^ ]*' "$backup_log")" +%s)
+			TZ=UTC printf ',"start":"%(%Y-%m-%dT%TZ)T"' "$start_t"
+
+			fin_line=$(grep 'sent .* bytes .* received .* bytes .* total size' "$backup_log" | tail -n1)
+			finish_t=$(date --date="$(echo "$fin_line" | grep -om1 '^[^ ]* [^ ]*')" +%s)
+			TZ=UTC printf ',"finish":"%(%Y-%m-%dT%TZ)T"' "$finish_t"
+
+			logged_lines=$(wc -l <"$backup_log")
+			printf ',"entries":%s' $((logged_lines - 2))
+
+			fin_line=${fin_line/* sent /}
+			sent_bytes=${fin_line/ bytes*/}
+			printf ',"sent_bytes":%s' "$sent_bytes"
+
+			fin_line=${fin_line//* received /}
+			recv_bytes=${fin_line/ bytes*/}
+			printf ',"recv_bytes":%s' "$recv_bytes"
+
+			fin_line=${fin_line//* total size /}
+			total_size=${fin_line/ */}
+			printf ',"total_size":%s' "$total_size"
+
+			backup_prior=${backup_log%*.log}
+			if [ -d "$backup_prior" ]; then
+				printf ',"path":"%s"' "$backup_prior"
+			else
+				printf ',"path":null'
+			fi
+
+			printf '}\n'
+
+		done
+}
+
+do_list() {
+	# TODO nicer table presentation
+	# TODO flag for json output
+	list_json | jq .
+}
+
 do_help() {
 	echo "usage: home-backup <cmd> ..."
 
@@ -95,6 +142,10 @@ do_help() {
 	echo "* takes an incremental snapshot"
 	echo "* primary entry point for crontab"
 	echo "* run with -h for more options (e.g. dry-run mode to see what would be backed up)"
+
+	echo
+	echo "home-backup ls"
+	echo "* list previously taken snapshots"
 }
 
 mode=help
@@ -108,6 +159,10 @@ case "$mode" in
 
 snapshot)
 	do_snapshot "$@"
+	;;
+
+ls)
+	do_list "$@"
 	;;
 
 help)
