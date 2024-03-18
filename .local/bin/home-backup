@@ -1,72 +1,124 @@
 #!/bin/bash
 set -euo pipefail
 
-# NOTE using rsync like this will create a whole separate copy,
-#      which will take to create first backup for a decently sized home,
-#      and also sets a functional limit on home size,
-#      to something like half of what it'd be otherwise...
-#
-# TODO support other backup methods like `cp -al` or btrfs snapshots
-
-# basic rsync archival backup with per-directory exclude files
-# and disallow filesystem traversal (e.g. avoid kinds of userspace filesystems)
-flags=(
-	'--archive'
-	'--one-file-system'
-	'--filter' ':- .backup-exclude'
-)
-
 backup_dir="$HOME/.backup"
+snapshot_datefmt='%Y/%U/%w/%H%M%S%Z'
+snapshot_fsdepth=4 # Yr/Wk/Dow/HMS
 
-# NOTE dont need this filter if you move $backup_dir outside of $HOME
-flags+=('--filter' '- .backup/')
+do_snapshot() {
+	# NOTE using rsync like this will create a whole separate copy,
+	#      which will take to create first backup for a decently sized home,
+	#      and also sets a functional limit on home size,
+	#      to something like half of what it'd be otherwise...
+	#
+	# TODO support other backup methods like `cp -al` or btrfs snapshots
 
-# Use a year/week/day oriented filing scheme like 2024/10/4/HHMMSSUTC
-#
-# NOTE if you change this filing scheme, may need to change the
-#      backup_prior find depths below
-backup_dest="${backup_dir}$(TZ=UTC date +/%Y/%U/%w/%H%M%S%Z)"
-flags+=("$HOME/" "${backup_dest}/")
-
-if [ -d "$backup_dir" ]; then
-	backup_prior=$(
-		find "$backup_dir" -mindepth 4 -maxdepth 4 -type d |
-			sort | tail -n1
+	# basic rsync archival backup with per-directory exclude files
+	# and disallow filesystem traversal (e.g. avoid kinds of userspace filesystems)
+	flags=(
+		'--archive'
+		'--one-file-system'
+		'--filter' ':- .backup-exclude'
 	)
-	if [ -n "$backup_prior" ]; then
-		flags+=('--link-dest' "$backup_prior")
+
+	# NOTE dont need this filter if you move $backup_dir outside of $HOME
+	flags+=('--filter' '- .backup/')
+
+	# Use a year/week/day oriented filing scheme like 2024/10/4/HHMMSSUTC
+	#
+	# NOTE if you change this filing scheme, may need to change the
+	#      backup_prior find depths below
+	backup_dest="${backup_dir}/$(TZ=UTC date +"$snapshot_datefmt")"
+	flags+=("$HOME/" "${backup_dest}/")
+
+	if [ -d "$backup_dir" ]; then
+		backup_prior=$(
+			find "$backup_dir" -mindepth $snapshot_fsdepth -maxdepth $snapshot_fsdepth -type d |
+				sort | tail -n1
+		)
+		if [ -n "$backup_prior" ]; then
+			flags+=('--link-dest' "$backup_prior")
+		fi
 	fi
+
+	verbose=0
+	while getopts "vdh" arg; do
+		case $arg in
+		v)
+			verbose=1
+			flags+=('--verbose' '--progress')
+			;;
+		d)
+			flags+=('--dry-run' '--debug=FILTER')
+			;;
+		h)
+			echo "usage: home-backup snapshot [-v] [-d]" >&2
+			echo >&2
+			echo "-v enables verbose output, default is quiet (no output)" >&2
+			echo "-d dry-run mode, printing what would be backed up instead of doing so" >&2
+			exit 1
+			;;
+		*)
+			echo "usage: home-backup snapshot [-v] [-d]" >&2
+			exit 1
+			;;
+		esac
+	done
+
+	# no output unless requested, avoid cron mail
+	if [ $verbose -eq 0 ]; then
+		flags+=('--quiet')
+	fi
+
+	# place a transfer log file next to each backup
+	backup_log="${backup_dest}.log"
+	flags+=(
+		'--log-file-format=%t %i %n%L'
+		'--log-file' "${backup_log}")
+
+	par_dir=$(dirname "$backup_log")
+	[ -d "$par_dir" ] || mkdir -p "$par_dir"
+
+	rsync "${flags[@]}"
+
+}
+
+do_help() {
+	echo "usage: home-backup <cmd> ..."
+
+	echo
+	echo "home-backup help"
+	echo "* prints this help screen"
+
+	echo
+	echo "home-backup snapshot"
+	echo "* takes an incremental snapshot"
+	echo "* primary entry point for crontab"
+	echo "* run with -h for more options (e.g. dry-run mode to see what would be backed up)"
+}
+
+mode=help
+
+if [ $# -gt 0 ] && [[ $1 != -* ]]; then
+	mode=$1
+	shift
 fi
 
-verbose=0
-while getopts "vd" arg; do
-	case $arg in
-	v)
-		verbose=1
-		flags+=('--verbose' '--progress')
-		;;
-	d)
-		flags+=('--dry-run' '--debug=FILTER')
-		;;
-	*)
-		echo "usage: home-backup [-v] [-d]" >&2
-		exit 1
-		;;
-	esac
-done
+case "$mode" in
 
-# no output unless requested, avoid cron mail
-if [ $verbose -eq 0 ]; then
-	flags+=('--quiet')
-fi
+snapshot)
+	do_snapshot "$@"
+	;;
 
-# place a transfer log file next to each backup
-backup_log="${backup_dest}.log"
-flags+=(
-	'--log-file-format=%t %i %n%L'
-	'--log-file' "${backup_log}")
+help)
+	do_help
+	;;
 
-par_dir=$(dirname "$backup_log")
-[ -d "$par_dir" ] || mkdir -p "$par_dir"
+*)
+	echo "invalid command: home-backup $mode" >&2
+	echo >&2
+	do_help >&2
+	exit 1
+	;;
 
-rsync "${flags[@]}"
+esac
