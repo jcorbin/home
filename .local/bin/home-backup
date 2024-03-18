@@ -124,10 +124,47 @@ list_json() {
 		done
 }
 
+list_extra_json() {
+	list_json | jq -cM '. + {
+    elapsed_seconds: ((.finish | fromdate) - (.start | fromdate)),
+    size_pct: (.recv_bytes/.total_size*100)
+  }'
+}
+
 do_list() {
-	# TODO nicer table presentation
-	# TODO flag for json output
-	list_json | jq .
+	json=0
+	while getopts "jh" arg; do
+		case $arg in
+		j)
+			json=$((json + 1))
+			;;
+		h)
+			echo "usage: home-backup ls [-j]" >&2
+			echo >&2
+			echo "-j output unformatted JSON ; give a second time to omit derived fields" >&2
+			exit 1
+			;;
+		*)
+			echo "usage: home-backup ls [-j]" >&2
+			exit 1
+			;;
+		esac
+	done
+
+	if [ $json -gt 1 ]; then
+		list_json
+		return
+	fi
+
+	if [ $json -gt 0 ]; then
+		list_extra_json
+		return
+	fi
+
+	printf "start\tfiles\tbytes\telapsed\tsize\n"
+	list_extra_json | jq -r 'select(.path != null)
+    | [.start, .entries, .recv_bytes, .elapsed_seconds, .total_size]
+    | @tsv'
 }
 
 do_help() {
