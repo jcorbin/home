@@ -132,10 +132,10 @@ vim.keymap.set('n', '<leader>ci',
 
 --- context marker motion {{{
 local context_marker = [[^\(@@ .* @@\|[<=>|]\{7}[<=>|]\@!\)]]
-vim.keymap.set('n', '[n',
+vim.keymap.set({ 'n', 'v' }, '[n',
   function() vim.fn.search(context_marker, 'bW') end,
   { desc = 'Prev conflict marker' })
-vim.keymap.set('n', ']n',
+vim.keymap.set({ 'n', 'v' }, ']n',
   function() vim.fn.search(context_marker, 'W') end,
   { desc = 'Next conflict marker' })
 -- }}}
