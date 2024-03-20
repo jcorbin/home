@@ -5,45 +5,32 @@ local last_showcmd_msg = '⋯'
 local last_showcmd_pending
 local last_showcmd_linger = 1000
 
+local function set_showmess(mess)
+  if last_showcmd_pending then
+    last_showcmd_pending:stop()
+    last_showcmd_pending = nil
+  end
+  if mess ~= '' then
+    last_showcmd_msg = mess
+    last_showcmd_pending = vim.defer_fn(function()
+      last_showcmd_msg = '⋯'
+    end, last_showcmd_linger)
+  end
+end
+
 vim.ui_attach(ns, { ext_messages = true }, function(event, ...)
   if event == 'msg_showcmd' then
     local content = ...
-
-    if last_showcmd_pending then
-      last_showcmd_pending:stop()
-      last_showcmd_pending = nil
-    end
-
     if #content > 0 then
       local it = vim.iter(content)
       it:map(function(tup) return tup[2] end)
-      last_showcmd_msg = it:join('')
-    else
-      last_showcmd_pending = vim.defer_fn(function()
-        last_showcmd_msg = '⋯'
-      end, last_showcmd_linger)
+      set_showmess(it:join(''))
     end
   end
 end)
+
 local function showcmd()
   return last_showcmd_msg
-end
-
-local showmacro_mess = ''
-local showmacro_pending
-local showmacro_linger = 1000
-local function showmacro_notify(mess)
-  if showmacro_pending then
-    showmacro_pending:stop()
-    showmacro_pending = nil
-  end
-  showmacro_mess = mess
-  if showmacro_mess ~= '' then
-    showmacro_pending = vim.defer_fn(function()
-      showmacro_mess = ''
-    end, showmacro_linger)
-  end
-  return showmacro_mess
 end
 
 local last_recording = ''
@@ -61,14 +48,14 @@ local function showmacro()
     return 'Executing @' .. exe
   end
 
-    if last_recording ~= '' and last_recorded == '' then
+  if last_recording ~= '' and last_recorded == '' then
     last_recorded = vim.fn.reg_recorded()
     if last_recorded ~= '' then
-      showmacro_notify('Recorded @' .. last_recorded)
+      set_showmess('Recorded @' .. last_recorded)
     end
   end
 
-  return showmacro_mess
+  return ''
 end
 
 local filename = {
