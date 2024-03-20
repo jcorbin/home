@@ -29,6 +29,48 @@ local function showcmd()
   return last_showcmd_msg
 end
 
+local showmacro_mess = ''
+local showmacro_pending
+local showmacro_linger = 1000
+local function showmacro_notify(mess)
+  if showmacro_pending then
+    showmacro_pending:stop()
+    showmacro_pending = nil
+  end
+  showmacro_mess = mess
+  if showmacro_mess ~= '' then
+    showmacro_pending = vim.defer_fn(function()
+      showmacro_mess = ''
+    end, showmacro_linger)
+  end
+  return showmacro_mess
+end
+
+local last_recording = ''
+local last_recorded = ''
+local function showmacro()
+  local rec = vim.fn.reg_recording()
+  if rec ~= '' then
+    last_recording = rec
+    last_recorded = ''
+    return 'Recording @' .. last_recording
+  end
+
+  local exe = vim.fn.reg_executing()
+  if exe ~= '' then
+    return 'Executing @' .. exe
+  end
+
+    if last_recording ~= '' and last_recorded == '' then
+    last_recorded = vim.fn.reg_recorded()
+    if last_recorded ~= '' then
+      showmacro_notify('Recorded @' .. last_recorded)
+    end
+  end
+
+  return showmacro_mess
+end
+
 local filename = {
   'filename',
   newfile_status = true,
@@ -59,7 +101,7 @@ return {
       lualine_c = { 'diagnostics' },
       lualine_x = { 'branch', 'diff' },
       lualine_y = { showcmd },
-      lualine_z = { 'mode' }
+      lualine_z = { showmacro, 'mode' }
     },
     inactive_sections = {
       lualine_a = { filename },
