@@ -454,6 +454,8 @@ local function setup_lsp(name, opts)
   require('lspconfig')[name].setup(opts)
 end
 
+setup_lsp 'arduino_language_server'
+
 setup_lsp('bashls', {
   filetypes = { 'sh', 'bash', 'zsh' },
 })
