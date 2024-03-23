@@ -457,7 +457,7 @@ setup_lsp('bashls', {
   filetypes = { 'sh', 'bash', 'zsh' },
 })
 
-setup_lsp 'clangd'
+-- setup_lsp 'clangd'
 
 setup_lsp 'cssls'
 
