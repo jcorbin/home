@@ -34,7 +34,8 @@
 [rebase]
     stat = false # no summary diff stats
     autosquash = true # honor commit markers like `fixup!`
-    instructionFormat = %s %d # subject with decoration
+    # instructionFormat = %s %d # subject with decoration
+	updateRefs = true
 
 [rerere]
     # remember and re-use merge conflict resolutions
