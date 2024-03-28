@@ -167,6 +167,48 @@ do_list() {
     | @tsv'
 }
 
+do_du() {
+  depth=4
+  hum=0
+
+	while getopts "hd:" arg; do
+		case $arg in
+		h)
+      hum=1
+			;;
+    d)
+      depth=$OPTARG
+      ;;
+		*)
+			echo "usage: home-backup du [-h]" >&2
+			exit 1
+			;;
+		esac
+	done
+
+  args=("$backup_dir/")
+  args+=("-d$depth")
+  if [ $hum -ne 0 ]; then
+    args+=('-h')
+  fi
+
+  du "${args[@]}" | while read -r size path; do
+    ent=${path#"$backup_dir"*/}
+    ent_depth=$(echo "$ent" | tr '/' '\n' | wc -l)
+    if [ "$ent_depth" -eq "$depth" ]; then
+      if [ $hum -ne 0 ]; then
+        echo "$size $path"
+      else
+        printf '{'
+        printf '"path":"%s"' "$path"
+        printf ',"disk_usage":%s' "$size"
+        printf '}\n'
+      fi
+    fi
+  done
+
+}
+
 do_help() {
 	echo "usage: home-backup <cmd> ..."
 
@@ -200,6 +242,10 @@ snapshot)
 
 ls)
 	do_list "$@"
+	;;
+
+du)
+	do_du "$@"
 	;;
 
 help)
