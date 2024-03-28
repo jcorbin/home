@@ -46,6 +46,12 @@ exec_session() {
   exec "$@"
 }
 
+config_desktop_session=$(cat ~/.config/desktop_session)
+desktop_session=${config_desktop_session:-sway}
+if [ "$desktop_session" = "shell" ]; then
+  return
+fi
+
 # start xdg graphical session if it's not already running
 case "$XDG_SESSION_TYPE" in
 
@@ -53,8 +59,6 @@ case "$XDG_SESSION_TYPE" in
     if [ -n "$DISPLAY" ]; then
       echo "x11 already seems to be running ( wanted wayland? )"
     elif [ -z "$WAYLAND_DISPLAY" ]; then
-      config_desktop_session=$(cat ~/.config/desktop_session)
-      desktop_session=${config_desktop_session:-sway}
       case "$desktop_session" in
         plasma)
           exec_session /usr/lib/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland
