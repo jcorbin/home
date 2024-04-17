@@ -28,7 +28,7 @@ fi
 	rec_file="$cache_dir/rec-$(date -Iseconds).mp4"
 	ln -sfv "$rec_file" "$cache_dir/current"
 
-	wf-recorder -g "$(slurp)" -f "$rec_file" &
+	wf-recorder -g "$(slurp)" -f "$rec_file" -c h264_vaapi -d /dev/dri/renderD128 &
 	rec_pid=$!
 	echo $rec_pid >"$pid_file"
 	notify-send "Start recording" "$rec_file"
