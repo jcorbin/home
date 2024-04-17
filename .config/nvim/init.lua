@@ -389,6 +389,12 @@ autocmd('LspAttach', function(args)
   local client = vim.lsp.get_client_by_id(args.data.client_id)
   if client == nil then return end
 
+  -- TODO Dynamic registration of LSP capabilities. An implication of this change is
+  --      that checking a client's `server_capabilities` is no longer a sufficient
+  --      indicator to see if a server supports a feature. Instead use
+  --      `client.supports_method(<method>)`. It considers both the dynamic
+  --      capabilities and static `server_capabilities`.
+
   local bufnr = args.buf
   local caps = client.server_capabilities or {}
 
