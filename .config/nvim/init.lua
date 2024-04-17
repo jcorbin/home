@@ -385,8 +385,8 @@ local function popup(v)
   })
 end
 
-autocmd('LspAttach', function(args)
-  local client = vim.lsp.get_client_by_id(args.data.client_id)
+autocmd('LspAttach', function(ev)
+  local client = vim.lsp.get_client_by_id(ev.data.client_id)
   if client == nil then return end
 
   -- TODO Dynamic registration of LSP capabilities. An implication of this change is
@@ -395,7 +395,7 @@ autocmd('LspAttach', function(args)
   --      `client.supports_method(<method>)`. It considers both the dynamic
   --      capabilities and static `server_capabilities`.
 
-  local bufnr = args.buf
+  local bufnr = ev.buf
   local caps = client.server_capabilities or {}
 
   local autocmd_local = autocmd.buffer(bufnr)
