@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+videos_dir=${XDG_VIDEOS_DIR:-$HOME/Videos}
 cache_dir=${XDG_CACHE_DIR:-$HOME/.cache}/recshot
 run_dir=${XDG_RUNTIME_DIR:-$cache_dir}
 pid_file=$run_dir/recshot.pid
@@ -37,8 +38,11 @@ fi
 	if [ ! -f "$rec_file" ]; then
 		notify-send "Recording aborted"
 	else
-		notify-send "Done recording" "$rec_file"
-		ln -sfv "$rec_file" "$cache_dir/last"
+    dest_file="$videos_dir/$(basename "$rec_file")"
+
+    [ -e "$videos_dir" ] || mkdir -p "$videos_dir"
+    mv "$rec_file" "$dest_file"
+		notify-send "Done recording" "$dest_file"
 	fi
 
 ) &
