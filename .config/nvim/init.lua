@@ -236,7 +236,7 @@ vim.keymap.set('n', '<leader>C', telescopes.colorscheme, { desc = 'select colors
 --- :terminal Quality of Life {{{
 
 -- Analog of :!
-vim.keymap.set('n', '<leader>!', ':vsplit | term ')
+vim.keymap.set('n', '<leader>!', ':vert term ')
 
 -- more natural prefix for terminal mode mappings than the awkward <C-\\> default
 -- this is like a tmux prefix, but instead we choose C-w for alignment with normal mode's window command map
