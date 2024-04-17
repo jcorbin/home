@@ -6,7 +6,7 @@
 set -e
 
 # export profile env to systemd; TODO consider migrating to environment.d(5) ala ~/.config/environment.d
-systemctl --user import-environment DYLD_LIBRARY_PATH EDITOR PATH PYTHONPATH SSH_AUTH_SOCK
+systemctl --user import-environment DYLD_LIBRARY_PATH EDITOR PATH PYTHONPATH SSH_AUTH_SOCK SSL_CERT_FILE
 
 # export wayland env to systemd
 systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
