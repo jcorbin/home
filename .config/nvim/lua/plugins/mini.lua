@@ -25,8 +25,6 @@ return {
     vim.keymap.set('n', '<leader>Sw', function() mini_sessions.select('write', {}) end, { desc = 'Write session' })
     vim.keymap.set('n', '<leader>Sd', function() mini_sessions.select('delete', {}) end, { desc = 'Delete session' })
 
-    require('mini.comment').setup {}
-
     require('mini.fuzzy').setup {}
   end
 }
