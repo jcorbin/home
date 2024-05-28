@@ -326,22 +326,12 @@ vim.diagnostic.config {
 vim.keymap.set('n', '[q', vim.cmd.cprev, { desc = 'Previous error (quickfix)' })
 vim.keymap.set('n', ']q', vim.cmd.cnext, { desc = 'Next error (quickfix)' })
 
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
-
--- TODO dedupe diagnostic open mappings
-vim.keymap.set('n', '<leader>dg',
-  vim.diagnostic.open_float, { desc = 'Open diagnostics float' })
-
-vim.keymap.set('n', '<leader>dh',
-  vim.diagnostic.hide, { desc = 'Hide diagnostics' })
-
 vim.keymap.set('n', '<leader>dd',
   function()
-    if vim.diagnostic.is_disabled() then
-      vim.diagnostic.enable()
+    if vim.diagnostic.is_enabled() then
+      vim.diagnostic.enable(false)
     else
-      vim.diagnostic.disable()
+      vim.diagnostic.enable()
     end
   end,
   { desc = 'Toggle diagnostics' })
