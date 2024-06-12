@@ -16,7 +16,7 @@ return {
     local actions = require 'telescope.actions'
     local themes = require 'telescope.themes'
 
-    local open_with_trouble = require('trouble.providers.telescope').open_with_trouble
+    local open_with_trouble = require("trouble.sources.telescope").open
 
     -- TODO rework and hoist into the plugin spec
     local opts = {
