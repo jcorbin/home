@@ -397,13 +397,13 @@ autocmd('LspAttach', function(ev)
   map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
   map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
 
-  -- inlay hints (uses virtual text to display parameter names and such)
-  if caps.inlayHintProvider then
-    vim.lsp.inlay_hint.enable(bufnr, true)
-    map_local('n', 'hh',
-      function() vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled()) end,
-      { desc = 'toggle lsp inlay hints' })
-  end
+  -- -- inlay hints (uses virtual text to display parameter names and such)
+  -- if caps.inlayHintProvider then
+  --   vim.lsp.inlay_hint.enable(bufnr, true)
+  --   map_local('n', 'hh',
+  --     function() vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled()) end,
+  --     { desc = 'toggle lsp inlay hints' })
+  -- end
 
   -- cursor hold highlighting
   if caps.documentHighlightProvider then
