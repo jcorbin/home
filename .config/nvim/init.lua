@@ -579,6 +579,11 @@ setup_lsp 'vimls'
 setup_lsp 'zls'
 -- }}}
 
+-- TODO break this out into an openscad ftplugin
+autocmd('FileType', {
+  'openscad',
+}, 'setlocal commentstring=//\\ %s')
+
 -- TODO break this out into a zig ftplugin
 autocmd('FileType', {
   'zig',
