@@ -5,6 +5,13 @@ backup_dir="$HOME/.backup"
 snapshot_datefmt='%Y/%U/%w/%H%M%S%Z'
 snapshot_fsdepth=4 # Yr/Wk/Dow/HMS
 
+prune_after_seconds=$(( 24 * 60 * 60 ))
+compact_after=(
+  $(( 7 * 12 ))
+  $(( 4 * 7 ))
+  24
+)
+
 do_snapshot() {
 	# NOTE using rsync like this will create a whole separate copy,
 	#      which will take to create first backup for a decently sized home,
@@ -227,6 +234,84 @@ do_help() {
 	echo "* list previously taken snapshots"
 }
 
+prune_failures() {
+  now=$(date +%s)
+  prune_after=$(( now - prune_after_seconds ))
+  find "$backup_dir/" -mindepth $snapshot_fsdepth -maxdepth $snapshot_fsdepth -type f -name '*.log' |
+  while read -r backup_log; do
+    start_t=$(date --date="$(grep -om1 '^[^ ]* [^ ]*' "$backup_log")" +%s)
+    backup_path=${backup_log%*.log}
+    if ! [ -d "$backup_path" ] && [ "$start_t" -lt $prune_after ]; then
+      echo -n "Prune $backup_log: "
+      rm -fv "$backup_log"
+    fi
+  done
+}
+
+compact_level() {
+  local level=$1
+
+  after=${compact_after[$level]}
+  if ! [ "$after" -gt 0 ]; then
+    return
+  fi
+
+  echo "Compacting level $level after $after"
+
+  local keep_group=
+  local keep_path=
+
+  find "$backup_dir/" -mindepth $snapshot_fsdepth -maxdepth $snapshot_fsdepth -type f -name '*.log' |
+  while read -r backup_log; do
+    backup_path=${backup_log%*.log}
+    if [ -d "$backup_path" ]; then
+      echo "${backup_log%*.log}"
+    fi
+  done | sort -r | tail -n "+$after" | tac |
+    while read -r backup_path; do
+
+      backup_group=$(dirname "$backup_path")
+      i=0
+      while [ $i -lt $level ]; do
+        backup_group=$(dirname "$backup_group")
+        i=$(( i + 1 ))
+      done
+
+      if [ "$backup_group" != "$keep_group" ]; then
+        keep_group=$backup_group
+      else
+        echo -n "Compact $keep_group rm $keep_path: "
+        rm -rf "${backup_path}"* && echo "ok"
+      fi
+      keep_path=$backup_path
+
+    done
+}
+
+compact_levels() {
+  level=0
+  while [ $level -le ${#compact_after} ]; do
+    compact_level $level
+    level=$(( level + 1 ))
+  done
+}
+
+do_prune() {
+  # prune_failures
+  compact_levels
+  # compact_level 0
+  # compact_level 1
+  # compact_level 2
+
+  # while read -r backup_log; do
+  #   backup_path=${backup_log%*.log}
+  # done | head -n10
+
+	# now_path="${backup_dir}/$(TZ=UTC date --date="@$now" +"$snapshot_datefmt")"
+	# now_group=$(dirname "$now_path")
+  # list_json | head -n30 | jq -r '(.start | fromdate | [strftime("%Y-%U-%w"), strftime("%T")]) + [.path, .log]'
+}
+
 mode=help
 
 if [ $# -gt 0 ] && [[ $1 != -* ]]; then
@@ -239,6 +324,10 @@ case "$mode" in
 snapshot)
 	do_snapshot "$@"
 	;;
+
+prune)
+  do_prune
+  ;;
 
 ls)
 	do_list "$@"
