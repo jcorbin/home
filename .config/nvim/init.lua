@@ -544,7 +544,7 @@ setup_lsp('pylsp', {
 setup_lsp 'rust_analyzer'
 -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
 
-setup_lsp 'tsserver'
+setup_lsp 'ts_ls'
 
 -- setup_lsp('tsserver', {
 --   completions = {
