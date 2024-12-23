@@ -271,7 +271,7 @@ vim.keymap.set('t', tleader .. 'P',
 --- Easy Fixed Width Windows {{{
 
 -- pin a window to 10x col increments
-for _, n in ipairs({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }) do
+for _, n in ipairs({ 2, 4, 6, 8, }) do
   local width = 10 * n
   local setem = function()
     vim.cmd('vertical resize ' .. width)
