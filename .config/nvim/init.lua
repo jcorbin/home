@@ -222,8 +222,6 @@ vim.keymap.set('n', '<leader>so', telescopes.oldfiles, { desc = 'search old file
 vim.keymap.set('n', '<leader>st', telescopes.treesitter, { desc = 'search syntax tree' })
 vim.keymap.set('n', '<leader>sd', telescopes.diagnostics, { desc = 'search diagnostics' })
 
-vim.keymap.set('n', '<leader>C', telescopes.colorscheme, { desc = 'select colorschemes' })
-
 --- }}}
 
 --- :terminal Quality of Life {{{
