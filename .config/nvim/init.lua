@@ -169,16 +169,6 @@ vim.keymap.set('n', '<leader>lw',
   { desc = 'toggle virtual line wrapping' })
 -- }}}
 
---- Cursor reticle toggles {{{
-vim.opt.cursorline = true
-vim.keymap.set('n', '<leader>cl',
-  function() vim.opt.cursorline = not vim.opt.cursorline:get() end,
-  { desc = 'toggle cursor line highlight' })
-vim.keymap.set('n', '<leader>cc',
-  function() vim.opt.cursorcolumn = not vim.opt.cursorcolumn:get() end,
-  { desc = 'toggle cursor column highlight' })
--- }}}
-
 --- Spellchecking {{{
 vim.keymap.set('n', '<leader>sp',
   function() vim.opt.spell = not vim.opt.spell:get() end,
