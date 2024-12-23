@@ -496,42 +496,7 @@ setup_lsp('openscad_lsp', {
   cmd = { "openscad-lsp", "--stdio", "--fmt-style", "file" },
 })
 
-setup_lsp('pylsp', {
-  settings = {
-    -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          ignore = {
-            -- NOTE these don't actually work for pylint... what even is the point of pycodestyle?
-            'C0114', -- missing-module-docstring
-            'C0115', -- missing-class-docstring
-            'C0116', -- missing-function-docstring
-          },
-          maxLineLength = 100
-        },
-        jedi_completion = {
-          fuzzy = true,
-          eager = true,
-        },
-
-        -- TODO useful or not w/ pycodestyle?
-        pylint = {
-          enabled = false,
-        },
-
-        -- TODO decide on black vs yapf
-        black = {
-          enabled = false,
-          line_length = 100,
-        },
-        yapf = {
-          enabled = true,
-        },
-      },
-    },
-  },
-})
+setup_lsp('basedpyright')
 
 setup_lsp 'rust_analyzer'
 -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
