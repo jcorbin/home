@@ -1,15 +1,15 @@
 return {
-  'folke/which-key.nvim',
-  opts = {
-    spelling = {
-      enabled = true,
+  "folke/which-key.nvim",
+  opts = {},
+  event = "VeryLazy",
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("which-key").show({ global = false })
+      end,
+      desc = 'Buffer Local Keymaps (which-key)',
     },
+
   },
-  config = function(_, opts)
-    vim.o.timeout = true
-    vim.o.timeoutlen = 300
-    local which_key = require('which-key')
-    which_key.setup(opts)
-    vim.keymap.set('n', '<leader>h', vim.cmd.WhichKey, { desc = 'Keymap Help' })
-  end,
 }
