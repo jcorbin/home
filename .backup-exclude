@@ -2,21 +2,15 @@
 # see FILTER RULES in rsync(1) for details
 # may be specified within any subdirectory
 
-# NOTE you could try to fight a loosing battle against cache directories like:
-#   /.cache
-#   /.cargo
-#   /.npm
-#   /go/pkg/mod/cache
-#
-# but good luck with things like:
-# - every electron app, like discord, has one
-# - every browser, every profile, its cache... maybe local storage...
-# - do you run wine? do you run browsers under it?
-# - steam... wine/proton under steam...
-# - all the other package mangers, or self updating software you might use
-#
-# So lets just go with the "keep all the caches, maybe we'll need some of that data someday"
+# cache whack-a-mole
+/.cache
+/.cargo
+/.npm
+/.ollama
+/go
+
+/.wine
+/.steam
 
 # exclude ssh private keys
 /.ssh/id_*
-
