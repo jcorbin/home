@@ -14,14 +14,15 @@ find_ssh_sock()
     export SSH_AUTH_SOCK="$systemd_sock"
   fi
 
-  if [ -z "$SSH_AUTH_SOCK" ]; then
-    local gpg_sock
-    gpg_sock=$(gpgconf --list-dirs agent-ssh-socket)
-    if [ -n "$gpg_sock" ]; then
-      export SSH_AUTH_SOCK=$gpg_sock
-      echo 'Set SSH_AUTH_SOCK from gpg-agent'
-    fi
-  fi
+  # TODO only on desktop
+  # if [ -z "$SSH_AUTH_SOCK" ]; then
+  #   local gpg_sock
+  #   gpg_sock=$(gpgconf --list-dirs agent-ssh-socket)
+  #   if [ -n "$gpg_sock" ]; then
+  #     export SSH_AUTH_SOCK=$gpg_sock
+  #     echo 'Set SSH_AUTH_SOCK from gpg-agent'
+  #   fi
+  # fi
 
   export_ssh_sock
 }
