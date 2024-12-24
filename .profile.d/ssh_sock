@@ -41,7 +41,7 @@ export_ssh_sock() {
     echo 'Exported SSH_AUTH_SOCK into systemd'
   fi
 
-  if [ -n "$TMUX" ]; then
+  if type tmux >/dev/null; then
     tmux setenv -g SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
     tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
     echo 'Exported SSH_AUTH_SOCK into tmux'
