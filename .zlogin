@@ -46,6 +46,8 @@ exec_session() {
   exec "$@"
 }
 
+[ -e ~/.config/desktop_session ] || return
+
 config_desktop_session=$(cat ~/.config/desktop_session)
 desktop_session=${config_desktop_session:-sway}
 if [ "$desktop_session" = "shell" ]; then
