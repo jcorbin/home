@@ -9,7 +9,6 @@ find_ssh_sock()
   fi
 
   local systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
-
   if [ -n "$systemd_sock" ]; then
     export SSH_AUTH_SOCK=$systemd_sock
     echo 'Set SSH_AUTH_SOCK from systemd'
@@ -23,7 +22,17 @@ find_ssh_sock()
     fi
   fi
 
-  if [ -z "$systemd_sock" ]; then
+  export_ssh_sock
+}
+
+export_ssh_sock() {
+  if [ -z "$SSH_AUTH_SOCK" ]; then
+    echo 'No SSH_AUTH_SOCK set to export'
+    return
+  fi
+
+  local systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
+  if [ -z "$systemd_sock" ] || [ "$systemd_sock" != "$SSH_AUTH_SOCK" ]; then
     systemctl --user import-environment SSH_AUTH_SOCK
     echo 'Exported SSH_AUTH_SOCK into systemd'
   fi
