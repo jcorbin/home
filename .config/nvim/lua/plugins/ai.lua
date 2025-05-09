@@ -24,7 +24,9 @@ return {
             schema = {
               model = {
                 -- default = "starcoder",
-                default = "qwen2.5-coder",
+                -- default = "starcoder2",
+                -- default = "qwen2.5-coder",
+                default = "deepseek-coder-v2",
               },
             },
 
