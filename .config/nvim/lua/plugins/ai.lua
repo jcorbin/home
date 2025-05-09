@@ -15,7 +15,7 @@ return {
         ollama = function()
           return require("codecompanion.adapters").extend("ollama", {
             env = {
-              url = "http://localhost:11434"
+              url = "http://zorya:11434"
             },
             parameters = {
               sync = true,
