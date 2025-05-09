@@ -373,18 +373,6 @@ autocmd('LspAttach', function(ev)
   local map_buffer = mykeymap.options { buffer = bufnr }
   local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
-  map_buffer('n', '<C-k>', vim.lsp.buf.signature_help, { desc = 'lsp signature help' })
-
-  -- keymaps to act on code
-  map_local('n', 'a', vim.lsp.buf.code_action, { desc = 'invoke code action (lsp)' })
-  map_local('n', 'gR', vim.lsp.buf.rename, { desc = 'rename symbol (lsp)' })
-
-  -- telescope invocations
-  local telescopes = require 'telescope.builtin'
-  map_local('n', 'sr', telescopes.lsp_references, { desc = 'search lsp references' })
-  map_local('n', 'sy', telescopes.lsp_document_symbols, { desc = 'search lsp document symbosl' })
-  map_local('n', 'sw', telescopes.lsp_workspace_symbols, { desc = 'search lsp workspace symbols' })
-
   -- -- inlay hints (uses virtual text to display parameter names and such)
   -- if caps.inlayHintProvider then
   --   vim.lsp.inlay_hint.enable(bufnr, true)
