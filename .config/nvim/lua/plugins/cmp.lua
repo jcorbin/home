@@ -6,6 +6,7 @@ return {
       'rafamadriz/friendly-snippets',
       'moyiz/blink-emoji.nvim',
       'Dynge/gitmoji.nvim',
+      'olimorris/codecompanion.nvim',
     },
 
     -- use a release tag to download pre-built binaries
@@ -43,6 +44,7 @@ return {
 
       sources = {
         default = {
+          'codecompanion',
           'lsp',
           'path',
           'snippets',
