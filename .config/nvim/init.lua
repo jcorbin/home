@@ -61,7 +61,8 @@ vim.keymap.set('n', '<leader>sl', bind(telescopes.find_files, {
 -- }}}
 
 --- UI options {{{
-vim.opt.guifont = 'JetBrains Mono:h14'
+-- vim.opt.guifont = 'JetBrains Mono:h14'
+vim.opt.guifont = 'Kelmscott Mono:h18'
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
 vim.opt.mouse = 'a'
