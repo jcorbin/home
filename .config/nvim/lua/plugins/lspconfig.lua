@@ -47,7 +47,10 @@ return {
         },
       },
       openscad_lsp = {
-        cmd = { "openscad-lsp", "--stdio", "--fmt-style", "file" },
+        cmd = {
+          "openscad-lsp", "--stdio",
+          -- "--fmt-style", "file"
+        },
       },
       rust_analyzer = {},
       -- https://github.com/rust-analyzer/rust-analyzer/tree/master/docs/user#settings
