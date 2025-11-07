@@ -29,16 +29,16 @@ return {
                   -- default = "qwen2.5-coder",
                   default = "deepseek-coder-v2",
                 },
+
+                num_ctx = {
+                  default = 16384,
+                },
+
+                -- num_predict = {
+                --   default = -1,
+                -- },
+
               },
-
-              -- num_ctx = {
-              --   default = 16384,
-              -- },
-
-              -- num_predict = {
-              --   default = -1,
-              -- },
-
             })
           end,
         },
