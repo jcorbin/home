@@ -22,6 +22,11 @@ return {
                 sync = true,
               },
 
+              opts = {
+                vision = true,
+                stream = true,
+              },
+
               schema = {
                 model = {
                   -- default = "starcoder",
@@ -33,6 +38,10 @@ return {
                 num_ctx = {
                   default = 16384,
                 },
+
+                -- think = {
+                --   default = false,
+                -- },
 
                 -- num_predict = {
                 --   default = -1,
