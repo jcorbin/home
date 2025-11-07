@@ -11,34 +11,37 @@ return {
   config = function()
     require("codecompanion").setup({
       adapters = {
-        ollama = function()
-          return require("codecompanion.adapters").extend("ollama", {
-            env = {
-              url = "http://zorya:11434"
-            },
-            parameters = {
-              sync = true,
-            },
+        http = {
+          ollama = function()
+            return require("codecompanion.adapters").extend("ollama", {
 
-            schema = {
-              model = {
-                -- default = "starcoder",
-                -- default = "starcoder2",
-                -- default = "qwen2.5-coder",
-                default = "deepseek-coder-v2",
+              env = {
+                url = "http://zorya:11434"
               },
-            },
+              parameters = {
+                sync = true,
+              },
 
-            -- num_ctx = {
-            --   default = 16384,
-            -- },
+              schema = {
+                model = {
+                  -- default = "starcoder",
+                  -- default = "starcoder2",
+                  -- default = "qwen2.5-coder",
+                  default = "deepseek-coder-v2",
+                },
+              },
 
-            -- num_predict = {
-            --   default = -1,
-            -- },
+              -- num_ctx = {
+              --   default = 16384,
+              -- },
 
-          })
-        end,
+              -- num_predict = {
+              --   default = -1,
+              -- },
+
+            })
+          end,
+        },
       },
 
       strategies = {
