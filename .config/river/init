@@ -6,11 +6,15 @@
 set -e
 set -x
 
+export XDG_CURRENT_DESKTOP=river
+
 # export profile env to systemd; TODO consider migrating to environment.d(5) ala ~/.config/environment.d
 systemctl --user import-environment DYLD_LIBRARY_PATH EDITOR PATH PYTHONPATH SSH_AUTH_SOCK SSL_CERT_FILE
 
 # export wayland env to systemd
-systemctl --user import-environment XDG_SESSION_TYPE WAYLAND_DISPLAY DISPLAY
+systemctl --user import-environment WAYLAND_DISPLAY DISPLAY
+# export xdg env to systemd
+systemctl --user import-environment XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
 
 source ~/.profile.d/ssh_sock
 svc() {
