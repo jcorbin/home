@@ -53,6 +53,7 @@
 
 !/.config
 /.config/*
+!/.config/alacritty
 !/.config/flake8
 !/.config/foot
 !/.config/kanshi
