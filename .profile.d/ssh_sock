@@ -5,7 +5,6 @@
 find_ssh_sock()
 {
   if [ -n "$SSH_AUTH_SOCK" ]; then
-    echo 'SSH_AUTH_SOCK already set'
     return
   fi
 
@@ -13,7 +12,6 @@ find_ssh_sock()
   systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
   if [ -n "$systemd_sock" ]; then
     export SSH_AUTH_SOCK="$systemd_sock"
-    echo 'Set SSH_AUTH_SOCK from systemd'
   fi
 
   if [ -z "$SSH_AUTH_SOCK" ]; then
