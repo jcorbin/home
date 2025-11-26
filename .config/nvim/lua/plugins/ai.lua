@@ -16,7 +16,7 @@ return {
             return require("codecompanion.adapters").extend("ollama", {
 
               env = {
-                url = "http://zorya:11434"
+                -- url = "http://zorya:11434"
               },
               parameters = {
                 sync = true,
@@ -32,7 +32,9 @@ return {
                   -- default = "starcoder",
                   -- default = "starcoder2",
                   -- default = "qwen2.5-coder",
-                  default = "deepseek-coder-v2",
+                  -- default = "deepseek-coder-v2",
+                  -- default = "qwen3-coder",
+                  default = "codellama",
                 },
 
                 num_ctx = {
