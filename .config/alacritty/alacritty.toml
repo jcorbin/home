@@ -29,12 +29,12 @@ background = "0x202020"
 foreground = "0xadadad"
 
 [colors.cursor]
-text = "0x202020"
-cursor = "0xffffff"
+text = "CellBackground"
+cursor = "CellForeground"
 
 [colors.selection]
-text = "0x202020"
-cursor = "0x1a3272"
+text = "CellBackground"
+cursor = "CellForeground"
 
 [colors.normal]
 black = "0x000000"
