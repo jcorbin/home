@@ -1,3 +1,21 @@
 #!/bin/bash
 
-export npm_config_prefix="${HOME}/.local"
+# RIP export npm_config_prefix="${HOME}/.local"
+# nvm is not compatible with the "npm_config_prefix" environment variable: currently set to "/home/jcorbin/.local"
+# Run `unset npm_config_prefix` to unset it.
+unset npm_config_prefix
+
+nvm_dist=/usr/share/nvm
+
+if [ -z "${NVM_DIR:-}" ]; then
+  NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
+fi
+export NVM_DIR
+
+[ -e "$NVM_DIR" ] || mkdir -vp "$NVM_DIR"
+
+# "nvm exec" and certain 3rd party scripts expect "nvm.sh" and "nvm-exec" to
+# exist under $NVM_DIR
+for prog in nvm.sh nvm-exec; do
+  [ -e "$NVM_DIR/$prog" ] || ln -vs "$nvm_dist/nvm.sh" "$NVM_DIR/$prog"
+done

@@ -32,3 +32,6 @@ else
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+. /usr/share/nvm/nvm.sh
+. /usr/share/nvm/bash_completion

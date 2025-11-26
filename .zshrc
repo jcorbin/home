@@ -14,3 +14,6 @@ for part in $(~/.local/bin/deporder -f ~/.zsh/rc.d); do
 done
 
 setopt no_correct_all
+
+. /usr/share/nvm/nvm.sh
+. /usr/share/nvm/bash_completion
