@@ -39,7 +39,7 @@ cursor = "CellForeground"
 [colors.normal]
 black = "0x000000"
 red = "0xfa5355"
-green = "0x126e00"
+green = "0x328e20"
 yellow = "0xc2c300"
 blue = "0x4581eb"
 magenta = "0xfa54ff"
