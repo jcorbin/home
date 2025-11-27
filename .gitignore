@@ -59,6 +59,7 @@
 !/.config/gtk-*
 !/.config/kanshi
 !/.config/kitty
+!/.config/Kvantum
 !/.config/mako
 !/.config/nvim
 !/.config/paru
