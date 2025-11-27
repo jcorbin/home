@@ -69,6 +69,7 @@
 !/.config/systemd
 !/.config/tmux
 !/.config/waybar
+!/.config/wlogout
 !/.config/wofi
 
 # Vim Config
