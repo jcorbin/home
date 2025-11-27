@@ -1,5 +1,9 @@
 gtk_dark=true
 allow_images=true
 allow_markup=true
-term=foot
+term=alacritty
 insensitive=true
+hide_scroll=true
+no_actions=false
+mode=drun
+--show
