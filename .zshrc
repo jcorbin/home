@@ -19,9 +19,11 @@ done
 # break scripts written with BSD assumptions.
 re_gnu
 
-# So that $HOME skew doesn't go unnoticed for too long
-git -C "$HOME" status --short
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 [ -f ~/.zsh/iterm2.zsh ] && source ~/.zsh/iterm2.zsh
+
+# So that $HOME skew doesn't go unnoticed for too long
+if [[ $(pwd) == $HOME ]]; then
+  git -C "$HOME" status --short
+fi
