@@ -15,8 +15,6 @@ fi
 # break scripts written with BSD assumptions.
 re_gnu
 
-[ -f ~/.zsh/iterm2.zsh ] && source ~/.zsh/iterm2.zsh
-
 for part in $(~/.local/bin/deporder -f ~/.zsh/rc.d); do
   source $part
 done
