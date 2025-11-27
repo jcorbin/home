@@ -9,10 +9,6 @@ else
     source ~/.profile.d/arrayutil
 fi
 
-for part in $(~/.local/bin/deporder -f ~/.zsh/rc.d); do
-    source $part
-done
-
 # For restoring sanity to MacOS: ~/.profile.d/brew_gnu_path defines re_gnu and
 # no_gnu to subvert much of BSD userspace with GNU alternatives. However we
 # only default such subversion on for interactive shells, so that we don't
@@ -22,6 +18,10 @@ re_gnu
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 [ -f ~/.zsh/iterm2.zsh ] && source ~/.zsh/iterm2.zsh
+
+for part in $(~/.local/bin/deporder -f ~/.zsh/rc.d); do
+  source $part
+done
 
 # So that $HOME skew doesn't go unnoticed for too long
 if [[ $(pwd) == $HOME ]]; then
