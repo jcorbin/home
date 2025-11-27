@@ -9,6 +9,9 @@ else
     source ~/.profile.d/arrayutil
 fi
 
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 # Include system-wide config; Mac OS NOTEs:
 # - setting PS1 above will cause this to be a noop
 # - the only other effect is a bunch Terminal.app specific integrations...
