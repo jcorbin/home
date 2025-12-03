@@ -82,10 +82,15 @@ window#waybar.solo {
 
 /* Power/exit button */
 #custom-exit {
-    background-color: #00ac89;
-    font-size: 14px;
-    font-weight: 800;
-    color: #0f1117;
+
+    /* background-color: #00ac89; */
+    /* color: #0f1117; */
+
+    background-color: #1e222a;
+    color: #00ac89;
+
+    font-size: 20px;
+    font-weight: bolder;
     padding: 0px 6px;
     margin: 2px 2px 2px 0;
 }
@@ -159,6 +164,7 @@ tooltip {
 #scratchpad,
 #mpd {
     padding: 0 10px;
+    background-color: #1e222a;
     color: #adadad;
 }
 
@@ -243,11 +249,12 @@ label:focus {
 }
 
 #temperature {
-    background-color: #f0932b;
+    background-color: #1e222a;
+    color: #f0932b;
 }
 
 #temperature.critical {
-    background-color: #eb4d4b;
+    color: #eb4d4b;
 }
 
 #tray {
