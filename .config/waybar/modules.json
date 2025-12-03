@@ -97,7 +97,9 @@
 
   // Clock
   "clock": {
-    "format": "{:%H:%M %a}",
+    "format": "{:%Y-%m-%d %H:%M:%S %z}",
+    "interval": 1,
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "on-click": "ags -t calendar",
     "tooltip": false
   },
