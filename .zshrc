@@ -12,8 +12,3 @@ fi
 for part in $(~/.local/bin/deporder -f ~/.zsh/rc.d); do
   source $part
 done
-
-# So that $HOME skew doesn't go unnoticed for too long
-if [[ $(pwd) == $HOME ]]; then
-  git -C "$HOME" status --short
-fi
