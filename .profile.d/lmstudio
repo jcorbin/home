@@ -1,0 +1,4 @@
+#!/bin/sh
+# after: arrayutil
+
+[ -d "$HOME/.lmstudio/bin" ] && export PATH=$(IFS=:; prepend "$HOME/.lmstudio/bin" $PATH)
