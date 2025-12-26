@@ -7,7 +7,7 @@
 input {
     keyboard {
         xkb {
-            layout "us" // Use the German keyboard layout
+            layout "us"
         }
         numlock // Enable numlock on startup
     }
@@ -45,6 +45,7 @@ binds {
     
     // Please choose your own file manager
     MOD+E                             hotkey-overlay-title="File Manager: Nautilus" { spawn-sh "nautilus"; }
+    // TODO pcmanfm
 
     // ─── Audio Controls ───
     // Example volume keys mappings for PipeWire & WirePlumber.
@@ -165,6 +166,7 @@ binds {
 // ────────────── Startup Applications ──────────────
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
 
+    // TODO unify with systemd units / river / etc
     spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
     spawn-sh-at-startup "swww-daemon" // Wallpaper daemon
     spawn-sh-at-startup "swww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
