@@ -12,3 +12,5 @@ fi
 for part in $(~/.local/bin/deporder -f ~/.zsh/rc.d); do
   source $part
 done
+
+setopt no_correct_all
