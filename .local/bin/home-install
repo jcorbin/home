@@ -16,15 +16,12 @@ DATA_DIR="$LOCAL_DIR/share/home-install"
 setup_system() {
   dest=${1}
   do=${2:-sudo}
-
   if [ -d "$dest/etc/systemd" ] && [ -e "$dest/usr/lib/systemd/system/getty@.service" ]; then
     set -x
     $do install -D "$DATA_DIR/autologin.conf" "$dest/etc/systemd/system/getty@tty1.service.d/autologin.conf"
-    $do install -d $dest/etc/systemd/system/getty.target.wants
-    $do ln -sf $dest/usr/lib/systemd/system/getty@.service $dest/etc/systemd/system/getty.target.wants/getty@tty1.service
+    $do systemctl add-wants getty.target getty@tty1.service
     set +x
   fi
-
 }
 
 REPO_DIR=$( dirname "$LOCAL_DIR" )
