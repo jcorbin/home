@@ -46,41 +46,6 @@ exec_session() {
   exec "$@"
 }
 
-[ -e ~/.config/desktop_session ] || return
-
-config_desktop_session=$(cat ~/.config/desktop_session)
-desktop_session=${config_desktop_session:-sway}
-if [ "$desktop_session" = "shell" ]; then
-  return
+if uwsm check may-start -q; then
+  exec_session uwsm start default
 fi
-
-# start xdg graphical session if it's not already running
-case "$XDG_SESSION_TYPE" in
-
-  wayland)
-    if [ -n "$DISPLAY" ]; then
-      echo "x11 already seems to be running ( wanted wayland? )"
-    elif [ -z "$WAYLAND_DISPLAY" ]; then
-      case "$desktop_session" in
-        plasma)
-          exec_session /usr/lib/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland
-          ;;
-        *)
-          exec_session "$desktop_session"
-          ;;
-      esac
-
-      echo "Unable to start wayland session ( install a compositor? )"
-    fi
-    ;;
-
-  x11)
-    if [ -n "$WAYLAND_DISPLAY" ]; then
-      echo "wayland already seems to be running ( wanted x11? )"
-    elif [ -z "$DISPLAY" ]; then
-      exec_session startx
-      echo "Unable to start x11 session ( install startx? )"
-    fi
-    ;;
-
-esac
