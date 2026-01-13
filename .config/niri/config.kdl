@@ -38,13 +38,13 @@ binds {
     MOD+SHIFT+ESCAPE                     { show-hotkey-overlay; }
 
     // ─── Applications ───
-    MOD+RETURN                          hotkey-overlay-title="Open Terminal: alacritty" { spawn-sh "alacritty"; }
-    MOD+SPACE                           hotkey-overlay-title="Open App Launcher: wofi" { spawn-sh "wofi"; }
-    MOD+B                               hotkey-overlay-title="Open Browser: firefox" { spawn-sh "firefox"; }
-    MOD+ALT+L                           hotkey-overlay-title="Lock Screen: swaylock" { spawn-sh "swaylock"; }
+    MOD+RETURN                          hotkey-overlay-title="Open Terminal: alacritty" { spawn-sh "uwsm app alacritty"; }
+    MOD+SPACE                           hotkey-overlay-title="Open App Launcher: wofi" { spawn-sh "uwofi"; }
+    MOD+B                               hotkey-overlay-title="Open Browser: firefox" { spawn-sh "uwsm app firefox"; }
+    MOD+ALT+L                           hotkey-overlay-title="Lock Screen: swaylock" { spawn-sh "uwsm app swaylock"; }
     
     // Please choose your own file manager
-    MOD+E                             hotkey-overlay-title="File Manager: Nautilus" { spawn-sh "nautilus"; }
+    MOD+E                             hotkey-overlay-title="File Manager: Nautilus" { spawn-sh "uwsm app nautilus"; }
     // TODO pcmanfm
 
     // ─── Audio Controls ───
@@ -167,11 +167,11 @@ binds {
 // ────────────── Startup Applications ──────────────
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
 
-    // TODO unify with systemd units / river / etc
-    spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
-    spawn-sh-at-startup "swww-daemon" // Wallpaper daemon
-    spawn-sh-at-startup "swww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
-    spawn-sh-at-startup "waybar" // Launch waybar
+    // TODO naturalize these into uwsm
+    // spawn-sh-at-startup "uwsm app -s s /usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
+    spawn-sh-at-startup "uwsm app -s s waybar" // Launch waybar
+    spawn-sh-at-startup "uwsm app -s b swww-daemon" // Wallpaper daemon
+    spawn-sh-at-startup "uwsm app swww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
 
     prefer-no-csd // Disable program decorations
     screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
