@@ -37,6 +37,10 @@ window {
     background-color: #404552;
 }
 
+expander > list > #entry {
+    background-color: #4C566A;
+}
+
 #entry:selected {
     background-color: #4C566A;
 }
