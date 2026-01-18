@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+
+D=$(wofi --show drun --define=drun-print_desktop_file=true)
+
+set -x
+case "$D" in
+  *'.desktop '*)
+    uwsm app -- "${D%.desktop *}.desktop:${D#*.desktop }"
+    ;;
+  *)
+    uwsm app -- "$D"
+    ;;
+esac
+
