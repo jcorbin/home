@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+# uwsm app -- "$(D=$(wofi --show drun --define=drun-print_desktop_file=true); case "$D" in *'.desktop '*) echo "${D%.desktop *}.desktop:${D#*.desktop }";; *) echo "$D";; esac)"
+
+D=$(wofi --show drun --define=drun-print_desktop_file=true)
+
+set -x
+case "$D" in
+  *'.desktop '*)
+    uwsm app -- "${D%.desktop *}.desktop:${D#*.desktop }"
+    ;;
+  *)
+    uwsm app -- "$D"
+    ;;
+esac
+
