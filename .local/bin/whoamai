@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -e
+
+# TODO does this method suffice? we may need to fallback to something like
+# process group, container, or "who's got the other end of my stdin? is robot?"
+
+nominit=
+pstree -psA $$ | tr '-' '\n' | while read proc; do
+  [ -n "$proc" ] || continue
+
+  pid=${proc#*(}
+  proc=${proc%(*}
+  pid=${pid%)}
+  if [ "$pid" == $$ ]; then
+    continue
+  elif [ "$pid" == "1" ]; then
+    nominit=$proc
+    continue
+  elif [ -n "$nominit" ] && [ "$proc" == "$nominit" ]; then
+    continue
+  fi
+
+  case "$proc" in
+    git)
+      continue
+      ;;
+    +)
+      break # stop at any + tree separator incurred by the `tr` command
+      ;;
+    *)
+      echo "$proc"
+  esac
+done |
+# TODO skip boring tech like shells? terminal emulators? editor?
+uniq |
+tail -n1
