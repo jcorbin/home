@@ -6,6 +6,12 @@
     autosetupmerge = always # setup branch tracking
     autosetuprebase = always # default to rebasing rather than merge
 
+[trailer "assist"]
+    key = "Assisted-by"
+    cmd = "whoamai"
+# TODO this works, but user must opt-in to annotating commits by passign `--trailer assist`
+# TODO how to turn this on by default, initial attempt at alias.commit injection failed
+
 [color]
     # turn on coloring in terminals
     ui = auto
