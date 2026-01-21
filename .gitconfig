@@ -1,3 +1,7 @@
+[user]
+    email = jcorbin@wunjo.org
+    name = Joshua T Corbin
+
 [branch]
     autosetupmerge = always # setup branch tracking
     autosetuprebase = always # default to rebasing rather than merge
@@ -105,11 +109,6 @@
 
 [commit]
     verbose = true
-
-# Commiter identity
-[user]
-    email = jcorbin@wunjo.org
-    name = Joshua T Corbin
 
 [init]
     defaultBranch = main
