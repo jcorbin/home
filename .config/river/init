@@ -116,8 +116,7 @@ riverctl map-pointer normal Super BTN_RIGHT resize-view
 riverctl map normal Super+Shift Space spawn 'run $(wofi -S drun -D drun-print_command=true)'
 riverctl map normal Super+Shift Semicolon spawn 'run $(wofi -S run -D run-print_command=true)'
 
-# Super+Semicolon to show/hide waybar
-riverctl map normal Super Semicolon spawn 'pkill -USR1 waybar'
+# TODO show/hide waybar -- spawn 'pkill -USR1 waybar'
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Super+Shift Return spawn 'run foot'
