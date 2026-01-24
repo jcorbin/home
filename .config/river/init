@@ -118,7 +118,7 @@ riverctl map normal Super+Escape Semicolon spawn 'uuctl'
 # TODO show/hide waybar -- spawn 'pkill -USR1 waybar'
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super+Shift Return spawn 'run foot'
+riverctl map normal Super+Shift Return spawn 'uwsm app foot'
 
 # TODO riverctl map normal Super+Shift Slash spawn 'clipman pick --tool=wofi'
 
