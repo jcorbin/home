@@ -111,10 +111,9 @@ riverctl map-pointer normal Super BTN_LEFT move-view
 # Super + Right Mouse Button to resize views
 riverctl map-pointer normal Super BTN_RIGHT resize-view
 
-# Super+Shift+Space for launcher (https://codeberg.org/dnkl/fuzzel)
-# riverctl map normal Super+Shift Space spawn 'fuzzel -T foot -w 50 -l 30 -B 3 -b 002b3699 -t 93a1a1ff -C 586e75cc -m c1c1a1ff -s 93a1a199 -S 002b36ff'
-riverctl map normal Super+Shift Space spawn 'run $(wofi -S drun -D drun-print_command=true)'
-riverctl map normal Super+Shift Semicolon spawn 'run $(wofi -S run -D run-print_command=true)'
+riverctl map normal Super+Space spawn 'uwofi'
+riverctl map normal Super+Semicolon spawn 'uwsm app -T  -- "$(wofi --show run --define=run-print_desktop_file=true)"'
+riverctl map normal Super+Escape Semicolon spawn 'uuctl'
 
 # TODO show/hide waybar -- spawn 'pkill -USR1 waybar'
 
