@@ -17,6 +17,8 @@ systemctl --user import-environment WAYLAND_DISPLAY DISPLAY
 systemctl --user import-environment XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
 
 source ~/.profile.d/ssh_sock
+
+# TODO s/svc/uwsm app .../
 svc() {
 	systemd-run --user \
 		--unit="$1@$WAYLAND_DISPLAY" \
