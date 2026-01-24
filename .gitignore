@@ -66,6 +66,7 @@
 !/.config/swaylock
 !/.config/systemd
 !/.config/tmux
+!/.config/uwsm
 !/.config/waybar
 !/.config/wofi
 
