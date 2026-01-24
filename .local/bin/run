@@ -2,6 +2,7 @@
 
 set -e
 
+# TODO obsolete / uwsm app ...
 systemd-run --user \
   --service-type=exec \
   --slice app.slice \
