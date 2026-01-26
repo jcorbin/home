@@ -63,6 +63,7 @@
 !/.config/paru
 !/.config/river
 !/.config/sway
+!/.config/swaylock
 !/.config/systemd
 !/.config/tmux
 !/.config/waybar
