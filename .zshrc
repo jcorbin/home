@@ -15,5 +15,7 @@ done
 
 setopt no_correct_all
 
-. /usr/share/nvm/nvm.sh
-. /usr/share/nvm/bash_completion
+if [ -d /usr/share/nvm ]; then
+  . /usr/share/nvm/nvm.sh
+  . /usr/share/nvm/bash_completion
+fi
