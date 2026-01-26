@@ -56,11 +56,14 @@
 !/.config/alacritty
 !/.config/flake8
 !/.config/foot
+!/.config/gtk-*
 !/.config/kanshi
 !/.config/kitty
+!/.config/Kvantum
 !/.config/mako
 !/.config/nvim
 !/.config/paru
+!/.config/qt*
 !/.config/river
 !/.config/sway
 !/.config/swayidle
