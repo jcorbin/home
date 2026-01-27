@@ -46,6 +46,6 @@ exec_session() {
   exec "$@"
 }
 
-if uwsm check may-start -q; then
-  exec_session uwsm start default
-fi
+# if uwsm check may-start -q; then
+#   exec_session uwsm start default
+# fi
