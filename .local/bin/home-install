@@ -3,6 +3,7 @@ set -e
 
 SCRIPT_DIR=$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 LOCAL_DIR=$( dirname "$SCRIPT_DIR" )
+REPO_DIR=$( dirname "$LOCAL_DIR" )
 
 if
   [ $(basename "$SCRIPT_DIR") != bin ] &&
@@ -24,57 +25,148 @@ setup_system() {
   fi
 }
 
-REPO_DIR=$( dirname "$LOCAL_DIR" )
+confirm() {
+  echo -n "$1? [y/N] "
+  read yn
+  case "$yn" in
+    y*|Y*)
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
 
-if [ "$REPO_DIR" == $(git rev-parse --show-toplevel) ]; then
+setup_dest() {
+  dest=${1:-$HOME}
 
-  setup_dest() {
-    dest=${1:-$HOME}
-    remote_name=${2:-local}
-    branch_name=${3:-local}
+  alter=$(
+    if [ "$dest" != "$HOME" ]; then
+      getent passwd | while IFS=: read name x uid guid gecos home shell; do
+        if [ "$dest" == "$home" ]; then
+          echo "$name"
+          break
+        fi
+      done
+    fi
+  )
 
-    if local_url=$(git remote get-url $remote_name 2>/dev/null); then
-      echo "$remote_name remote already exists, skipping $dest git setup"
+  nom=
+  if [ -n "$alter" ]; then
+    nom=".$alter"
+  fi
+  remote_name=${2:-local$nom}
+  branch_name=${3:-local$nom}
+  shared='false'
+
+  if ! [ -O "$dest" ]; then
+    if ! [ -w "$dest" ]; then
+      echo "Unable to write to $dest" >&2
       return 1
     fi
+    shared='group'
+  fi
 
-    set -x
+  echo "dest: $dest"
+  echo "remote_name: $remote_name"
+  echo "branch_name: $branch_name"
+  echo "shared: $shared"
+  confirm "deploy"
+  echo "deploying..."
 
-    if ! [ -d "$dest/.git" ]; then
-      pushd "$dest"
-      [ -f .gitignore ] || cp "$REPO_DIR/.gitignore" .
-      git init -b prior
-      git add .
-      git commit -m 'Add prior $dest files'
-      popd
-    fi
+  if [ "$REPO_DIR" == "$dest" ]; then
+    echo "Already running inside of $dest" >&2
+    return 1
+  fi
 
-    git remote add $remote_name "$dest"
-    git fetch $remote_name
-    git branch $branch_name main
-    git push -u $remote_name $branch_name
+  if local_url=$(git remote get-url $remote_name 2>/dev/null); then
+    echo "$remote_name remote already exists, skipping $dest git setup" >&2
+    return 1
+  fi
 
+  set -x
+
+  if ! [ -d "$dest/.git" ]; then
     pushd "$dest"
-    git checkout $branch_name
-    "$SCRIPT_DIR/git-setup-worktree-push"
+    [ -f .gitignore ] || cp "$REPO_DIR/.gitignore" .
+    git init --initial-branch=prior --shared="$shared"
+    git config --global --add safe.directory "$dest" # TODO only if needed; also dupe for target
+    if [ "$shared" != "false" ]; then
+      git config receive.denyNonFastForwards false
+    fi
+    git add .
+    git commit -m "Add prior $dest files"
     popd
+  fi
 
-    set +x
-  }
+  git remote add $remote_name "$dest"
+  git fetch $remote_name
 
-  if [ "$1" == test ]; then
-    fake=$(mktemp -t -d home.XXX)
-    nom=$(basename "$fake")
-    echo "=== Testing home-install in $fake"
-    echo '# some cargo' > $fake/.bashrc
-    setup_dest "$fake" "$nom" "$nom"
-    exit 0
-  elif [ "$REPO_DIR" != "$HOME" ]; then
-    if setup_dest; then
-      setup_system
+  if ! git rev-parse --verify $branch_name >/dev/null 2>&2; then
+    create_alter "$alter"
+  fi
+
+  if [ -n "$alter" ] && [ $(git rev-parse "$branch_name") == $(git rev-parse local) ]; then
+    git checkout $branch_name
+    make_alter "$alter"
+    git checkout -
+  fi
+
+  git push -u $remote_name $branch_name
+
+  pushd "$dest"
+  git checkout $branch_name
+  "$SCRIPT_DIR/git-setup-worktree-push"
+  popd
+
+  set +x
+}
+
+create_alter() {
+  alter=$1
+  [ -n "$alter" ]
+  branch_name=${2:-local.$alter}
+
+  for start in alter local wip main; do
+    if git rev-parse --verify $start >/dev/null 2>&2; then
+      git branch "$branch_name" "$start"
+      break
+    fi
+  done
+}
+
+make_alter() {
+  alter=$1
+  if [ -z "$alter" ]; then
+    echo -n "alter name? "
+    read alter
+  fi
+
+  branch_name="local.$alter" 
+  head_branch=$(basename $(git symbolic-ref HEAD))
+  if [ "$branch_name" != "$head_branch" ]; then
+    if [ $(git rev-parse --verify "$branch_name") ]; then
+      git checkout "$branch_name"
+    elif confirm "create branch $branch_name"; then
+      create_alter "$alter" "$branch_name"
+    else
+      echo "NOTE: creating alter on current branch: $head_branch"
     fi
   fi
-fi
+
+  sed -i .gitconfig \
+    -e "/email *=/ s/@/+${alter}@/"
+  git add .gitconfig
+
+  sed -i .gitignore \
+    -e '/ssh.config/ a !/.ssh/authorized_keys'
+  git add .gitignore
+
+  cat $(find ~/.ssh -name '*.pub' | head -n1) >> .ssh/authorized_keys
+  git add .ssh/authorized_keys
+
+  git commit -m "LOCAL.${alter}: init alter"
+}
 
 just() {
   "$@"
@@ -83,6 +175,8 @@ just() {
 usage() {
   echo "usage: home-install system"
   echo "       home-install test-system"
+  echo "       home-install deploy [dest [name] [start]]"
+  echo "       home-install make-alter [<name>]"
 }
 
 case "$1" in
@@ -95,11 +189,22 @@ case "$1" in
     install -d "$fake/usr/lib/systemd/system"
     echo 'nonesense' > "$fake/usr/lib/systemd/system/getty@.service"
 
-    setup_system $fake just
+    setup_system "$fake" just
     ;;
 
   system)
     setup_system
+    ;;
+
+  deploy)
+    shift
+    setup_dest "$@"
+    ;;
+
+  make-alter)
+    shift
+    # TODO ensure branch?
+    make_alter "$1"
     ;;
 
   *)
