@@ -1,6 +1,6 @@
 [user]
-    email = jcorbin@wunjo.org
-    name = Joshua T Corbin
+    email = jcorbin+leoben@wunjo.org
+    name = Joshua Leoben Corbin
 
 [branch]
     autosetupmerge = always # setup branch tracking
