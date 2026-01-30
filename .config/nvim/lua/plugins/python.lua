@@ -13,4 +13,12 @@ return {
   keys = {
     { "<leader>V", "<cmd>VenvSelect<cr>" }, -- Open picker on keymap
   },
+
+  -- Pipenv found itself running within a virtual environment, so it will
+  -- automatically use that environment, instead of creating its own for any
+  -- project.
+  -- You can set PIPENV_IGNORE_VIRTUALENVS=1 to force pipenv to ignore that
+  -- environment and create its own instead. You can set PIPENV_VERBOSITY=-1 to
+  -- suppress this warning.
+
 }
