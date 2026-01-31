@@ -8,10 +8,12 @@ find_ssh_sock()
     return
   fi
 
-  local systemd_sock
-  systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
-  if [ -n "$systemd_sock" ]; then
-    export SSH_AUTH_SOCK="$systemd_sock"
+  if systemctl --user whoami >/dev/null 2>&1; then
+    local systemd_sock
+    systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
+    if [ -n "$systemd_sock" ]; then
+      export SSH_AUTH_SOCK="$systemd_sock"
+    fi
   fi
 
   if [ -z "$SSH_AUTH_SOCK" ]; then
@@ -32,11 +34,13 @@ export_ssh_sock() {
     return
   fi
 
-  local systemd_sock
-  systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
-  if [ -z "$systemd_sock" ] || [ "$systemd_sock" != "$SSH_AUTH_SOCK" ]; then
-    systemctl --user import-environment SSH_AUTH_SOCK
-    echo 'Exported SSH_AUTH_SOCK into systemd'
+  if systemctl --user whoami >/dev/null 2>&1; then
+    local systemd_sock
+    systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
+    if [ -z "$systemd_sock" ] || [ "$systemd_sock" != "$SSH_AUTH_SOCK" ]; then
+      systemctl --user import-environment SSH_AUTH_SOCK
+      echo 'Exported SSH_AUTH_SOCK into systemd'
+    fi
   fi
 
   if type tmux >/dev/null; then
