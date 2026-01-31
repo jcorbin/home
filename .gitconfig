@@ -140,9 +140,10 @@
 [http]
     followRedirects = true
 
-[url "ssh://git@github.com/"]
-    insteadOf = https://github.com/
-    pushInsteadOf = https://github.com/
+; TODO only use this if we've setup an ssh identity
+; [url "ssh://git@github.com/"]
+;     insteadOf = https://github.com/
+;     pushInsteadOf = https://github.com/
 
 [filter "lfs"]
     smudge = git-lfs smudge -- %f
