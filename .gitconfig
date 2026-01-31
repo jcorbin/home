@@ -105,7 +105,6 @@
     rst = reset --hard
     st = status --short --branch
     suri = submodule update --recursive --init
-    uewu = config user.email jcorbin@wunjo.org
 
 [commit]
     verbose = true
