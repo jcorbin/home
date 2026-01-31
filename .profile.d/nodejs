@@ -18,7 +18,9 @@ if [ -d "$nvm_dist" ]; then
   # "nvm exec" and certain 3rd party scripts expect "nvm.sh" and "nvm-exec" to
   # exist under $NVM_DIR
   for prog in nvm.sh nvm-exec; do
-    [ -e "$NVM_DIR/$prog" ] || ln -vs "$nvm_dist/nvm.sh" "$NVM_DIR/$prog"
+    if ! [ -e "$NVM_DIR/$prog" ]; then
+      ln -vs "$nvm_dist/nvm.sh" "$NVM_DIR/$prog"
+    fi
   done
 
 fi
