@@ -79,20 +79,23 @@
     dc = diff --cached
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
-    lg  = log --pretty=author
-    lob = log --pretty=briefbody
+    fp = merge-base --fork-point
     lb  = log --pretty=brief
-    logg = log --graph
-    lgg  = log --graph --pretty=author
-    lobg = log --graph --pretty=briefbody
-    lbg  = log --graph --pretty=brief
-    logf = log --graph --first-parent
-    lgf  = log --graph --first-parent --pretty=author
-    lobf = log --graph --first-parent --pretty=briefbody
     lbf  = log --graph --first-parent --pretty=brief
+    lbg  = log --graph --pretty=brief
+    lg  = log --pretty=author
+    lgf  = log --graph --first-parent --pretty=author
+    lgg  = log --graph --pretty=author
+    lob = log --pretty=briefbody
+    lobf = log --graph --first-parent --pretty=briefbody
+    lobg = log --graph --pretty=briefbody
+    logf = log --graph --first-parent
+    logg = log --graph
+    mark = commit -m mark --allow-empty
+    mrg = merge --no-edit --no-ff
     pub = !git push -u origin $(git symbolic-ref HEAD | sed -e 's~^refs/heads/~~')
-    rb = rebase
     ra = rebase --abort
+    rb = rebase
     rc = rebase --continue
     re = rebase --edit-todo
     redo = reset HEAD^ --mixed
@@ -103,9 +106,6 @@
     st = status --short --branch
     suri = submodule update --recursive --init
     uewu = config user.email jcorbin@wunjo.org
-    mrg = merge --no-edit --no-ff
-    mark = commit -m mark --allow-empty
-    fp = merge-base --fork-point
 
 [commit]
     verbose = true
