@@ -39,7 +39,7 @@ compctl -g '*(D-/)' cd pushd
 
 autoload compinit 2> /dev/null
 autoload -U compinit 2> /dev/null
-compinit
+compinit -u
 
 zstyle ':completion:*' insert-unambiguous true
 zstyle ':completion:*' add-space true
