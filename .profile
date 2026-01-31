@@ -2,6 +2,8 @@
 
 # Common shell environment and configuration
 
+umask 0007
+
 for part in $(~/.local/bin/deporder -f ~/.profile.d); do
 	. $part
 done
