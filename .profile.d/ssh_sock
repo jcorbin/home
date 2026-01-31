@@ -43,7 +43,7 @@ export_ssh_sock() {
     fi
   fi
 
-  if type tmux >/dev/null; then
+  if type tmux >/dev/null && tmux has-session >/dev/null 2>&1; then
     tmux setenv -g SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
     tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
     echo 'Exported SSH_AUTH_SOCK into tmux'
