@@ -6,12 +6,10 @@
 !git-branch-base
 !git-commit-patch-ids
 !git-current-branch
-!git-fit
 !git-fix-userid
 !git-rewrite-branch
 !git-setup-worktree-push
 !git-shell-pack
-!git-sit
 !git-subtree
 !githook-update-worktree-post-receive
 !githook-update-worktree-post-receive
