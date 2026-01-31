@@ -39,7 +39,7 @@
     stat = false # no summary diff stats
     autosquash = true # honor commit markers like `fixup!`
     # instructionFormat = %s %d # subject with decoration
-	  updateRefs = true
+    updateRefs = true
     rebaseMerges = true ; ? rebase-cousins
 
 [rerere]
@@ -138,7 +138,7 @@
     pushInsteadOf = https://github.com/
 
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
