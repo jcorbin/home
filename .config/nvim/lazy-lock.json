@@ -1,7 +1,7 @@
 {
   "blink-emoji.nvim": { "branch": "master", "commit": "066013e4c98a9318408ee3f1ca2dbcb6fa3e4c06" },
   "blink.cmp": { "branch": "main", "commit": "b19413d214068f316c78978b08264ed1c41830ec" },
-  "codecompanion.nvim": { "branch": "main", "commit": "b6fcc25ced5628d3d960e6e4bc287ce8fc9a1710" },
+  "codecompanion.nvim": { "branch": "main", "commit": "f61dbb22439386585a514d15be713c355f830e49" },
   "conform.nvim": { "branch": "master", "commit": "8314f4c9e205e7f30b62147069729f9a1227d8bf" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
