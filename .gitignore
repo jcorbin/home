@@ -50,6 +50,7 @@
 !/.ssh
 /.ssh/*
 !/.ssh/config
+!/.ssh/authorized_keys
 
 !/.config
 /.config/*
