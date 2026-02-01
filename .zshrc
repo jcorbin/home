@@ -19,3 +19,6 @@ if [ -d /usr/share/nvm ]; then
   . /usr/share/nvm/nvm.sh
   . /usr/share/nvm/bash_completion
 fi
+
+# OpenClaw Completion
+source <(openclaw completion --shell zsh)
