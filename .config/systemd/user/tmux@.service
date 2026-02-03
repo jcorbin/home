@@ -1,0 +1,12 @@
+[Unit]
+Description=Named tmux session
+Slice=app.slice
+
+[Service]
+Type=forking
+; TODO split server out into a socket activated unit?
+ExecStart=/usr/bin/tmux new-session -d -s%i
+ExecStop=/usr/bin/tmux kill-session -t%i
+
+[Install]
+WantedBy=default.target
