@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+
+usage() {
+  echo "usage: home-install ..."
+}
+
+# systemctl status user@1001.service
+# systemctl start user@1001.service
+# sudo -u leoben -H tmux attach
+# TODO add -> useradd
+# TODO with -> setegid & umask
+# TODO enter -> tmux attach or sudo shell
+
+case "$1" in
+
+  *)
+    usage >&2
+    ;;
+
+esac
