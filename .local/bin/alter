@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+set -e
+
+alter_sudoers=/etc/sudoers.d/99-alters
+
+die() {
+  echo "$@" >&2
+  exit 1
+}
+
+yano() {
+  echo "[Y/n] :: $@"
+  read yn
+  case "$yn" in
+    y*|Y*)
+      "$@"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+yedo() {
+  echo "++ $@"
+  "$@"
+}
+
+sydo() {
+  # TODO sudo wen?
+  echo "++ systemctl $@"
+  systemctl "$@"
+}
+
+case "$1" in
+  list)
+    me=${USER:-$(whoami)}
+    getent group | while IFS=: read name _ uid members; do
+      [ $uid -gt $UID ] || continue
+
+      IFS=, read -r -a members <<< "$members"
+      found=
+      for member in $members; do
+        if [ $member == $me ]; then
+          found=1
+        fi
+      done
+      [ -n "$found" ] || continue
+
+      # TODO other checks or formal labeling
+
+      echo $name
+    done
+    ;;
+
+  add)
+    shift
+    name=$1
+    if [ -z "$name" ]; then
+      echo -n "Alter Username? "
+      read name
+    else
+      shift
+    fi
+
+    fullname=$1
+    if [ -z "$fullname" ]; then
+      echo -n "Alter Fullname? "
+      read fullname
+    else
+      shift
+    fi
+
+    me=${USER:-$(whoami)}
+    yano sudo useradd --no-create-home --user-group --shell "$SHELL" --comment "$fullname" "$name"
+    yedo sudo usermod -a -G "$name" "$me"
+    yedo sudo loginctl enable-linger "$name"
+
+    IFS=: read -r -a pwdata <<< $(getent passwd "$name")
+    alter_home=${pwdata[5]}
+
+    yedo sudo git init $alter_home --shared
+    sudo chown $name:$name -R $alter_home
+    sudo find $alter_home -perm /0200 -print0 \
+      | xargs -0 sudo chmod g+w
+
+    echo "$me ALL=($name) NOPASSWD: ALL" | yedo sudo tee -a "$alter_sudoers"
+    ;;
+
+  make)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    yedo home-install make-alter "$name"
+    # TODO clawkin seed and generate
+    ;;
+
+  deploy)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    IFS=: read -r -a pwdata <<< $(getent passwd "$name")
+    alter_home=${pwdata[5]}
+    yano home-install deploy $alter_home "$name"
+
+    # TODO clawkin workspace
+
+    sudo chown $name:$name $alter_home -Rc
+    sudo find $alter_home -perm /0200 -print0 \
+      | xargs -0 sudo chmod g+w -c
+
+    ;;
+
+  start)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    IFS=: read -r -a pwdata <<< $(getent passwd "$name")
+    uid=${pwdata[2]}
+    sydo start user@$uid.service
+    ;;
+
+  stop)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    IFS=: read -r -a pwdata <<< $(getent passwd "$name")
+    uid=${pwdata[2]}
+    sydo stop user@$uid.service
+    ;;
+
+  enable)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    IFS=: read -r -a pwdata <<< $(getent passwd "$name")
+    uid=${pwdata[2]}
+    sydo add-wants multi-user.target user@$uid.service
+    ;;
+
+  status)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    IFS=: read -r -a pwdata <<< $(getent passwd "$name")
+    uid=${pwdata[2]}
+    sydo status user@$uid.service
+    ;;
+
+  sudo)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    yedo sudo -u $name -H "$@"
+    ;;
+
+  attach)
+    shift
+    name=$1
+    [ -n "$name" ] || die "Missing <name> argument"
+    # TODO ensure group write on well-named socket file, then no need to sudo-tmux
+    yedo sudo -u $name -H tmux attach
+    ;;
+
+  *)
+    prog=$(basename $0)
+    echo "Usage: $prog list"
+    echo "Usage: $prog add <name> [<fullname>]"
+    echo "Usage: $prog make <name>"
+    echo "Usage: $prog deploy <name>"
+    echo "Usage: $prog start <name>"
+    echo "Usage: $prog stop <name>"
+    echo "Usage: $prog enable <name>"
+    echo "Usage: $prog status <name>"
+    echo "Usage: $prog sudo <name> [command...]"
+    echo "Usage: $prog attach <name>"
+    exit 1
+    ;;
+esac
