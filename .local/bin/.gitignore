@@ -2,6 +2,7 @@
 *
 !.gitignore
 
+!alter
 !deporder
 !git-branch-base
 !git-commit-patch-ids
