@@ -35,6 +35,7 @@ require('lazy').setup('plugins')
 -- }}}
 
 local telescopes = require 'telescope.builtin'
+local telescope_utils = require 'telescope.utils'
 
 --- easy editing of/around $MYVIMRC {{{
 vim.keymap.set('n', '<leader>ev', function()
@@ -195,11 +196,31 @@ autocmd('TermOpen', 'setlocal nospell')
 
 vim.keymap.set('n', '<leader>s.', telescopes.resume, { desc = 'resume last search' })
 
-vim.keymap.set('n', '<leader>sf', bind(telescopes.find_files, {
-  previewer = false,
-  hidden = true,
-  no_ignore = true,
-}), { desc = 'search files' })
+vim.keymap.set('n', '<leader>sf', function()
+  local dir = telescope_utils.buffer_dir()
+
+  -- Handle fugitive://<path>/.git patterns by extracting the path
+  if dir:match("^fugitive://") then
+    dir = dir:gsub("^fugitive://", "")
+    dir = dir:gsub("/%.git/?.*$", "")
+
+  -- Ignore unknown URL paths
+  elseif dir:find("://") then
+    dir = ""
+  end
+
+  -- Fallback to normal cwd
+  if dir == "" then
+    dir = vim.fn.getcwd()
+  end
+
+  telescopes.find_files {
+    cwd = dir,
+    previewer = false,
+    hidden = true,
+    no_ignore = true,
+  }
+end, { desc = 'search files' })
 
 vim.keymap.set('n', '<leader>sh', telescopes.help_tags, { desc = 'search help' })
 vim.keymap.set('n', '<leader>sm', telescopes.man_pages, { desc = 'search man pages' })
