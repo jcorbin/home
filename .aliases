@@ -48,3 +48,5 @@ if [ -n "$USE_GNU" ]; then
 else
     alias ps="ps -w"
 fi
+
+alias clolo="ollama launch claude -- --dangerously-skip-permissions"
