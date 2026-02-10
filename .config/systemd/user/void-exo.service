@@ -1,0 +1,26 @@
+[Unit]
+Description=Void Exo Daemon
+Slice=app.slice
+
+[Service]
+Type=simple
+WorkingDirectory=/home/leoben/void.exo
+ExecStart=/home/leoben/.cargo/bin/localgpt daemon start -f
+ExecStop=/home/leoben/.cargo/bin/localgpt daemon stop
+Restart=on-failure
+RestartSec=5
+
+# Environment variables if needed
+# Environment="LOG_LEVEL=info"
+# Environment="DATA_DIR=/var/lib/void.exo"
+
+# Standard output and error handling
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
