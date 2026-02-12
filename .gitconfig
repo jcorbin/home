@@ -79,7 +79,7 @@
     dc = diff --cached
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
-    fit = git commit --fixup
+    fit = commit --fixup
     fp = merge-base --fork-point
     lb  = log --pretty=brief
     lbf  = log --graph --first-parent --pretty=brief
@@ -104,7 +104,7 @@
     remv = remote -v
     rs = rebase --skip
     rst = reset --hard
-    sit = git commit --squash
+    sit = commit --squash
     st = status --short --branch
     suri = submodule update --recursive --init
 
