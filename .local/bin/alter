@@ -2,17 +2,18 @@
 set -e
 
 usage() {
-  echo "usage: home-install ..."
+  echo "usage: alter ..."
 }
 
-# systemctl status user@1001.service
-# systemctl start user@1001.service
-# sudo -u leoben -H tmux attach
-# TODO add -> useradd
-# TODO with -> setegid & umask
-# TODO enter -> tmux attach or sudo shell
-
 case "$1" in
+
+  # TODO add -> useradd
+  # TODO make -> home-install ; or takeover from it
+  # TODO start -> systemctl start user@1001.service
+  # TODO enable -> enable user@1001.service... what wants it
+  # TODO status -> systemctl status user@1001.service
+  # TODO with -> setegid & umask
+  # TODO enter -> sudo -u leoben -H tmux attach
 
   *)
     usage >&2
