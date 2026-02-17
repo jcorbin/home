@@ -16,7 +16,7 @@ return {
             return require("codecompanion.adapters").extend("ollama", {
 
               env = {
-                url = "http://zorya:11434"
+                url = "http://doral:11434"
               },
               parameters = {
                 sync = true,
@@ -29,14 +29,11 @@ return {
 
               schema = {
                 model = {
-                  -- default = "starcoder",
-                  -- default = "starcoder2",
-                  -- default = "qwen2.5-coder",
-                  default = "deepseek-coder-v2",
+                  default = "glm-4.7-flash"
                 },
 
                 num_ctx = {
-                  default = 16384,
+                  default = 131072,
                 },
 
                 -- think = {
