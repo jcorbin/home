@@ -497,13 +497,16 @@ autocmd('LspAttach', function(ev)
   local map_buffer = mykeymap.options { buffer = bufnr }
   local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
-  -- -- inlay hints (uses virtual text to display parameter names and such)
-  -- if caps.inlayHintProvider then
-  --   vim.lsp.inlay_hint.enable(bufnr, true)
-  --   map_local('n', 'hh',
-  --     function() vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled()) end,
-  --     { desc = 'toggle lsp inlay hints' })
-  -- end
+  -- inlay hints (uses virtual text to display parameter names and such)
+  if caps.inlayHintProvider then
+    vim.lsp.inlay_hint.enable(true, {bufnr = bufnr})
+    map_local('n', 'ih',
+      function()
+        local was = vim.lsp.inlay_hint.is_enabled({bufnr = bufnr})
+        vim.lsp.inlay_hint.enable(not was, {bufnr = bufnr})
+      end,
+      { desc = 'toggle lsp inlay hints' })
+  end
 
   -- cursor hold highlighting
   if caps.documentHighlightProvider then
