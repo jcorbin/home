@@ -160,3 +160,4 @@
 
 [safe]
 	directory = /home/leoben/.git
+	directory = /home/leoben/void.exo/.git
