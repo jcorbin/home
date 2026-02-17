@@ -37,7 +37,8 @@ return {
             return require("codecompanion.adapters").extend("ollama", {
 
               env = {
-                url = "http://doral:11434"
+                -- That's Me! There's No Place Like 127.0.0.1
+                -- url = "http://doral:11434"
               },
               parameters = {
                 sync = true,
