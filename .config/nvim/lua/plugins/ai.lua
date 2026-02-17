@@ -12,6 +12,27 @@ return {
     require("codecompanion").setup({
       adapters = {
         http = {
+
+          -- for @web_search tool
+          tavily = function()
+            return require("codecompanion.adapters").extend("tavily", {
+              env = {
+                -- cleartext key, but at least it's not in ambient environ
+                api_key = 'cmd: cat ~/.config/api_keys/tavily',
+
+                -- example for 1password
+                -- api_key = "cmd:op read op://personal/Anthropic/credential --no-newline",
+
+                -- example for gnupg
+                -- api_key = 'cmd: gpg --batch --quiet --decrypt /path/to/api_key.gpg',
+                -- TODO prep with `gpg -c /path/to/api_key`
+
+                -- TODO lead for bitwarden
+                -- api_key = vim.fn.system('bw get password "Gemini API Key"'):match("[^\n]+")
+              },
+            })
+          end,
+
           ollama = function()
             return require("codecompanion.adapters").extend("ollama", {
 
