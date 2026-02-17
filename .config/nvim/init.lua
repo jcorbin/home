@@ -199,9 +199,13 @@ vim.keymap.set('n', '<leader>s.', telescopes.resume, { desc = 'resume last searc
 vim.keymap.set('n', '<leader>sf', function()
   local dir = telescope_utils.buffer_dir()
 
+  -- TODO strip all trailing "/"s from dir
+
   -- Handle fugitive://<path>/.git patterns by extracting the path
   if dir:match("^fugitive://") then
     dir = dir:gsub("^fugitive://", "")
+
+    -- TODO if dir matches.git/woktrees/NAME// then read .git/worktrees/NAMD/gitdir, use its contents for dir
     dir = dir:gsub("/%.git/?.*$", "")
 
   -- Ignore unknown URL paths
