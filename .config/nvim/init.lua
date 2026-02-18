@@ -214,12 +214,7 @@ vim.keymap.set('n', '<leader>sf', function()
     dir = vim.fn.getcwd()
   end
 
-  telescopes.find_files {
-    cwd = dir,
-    previewer = false,
-    hidden = true,
-    no_ignore = true,
-  }
+  telescopes.find_files({ cwd = dir })
 end, { desc = 'search files' })
 
 vim.keymap.set('n', '<leader>sh', telescopes.help_tags, { desc = 'search help' })
