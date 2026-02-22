@@ -72,6 +72,23 @@ return {
         },
       },
 
+      interactions = {
+        chat = {
+          tools = {
+            ["cmd_runner"] = {
+              opts = {
+                allowed_in_yolo_mode = true,
+              }
+            },
+            ["delete_file"] = {
+              opts = {
+                allowed_in_yolo_mode = true,
+              }
+            },
+          },
+        },
+      },
+
       strategies = {
         chat = {
           adapter = "ollama",
