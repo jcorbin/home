@@ -79,11 +79,6 @@ setup_dest() {
     return 1
   fi
 
-  if local_url=$(git remote get-url $remote_name 2>/dev/null); then
-    echo "$remote_name remote already exists, skipping $dest git setup" >&2
-    return 1
-  fi
-
   set -x
 
   if ! [ -d "$dest/.git" ]; then
@@ -99,17 +94,22 @@ setup_dest() {
     popd
   fi
 
-  git remote add $remote_name "$dest"
-  git fetch $remote_name
-
-  if ! git rev-parse --verify $branch_name >/dev/null 2>&2; then
-    create_alter "$alter"
+  if ! git remote get-url $remote_name >&/dev/null; then
+    git remote add $remote_name "$dest"
+    git fetch $remote_name
   fi
 
-  if [ -n "$alter" ] && [ $(git rev-parse "$branch_name") == $(git rev-parse local) ]; then
-    git checkout $branch_name
-    make_alter "$alter"
-    git checkout -
+  if [ -n "$alter" ]; then
+    if ! git rev-parse --verify $branch_name >/dev/null 2>&2; then
+      create_alter "$alter"
+    fi
+
+    if [ $(git rev-parse "$branch_name") == $(git rev-parse local) ]; then
+      git checkout $branch_name
+      make_alter "$alter"
+      git checkout -
+    fi
+
   fi
 
   git push -u $remote_name $branch_name
