@@ -142,6 +142,10 @@ make_alter() {
     read alter
   fi
 
+  home_remote=$(git --git-dir=$HOME/.git remote)
+  home_int=$(git --git-dir=$HOME/.git remote get-url "$home_remote")
+  cd "$home_int"
+
   branch_name="local.$alter" 
   head_branch=$(basename $(git symbolic-ref HEAD))
   if [ "$branch_name" != "$head_branch" ]; then
