@@ -140,12 +140,20 @@
 [http]
     followRedirects = true
 
-[url "ssh://git@github.com/"]
-    insteadOf = https://github.com/
-    pushInsteadOf = https://github.com/
-
 [filter "lfs"]
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
     clean = git-lfs clean -- %f
+
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
+    pushInsteadOf = https://github.com/
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
