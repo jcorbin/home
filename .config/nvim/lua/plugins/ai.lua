@@ -80,6 +80,26 @@ return {
         },
       },
 
+      display = {
+        chat = {
+
+          icons = {
+            chat_fold = " ",
+          },
+
+          show_context = true, -- Show context (from slash commands and variables) in the chat buffer?
+          show_header_separator = false, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
+
+          -- show_settings = true, -- Show LLM settings at the top of the chat buffer?
+          show_token_count = true, -- Show the token count for each response?
+          show_tools_processing = true, -- Show the loading message when tools are being executed?
+
+          fold_reasoning = true,
+          show_reasoning = true,
+
+        },
+      },
+
     })
   end,
 
