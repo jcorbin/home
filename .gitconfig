@@ -1,6 +1,6 @@
 [user]
-    email = jcorbin+oscar@wunjo.org
-    name = Joshua T Corbin
+    email = oscar.trashcan@localhost.localdomain
+    name = Oscar Trashcan
 
 [branch]
     autosetupmerge = always # setup branch tracking
