@@ -1,5 +1,8 @@
 return {
 
+  -- TODO investigate [dashboard.nvim](https://github.com/nvimdev/dashboard-nvim) 
+  -- TODO investigate [snacks.dashboard](https://github.com/folke/snacks.nvim/blob/main/docs/dashboard.md)
+
   {
     "raulcorreia7/eldritch.nvim",
     lazy = false,
