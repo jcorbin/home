@@ -67,7 +67,7 @@ vim.opt.guifont = 'Kelmscott Mono:h18'
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
 vim.opt.mouse = 'a'
-vim.cmd.colorscheme 'kanagawa'
+vim.cmd.colorscheme 'eldritch-fusion-kanagawa'
 vim.opt.laststatus = 2
 vim.opt.smoothscroll = true
 
