@@ -21,17 +21,16 @@
 
     // System tray
     "tray": {
-        // "icon-size": 21,
+        "icon-size": 21,
         "spacing": 10,
-        // "show-passive-items": true,
     },
 
     // Clock
     "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%Y-%m-%d %H:%M:%S %z}",
         "interval": 1,
-        "format": "{:%Y-%m-%d %H:%M:%S %z}"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip": false
     },
 
     "cpu": {
@@ -61,36 +60,31 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
+        "format": "{icon} {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-alt": "{icon}  {time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": [" ", " ", " ", " ", " "]
     },
 
     "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "",
         "format-ethernet": "",
         "format-linked": "X",
         "format-disconnected": "⚠",
         "interval": 15,
-
         "tooltip-format-wifi": "{essid} ({signalStrength}%) {ifname} via {gwaddr}",
         "tooltip-format-ethernet": "{ifname} via {gwaddr}",
         "tooltip-format-disconnected": "{ifname} (No IP)",
         "tooltip-format-disabled": "{ifname} (disabled)",
-
-        "on-click": "systemd-run --user foot iwctl",
-
     },
 
     // Pulseaudio
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
+        "format": "{icon} {volume}%",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": " {format_source}",
@@ -105,24 +99,41 @@
             "car": "",
             "default": ["", "", ""]
         },
-        // "on-click": "pavucontrol"
-        "on-click": "systemd-run --user foot pulsemixer"
+        "on-click": "pavucontrol"
     },
 
     // Bluetooth
     "bluetooth": {
-        "on-click": "systemd-run --user foot bluetuith",
-        "format": "",
-        "format-disabled": "X",
-        "format-off": "-",
-        "format-connected": "+",
+        "interval": 30,
+        "format": " {status}",
+        "format-disabled": "X",
+        "format-off": "-",
+        "format-connected": "+",
+        "on-click": "blueman-manager",
+        "format-no-controller": ""
     },
 
     // Backlight
     "backlight": {
-        // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        ],
+        "scroll-step": 1
     },
 
 }
