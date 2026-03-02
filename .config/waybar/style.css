@@ -1,15 +1,13 @@
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
-    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 13px;
+    font-family: "Fira Sans Semibold", "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
 }
 
 window#waybar {
-    background-color: #202020;
-    border-bottom: none;
-    color: #adadad;
-    transition-property: background-color;
-    transition-duration: .5s;
+    background-color: #0f1117;
+    font-size: 14px;
+    border-radius: 0px;
+    margin: 0px;
+    padding: 0;
 }
 
 window#waybar.hidden {
@@ -24,6 +22,32 @@ window#waybar.solo {
     background-color: #FFFFFF;
 }
 */
+
+#clock {
+    font-size: 14px;
+    background-color: #1e222a;
+    color: #c0c0c0;
+    border-radius: 0px;
+    padding: 0px 8px;
+}
+
+/* Active window title */
+#window {
+    font-size: 14px;
+    font-weight: 800;
+    color: #e0e0e0;
+    border-radius: 0px;
+    padding: 4px 12px;
+    background-color: #1e222a;
+}
+
+/* Tooltips */
+tooltip {
+    border-radius: 12px;
+    background-color: #0f1117;
+    color: #c0c0c0;
+    padding: 4px 8px;
+}
 
 #workspaces button {
     padding: 0 5px;
@@ -42,6 +66,45 @@ window#waybar.solo {
 
 #workspaces button.urgent {
     background-color: #eb4d4b;
+}
+
+/* Taskbar */
+#taskbar {
+    background-color: #1e222a;
+    margin: 0px;
+    border-radius: 0px;
+    font-weight: normal;
+}
+
+/* All system info modules */
+#backlight,
+#pulseaudio,
+#network,
+#bluetooth,
+#battery,
+#tray,
+#custom-updates,
+#custom-notification {
+    background-color: #1e222a;
+    font-size: 14px;
+    font-weight: 800;
+    color: #c0c0c0;
+    border-radius: 0px;
+    padding: 4px 10px;
+}
+
+/* Battery critical warning */
+#battery.critical:not(.charging) {
+    background-color: #e65100;
+    color: #ffffff;
+    animation: blink 0.5s linear infinite alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: #0f1117;
+        color: #ffffff;
+    }
 }
 
 #mode {
@@ -66,6 +129,7 @@ window#waybar.solo {
 #scratchpad,
 #mpd {
     padding: 0 10px;
+    background-color: #1e222a;
     color: #adadad;
 }
 
@@ -150,11 +214,12 @@ label:focus {
 }
 
 #temperature {
-    background-color: #f0932b;
+    background-color: #1e222a;
+    color: #f0932b;
 }
 
 #temperature.critical {
-    background-color: #eb4d4b;
+    color: #eb4d4b;
 }
 
 #tray {
@@ -199,12 +264,6 @@ label:focus {
 
 #scratchpad.empty {
 	background-color: transparent;
-}
-
-
-#window {
-  color: #4581eb;
-  font-size: 150%;
 }
 
 #tags button * {
