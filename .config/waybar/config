@@ -15,11 +15,12 @@
 
     "modules-left": [
         "clock",
-        "river/tags",
+        "wlr/taskbar",
+        "niri/window",
     ],
 
     "modules-center": [
-        "river/window",
+        "niri/workspaces"
     ],
 
     "modules-right": [
