@@ -36,7 +36,7 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false,
-        "on-click": "systemd-run --user foot htop",
+        "on-click": "systemd-run --user alacritty -e htop",
     },
 
     "memory": {
