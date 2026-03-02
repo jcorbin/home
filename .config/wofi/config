@@ -3,3 +3,7 @@ allow_images=true
 allow_markup=true
 term=foot
 insensitive=true
+hide_scroll=true
+no_actions=false
+mode=drun
+--show
