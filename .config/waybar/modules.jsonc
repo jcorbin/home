@@ -113,6 +113,13 @@
         "format-no-controller": ""
     },
 
+    // Other
+    "user": {
+        "format": "{user}",
+        "interval": 60,
+        "icon": false
+    },
+
     // Backlight
     "backlight": {
         "format": "{icon} {percent}%",
