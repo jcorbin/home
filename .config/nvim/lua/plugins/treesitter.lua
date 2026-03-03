@@ -2,11 +2,6 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
 
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-      'nvim-treesitter/nvim-treesitter-refactor',
-    },
-
     opts = {
       ensure_installed = {},
       sync_install = 'false',
@@ -29,52 +24,6 @@ return {
 
       indent = { enable = true },
 
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-
-          keymaps = {
-
-            -- You can use the capture groups defined in textobjects.scm
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-
-            -- You can optionally set descriptions to the mappings (used in the desc parameter of
-            -- nvim_buf_set_keymap) which plugins like which-key display
-            ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-
-            -- You can also use captures from other query groups like `locals.scm`
-            ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-          },
-        },
-
-        swap = {
-          enable = true,
-          swap_previous = { ["[."] = "@parameter.inner", },
-          swap_next = { ["]."] = "@parameter.inner", },
-        },
-      },
-
-      refactor = {
-        highlight_definitions = {
-          enable = true,
-          -- Set to false if you have an `updatetime` of ~100.
-          clear_on_cursor_move = true,
-        },
-        highlight_current_scope = { enable = false },
-        smart_rename = {
-          enable = true,
-          -- Assign keymaps to false to disable them, e.g. `smart_rename = false`.
-          keymaps = {
-            smart_rename = "grr",
-          },
-        },
-      },
-
     },
   },
-  'nvim-treesitter/nvim-treesitter-textobjects',
-  'nvim-treesitter/nvim-treesitter-refactor',
 }
