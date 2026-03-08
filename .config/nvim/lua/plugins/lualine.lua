@@ -65,6 +65,8 @@ local filename = {
   path = 1, -- relative path
 }
 
+local cc_spinner = require('codecompanion._extensions.spinner.styles.lualine')
+
 return {
   'nvim-lualine/lualine.nvim',
   opts = {
@@ -85,7 +87,10 @@ return {
     sections = {
       lualine_a = { filename },
       lualine_b = { 'location' },
-      lualine_c = { 'diagnostics' },
+      lualine_c = {
+        'diagnostics',
+        cc_spinner.get_lualine_component(),
+      },
       lualine_x = { 'branch', 'diff' },
       lualine_y = { showcmd },
       lualine_z = { showmacro, 'mode' }
@@ -93,7 +98,10 @@ return {
     inactive_sections = {
       lualine_a = { filename },
       lualine_b = { 'location' },
-      lualine_c = { 'diagnostics' },
+      lualine_c = {
+        'diagnostics',
+        cc_spinner.get_lualine_component(),
+      },
       lualine_x = { 'branch', 'diff' },
       lualine_y = {},
       lualine_z = {},
