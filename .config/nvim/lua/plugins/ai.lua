@@ -96,10 +96,7 @@ return {
 
       display = {
         chat = {
-
-          icons = {
-            chat_fold = " ",
-          },
+          intro_message = "",
 
           show_context = true, -- Show context (from slash commands and variables) in the chat buffer?
           show_header_separator = false, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
