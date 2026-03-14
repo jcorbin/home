@@ -76,6 +76,15 @@ return {
         },
       },
 
+      prompt_library = {
+        -- Users can define prompt library items in markdown
+        markdown = {
+          dirs = {
+            '~/.config/nvim/cc_library',
+          },
+        },
+      },
+
       strategies = {
         chat = {
           adapter = "ollama",
