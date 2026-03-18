@@ -41,7 +41,7 @@
     autosquash = true # honor commit markers like `fixup!`
     # instructionFormat = %s %d # subject with decoration
     updateRefs = true
-    rebaseMerges = true ; ? rebase-cousins
+    rebaseMerges = no-rebase-cousins
 
 [rerere]
     # remember and re-use merge conflict resolutions
