@@ -16,6 +16,7 @@
 
 [diff]
     renames = copies # more aggresisve rename detection
+    renameLimit = 100000
 
 [core]
     # Use less as our pager, turn off the -c option if it was specified in $LESS,
