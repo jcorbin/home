@@ -306,6 +306,13 @@ window-rule {
     open-floating true // Always float Firefox PiP windows
 }
 
+window-rule {
+    match app-id=r"Zoom Workplace"
+    exclude title=r"Meeting"
+    // title=r"as_toolbar"
+    open-floating true
+}
+
 // Block out mako notifications from screencasts.
 layer-rule {
     match namespace="^notifications$"
