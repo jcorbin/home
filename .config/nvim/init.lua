@@ -169,6 +169,10 @@ vim.keymap.set('n', '<leader>lr',
 vim.keymap.set('n', '<leader>lw',
   function() vim.opt.wrap = not vim.opt.wrap:get() end,
   { desc = 'toggle virtual line wrapping' })
+
+vim.opt.number = true
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
 -- }}}
 
 --- Spellchecking {{{
