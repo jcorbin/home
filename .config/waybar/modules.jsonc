@@ -8,8 +8,9 @@
     // Taskbar
     "wlr/taskbar": {
         "format": "{icon}",
+
         "icon-size": 18,
-        "tooltip-format": "{title}",
+        "tooltip-format": "app_id:{app_id} title:{title}",
         "on-click": "activate",
         "on-click-middle": "close",
         "ignore-list": ["Alacritty", "kitty", "ghostty"],
@@ -24,7 +25,7 @@
 
     // niri Window
     "niri/window": {
-        "format": "{}",
+        "format": "{app_id} — {title}",
         "rewrite": {
             "(.*) - Brave": "$1",
             "(.*) - Chromium": "$1",
