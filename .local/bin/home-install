@@ -59,13 +59,23 @@ setup_dest() {
   branch_name=${3:-local$nom}
   shared='false'
 
+  need_sudo=false
   if ! [ -O "$dest" ]; then
     if ! [ -w "$dest" ]; then
-      echo "Unable to write to $dest" >&2
-      return 1
+      need_sudo=true
     fi
     shared='group'
   fi
+
+  usdo() {
+    if $need_sudo; then
+      echo "++ sudo -u "$alter" $@"
+      sudo -u "$alter" "$@"
+    else
+      echo "++ $@"
+      "$@"
+    fi
+  }
 
   echo "dest: $dest"
   echo "remote_name: $remote_name"
