@@ -11,8 +11,15 @@ return {
     vim.keymap.set('n', '<leader>Gb', ':G blame<cr>', { desc = 'Git blame' })
     vim.keymap.set('n', '<leader>Gc', ':G commit<cr>', { desc = 'Git commmit' })
     vim.keymap.set('n', '<leader>GC', ':G commit --amend<cr>', { desc = 'Git commmit amend' })
+
     vim.keymap.set('n', '<leader>Go',
       -- TODO implement a function that avoids clobbering the default register
       'yaw:Gsplit <C-r>"<cr>', { desc = 'Git open object' })
+
+    vim.keymap.set('n', '<leader>Gs',
+      -- TODO implement a function that avoids clobbering the default register
+      'yaw:G show --stat <C-r>"<cr>', { desc = 'Git show --stat object' })
+
   end
+
 }
