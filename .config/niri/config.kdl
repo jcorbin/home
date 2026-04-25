@@ -206,8 +206,8 @@ binds {
 
 // spawn-sh-at-startup "uwsm app -s s /usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
 spawn-sh-at-startup "uwsm app -s s waybar" // Launch waybar
-spawn-sh-at-startup "uwsm app -s b swww-daemon" // Wallpaper daemon
-spawn-sh-at-startup "uwsm app swww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
+spawn-sh-at-startup "uwsm app -s b awww-daemon" // Wallpaper daemon
+spawn-sh-at-startup "uwsm app awww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
 
 prefer-no-csd // Disable program decorations
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
