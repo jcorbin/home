@@ -17,6 +17,11 @@ local autocmd = augroup 'myvimrc'
 local mykeymap = require 'my.keymap'
 -- }}}
 
+-- vim.pack.add({
+--   "https://github.com/arborist-ts/arborist.nvim",
+-- })
+-- require("arborist").setup()
+
 --- Lazy plugin manager {{{
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
