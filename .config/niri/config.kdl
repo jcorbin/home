@@ -33,6 +33,12 @@ input {
     scale 1 // No scaling (use 2 for HiDPI)
 }
 
+// ────────────── Clipboard Configuration ──────────────
+
+clipboard {
+    disable-primary
+}
+
 // ────────────── Keybindings ──────────────
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Key-Bindings
 
