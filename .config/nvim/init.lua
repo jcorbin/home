@@ -521,11 +521,11 @@ autocmd('LspAttach', function(ev)
     end)
   end
 
-  if caps.codeLensProvider ~= nil and caps.codeLensProvider.resolveProvider then
-    autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
-      vim.lsp.codelens.refresh({ bufnr = 0 })
-    end)
-  end
+  -- if caps.codeLensProvider ~= nil and caps.codeLensProvider.resolveProvider then
+  --   autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
+  --     vim.lsp.codelens.refresh({ bufnr = 0 })
+  --   end)
+  -- end
 
   map_local('n', 'lc', function()
     popup({ server_capabilities = vim.lsp.get_clients()[1].server_capabilities })
