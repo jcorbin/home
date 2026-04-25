@@ -471,6 +471,7 @@ vim.lsp.enable({
   'yamlls',
   'vimls',
   'zls',
+  -- 'eslint-ls',
 })
 
 vim.lsp.config('*', {
