@@ -18,5 +18,6 @@
 !quotecmd
 !recshot
 !run
+!tpm-luks-reenroll
 !uwofi
 !whoamai
