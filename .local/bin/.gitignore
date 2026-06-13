@@ -7,14 +7,12 @@
 !git-commit-patch-ids
 !git-current-branch
 !git-fix-userid
+!githook-update-worktree-post-receive
+!githook-update-worktree-update
 !git-rewrite-branch
 !git-setup-worktree-push
 !git-shell-pack
 !git-subtree
-!githook-update-worktree-post-receive
-!githook-update-worktree-post-receive
-!githook-update-worktree-update
-!githook-update-worktree-update
 !home-backup
 !home-install
 !quotecmd
