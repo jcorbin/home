@@ -309,10 +309,14 @@ layout {
 // systemctl --user daemon-reload
 // systemctl --user add-wants niri.service swayidle.service
 
+spawn-at-startup "qs" "-c" "noctalia-shell"
+
+// TODO reconcile awww w/ noctalia wallpaper
+// XXX spawn-sh-at-startup "uwsm app -s b awww-daemon" // Wallpaper daemon
+// XXX spawn-sh-at-startup "uwsm app awww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
+
+// TODO relevant?
 // spawn-sh-at-startup "uwsm app -s s /usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
-spawn-sh-at-startup "uwsm app -s s waybar" // Launch waybar
-spawn-sh-at-startup "uwsm app -s b awww-daemon" // Wallpaper daemon
-spawn-sh-at-startup "uwsm app awww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -387,7 +391,7 @@ animations {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-    geometry-corner-radius 8
+    geometry-corner-radius 20
     clip-to-geometry true
 }
 
@@ -447,6 +451,17 @@ window-rule {
     // TODO gpg-agent's deal?
     // TODO bitwarden?
     block-out-from "screencast"
+}
+
+// Set the overview wallpaper on the backdrop.
+layer-rule {
+  match namespace="^noctalia-overview*"
+  place-within-backdrop true
+}
+
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
 }
 
 // Indicate screencasted windows with red colors.
@@ -512,12 +527,16 @@ binds {
       spawn "uwsm" "app" "alacritty";
     }
     Mod+Space hotkey-overlay-title="Launcher" {
-      spawn "uwofi";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle";
     }
 
-    // TODO better integrated with service unit
+    Mod+Semicolon hotkey-overlay-title="Settings" {
+      // spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle";
+    }
+
     Super+Alt+L hotkey-overlay-title="Lock the Screen" {
-      spawn "swaylock";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "lock";
     }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
@@ -527,41 +546,41 @@ binds {
 
     // ─── Audio Controls ───
     XF86AudioRaiseVolume allow-when-locked=true {
-      spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "increase";
     }
     XF86AudioLowerVolume allow-when-locked=true {
-      spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "decrease";
     }
     XF86AudioMute allow-when-locked=true {
-      spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "muteOutput";
     }
     XF86AudioMicMute allow-when-locked=true {
-      spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "muteInput";
     }
 
     // ─── Media Controls ───
-    XF86AudioPlay  allow-when-locked=true {
-      spawn "playerctl" "play-pause";
+    XF86AudioPlay allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "playPause";
     }
-    XF86AudioStop  allow-when-locked=true {
-      spawn "playerctl" "stop";
+    XF86AudioStop allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "stop";
     }
     XF86AudioPause allow-when-locked=true {
-      spawn "playerctl" "play-pause";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "pause";
     }
-    XF86AudioNext  allow-when-locked=true {
-      spawn "playerctl" "next";
+    XF86AudioNext allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "next";
     }
-    XF86AudioPrev  allow-when-locked=true {
-      spawn "playerctl" "previous";
+    XF86AudioPrev allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "previous";
     }
 
     // ─── Screen Controls ───
     XF86MonBrightnessUp allow-when-locked=true {
-      spawn "brightnessctl" "--class=backlight" "set" "+10%";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "brightness" "increase";
     }
     XF86MonBrightnessDown allow-when-locked=true {
-      spawn "brightnessctl" "--class=backlight" "set" "10%-";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "brightness" "decrease";
     }
 
     // ─── Window Movement and Focus ───
@@ -800,10 +819,10 @@ binds {
     // ─── Exit / Power ───
     // The quit action will show a confirmation dialog to avoid accidental exits.
     Mod+Shift+E {
-      quit;
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
     }
     Ctrl+Alt+Delete {
-      quit;
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
     }
 
     // Powers off the monitors. To turn them back on, do any input like
