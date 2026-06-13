@@ -508,11 +508,17 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // ─── Applications ───
-    Mod+Return hotkey-overlay-title="Terminal: alacritty" { spawn "uwsm" "app" "alacritty"; }
-    Mod+Space hotkey-overlay-title="Launcher: uwofi" { spawn "uwofi"; }
+    Mod+Return hotkey-overlay-title="Terminal" {
+      spawn "uwsm" "app" "alacritty";
+    }
+    Mod+Space hotkey-overlay-title="Launcher" {
+      spawn "uwofi";
+    }
 
     // TODO better integrated with service unit
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Super+Alt+L hotkey-overlay-title="Lock the Screen" {
+      spawn "swaylock";
+    }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -520,27 +526,43 @@ binds {
     // Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
     // ─── Audio Controls ───
-    // Example volume keys mappings for PipeWire & WirePlumber.
-    // The allow-when-locked=true property makes them work even when the session is locked.
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
-    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86AudioRaiseVolume allow-when-locked=true {
+      spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+";
+    }
+    XF86AudioLowerVolume allow-when-locked=true {
+      spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-";
+    }
+    XF86AudioMute allow-when-locked=true {
+      spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle";
+    }
+    XF86AudioMicMute allow-when-locked=true {
+      spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
+    }
 
-    // Example media keys mapping using playerctl.
-    // This will work with any MPRIS-enabled media player.
-    XF86AudioPlay  allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioStop  allow-when-locked=true { spawn "playerctl" "stop"; }
-    XF86AudioPause allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioNext  allow-when-locked=true { spawn "playerctl" "next"; }
-    XF86AudioPrev  allow-when-locked=true { spawn "playerctl" "previous"; }
+    // ─── Media Controls ───
+    XF86AudioPlay  allow-when-locked=true {
+      spawn "playerctl" "play-pause";
+    }
+    XF86AudioStop  allow-when-locked=true {
+      spawn "playerctl" "stop";
+    }
+    XF86AudioPause allow-when-locked=true {
+      spawn "playerctl" "play-pause";
+    }
+    XF86AudioNext  allow-when-locked=true {
+      spawn "playerctl" "next";
+    }
+    XF86AudioPrev  allow-when-locked=true {
+      spawn "playerctl" "previous";
+    }
 
     // ─── Screen Controls ───
-    // Example brightness key mappings for brightnessctl.
-    // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
-    // but you need to manually put each argument in separate "" quotes.
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    XF86MonBrightnessUp allow-when-locked=true {
+      spawn "brightnessctl" "--class=backlight" "set" "+10%";
+    }
+    XF86MonBrightnessDown allow-when-locked=true {
+      spawn "brightnessctl" "--class=backlight" "set" "10%-";
+    }
 
     // ─── Window Movement and Focus ───
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
@@ -777,8 +799,12 @@ binds {
 
     // ─── Exit / Power ───
     // The quit action will show a confirmation dialog to avoid accidental exits.
-    Mod+Shift+E { quit; }
-    Ctrl+Alt+Delete { quit; }
+    Mod+Shift+E {
+      quit;
+    }
+    Ctrl+Alt+Delete {
+      quit;
+    }
 
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
