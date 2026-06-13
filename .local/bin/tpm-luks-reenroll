@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+#
+# tpm-luks-reenroll — re-bind the TPM2 keyslot used to auto-unlock the LUKS
+# root volume to the *current* PCR values, optionally protected by a PIN.
+#
+# Run this when the passphrase prompt reappears at boot. That means PCR 7
+# changed (Secure Boot toggled, SB keys changed, or fwupd pushed a dbx
+# update), so the TPM no longer releases the old key. Boot with your
+# passphrase, then run this to rebind.
+#
+# Your passphrase / recovery keyslots are never touched — only the tpm2
+# keyslot is wiped and recreated. You'll be prompted for an existing
+# passphrase (or recovery key) to authorize the change.
+
+set -euo pipefail
+
+# TODO detect this somehow
+DEVICE="/dev/nvme0n1p2"
+
+PCRS="7"
+WITH_PIN="no"
+FORCE="no"
+
+usage() {
+  cat <<EOF
+Usage: ${0##*/} [options]
+
+Re-enroll (wipe + recreate) the TPM2 keyslot for LUKS auto-unlock.
+
+Options:
+  -p, --pin           Require a PIN in addition to the TPM (second factor)
+      --device DEV    LUKS device (default: $DEVICE)
+      --pcrs LIST     PCRs to bind to (default: $PCRS, e.g. "7" or "7+11")
+  -f, --force         Skip the "is there a fallback keyslot?" safety check
+  -h, --help          Show this help
+EOF
+}
+
+# Handle help without needing root.
+for a in "$@"; do
+  case "$a" in -h|--help) usage; exit 0 ;; esac
+done
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -p|--pin)    WITH_PIN="yes"; shift ;;
+    --device)    DEVICE="${2:?--device needs a value}"; shift 2 ;;
+    --pcrs)      PCRS="${2:?--pcrs needs a value}"; shift 2 ;;
+    -f|--force)  FORCE="yes"; shift ;;
+    -h|--help)   usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if ! sudo cryptsetup isLuks "$DEVICE" 2>/dev/null; then
+  echo "error: $DEVICE is not a LUKS device" >&2
+  exit 1
+fi
+
+# Lockout guard: make sure a non-TPM keyslot exists, so wiping the tpm2 slot
+# can never leave the volume with no way in. Count luks2 keyslots; we expect
+# at least 2 (the tpm2 slot + a passphrase/recovery slot).
+slots="$(sudo cryptsetup luksDump "$DEVICE" | grep -cE '^[[:space:]]+[0-9]+: luks2' || true)"
+if [[ "$FORCE" != "yes" && "${slots:-0}" -lt 2 ]]; then
+  echo "error: only ${slots:-0} keyslot(s) on $DEVICE — refusing to wipe the" >&2
+  echo "       tpm2 slot without a confirmed passphrase/recovery fallback." >&2
+  echo "       Add a passphrase or recovery key first, or pass --force." >&2
+  exit 1
+fi
+
+cmd=(sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs="$PCRS")
+[[ "$WITH_PIN" == "yes" ]] && cmd+=(--tpm2-with-pin=yes)
+cmd+=("$DEVICE")
+
+echo ">> ${cmd[*]}"
+"${cmd[@]}"
+
+echo
+echo "Done. Current tokens on $DEVICE:"
+sudo cryptsetup luksDump "$DEVICE" | grep -A6 -i '^Tokens:' || true
+echo
+echo "Reboot to confirm auto-unlock works."
