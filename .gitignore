@@ -76,6 +76,10 @@
 !/.config/wlogout
 !/.config/wofi
 
+# Systemd User Config
+/.config/systemd/**/notify-server*
+/.config/systemd/**/my-www*
+
 # Vim Config
 !.vimrc
 !/.vim
