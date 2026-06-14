@@ -152,7 +152,9 @@ make_alter() {
     read alter
   fi
 
-  home_remote=$(git --git-dir=$HOME/.git remote)
+  set -x
+
+  home_remote=$(git --git-dir=$HOME/.git remote | head -n1)
   home_int=$(git --git-dir=$HOME/.git remote get-url "$home_remote")
   cd "$home_int"
 
