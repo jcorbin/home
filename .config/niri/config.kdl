@@ -287,33 +287,7 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-// TODO naturalize these into uwsm
-
-// TODO read more from https://github.com/YaLTeR/niri/wiki/Example-systemd-Setup
-// systemctl --user add-wants niri.service mako.service
-// systemctl --user add-wants niri.service waybar.service
-
-// > swayidle similarly does not provide a service, so we will also make
-// > our own. Create ~/.config/systemd/user/swayidle.service with the
-// following contents:
-// ```
-// [Unit]
-// PartOf=graphical-session.target
-// After=graphical-session.target
-// Requisite=graphical-session.target
-//
-// [Service]
-// ExecStart=/usr/bin/swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f'
-// Restart=on-failure
-// ```
-// systemctl --user daemon-reload
-// systemctl --user add-wants niri.service swayidle.service
-
 spawn-at-startup "qs" "-c" "noctalia-shell"
-
-// TODO reconcile awww w/ noctalia wallpaper
-// XXX spawn-sh-at-startup "uwsm app -s b awww-daemon" // Wallpaper daemon
-// XXX spawn-sh-at-startup "uwsm app awww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
 
 // TODO relevant?
 // spawn-sh-at-startup "uwsm app -s s /usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
@@ -455,7 +429,7 @@ window-rule {
 
 // Set the overview wallpaper on the backdrop.
 layer-rule {
-  match namespace="^noctalia-overview*"
+  match namespace="background"
   place-within-backdrop true
 }
 

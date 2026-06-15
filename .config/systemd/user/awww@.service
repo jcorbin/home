@@ -1,0 +1,12 @@
+[Unit]
+Description=Wayland Wallpaper Daemon (%i layer)
+Slice=background.slice
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/awww-daemon --namespace %i --layer %i
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=graphical-session.target

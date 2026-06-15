@@ -788,9 +788,9 @@
     },
     "wallpaper": {
         "automationEnabled": false,
-        "directory": "/usr/share/backgrounds",
+        "directory": "/home/jcorbin/Pictures/Wallpapers",
         "enableMultiMonitorDirectories": false,
-        "enabled": true,
+        "enabled": false,
         "favorites": [
         ],
         "fillColor": "#000000",
