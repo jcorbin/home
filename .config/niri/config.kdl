@@ -312,9 +312,6 @@ layout {
 
 spawn-at-startup "qs" "-c" "noctalia-shell"
 
-// TODO relevant?
-// spawn-sh-at-startup "uwsm app -s s /usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
-
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
