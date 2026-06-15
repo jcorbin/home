@@ -3,7 +3,7 @@
   "blink.cmp": { "branch": "main", "commit": "78336bc89ee5365633bcf754d93df01678b5c08f" },
   "codecompanion-history.nvim": { "branch": "main", "commit": "bc1b4fe06eaaf0aa2399be742e843c22f7f1652a" },
   "codecompanion-spinners.nvim": { "branch": "main", "commit": "86926cbf7554d69d40d2a5c3cf576063814a42d5" },
-  "codecompanion.nvim": { "branch": "main", "commit": "d8a5d885ae477d80d9f4fdfad4f600cd0db75451" },
+  "codecompanion.nvim": { "branch": "main", "commit": "123d8b3428b321ade9a8c1b749a65e4021a14dd0" },
   "conform.nvim": { "branch": "master", "commit": "619363c30309d29ffa631e67c8183f2a72caa373" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "eldritch.nvim": { "branch": "master", "commit": "5378b29598298eadad6a22ec4b31bef0f176f399" },
