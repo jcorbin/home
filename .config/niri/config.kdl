@@ -122,7 +122,7 @@ clipboard {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 4
+    gaps 12
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -130,7 +130,8 @@ layout {
     // - "always", the focused column will always be centered.
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
-    center-focused-column "never"
+    center-focused-column "on-overflow"
+    always-center-single-column
 
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
     preset-column-widths {
@@ -164,36 +165,36 @@ layout {
     // Alternatively, you can override it with a window rule called
     // `draw-border-with-background`.
 
+    // Colors can be set in a variety of ways:
+    // - CSS named colors: "red"
+    // - RGB hex: "#rgb", "#rgba", "#rrggbb", "#rrggbbaa"
+    // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
+
+    // You can also use gradients. They take precedence over solid colors.
+    // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
+    // The angle is the same as in linear-gradient, and is optional,
+    // defaulting to 180 (top-to-bottom gradient).
+    // You can use any CSS linear-gradient tool on the web to set these up.
+    // Changing the color space is also supported, check the wiki for more info.
+    //
+    // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+
     // You can change how the focus ring looks.
     focus-ring {
         // Uncomment this line to disable the focus ring.
-        // off
+        off
 
         // How many logical pixels the ring extends out from the windows.
-        width 2
-
-        // Colors can be set in a variety of ways:
-        // - CSS named colors: "red"
-        // - RGB hex: "#rgb", "#rgba", "#rrggbb", "#rrggbbaa"
-        // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
+        width 4
 
         // Color of the ring on the active monitor.
-        active-color "#7fc8ff"
+        active-color "#7fc8ff88"
 
         // Color of the ring on inactive monitors.
         //
         // The focus ring only draws around the active window, so the only place
         // where you can see its inactive-color is on other monitors.
-        inactive-color "#505050"
-
-        // You can also use gradients. They take precedence over solid colors.
-        // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
-        // The angle is the same as in linear-gradient, and is optional,
-        // defaulting to 180 (top-to-bottom gradient).
-        // You can use any CSS linear-gradient tool on the web to set these up.
-        // Changing the color space is also supported, check the wiki for more info.
-        //
-        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+        inactive-color "#50505088"
 
         // You can also color the gradient relative to the entire view
         // of the workspace, rather than relative to just the window itself.
@@ -206,14 +207,12 @@ layout {
     border {
         // The settings are the same as for the focus ring.
         // If you enable the border, you probably want to disable the focus ring.
-        off
+        on
 
-        width 2
-        active-color "#ffc87f"
-        inactive-color "#505050"
-
-        // Color of the border around windows that request your attention.
-        urgent-color "#9b0000"
+        width 4
+        active-color "#5070c088"
+        inactive-color "#50505088"
+        urgent-color "#c0705088"
 
         // Gradients can use a few different interpolation color spaces.
         // For example, this is a pastel rainbow gradient via in="oklch longer hue".
@@ -226,7 +225,7 @@ layout {
     // You can enable drop shadows for windows.
     shadow {
         // Uncomment the next line to enable shadows.
-        // on
+        on
 
         // By default, the shadow draws only around its window, and not behind it.
         // Uncomment this setting to make the shadow draw behind its window.
@@ -248,22 +247,31 @@ layout {
         // pixels and match the CSS box-shadow properties.
 
         // Softness controls the shadow blur radius.
-        softness 30
+        softness 2
 
         // Spread expands the shadow.
         spread 4
 
         // Offset moves the shadow relative to the window.
-        offset x=0 y=4
+        offset x=0 y=0
 
         // You can also change the shadow color and opacity.
-        color "#0007"
+        color "#00223388"
     }
 
     tab-indicator {
-      width 16
-      corner-radius 8
-      gaps-between-tabs 8
+      place-within-column
+
+      width 8
+      corner-radius 4
+
+      gap 4
+      gaps-between-tabs 4
+
+      active-color "#5070c0cc"
+      inactive-color "#505050cc"
+      urgent-color "#c07050cc"
+
     }
 
     // Struts shrink the area occupied by windows, similarly to layer-shell panels.
@@ -274,9 +282,14 @@ layout {
     struts {
         left 8
         right 8
-        // top 64
-        // bottom 64
+        // top 4
+        // bottom 4
     }
+
+    insert-hint {
+        color "#5070c0cc"
+    }
+
 }
 
 // ────────────── Startup Applications ──────────────
@@ -431,6 +444,10 @@ window-rule {
 layer-rule {
   match namespace="background"
   place-within-backdrop true
+}
+
+overview {
+  backdrop-color "#012"
 }
 
 debug {
