@@ -133,27 +133,14 @@
             ],
             "left": [
                 {
-                    "clockColor": "none",
-                    "customFont": "",
-                    "formatHorizontal": "yyyy-MM-dd HH:mm:ss t",
-                    "formatVertical": "HH mm - dd MM",
-                    "id": "Clock",
-                    "tooltipFormat": "yyyy-MM-dd HH:mm:ss t",
-                    "useCustomFont": false
-                },
-                {
-                    "defaultSettings": {
-                        "deviceNativePath": "__default__",
-                        "displayMode": "graphic-clean",
-                        "hideIfIdle": false,
-                        "hideIfNotDetected": true,
-                        "refreshIntervalSeconds": 5,
-                        "showNoctaliaPerformance": false,
-                        "showPowerInBar": true,
-                        "showPowerProfiles": false,
-                        "showTimeInBar": true
-                    },
-                    "id": "plugin:battery-monitor-plus"
+                    "colorizeDistroLogo": false,
+                    "colorizeSystemIcon": "none",
+                    "colorizeSystemText": "none",
+                    "customIconPath": "",
+                    "enableColorization": false,
+                    "icon": "noctalia",
+                    "id": "ControlCenter",
+                    "useDistroLogo": false
                 },
                 {
                     "compactMode": true,
@@ -178,6 +165,29 @@
                     "usePadding": false
                 },
                 {
+                    "clockColor": "none",
+                    "customFont": "",
+                    "formatHorizontal": "yyyy-MM-dd HH:mm:ss t",
+                    "formatVertical": "HH mm - dd MM",
+                    "id": "Clock",
+                    "tooltipFormat": "yyyy-MM-dd HH:mm:ss t",
+                    "useCustomFont": false
+                },
+                {
+                    "defaultSettings": {
+                        "deviceNativePath": "__default__",
+                        "displayMode": "graphic-clean",
+                        "hideIfIdle": false,
+                        "hideIfNotDetected": true,
+                        "refreshIntervalSeconds": 5,
+                        "showNoctaliaPerformance": false,
+                        "showPowerInBar": true,
+                        "showPowerProfiles": false,
+                        "showTimeInBar": true
+                    },
+                    "id": "plugin:battery-monitor-plus"
+                },
+                {
                     "compactMode": false,
                     "hideMode": "hidden",
                     "hideWhenIdle": false,
@@ -195,6 +205,17 @@
                 }
             ],
             "right": [
+                {
+                    "blacklist": [
+                    ],
+                    "chevronColor": "none",
+                    "colorizeIcons": false,
+                    "drawerEnabled": false,
+                    "hidePassive": false,
+                    "id": "Tray",
+                    "pinned": [
+                    ]
+                },
                 {
                     "hideWhenZero": false,
                     "hideWhenZeroUnread": false,
@@ -248,17 +269,6 @@
                     "textColor": "none"
                 },
                 {
-                    "blacklist": [
-                    ],
-                    "chevronColor": "none",
-                    "colorizeIcons": false,
-                    "drawerEnabled": false,
-                    "hidePassive": false,
-                    "id": "Tray",
-                    "pinned": [
-                    ]
-                },
-                {
                     "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Network",
@@ -290,16 +300,6 @@
                     "iconColor": "none",
                     "id": "Brightness",
                     "textColor": "none"
-                },
-                {
-                    "colorizeDistroLogo": false,
-                    "colorizeSystemIcon": "none",
-                    "colorizeSystemText": "none",
-                    "customIconPath": "",
-                    "enableColorization": false,
-                    "icon": "noctalia",
-                    "id": "ControlCenter",
-                    "useDistroLogo": false
                 }
             ]
         }
