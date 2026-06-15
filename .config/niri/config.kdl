@@ -110,6 +110,11 @@ input {
     position x=1280 y=0
 }
 
+cursor {
+    hide-when-typing
+    hide-after-inactive-ms 2500
+}
+
 // ────────────── Clipboard Configuration ──────────────
 
 clipboard {
