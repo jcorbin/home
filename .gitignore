@@ -54,6 +54,7 @@
 !/.config
 /.config/*
 !/.config/alacritty
+!/.config/autostart
 !/.config/flake8
 !/.config/foot
 !/.config/gtk-*
