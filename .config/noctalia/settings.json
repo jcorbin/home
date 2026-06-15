@@ -21,7 +21,11 @@
             "firefox",
             "Alacritty",
             "google-chrome",
-            "chrome-oebmepagbpcebjnjlifejjodkplinhbe-Default"
+            "chrome-oebmepagbpcebjnjlifejjodkplinhbe-Default",
+            "org.telegram.desktop",
+            "signal",
+            "discord",
+            "io.element.Element"
         ],
         "position": "follow_bar",
         "screenshotAnnotationTool": "",
