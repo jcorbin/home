@@ -113,6 +113,11 @@ input {
 cursor {
     hide-when-typing
     hide-after-inactive-ms 2500
+
+    // xcursor-theme "breeze_cursors"
+    // xcursor-theme "Vimix-cursors"
+    xcursor-theme "capitaine-cursors"
+    xcursor-size 32
 }
 
 // ────────────── Clipboard Configuration ──────────────
