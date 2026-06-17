@@ -406,21 +406,22 @@ window-rule {
     open-floating true
 }
 
-// Example: block out two password managers from screen capture.
-// (This example rule is commented out with a "/-" in front.)
+// Block password managers from screen capture.
 window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
+    // TODO gpg-agent's deal?
+    // TODO bitwarden?
     block-out-from "screen-capture"
-
-    // Use this instead if you want them visible on third-party screenshot tools.
-    // block-out-from "screencast"
 }
 
+// Block password managers from screencasts.
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true // Always float Firefox PiP windows
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+    // TODO gpg-agent's deal?
+    // TODO bitwarden?
+    block-out-from "screencast"
 }
 
 window-rule {
@@ -433,15 +434,6 @@ window-rule {
 // Block out mako notifications from screencasts.
 layer-rule {
     match namespace="^notifications$"
-    block-out-from "screencast"
-}
-
-// Block out password managers from screencasts.
-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^org\.gnome\.World\.Secrets$"#
-    // TODO gpg-agent's deal?
-    // TODO bitwarden?
     block-out-from "screencast"
 }
 
