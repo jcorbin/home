@@ -797,6 +797,7 @@ binds {
     Ctrl+Shift+1 { screenshot; }
     Ctrl+Shift+2 { screenshot-screen; }
     Ctrl+Shift+3 { screenshot-window; }
+    Ctrl+Shift+9 { spawn-sh "niri msg -j windows | jq -c '.[]' | wl-copy"; }
 
     // ─── Emergency Escape Key ───
     // Applications such as remote-desktop clients and software KVM switches may
