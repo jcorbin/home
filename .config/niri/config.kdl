@@ -399,12 +399,26 @@ window-rule {
     default-column-width {}
 }
 
-// Open the Firefox picture-in-picture player as floating by default.
+// Open Firefox popups as floating by default
 window-rule {
     // This app-id regular expression will work for both:
     // - host Firefox (app-id is "firefox")
     // - Flatpak Firefox (app-id is "org.mozilla.firefox")
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"firefox$"# title=r#"^Picture-in-Picture$"#
+
+    match app-id=r#"firefox$"# title=r#"Extension"#
+    // "app_id":"firefox"
+    // "title":"Extension: (Bitwarden Password Manager) - Bitwarden — Mozilla Firefox"
+
+    // "id":29
+    // "pid":1602
+    // "workspace_id":2
+    // "is_focused":true
+    // "is_floating":true
+    // "is_urgent":false
+    // "layout":{"pos_in_scrolling_layout":null,"tile_size":[876.0,1144.8],"window_size":[868,1137],"tile_pos_in_workspace_view":[515.2,58.4],"window_offset_in_tile":[4.0,4.0]}
+    // "focus_timestamp":{"secs":18089,"nanos":157363861}
+
     open-floating true
 }
 
