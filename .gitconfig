@@ -81,7 +81,6 @@
     doh = commit --amend --no-edit
     dohe = commit --amend --edit
     fit = commit --fixup
-    fp = merge-base --fork-point
     lb  = log --pretty=brief
     lbf  = log --graph --first-parent --pretty=brief
     lbg  = log --graph --pretty=brief
@@ -94,7 +93,6 @@
     logf = log --graph --first-parent
     logg = log --graph
     mark = commit -m mark --allow-empty
-    mrg = merge --no-edit --no-ff
     pub = !git push -u origin $(git symbolic-ref HEAD | sed -e 's~^refs/heads/~~')
     ra = rebase --abort
     rb = rebase
