@@ -31,8 +31,8 @@ input {
     touchpad {
         // off
         tap
-        dwt
-        dwtp
+        // dwt
+        // dwtp
         drag true
         drag-lock
         natural-scroll
