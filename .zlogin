@@ -46,6 +46,11 @@ exec_session() {
   exec "$@"
 }
 
+if [ -n "$AUTOLOGIN" ] && [ -e "$HOME/autologin.hold" ]; then
+  echo "< Press Enter To Proceed With Auto Login >"
+  read pause
+fi
+
 if uwsm check may-start -q; then
   exec_session uwsm start default
 fi
