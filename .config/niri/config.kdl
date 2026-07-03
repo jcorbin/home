@@ -418,7 +418,7 @@ window-rule {
 window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
-    // TODO gpg-agent's deal?
+    match app-id=r#"^Pinentry-gtk"#
     // TODO bitwarden?
     block-out-from "screen-capture"
 }
@@ -427,9 +427,15 @@ window-rule {
 window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
-    // TODO gpg-agent's deal?
+    match app-id=r#"^Pinentry-gtk"#
     // TODO bitwarden?
     block-out-from "screencast"
+}
+
+// Make password manager prompts float
+window-rule {
+    match app-id=r#"^Pinentry-gtk"#
+    open-floating true
 }
 
 window-rule {
