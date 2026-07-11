@@ -1,0 +1,15 @@
+settings.json
+.claude/
+.codex/
+.env
+.env.*
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

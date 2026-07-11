@@ -186,6 +186,39 @@
             ],
             "right": [
                 {
+                    "defaultSettings": {
+                        "barCycleIntervalSec": 5,
+                        "barDisplayMode": "active",
+                        "barMetric": "prompts",
+                        "providers": {
+                            "claude": {
+                                "credentialsPath": "~/.claude/.credentials.json",
+                                "enabled": false,
+                                "statsPath": "~/.claude/stats-cache.json"
+                            },
+                            "codex": {
+                                "enabled": false
+                            },
+                            "copilot": {
+                                "enabled": false
+                            },
+                            "gemini": {
+                                "enabled": false
+                            },
+                            "openrouter": {
+                                "apiKey": "",
+                                "enabled": false
+                            },
+                            "zen": {
+                                "apiKey": "",
+                                "enabled": false
+                            }
+                        },
+                        "refreshIntervalSec": 30
+                    },
+                    "id": "plugin:model-usage"
+                },
+                {
                     "blacklist": [
                     ],
                     "chevronColor": "none",
