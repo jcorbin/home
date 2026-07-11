@@ -536,7 +536,7 @@ binds {
 
     // ─── Applications ───
     Mod+Return hotkey-overlay-title="Terminal" {
-      spawn "uwsm" "app" "alacritty";
+      spawn "uwsm" "app" "ghostty";
     }
     Mod+Space hotkey-overlay-title="Launcher" {
       spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle";

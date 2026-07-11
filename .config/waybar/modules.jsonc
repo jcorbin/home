@@ -76,7 +76,7 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false,
-        "on-click": "systemd-run --user alacritty -e htop",
+        "on-click": "systemd-run --user ghostty -e htop",
     },
 
     "memory": {

@@ -19,7 +19,7 @@
         "overviewLayer": false,
         "pinnedApps": [
             "firefox",
-            "Alacritty",
+            "com.mitchellh.ghostty",
             "google-chrome",
             "chrome-oebmepagbpcebjnjlifejjodkplinhbe-Default",
             "org.telegram.desktop",
@@ -32,7 +32,7 @@
         "showCategories": true,
         "showIconBackground": false,
         "sortByMostUsed": true,
-        "terminalCommand": "alacritty -e",
+        "terminalCommand": "ghostty -e",
         "viewMode": "list"
     },
     "audio": {
