@@ -1,0 +1,28 @@
+#!/bin/zsh
+# after: aliases
+
+# Modern replacements for ls/cat. Loaded after `aliases` so these win
+# over the plain-coreutils definitions in ~/.aliases. Interactive-only
+# (aliases don't affect scripts), and fully guarded on tool presence.
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --group-directories-first --icons=auto'
+    alias ll='eza -l --group-directories-first --icons=auto --git'
+    alias la='eza -la --group-directories-first --icons=auto --git'
+    alias lt='eza --tree --level=2 --group-directories-first --icons=auto'
+fi
+
+if command -v bat >/dev/null 2>&1; then
+    alias cat='bat --paging=never'   # bat auto-degrades to plain cat when piped
+
+    export BAT_THEME='Coldark-Dark'  # dark theme that vibes with Carbonfox
+
+    # Colorized man pages via bat.
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT='-c'
+
+    # `cmd --help` piped through bat's help highlighting. Global alias, so it
+    # only kicks in when --help is a standalone word on the line.
+    alias -g -- --help='--help 2>&1 | bat --language=help --style=plain --paging=never'
+fi
+
+# vim:set ft=zsh:

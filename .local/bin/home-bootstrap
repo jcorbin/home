@@ -11,6 +11,8 @@ set -euo pipefail
 
 # Packages from the official repos (pacman).
 REPO_PKGS=(
+  bat                            # modern cat / pager / man
+  eza                            # modern ls
   zsh                            # the shell
   zsh-autosuggestions            # inline history suggestions
   zsh-syntax-highlighting        # command-line highlighting
