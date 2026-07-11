@@ -21,6 +21,7 @@ REPO_PKGS=(
   git-delta                      # syntax-highlighted git diffs
   ripgrep                        # fast grep
   starship                       # prompt
+  zoxide                         # `z` frecency cd
   zsh                            # the shell
   zsh-autosuggestions            # inline history suggestions
   zsh-syntax-highlighting        # command-line highlighting
