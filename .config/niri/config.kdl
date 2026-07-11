@@ -432,6 +432,19 @@ window-rule {
     block-out-from "screencast"
 }
 
+// Make zoom ancillary windows float
+window-rule {
+    match app-id=r#"^zoom$"# title=r#"^annotate_toolbar$"#
+    open-floating true
+    open-focused true
+}
+
+window-rule {
+    match app-id="Zoom Workplace" title=".*menu.*"
+    open-floating true
+    open-focused true
+}
+
 // Make password manager prompts float
 window-rule {
     match app-id=r#"^Pinentry-gtk"#
