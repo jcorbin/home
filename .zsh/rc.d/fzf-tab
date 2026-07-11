@@ -1,0 +1,39 @@
+#!/bin/zsh
+# after: completion
+# after: fzf
+# before: autosuggestions
+# before: highlighting
+
+# Replace zsh's completion menu with an fzf picker + live previews.
+# Must load AFTER compinit (completion) and BEFORE the widget-wrapping
+# plugins (autosuggestions / syntax-highlighting), hence the deps above.
+# Prefer the AUR package (fzf-tab-git installs to .../fzf-tab-git/; the
+# non-git fzf-tab uses .../fzf-tab/); fall back to a local clone.
+fzf_tab=
+for cand in \
+    /usr/share/zsh/plugins/fzf-tab-git/fzf-tab.plugin.zsh \
+    /usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh \
+    ~/.zsh/fzf-tab/fzf-tab.plugin.zsh
+do
+    if [ -f "$cand" ]; then fzf_tab="$cand"; break; fi
+done
+
+if [ -n "$fzf_tab" ]; then
+    source "$fzf_tab"
+    unset fzf_tab
+
+    # fzf-tab requires zsh's own menu to be disabled (overrides `completion`).
+    zstyle ':completion:*' menu no
+
+    # Preview pane: dirs via eza tree, files via bat, fallback to cat.
+    zstyle ':fzf-tab:complete:*:*' fzf-preview \
+        'if [ -d "$realpath" ]; then eza -1 --color=always --icons --group-directories-first "$realpath"; else bat --color=always --style=numbers --line-range=:200 "$realpath" 2>/dev/null || cat "$realpath"; fi'
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview \
+        'eza -1 --color=always --icons --group-directories-first "$realpath"'
+
+    # Compact popup; `<` / `>` switch between completion groups.
+    zstyle ':fzf-tab:*' fzf-flags --height=50% --layout=reverse --border
+    zstyle ':fzf-tab:*' switch-group '<' '>'
+fi
+
+# vim:set ft=zsh:

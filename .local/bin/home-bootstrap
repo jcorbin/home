@@ -13,6 +13,9 @@ set -euo pipefail
 REPO_PKGS=(
   bat                            # modern cat / pager / man
   eza                            # modern ls
+  fd                             # fast find (backs fzf)
+  fzf                            # fuzzy finder (Ctrl-R / Ctrl-T / Alt-C)
+  ripgrep                        # fast grep
   starship                       # prompt
   zsh                            # the shell
   zsh-autosuggestions            # inline history suggestions
@@ -23,6 +26,7 @@ REPO_PKGS=(
 
 # Packages from the AUR (needs an AUR helper: paru or yay).
 AUR_PKGS=(
+  fzf-tab-git                    # Aloxaf/fzf-tab: fzf-powered tab completion
 )
 
 have() { command -v "$1" >/dev/null 2>&1; }

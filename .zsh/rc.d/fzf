@@ -1,0 +1,27 @@
+#!/bin/zsh
+# after: history
+
+# Fuzzy finder: Ctrl-R history, Ctrl-T file insert, Alt-C dir jump.
+# Sourced after `history` so fzf's Ctrl-R binding wins over the
+# history-incremental / substring-search bindings there.
+if command -v fzf >/dev/null 2>&1; then
+    if fzf --zsh >/dev/null 2>&1; then
+        source <(fzf --zsh)                          # fzf >= 0.48
+    else
+        [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+        [ -f /usr/share/fzf/completion.zsh ]   && source /usr/share/fzf/completion.zsh
+    fi
+
+    # Back the pickers with fd (already installed) and preview with bat if present.
+    if command -v fd >/dev/null 2>&1; then
+        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+    fi
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --info=inline'
+    if command -v bat >/dev/null 2>&1; then
+        export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+    fi
+fi
+
+# vim:set ft=zsh:
