@@ -1,0 +1,17 @@
+#!/bin/zsh
+# before: highlighting
+
+# Fish-style inline suggestions from history + completion.
+# Must load before zsh-syntax-highlighting (which wants to be last).
+if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+    ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'   # dim grey ghost text
+    ZSH_AUTOSUGGEST_MANUAL_REBIND=1          # faster; we rebind explicitly below
+
+    bindkey '^ ' autosuggest-accept          # Ctrl-Space accepts (handy in vi-mode)
+    bindkey -M vicmd '^ ' autosuggest-accept
+fi
+
+# vim:set ft=zsh:
