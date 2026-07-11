@@ -313,6 +313,13 @@
                     "iconColor": "none",
                     "id": "Brightness",
                     "textColor": "none"
+                },
+                {
+                    "defaultSettings": {
+                        "iconColor": "none",
+                        "niriConfigPath": "~/.config/niri/config.kdl"
+                    },
+                    "id": "plugin:display-settings"
                 }
             ]
         }
