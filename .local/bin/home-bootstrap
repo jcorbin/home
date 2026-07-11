@@ -12,6 +12,10 @@ set -euo pipefail
 # Packages from the official repos (pacman).
 REPO_PKGS=(
   zsh                            # the shell
+  zsh-autosuggestions            # inline history suggestions
+  zsh-syntax-highlighting        # command-line highlighting
+  zsh-completions                # extra completion defs
+  zsh-history-substring-search   # up/down substring history search
 )
 
 # Packages from the AUR (needs an AUR helper: paru or yay).

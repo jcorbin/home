@@ -4,9 +4,25 @@
 # after: editor
 # after: history
 # after: vi-mode-cursor
+# after: autosuggestions
 
-if [ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# zsh-syntax-highlighting must be sourced LAST, after every widget is defined
+# (that's why all the `# after:` deps above, incl. autosuggestions).
+# Prefer the pacman package; fall back to a local clone if one exists.
+zsh_hl=
+for cand in \
+    /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+do
+    if [ -f "$cand" ]; then zsh_hl="$cand"; break; fi
+done
+
+if [ -n "$zsh_hl" ]; then
+    source "$zsh_hl"
+    unset zsh_hl
+
+    # main = command/argument coloring; brackets = matching-bracket highlight.
+    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
     ZSH_HIGHLIGHT_STYLES[default]=none
     ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=131,bold
@@ -29,5 +45,6 @@ if [ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=067
     ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=044
     ZSH_HIGHLIGHT_STYLES[assign]=fg=178
-
 fi
+
+# vim:set ft=zsh:

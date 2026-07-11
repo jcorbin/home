@@ -18,8 +18,18 @@ setopt HIST_BEEP              # Beep when accessing non-existent history.
 
 bindkey '^r' history-incremental-search-backward
 
-if [ -f ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh ]; then
-    source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+# Prefer the pacman package; fall back to a local clone if one exists.
+zsh_hss=
+for cand in \
+    /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh \
+    ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+do
+    if [ -f "$cand" ]; then zsh_hss="$cand"; break; fi
+done
+
+if [ -n "$zsh_hss" ]; then
+    source "$zsh_hss"
+    unset zsh_hss
     bindkey '^[[A' history-substring-search-up
     bindkey '^[[B' history-substring-search-down
     bindkey -M emacs '^P' history-substring-search-up
