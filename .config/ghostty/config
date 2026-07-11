@@ -1,0 +1,69 @@
+font-family = "JetBrainsMono Nerd Font"
+font-size = 12
+
+window-padding-x = 8
+window-padding-y = 8
+
+background-opacity = 0.85
+background-blur-radius = 20
+
+# No "Copied to clipboard" toast on every OSC 52 / copy (keep reload toasts).
+app-notifications = no-clipboard-copy
+
+# Unbind every ghostty mapping for windows, splits, panes, and tabs: window and
+# workspace management belongs to window manager, and launching terminals
+# belongs to the launcher / wayland shell.
+# Ghostty has no switch to disable these, but they're only reachable via
+# keybinds, so unbinding them makes them inert.
+
+# Windows (Niri / launcher own these)
+keybind = ctrl+shift+n=unbind
+keybind = ctrl+enter=unbind
+
+# Splits / panes
+keybind = ctrl+shift+o=unbind
+keybind = ctrl+shift+e=unbind
+keybind = super+ctrl+[=unbind
+keybind = super+ctrl+]=unbind
+keybind = ctrl+alt+arrow_up=unbind
+keybind = ctrl+alt+arrow_down=unbind
+keybind = ctrl+alt+arrow_left=unbind
+keybind = ctrl+alt+arrow_right=unbind
+keybind = super+ctrl+shift+arrow_up=unbind
+keybind = super+ctrl+shift+arrow_down=unbind
+keybind = super+ctrl+shift+arrow_left=unbind
+keybind = super+ctrl+shift+arrow_right=unbind
+keybind = ctrl+shift+enter=unbind
+
+# Tabs
+keybind = ctrl+shift+t=unbind
+keybind = ctrl+tab=unbind
+keybind = ctrl+shift+tab=unbind
+keybind = ctrl+shift+arrow_left=unbind
+keybind = ctrl+shift+arrow_right=unbind
+keybind = ctrl+page_up=unbind
+keybind = ctrl+page_down=unbind
+keybind = alt+digit_1=unbind
+keybind = alt+digit_2=unbind
+keybind = alt+digit_3=unbind
+keybind = alt+digit_4=unbind
+keybind = alt+digit_5=unbind
+keybind = alt+digit_6=unbind
+keybind = alt+digit_7=unbind
+keybind = alt+digit_8=unbind
+keybind = alt+digit_9=unbind
+keybind = alt+1=unbind
+keybind = alt+2=unbind
+keybind = alt+3=unbind
+keybind = alt+4=unbind
+keybind = alt+5=unbind
+keybind = alt+6=unbind
+keybind = alt+7=unbind
+keybind = alt+8=unbind
+keybind = alt+9=unbind
+
+# Close / quit: handled by the window manager, never at the app level.
+keybind = ctrl+shift+w=unbind
+keybind = ctrl+shift+q=unbind
+keybind = alt+f4=unbind
+

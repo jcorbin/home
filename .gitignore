@@ -57,6 +57,7 @@
 !/.config/autostart
 !/.config/flake8
 !/.config/foot
+!/.config/ghostty
 !/.config/gtk-*
 !/.config/kanshi
 !/.config/kitty

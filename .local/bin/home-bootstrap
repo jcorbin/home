@@ -11,6 +11,9 @@ set -euo pipefail
 
 # Packages from the official repos (pacman).
 REPO_PKGS=(
+  ghostty                        # terminal emulator
+  ttf-jetbrains-mono-nerd        # its font (glyphs for starship/eza/etc.)
+
   bat                            # modern cat / pager / man
   eza                            # modern ls
   fd                             # fast find (backs fzf)
