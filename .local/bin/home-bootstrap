@@ -15,6 +15,7 @@ REPO_PKGS=(
   eza                            # modern ls
   fd                             # fast find (backs fzf)
   fzf                            # fuzzy finder (Ctrl-R / Ctrl-T / Alt-C)
+  git-delta                      # syntax-highlighted git diffs
   ripgrep                        # fast grep
   starship                       # prompt
   zsh                            # the shell

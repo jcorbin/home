@@ -17,11 +17,10 @@
 [diff]
     renames = copies # more aggresisve rename detection
     renameLimit = 100000
+    colorMoved = default
 
 [core]
-    # Use less as our pager, turn off the -c option if it was specified in $LESS,
-    # also don't use -S as per git default
-    pager = "less -+c -FRX"
+    pager = delta
 
 [grep]
     patternType = extended # use modern regexp dialect by default
@@ -35,6 +34,7 @@
 
 [merge]
     stat = false # no summary diff stats
+    conflictstyle = zdiff3
 
 [rebase]
     stat = false # no summary diff stats
@@ -107,6 +107,9 @@
     st = status --short --branch
     suri = submodule update --recursive --init
     sw = switch
+    dsplit = -c delta.side-by-side=true diff
+    dlog = -c delta.side-by-side=true log -p
+    dshow = -c delta.side-by-side=true show
 
 [commit]
     verbose = true
@@ -143,3 +146,16 @@
     process = git-lfs filter-process
     required = true
     clean = git-lfs clean -- %f
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    line-numbers = true
+    hyperlinks = true
+    pager = "less -+c -FRX"
+    syntax-theme = Coldark-Dark
+    tabs = 4
+    line-numbers-left-format = " {nm:>3} "
+    line-numbers-right-format = " {np:>3} "
