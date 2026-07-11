@@ -1,0 +1,10 @@
+#!/bin/zsh
+# after: dirnav
+
+# Frecency-based directory jumping: `z foo`, `zi` for interactive pick.
+# Layers on top of autocd/autopushd from dirnav.
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
+# vim:set ft=zsh:
