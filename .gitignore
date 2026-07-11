@@ -68,6 +68,7 @@
 !/.config/paru
 !/.config/qt*
 !/.config/river
+!/.config/starship.toml
 !/.config/sway
 !/.config/swayidle
 !/.config/swaylock

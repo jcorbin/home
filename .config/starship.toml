@@ -1,0 +1,113 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 800   # ms; keep the prompt snappy even in slow dirs
+scan_timeout = 30
+
+palette = 'carbonfox'
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+${custom.git_describe}\
+$docker_context\
+$kubernetes\
+$line_break\
+$character"""
+
+# Keep the typing line clean: timing + jobs + clock float to the right edge.
+right_format = """$cmd_duration$jobs$time"""
+
+[palettes.carbonfox]
+fg     = '#f2f4f8'
+grey   = '#6b6b6b'
+red    = '#ee5396'
+green  = '#42be65'
+yellow = '#3ddbd9'
+blue   = '#33b1ff'
+purple = '#be95ff'
+cyan   = '#82cfff'
+orange = '#ff7eb6'
+
+[character]
+success_symbol = '[❯](bold green)'
+error_symbol   = '[❯](bold red)'
+vicmd_symbol   = '[❮](bold blue)'   # shows when you hit Esc in vi-mode
+
+[directory]
+style = 'bold blue'
+truncation_length = 3
+truncation_symbol = '…/'
+read_only = ' '
+read_only_style = 'red'
+home_symbol = '~'
+
+[git_branch]
+symbol = ' '
+style = 'bold purple'
+format = '[$symbol$branch]($style) '
+
+[git_status]
+style = 'red'
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = '=${count} '
+ahead      = '⇡${count} '
+behind     = '⇣${count} '
+diverged   = '⇕⇡${ahead_count}⇣${behind_count} '
+untracked  = '?${count} '
+stashed    = '≡${count} '
+modified   = '!${count} '
+staged     = '+${count} '
+renamed    = '»${count} '
+deleted    = '✘${count} '
+
+[git_state]
+style = 'bold yellow'
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+
+[cmd_duration]
+min_time = 2000
+style = 'yellow'
+format = '[ $duration]($style)'
+
+# Shows only when a docker context is active (compose/Dockerfile present or
+# DOCKER_HOST set) and it isn't the plain "default" context.
+[docker_context]
+symbol = ' '
+style = 'blue'
+format = '[$symbol$context]($style) '
+
+# Deliberately scoped: only surfaces inside dirs that look like k8s work,
+# so your prompt isn't cluttered by a stray kubectl context everywhere.
+[kubernetes]
+disabled = false
+symbol = '☸ '
+style = 'cyan'
+format = '[$symbol$context( \($namespace\))]($style) '
+detect_files = ['k8s', 'Chart.yaml', 'skaffold.yaml']
+detect_extensions = []
+detect_folders = ['.helm', 'kustomize']
+
+# Right-aligned clock. Nerd-font clock glyph + 24h time.
+[time]
+disabled = false
+style = 'grey'
+format = '[ $time]($style)'
+time_format = '%H:%M'
+
+# git-describe: nearest tag + commits-since + short hash + dirty flag,
+# e.g. "devoker-v0.3.6-4-gabc123". This replaces the runtime-version modules.
+[custom.git_describe]
+when = 'git rev-parse --is-inside-work-tree'
+command = 'git describe --tags --always --dirty 2>/dev/null'
+description = 'git describe of the current repo'
+symbol = ' '
+style = 'cyan'
+format = '[$symbol$output]($style) '
+
+[jobs]
+symbol = ' '
+style = 'purple'
+format = '[$symbol$number]($style) '

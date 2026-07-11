@@ -13,6 +13,7 @@ set -euo pipefail
 REPO_PKGS=(
   bat                            # modern cat / pager / man
   eza                            # modern ls
+  starship                       # prompt
   zsh                            # the shell
   zsh-autosuggestions            # inline history suggestions
   zsh-syntax-highlighting        # command-line highlighting

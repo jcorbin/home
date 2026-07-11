@@ -1,15 +1,18 @@
 setopt promptsubst
 setopt transientrprompt
 
-autoload -U promptinit
-promptinit
-
 if [ -e ~/.demo-mode ]; then
+    autoload -U promptinit; promptinit
     prompt off
     export PS1='$ '
+elif command -v starship >/dev/null 2>&1; then
+    # New hotness: Starship. Configure via ~/.config/starship.toml.
+    eval "$(starship init zsh)"
 elif [ -f ~/.promptline.sh ]; then
     source ~/.promptline.sh
 else
+    # Fallback to the hand-rolled wunjo theme when starship isn't installed.
+    autoload -U promptinit; promptinit
     prompt wunjo
 fi
 
