@@ -69,11 +69,3 @@ keybind = ctrl+shift+w=unbind
 keybind = ctrl+shift+q=unbind
 keybind = alt+f4=unbind
 
-# --- Keyboard URL open (replaces alacritty's Ctrl+Shift+O hint mode) ---
-# Ghostty has no native URL-hint action, so we bridge via scrollback:
-# Ctrl+Shift+O dumps the scrollback to a temp file and PASTES its path onto
-# the prompt. A bracketed-paste hook in ~/.zsh/rc.d/urlpick recognises that
-# fresh-temp-file paste and turns it straight into an fzf URL picker — so
-# this is a single keystroke, no mouse, no second binding.
-# (This overrides the default ctrl+shift+o=new_split:right binding.)
-keybind = ctrl+shift+o=write_scrollback_file:paste,plain
