@@ -3,7 +3,7 @@
 }
 
 window#waybar {
-    background-color: #0f1117;
+    background-color: #161616;
     font-size: 14px;
     border-radius: 0px;
     margin: 0px;
@@ -25,8 +25,8 @@ window#waybar.solo {
 
 #clock {
     font-size: 14px;
-    background-color: #1e222a;
-    color: #c0c0c0;
+    background-color: #262626;
+    color: #c1c7cd;
     border-radius: 0px;
     padding: 0px 8px;
 }
@@ -35,27 +35,27 @@ window#waybar.solo {
 #window {
     font-size: 14px;
     font-weight: 800;
-    color: #e0e0e0;
+    color: #f2f4f8;
     border-radius: 0px;
     padding: 4px 12px;
-    background-color: #1e222a;
+    background-color: #262626;
 }
 
 /* Tooltips */
 tooltip {
     border-radius: 12px;
-    background-color: #0f1117;
-    color: #c0c0c0;
+    background-color: #161616;
+    color: #c1c7cd;
     padding: 4px 8px;
 }
 
 /* Workspace container */
 #niri-workspaces {
-    background: #1e222a;
+    background: #262626;
     font-weight: bold;
     border-radius: 0px;
     font-size: 8px;
-    color: #e0e0e0;
+    color: #f2f4f8;
 }
 
 /* Individual workspace buttons */
@@ -66,19 +66,19 @@ tooltip {
 
 #workspaces button.active {
     border-radius: 0px;
-    color: #0f1117;
-    background: #00ac89;
+    color: #161616;
+    background: #33b1ff;
 }
 
 #workspaces button:hover {
     border-radius: 0px;
-    background: #0d3531;
+    background: #393939;
     border-width: 0px;
 }
 
 /* Taskbar */
 #taskbar {
-    background-color: #1e222a;
+    background-color: #262626;
     margin: 0px;
     border-radius: 0px;
     font-weight: normal;
@@ -93,10 +93,10 @@ tooltip {
 #tray,
 #custom-updates,
 #custom-notification {
-    background-color: #1e222a;
+    background-color: #262626;
     font-size: 14px;
     font-weight: 800;
-    color: #c0c0c0;
+    color: #c1c7cd;
     border-radius: 0px;
     padding: 4px 10px;
 }
@@ -110,7 +110,7 @@ tooltip {
 
 @keyframes blink {
     to {
-        background-color: #0f1117;
+        background-color: #161616;
         color: #ffffff;
     }
 }
@@ -137,7 +137,7 @@ tooltip {
 #scratchpad,
 #mpd {
     padding: 0 10px;
-    background-color: #1e222a;
+    background-color: #262626;
     color: #adadad;
 }
 
@@ -222,7 +222,7 @@ label:focus {
 }
 
 #temperature {
-    background-color: #1e222a;
+    background-color: #262626;
     color: #f0932b;
 }
 
