@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# home-bootstrap: install the CLI / terminal environment this dotfiles repo
+# expects, so a fresh host is one command away. Companion to home-install
+# (which handles the git/dotfile deployment). Idempotent via `pacman --needed`.
+#
+#   home-bootstrap            install everything (repo + AUR), with a prompt
+#   home-bootstrap --list     just print the package sets and what's missing
+#   home-bootstrap --yes      non-interactive (pass --noconfirm through)
+
+# Packages from the official repos (pacman).
+REPO_PKGS=(
+  zsh                            # the shell
+)
+
+# Packages from the AUR (needs an AUR helper: paru or yay).
+AUR_PKGS=(
+)
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+need_arch() {
+  if ! have pacman; then
+    echo "home-bootstrap: this script targets Arch (pacman not found)." >&2
+    echo "Install these manually on other distros:" >&2
+    printf '  repo: %s\n' "${REPO_PKGS[*]}" >&2
+    printf '  aur:  %s\n' "${AUR_PKGS[*]}" >&2
+    exit 1
+  fi
+}
+
+# Print each package and whether pacman reports it installed.
+list_status() {
+  local group=$1; shift
+  echo "== $group =="
+  local p
+  for p in "$@"; do
+    if pacman -Qi "$p" >/dev/null 2>&1; then
+      printf '  [x] %s\n' "$p"
+    else
+      printf '  [ ] %s\n' "$p"
+    fi
+  done
+}
+
+confirm() {
+  echo -n "$1? [y/N] "
+  read -r yn
+  case "$yn" in y*|Y*) return 0 ;; *) return 1 ;; esac
+}
+
+# Pick an AUR helper, if any.
+aur_helper() {
+  local h
+  for h in paru yay; do
+    if have "$h"; then echo "$h"; return 0; fi
+  done
+  return 1
+}
+
+install_all() {
+  local noconfirm=$1
+
+  local pacman_flags=(-S --needed)
+  $noconfirm && pacman_flags+=(--noconfirm)
+
+  echo "==> installing repo packages via pacman"
+  set -x
+  sudo pacman "${pacman_flags[@]}" "${REPO_PKGS[@]}"
+  set +x
+
+  local helper
+  if helper=$(aur_helper); then
+    echo "==> installing AUR packages via $helper"
+    local aur_flags=(-S --needed)
+    $noconfirm && aur_flags+=(--noconfirm)
+    set -x
+    "$helper" "${aur_flags[@]}" "${AUR_PKGS[@]}"
+    set +x
+  else
+    echo "home-bootstrap: no AUR helper (paru/yay) found." >&2
+    echo "Install these AUR packages manually: ${AUR_PKGS[*]}" >&2
+  fi
+}
+
+usage() {
+  echo "usage: home-bootstrap [--list | --yes]"
+}
+
+main() {
+  case "${1:-}" in
+    --list|-l)
+      need_arch
+      list_status "repo (pacman)" "${REPO_PKGS[@]}"
+      list_status "aur (paru/yay)" "${AUR_PKGS[@]}"
+      ;;
+    --yes|-y)
+      need_arch
+      install_all true
+      echo "==> done. start a fresh shell: exec zsh"
+      ;;
+    ""|--install)
+      need_arch
+      list_status "repo (pacman)" "${REPO_PKGS[@]}"
+      list_status "aur (paru/yay)" "${AUR_PKGS[@]}"
+      echo
+      confirm "install the missing packages" || { echo "aborted."; exit 0; }
+      install_all false
+      echo "==> done. start a fresh shell: exec zsh"
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      usage >&2
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"
