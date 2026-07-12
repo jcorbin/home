@@ -76,7 +76,7 @@ return {
   opts = {
     options = {
       icons_enabled = true,
-      theme = 'eldritch',
+      theme = 'carbonfox',
       component_separators = { left = '', right = '' },
       section_separators = { left = '', right = '' },
       always_divide_middle = false,
