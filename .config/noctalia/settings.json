@@ -64,9 +64,9 @@
         "hideOnOverview": false,
         "marginHorizontal": 4,
         "marginVertical": 4,
-        "middleClickAction": "none",
+        "middleClickAction": "launcherPanel",
         "middleClickCommand": "",
-        "middleClickFollowMouse": false,
+        "middleClickFollowMouse": true,
         "monitors": [
         ],
         "mouseWheelAction": "none",
@@ -119,29 +119,9 @@
                     "showTitle": true,
                     "smartWidth": true,
                     "titleWidth": 120
-                },
-                {
-                    "colorizeSystemIcon": "none",
-                    "colorizeSystemText": "none",
-                    "customIconPath": "",
-                    "enableColorization": false,
-                    "icon": "rocket",
-                    "iconColor": "none",
-                    "id": "Launcher",
-                    "useDistroLogo": false
                 }
             ],
             "left": [
-                {
-                    "colorizeDistroLogo": false,
-                    "colorizeSystemIcon": "none",
-                    "colorizeSystemText": "none",
-                    "customIconPath": "",
-                    "enableColorization": false,
-                    "icon": "noctalia",
-                    "id": "ControlCenter",
-                    "useDistroLogo": false
-                },
                 {
                     "compactMode": true,
                     "diskPath": "/",
