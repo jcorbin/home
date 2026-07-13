@@ -800,6 +800,10 @@
         "activeTemplates": [
             {
                 "enabled": true,
+                "id": "alacritty"
+            },
+            {
+                "enabled": true,
                 "id": "niri"
             }
         ],
