@@ -26,6 +26,11 @@ REPO_PKGS=(
   zsh-syntax-highlighting        # command-line highlighting
   zsh-completions                # extra completion defs
   zsh-history-substring-search   # up/down substring history search
+
+  # Desktop theming backends (Carbonfox via noctalia templates).
+  adw-gtk-theme                  # adw-gtk3-dark: GTK3 theme honoring the accent
+  qt5ct                          # Qt5 appearance (loads the noctalia palette)
+  qt6ct                          # Qt6 appearance (loads the noctalia palette)
 )
 
 # Packages from the AUR (needs an AUR helper: paru or yay).
