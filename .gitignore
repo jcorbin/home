@@ -72,6 +72,7 @@
 /.config/noctalia/colors.json
 !/.config/nvim
 !/.config/paru
+!/.config/pywalfox
 !/.config/qt*
 !/.config/river
 !/.config/starship.toml
