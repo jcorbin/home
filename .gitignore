@@ -19,6 +19,7 @@
 
 !.local/share
 .local/share/*
+!.local/share/color-schemes
 !.local/share/home-install
 
 # Common shell environment and configuration
@@ -61,6 +62,7 @@
 !/.config/ghostty
 !/.config/gtk-*
 !/.config/kanshi
+!/.config/kdeglobals
 !/.config/kitty
 !/.config/Kvantum
 !/.config/niri
