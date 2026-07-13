@@ -55,6 +55,7 @@
 /.config/*
 !/.config/alacritty
 !/.config/autostart
+!/.config/btop
 !/.config/flake8
 !/.config/foot
 !/.config/ghostty
