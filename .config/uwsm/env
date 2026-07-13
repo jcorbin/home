@@ -7,6 +7,10 @@
 export QT_QPA_PLATFORM=wayland
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 
+# Qt platform theme: makes Qt6 apps load the qt6ct palette (Carbonfox via
+# noctalia). Qt5 apps follow qt5ct only if this is "qt5ct" — Qt6 is dominant.
+export QT_QPA_PLATFORMTHEME=qt6ct
+
 # --- Electron ---
 # Let Electron/Chromium apps auto-pick the Wayland backend.
 export ELECTRON_OZONE_PLATFORM_HINT=auto
