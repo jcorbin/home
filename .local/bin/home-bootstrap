@@ -36,6 +36,7 @@ REPO_PKGS=(
 # Packages from the AUR (needs an AUR helper: paru or yay).
 AUR_PKGS=(
   fzf-tab-git                    # Aloxaf/fzf-tab: fzf-powered tab completion
+  python-pywalfox                # applies the Carbonfox palette to Firefox chrome
 )
 
 have() { command -v "$1" >/dev/null 2>&1; }
