@@ -510,12 +510,9 @@ debug {
 // > Valve's gamescope, for example:
 // TODO $ gamescope -f -w 1920 -h 1080 -W 1920 -H 1080 --force-grab-cursor --backend sdl -- <game>
 
-// TODO naturalize into uwsm / systemd env
 environment {
+    // TODO does uwsm set these? aren't they redundant?
     DISPLAY ":1"
-    ELECTRON_OZONE_PLATFORM_HINT "auto"
-    QT_QPA_PLATFORM "wayland"
-    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
     XDG_SESSION_TYPE "wayland"
     XDG_CURRENT_DESKTOP "niri"
 }

@@ -1,0 +1,12 @@
+# uwsm session environment (sourced by uwsm at session start, exported into the
+# systemd --user manager + D-Bus activation env, so it reaches all apps).
+# Compositor-agnostic vars go here; niri-only ones can go in env-niri.
+
+# --- Qt ---
+# Render Qt apps natively on Wayland, without their own CSD titlebars.
+export QT_QPA_PLATFORM=wayland
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# --- Electron ---
+# Let Electron/Chromium apps auto-pick the Wayland backend.
+export ELECTRON_OZONE_PLATFORM_HINT=auto
