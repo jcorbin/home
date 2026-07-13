@@ -798,6 +798,10 @@
     },
     "templates": {
         "activeTemplates": [
+            {
+                "enabled": true,
+                "id": "niri"
+            }
         ],
         "enableUserTheming": false
     },
