@@ -812,6 +812,10 @@
             },
             {
                 "enabled": true,
+                "id": "kcolorscheme"
+            },
+            {
+                "enabled": true,
                 "id": "niri"
             },
             {
