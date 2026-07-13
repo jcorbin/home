@@ -80,6 +80,7 @@
 !/.config/swayidle
 !/.config/swaylock
 !/.config/systemd
+!/.config/telegram-desktop
 !/.config/tmux
 !/.config/uwsm
 !/.config/waybar
