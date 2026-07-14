@@ -532,7 +532,7 @@ binds {
 
     // ─── Applications ───
     Mod+Return hotkey-overlay-title="Terminal" {
-      spawn "uwsm" "app" "ghostty";
+      spawn "uwsm" "app" "org.wezfurlong.wezterm.desktop";
     }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.

@@ -80,6 +80,7 @@
 !/.config/tmux
 !/.config/uwsm
 !/.config/waybar
+!/.config/wezterm
 !/.config/wlogout
 !/.config/wofi
 

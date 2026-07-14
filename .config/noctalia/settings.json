@@ -19,7 +19,7 @@
         "overviewLayer": false,
         "pinnedApps": [
             "firefox",
-            "com.mitchellh.ghostty",
+            "org.wezfurlong.wezterm",
             "google-chrome",
             "chrome-oebmepagbpcebjnjlifejjodkplinhbe-Default",
             "org.telegram.desktop",
@@ -32,7 +32,7 @@
         "showCategories": true,
         "showIconBackground": false,
         "sortByMostUsed": true,
-        "terminalCommand": "ghostty -e",
+        "terminalCommand": "wezterm start --",
         "viewMode": "list"
     },
     "audio": {
@@ -262,7 +262,7 @@
                         "systemCmd": "checkupdates 2>/dev/null",
                         "toast": true,
                         "tooltip": true,
-                        "updateCmd": "ghostty -e bash -c 'echo \"Updating System...\";paru; flatpak update; read -n 1 -p \"Press any key to exit...\"'",
+                        "updateCmd": "wezterm start -- bash -c 'echo \"Updating System...\";paru; flatpak update; read -n 1 -p \"Press any key to exit...\"'",
                         "useDistroLogo": false
                     },
                     "id": "plugin:arch-updater"
@@ -841,6 +841,10 @@
             {
                 "enabled": true,
                 "id": "telegram"
+            },
+            {
+                "enabled": true,
+                "id": "wezterm"
             }
         ],
         "enableUserTheming": false

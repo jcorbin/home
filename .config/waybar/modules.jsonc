@@ -13,7 +13,7 @@
         "tooltip-format": "app_id:{app_id} title:{title}",
         "on-click": "activate",
         "on-click-middle": "close",
-        "ignore-list": ["Alacritty", "kitty", "ghostty"],
+        "ignore-list": ["Alacritty", "kitty", "ghostty", "org.wezfurlong.wezterm", "wezterm"],
         "app_ids-mapping": {
             "firefoxdeveloperedition": "firefox-developer-edition"
         },
@@ -76,7 +76,7 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false,
-        "on-click": "systemd-run --user ghostty -e htop",
+        "on-click": "systemd-run --user wezterm start -- htop",
     },
 
     "memory": {
