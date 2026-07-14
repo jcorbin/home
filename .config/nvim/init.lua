@@ -140,9 +140,9 @@ vim.keymap.set({ 'n', 'v' }, ']n',
   { desc = 'Next conflict marker' })
 -- }}}
 
--- line exchange mappings
-vim.keymap.set('n', '[e', '<leader>:move--<cr>')
-vim.keymap.set('n', ']e', '<leader>:move+<cr>')
+-- line exchange mappings (unimpaired-style: move current line up / down)
+vim.keymap.set('n', '[e', ':move--<cr>')
+vim.keymap.set('n', ']e', ':move+<cr>')
 
 --- marginally quicker path to norm/move/copy a range {{{
 -- ... this mapping is barely useful in normal mode fwiw
