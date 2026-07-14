@@ -487,21 +487,18 @@ autocmd('LspAttach', function(ev)
   local client = vim.lsp.get_client_by_id(ev.data.client_id)
   if client == nil then return end
 
-  -- TODO Dynamic registration of LSP capabilities. An implication of this change is
-  --      that checking a client's `server_capabilities` is no longer a sufficient
-  --      indicator to see if a server supports a feature. Instead use
-  --      `client.supports_method(<method>)`. It considers both the dynamic
-  --      capabilities and static `server_capabilities`.
+  -- NOTE dynamic capability registration means `server_capabilities` alone is not
+  -- authoritative; `client:supports_method(<method>)` folds in both static and
+  -- dynamically-registered capabilities.
 
   local bufnr = ev.buf
-  local caps = client.server_capabilities or {}
 
   local autocmd_local = autocmd.buffer(bufnr)
   local map_buffer = mykeymap.options { buffer = bufnr }
   local map_local = mykeymap.prefix('<LocalLeader>', map_buffer)
 
   -- -- inlay hints (uses virtual text to display parameter names and such)
-  -- if caps.inlayHintProvider then
+  -- if client:supports_method('textDocument/inlayHint') then
   --   vim.lsp.inlay_hint.enable(true, {bufnr = bufnr})
   --   map_local('n', 'ih',
   --     function()
@@ -512,7 +509,7 @@ autocmd('LspAttach', function(ev)
   -- end
 
   -- cursor hold highlighting
-  if caps.documentHighlightProvider then
+  if client:supports_method('textDocument/documentHighlight') then
     autocmd_local({ 'CursorHold', 'CursorHoldI' }, function()
       vim.lsp.buf.document_highlight()
     end)
@@ -521,14 +518,14 @@ autocmd('LspAttach', function(ev)
     end)
   end
 
-  -- if caps.codeLensProvider ~= nil and caps.codeLensProvider.resolveProvider then
+  -- if client:supports_method('textDocument/codeLens') then
   --   autocmd_local({ 'BufEnter', 'CursorHold', 'InsertLeave' }, function()
   --     vim.lsp.codelens.refresh({ bufnr = 0 })
   --   end)
   -- end
 
   map_local('n', 'lc', function()
-    popup({ server_capabilities = vim.lsp.get_clients()[1].server_capabilities })
+    popup({ server_capabilities = client.server_capabilities })
   end)
 
   map_local('n', 'lt', function()
