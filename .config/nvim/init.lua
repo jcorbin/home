@@ -342,7 +342,7 @@ vim.keymap.set('n', '<leader>dd',
 -- }}}
 
 -- highlight yanks
-autocmd('TextYankPost', function() vim.highlight.on_yank { timeout = 500 } end)
+autocmd('TextYankPost', function() vim.hl.on_yank { timeout = 500 } end)
 
 --- Inspects any value in a floating window scratch buffer.
 --- Focus is transferred to the new floating window.
