@@ -65,7 +65,11 @@ local filename = {
   path = 1, -- relative path
 }
 
-local cc_spinner = require('codecompanion._extensions.spinner.styles.lualine')
+-- Lazily resolved so this spec file doesn't hard-require codecompanion at
+-- module-eval time (which would couple lualine's load order to it).
+local function cc_spinner_component()
+  return require('codecompanion._extensions.spinner.styles.lualine').get_lualine_component()
+end
 
 return {
   'nvim-lualine/lualine.nvim',
@@ -89,7 +93,7 @@ return {
       lualine_b = { 'location' },
       lualine_c = {
         'diagnostics',
-        cc_spinner.get_lualine_component(),
+        cc_spinner_component(),
       },
       lualine_x = { 'branch', 'diff' },
       lualine_y = { showcmd },
@@ -100,7 +104,7 @@ return {
       lualine_b = { 'location' },
       lualine_c = {
         'diagnostics',
-        cc_spinner.get_lualine_component(),
+        cc_spinner_component(),
       },
       lualine_x = { 'branch', 'diff' },
       lualine_y = {},
