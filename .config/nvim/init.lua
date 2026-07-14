@@ -147,7 +147,6 @@ vim.keymap.set('n', ']e', '<leader>:move+<cr>')
 --- marginally quicker path to norm/move/copy a range {{{
 -- ... this mapping is barely useful in normal mode fwiw
 vim.keymap.set({ 'n', 'v' }, '<leader>nn', ':norm ')
-vim.keymap.set({ 'n', 'v' }, '<leader>nn', ':norm ')
 vim.keymap.set({ 'n', 'v' }, '<leader>mm', ':move ')
 vim.keymap.set({ 'n', 'v' }, '<leader>cc', ':copy ')
 
