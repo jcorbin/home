@@ -7,11 +7,16 @@ scan_timeout = 30
 palette = 'carbonfox'
 
 format = """
+$username\
+$hostname\
 $directory\
 $git_branch\
 $git_status\
 $git_state\
 ${custom.git_describe}\
+$nix_shell\
+$direnv\
+$container\
 $docker_context\
 $kubernetes\
 $line_break\
@@ -35,6 +40,47 @@ orange = '#ff7eb6'
 success_symbol = '[❯](bold green)'
 error_symbol   = '[❯](bold red)'
 vicmd_symbol   = '[❮](bold blue)'   # shows when you hit Esc in vi-mode
+
+# username surfaces only when it's not "you": root, or a different user over SSH.
+[username]
+show_always = false
+style_user = 'bold yellow'
+style_root = 'bold red'
+format = '[$user]($style)@'
+
+# Shows the box you're on. ssh_only keeps it invisible on your local machine and
+# only surfaces once you're SSH'd somewhere — exactly when you want the reminder.
+[hostname]
+ssh_only = true
+style = 'bold green'
+format = '[$hostname]($style) '
+
+# Surfaces only when you're inside a container (toolbox/distrobox/docker/podman).
+# Empty on the host, so it can't clutter your normal prompt.
+[container]
+symbol = ' '
+style = 'red dimmed'
+format = '[$symbol\[$name\]]($style) '
+
+# direnv is disabled by default; enabling it. It only prints when an `.envrc`
+# is in scope, showing whether it's loaded + allowed — nothing when there's none.
+[direnv]
+disabled = false
+symbol = ' '
+style = 'yellow'
+format = '[$symbol$loaded/$allowed]($style) '
+allowed_msg = 'allowed'
+not_allowed_msg = 'not-allowed'
+denied_msg = 'denied'
+loaded_msg = 'on'
+unloaded_msg = 'off'
+
+# Renders only inside a `nix-shell` / `nix develop`. Invisible otherwise.
+[nix_shell]
+disabled = false
+symbol = ' '
+style = 'blue'
+format = '[$symbol$state( \($name\))]($style) '
 
 [directory]
 style = 'bold blue'
