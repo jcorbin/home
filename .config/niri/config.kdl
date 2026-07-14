@@ -458,9 +458,9 @@ window-rule {
     open-floating true
 }
 
-// Block out mako notifications from screencasts.
+// Block out noctalia notifications / toasts from screencasts.
 layer-rule {
-    match namespace="^notifications$"
+    match namespace="^noctalia-(notifications|toast)-"
     block-out-from "screencast"
 }
 
