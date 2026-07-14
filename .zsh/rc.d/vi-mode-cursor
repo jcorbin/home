@@ -3,14 +3,21 @@ function print_dcs
   print -n -- "\EP$1;\E$2\E\\"
 }
 
+# Set the cursor shape via DECSCUSR (CSI Ps SP q)
+#   Ps: 1 blink block
+#       2 steady block
+#       3 blink underline
+#       4 steady underline
+#       5 blink bar
+#       6 steady bar
 function set_cursor_shape
 {
   if [ -n "$TMUX" ]; then
     # tmux will only forward escape sequences to the terminal if surrounded by
     # a DCS sequence
-    print_dcs tmux "\E]50;CursorShape=$1\C-G"
+    print_dcs tmux "\E[$1 q"
   else
-    print -n -- "\E]50;CursorShape=$1\C-G"
+    print -n -- "\E[$1 q"
   fi
 }
 
@@ -18,10 +25,10 @@ function zle-keymap-select zle-line-init
 {
   case $KEYMAP in
     vicmd)
-      set_cursor_shape 0 # block cursor
+      set_cursor_shape 2 # steady block
       ;;
     viins|main)
-      set_cursor_shape 1 # line cursor
+      set_cursor_shape 6 # steady bar
       ;;
   esac
   zle reset-prompt
@@ -30,7 +37,7 @@ function zle-keymap-select zle-line-init
 
 function zle-line-finish
 {
-  set_cursor_shape 0 # block cursor
+  set_cursor_shape 2 # steady block
 }
 
 zle -N zle-line-init
