@@ -26,5 +26,10 @@ return {
     vim.keymap.set('n', '<leader>Sd', function() mini_sessions.select('delete', {}) end, { desc = 'Delete session' })
 
     require('mini.fuzzy').setup {}
+
+    -- Provide file/glyph icons and stand in for nvim-web-devicons, so plugins
+    -- (oil, trouble, lualine, ...) don't need the separate devicons dependency.
+    require('mini.icons').setup {}
+    MiniIcons.mock_nvim_web_devicons()
   end
 }

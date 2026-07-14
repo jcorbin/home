@@ -34,10 +34,6 @@ return {
       },
     },
 
-    dependencies = {
-      'nvim-tree/nvim-web-devicons'
-    },
-
     config = function(_, opts)
       local oil = require 'oil'
       oil.setup(opts)
