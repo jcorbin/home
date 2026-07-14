@@ -7,9 +7,4 @@ return {
     end,
   },
 
-  -- {
-  --   'microsoft/eslint-ls',
-  --   ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'markdown', 'json' },
-  -- },
-
 }
