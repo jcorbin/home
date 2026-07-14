@@ -12,6 +12,7 @@ return {
       virtual_lines = { only_current_line = true },
     })
 
-    vim.keymap.set('n', '<leader>l', lsp_lines.toggle)
+    -- Bound under the <leader>l* line-toggle group (avoids shadowing that prefix).
+    vim.keymap.set('n', '<leader>lL', lsp_lines.toggle, { desc = 'toggle lsp_lines diagnostics' })
   end
 }
