@@ -26,4 +26,6 @@ return {
 
   },
 
+  -- TODO evaluate a richer git UI (neogit / fugit2 / diffview) atop fugitive
+
 }
