@@ -62,7 +62,7 @@ vim.keymap.set('n', '<leader>sl', bind(telescopes.find_files, {
   previewer = false,
   hidden = true,
   no_ignore = true,
-}), { desc = 'search files near $MYVIMRC' })
+}), { desc = 'search installed plugin files' })
 
 -- }}}
 
