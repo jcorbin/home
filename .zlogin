@@ -60,7 +60,10 @@ exec_session() {
 #       Bootstrap and tripwire are BOTH disabled, and every gate is skipped.
 if [ -n "${SSH_CONNECTION-}${SSH_TTY-}${SSH_CLIENT-}" ]; then
   session_launch=-1
-elif [ "${XDG_SESSION_TYPE-}" = wayland ]; then
+elif [ "${XDG_SESSION_TYPE-}" = wayland ] && [ -n "${XDG_VTNR-}" ]; then
+  # Require a VT number too: the bootstrap path below is VT-scoped;
+  # exec_session interpolates it into vt${XDG_VTNR}-pending / vt${XDG_VTNR}.log,
+  # which would collapse to malformed "vt-pending" / "vt.log" if it were empty.
   session_launch=1
 else
   session_launch=0
