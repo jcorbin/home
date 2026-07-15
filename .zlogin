@@ -56,7 +56,11 @@ exec_session() {
 # $session_launch:
 #    1  candidate VT login → run the session-bootstrap path
 #    0  login shell where it has no business being → fire the tripwire
-if [ "${XDG_SESSION_TYPE-}" = wayland ]; then
+#   -1  a legitimate new login session, but never a wayland launch path.
+#       Bootstrap and tripwire are BOTH disabled, and every gate is skipped.
+if [ -n "${SSH_CONNECTION-}${SSH_TTY-}${SSH_CLIENT-}" ]; then
+  session_launch=-1
+elif [ "${XDG_SESSION_TYPE-}" = wayland ]; then
   session_launch=1
 else
   session_launch=0
@@ -64,7 +68,7 @@ fi
 
 # Any gate that trips below clears $session_launch.
 # Each only bothers checking while we're still a candidate,
-# so already-rejected (0) short-circuit past all of them.
+# so SSH (-1) and already-rejected (0) short-circuit past all of them.
 
 # (a) No compositor yet: a real VT login runs before wayland/X exist;
 #     a terminal emulator always has WAYLAND_DISPLAY (or DISPLAY) set.
@@ -103,4 +107,5 @@ elif [ "$session_launch" = 0 ]; then
       print -u2 -P "%B%F{yellow}  $var=$val%f%b"
     fi
   done
+# else   session_launch = -1 is legit additional session, like SSH
 fi
