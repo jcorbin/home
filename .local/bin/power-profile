@@ -1,0 +1,386 @@
+#!/usr/bin/env bash
+
+# power-profile — inspect and pin the system power profile, and optionally
+# disable system sleep outright, on whatever power stack a given box runs.
+#
+# Boxes vary, so hardcoding one knob doesn't travel:
+# - some hosts run power-profiles-daemon, some tuned, some have neither and
+#   only raw cpufreq sysfs.
+# - amd_pstate exposes a different governor set than intel_pstate or
+#   acpi-cpufreq, and every vendor names their ACPI platform_profile levels
+#   differently ("low-power" here, "quiet" or "cool" there)
+# - So rather than assume, this probes what a host actually offers and picks
+#   the closest match.
+#
+# If a daemon owns the policy, the daemon wins:
+# - writing scaling_governor behind power-profiles-daemon's back just gets
+#   reverted on its next event (AC plug, lid, battery threshold)
+# - raw sysfs is the fallback for bare hosts
+#
+#   power-profile                  # what is this box doing right now
+#   power-profile set performance  # full send
+#   power-profile why              # what put this box to sleep
+#
+# nosleep refuses on laptops unless --force. With sleep masked a closed lid
+# no longer suspends, and a laptop left awake in a bag cooks itself.
+
+set -euo pipefail
+
+PROFILES="performance balanced power-saver"
+
+SLEEP_TARGETS=(
+  sleep.target
+  suspend.target
+  hibernate.target
+  hybrid-sleep.target
+  suspend-then-hibernate.target
+)
+
+LOGIND_DROPIN="/etc/systemd/logind.conf.d/99-nosleep.conf"
+SLEEP_DROPIN="/etc/systemd/sleep.conf.d/99-nosleep.conf"
+
+usage() {
+  cat <<EOF
+Usage: ${0##*/} [command]
+
+Inspect and pin the system power profile; optionally disable sleep entirely.
+
+Commands:
+  status              Show profile, backend, and sleep state (default)
+  set PROFILE         Set profile: $PROFILES
+  nosleep [--force]   Mask suspend/hibernate; ignore idle and power keys
+  allow-sleep         Undo nosleep
+  why                 Show recent sleep/wake events and what asked for them
+  -h, --help          Show this help
+EOF
+}
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+run() {
+  if [[ $EUID -eq 0 ]]; then "$@"; else sudo "$@"; fi
+}
+
+sysread() { [[ -r "$1" ]] && tr -d '\n' <"$1" || true; }
+
+# Write one value to many sysfs files in a single privileged call
+#
+# Use case: a 32-core box has 32 scaling_governor files and they all take the same value.
+write_all() {
+  local val="$1"; shift
+  (( $# )) || return 0
+  printf '%s\n' "$val" | run tee "$@" >/dev/null
+}
+
+sudo_install() { # <mode> <dest>, content on stdin
+  local mode="$1" dest="$2" tmp
+  tmp="$(mktemp)"
+  cat >"$tmp"
+  run install -Dm"$mode" "$tmp" "$dest"
+  rm -f "$tmp"
+  echo ">> wrote $dest"
+}
+
+# Echo the first candidate that appears in a space-separated available list.
+#
+# Nonzero if the host offers none of them.
+#
+# Callers deliberately leave the candidate list unquoted so it splits into
+# separate args (SC2046/SC2086): these lists are our own literals, never host
+# input.
+pick_first() {
+  local avail=" $1 " c
+  shift
+  for c in "$@"; do
+    [[ "$avail" == *" $c "* ]] && { echo "$c"; return 0; }
+  done
+  return 1
+}
+
+ppd_active()   { have powerprofilesctl && systemctl is-active --quiet power-profiles-daemon; }
+tuned_active() { have tuned-adm && systemctl is-active --quiet tuned; }
+
+backend() {
+  if ppd_active; then echo "power-profiles-daemon"
+  elif tuned_active; then echo "tuned"
+  else echo "sysfs"
+  fi
+}
+
+is_laptop() {
+  local chassis=""
+  have hostnamectl && chassis="$(hostnamectl chassis 2>/dev/null || true)"
+  case "$chassis" in
+    laptop|notebook|portable|handset|tablet|convertible) return 0 ;;
+    desktop|server|vm|container) return 1 ;;
+  esac
+  # No usable chassis hint (VMs, odd firmware):
+  # - a real battery or a lid switch is the giveaway
+  # - /sys/class/power_supply/ models every power source, not just batteries:
+  #   - the AC adapter shows up there (ACAD, ADP1 or AC0 depending on firmware, type=Mains)
+  #   - as do wireless peripherals (hidpp_battery_N, type=Battery)
+  #   - a desktop with a cordless mouse has a type=Battery and no lid
+  compgen -G "/sys/class/power_supply/BAT*" >/dev/null && return 0
+  [[ -d /proc/acpi/button/lid ]] && return 0
+  return 1
+}
+
+sleep_masked() {
+  [[ "$(systemctl is-enabled sleep.target 2>/dev/null || true)" == "masked" ]]
+}
+
+# Candidate knob values per profile, best match first.
+governors_for() {
+  case "$1" in
+    performance) echo "performance" ;;
+    balanced)    echo "schedutil ondemand performance" ;;
+    power-saver) echo "powersave conservative" ;;
+  esac
+}
+
+epp_for() {
+  case "$1" in
+    performance) echo "performance" ;;
+    balanced)    echo "balance_performance default balance_power" ;;
+    power-saver) echo "power balance_power" ;;
+  esac
+}
+
+platform_for() {
+  case "$1" in
+    performance) echo "performance throughput-performance" ;;
+    balanced)    echo "balanced balanced-performance" ;;
+    power-saver) echo "low-power quiet cool power-saver" ;;
+  esac
+}
+
+tuned_for() {
+  case "$1" in
+    performance) echo "throughput-performance latency-performance desktop" ;;
+    balanced)    echo "balanced desktop" ;;
+    power-saver) echo "powersave laptop-battery-powersave" ;;
+  esac
+}
+
+# Set governor + EPP + platform_profile straight through sysfs.
+# Only correct when nothing else owns the policy; see set_profile.
+set_sysfs() {
+  local profile="$1" avail pick files
+
+  files=(/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor)
+  if [[ -r "${files[0]}" ]]; then
+    avail="$(sysread /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors)"
+    # shellcheck disable=SC2046 # intentional split into candidate args
+    if pick="$(pick_first "$avail" $(governors_for "$profile"))"; then
+      echo ">> scaling_governor = $pick (${#files[@]} cpus)"
+      write_all "$pick" "${files[@]}"
+    else
+      echo "warning: no governor for '$profile' among: $avail" >&2
+    fi
+  fi
+
+  files=(/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference)
+  if [[ -r "${files[0]}" ]]; then
+    avail="$(sysread /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences)"
+    # shellcheck disable=SC2046 # intentional split into candidate args
+    if pick="$(pick_first "$avail" $(epp_for "$profile"))"; then
+      echo ">> energy_performance_preference = $pick"
+      write_all "$pick" "${files[@]}"
+    fi
+  fi
+
+  if [[ -w /sys/firmware/acpi/platform_profile ]] || [[ -e /sys/firmware/acpi/platform_profile ]]; then
+    avail="$(sysread /sys/firmware/acpi/platform_profile_choices)"
+    # shellcheck disable=SC2046 # intentional split into candidate args
+    if pick="$(pick_first "$avail" $(platform_for "$profile"))"; then
+      echo ">> platform_profile = $pick"
+      write_all "$pick" /sys/firmware/acpi/platform_profile
+    fi
+  fi
+}
+
+set_profile() {
+  local profile="${1:?set needs a profile: $PROFILES}" pick avail
+
+  if ! pick_first "$PROFILES" "$profile" >/dev/null; then
+    echo "error: unknown profile '$profile' (want: $PROFILES)" >&2
+    exit 2
+  fi
+
+  case "$(backend)" in
+    power-profiles-daemon)
+      # ppd drives governor, EPP and platform_profile itself.
+      avail="$(powerprofilesctl list 2>/dev/null | sed -n 's/^[* ] \([a-z-]*\):$/\1/p' | tr '\n' ' ')"
+      # shellcheck disable=SC2086 # intentional split into candidate args
+      pick="$(pick_first "$avail" "$profile" $PROFILES)" || pick="$profile"
+      echo ">> powerprofilesctl set $pick"
+      powerprofilesctl set "$pick"
+      ;;
+    tuned)
+      avail="$(tuned-adm list 2>/dev/null | sed -n 's/^- \([a-z0-9-]*\).*/\1/p' | tr '\n' ' ')"
+      # shellcheck disable=SC2046 # intentional split into candidate args
+      if pick="$(pick_first "$avail" $(tuned_for "$profile"))"; then
+        echo ">> tuned-adm profile $pick"
+        run tuned-adm profile "$pick"
+      else
+        echo "warning: no tuned profile for '$profile' among: $avail" >&2
+      fi
+      ;;
+    sysfs)
+      set_sysfs "$profile"
+      ;;
+  esac
+}
+
+# The idle timer that actually bit: noctalia's shell config, not logind.
+# Echo the timeout (seconds) if it is armed; nonzero if disabled or absent.
+#
+# The sed fallback only sees suspendTimeout, not whether idle.enabled is set,
+# so on a jq-less host it still warns when the idle daemon is switched off
+# wholesale.
+noctalia_idle_suspend() {
+  local f="${XDG_CONFIG_HOME:-$HOME/.config}/noctalia/settings.json" t=""
+  [[ -r "$f" ]] || return 1
+  if have jq; then
+    t="$(jq -r '.idle | select(.enabled) | .suspendTimeout // empty' "$f" 2>/dev/null || true)"
+  else
+    t="$(sed -n 's/.*"suspendTimeout"[[:space:]]*:[[:space:]]*\([0-9]\{1,\}\).*/\1/p' "$f" | head -n1 || true)"
+  fi
+  [[ -n "$t" && "$t" != "0" && "$t" != "null" ]] || return 1
+  echo "$t"
+}
+
+status() {
+  local gov epp plat t
+
+  echo "host:      $(hostname) ($(have hostnamectl && hostnamectl chassis 2>/dev/null || echo unknown))"
+  echo "backend:   $(backend)"
+
+  if ppd_active; then
+    echo "profile:   $(powerprofilesctl get 2>/dev/null || echo '?')"
+    local degraded
+    # || true: pipefail would otherwise abort status if ppd went away between
+    # the is-active check above and this call.
+    degraded="$(powerprofilesctl list 2>/dev/null | sed -n 's/^ *Degraded: *\(.*\)/\1/p' | head -n1 || true)"
+    [[ -n "${degraded:-}" && "$degraded" != "no" ]] && echo "degraded:  $degraded (thermal or firmware throttle)"
+  elif tuned_active; then
+    echo "profile:   $(tuned-adm active 2>/dev/null | sed -n 's/.*: *//p')"
+  fi
+
+  gov="$(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor 2>/dev/null | sort -u | tr '\n' ' ' || true)"
+  epp="$(sysread /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference)"
+  plat="$(sysread /sys/firmware/acpi/platform_profile)"
+  [[ -n "${gov// /}" ]] && echo "governor:  $gov ($(sysread /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver))"
+  [[ -n "$epp"  ]] && echo "epp:       $epp"
+  [[ -n "$plat" ]] && echo "platform:  $plat"
+
+  if sleep_masked; then
+    echo "sleep:     MASKED (suspend/hibernate refused)"
+  else
+    echo "sleep:     allowed"
+    if t="$(noctalia_idle_suspend)"; then
+      echo "           ^ noctalia will suspend after $((t / 60))m idle — 'power-profile nosleep' or set idle.suspendTimeout=0"
+    fi
+  fi
+}
+
+nosleep() {
+  local force="${1:-no}"
+
+  if is_laptop && [[ "$force" != "--force" ]]; then
+    echo "error: this looks like a laptop" >&2
+    echo "       Masking sleep means a closed lid no longer suspends," >&2
+    echo "       and a laptop left awake in a bag overheats." >&2
+    echo "       Pass --force if you really want that." >&2
+    exit 1
+  fi
+
+  sudo_install 644 "$LOGIND_DROPIN" <<'EOF'
+# Managed by power-profile(1). Never sleep on idle or on key presses.
+[Login]
+IdleAction=ignore
+HandleSuspendKey=ignore
+HandleSuspendKeyLongPress=ignore
+HandleHibernateKey=ignore
+HandleHibernateKeyLongPress=ignore
+HandleLidSwitch=ignore
+HandleLidSwitchExternalPower=ignore
+HandleLidSwitchDocked=ignore
+EOF
+
+  sudo_install 644 "$SLEEP_DROPIN" <<'EOF'
+# Managed by power-profile(1). Refuse every sleep state.
+[Sleep]
+AllowSuspend=no
+AllowHibernation=no
+AllowSuspendThenHibernate=no
+AllowHybridSleep=no
+EOF
+
+  echo ">> systemctl mask ${SLEEP_TARGETS[*]}"
+  run systemctl mask "${SLEEP_TARGETS[@]}"
+
+  # logind re-reads config only on restart.
+  # This is safe on a live session: KillUserProcesses=no is the default.
+  echo ">> systemctl restart systemd-logind"
+  run systemctl restart systemd-logind
+
+  local t
+  if t="$(noctalia_idle_suspend)"; then
+    echo
+    echo "note: noctalia still has idle.suspendTimeout=$t ($((t / 60))m) in its settings."
+    echo "      Masking makes its 'systemctl suspend' fail loudly rather than sleep;"
+    echo "      set that to 0 to stop it trying."
+  fi
+
+  echo
+  status
+}
+
+allow_sleep() {
+  echo ">> systemctl unmask ${SLEEP_TARGETS[*]}"
+  run systemctl unmask "${SLEEP_TARGETS[@]}"
+  run rm -fv "$LOGIND_DROPIN" "$SLEEP_DROPIN"
+  run systemctl restart systemd-logind
+  echo
+  status
+}
+
+why() {
+  echo "=== recent sleep/wake events ==="
+  # Deliberately no -u/-k filter: the interesting lines span systemd-logind
+  # (who asked) and the kernel (what actually happened), and journalctl ANDs
+  # -u with -k, which matches nothing at all.
+  journalctl --no-pager --since "30 days ago" 2>/dev/null |
+    grep -iE "suspend requested|hibernate requested|will (suspend|hibernate)|PM: suspend (entry|exit)|Lid (opened|closed)|idle action" |
+    tail -30 ||
+    echo "(none found — this box has not slept in the journal's retention window)"
+
+  echo
+  echo "=== who can block or delay sleep right now ==="
+  systemd-inhibit --list 2>/dev/null | grep -iE "sleep|idle|WHO|MODE" || true
+
+  echo
+  echo "=== idle daemons in this session ==="
+  pgrep -a -u "$(id -u)" -f 'swayidle|hypridle|xidlehook|noctalia|xautolock' 2>/dev/null ||
+    echo "(none)"
+
+  local t
+  if t="$(noctalia_idle_suspend)"; then
+    echo
+    echo "noctalia: idle.suspendTimeout=$t ($((t / 60))m) — this fires 'systemctl suspend'."
+  fi
+}
+
+cmd="${1:-status}"
+[[ $# -gt 0 ]] && shift || true
+
+case "$cmd" in
+  status)      status ;;
+  set)         set_profile "${1:-}" ;;
+  nosleep)     nosleep "${1:-no}" ;;
+  allow-sleep) allow_sleep ;;
+  why)         why ;;
+  -h|--help)   usage ;;
+  *)           echo "Unknown command: $cmd" >&2; usage >&2; exit 2 ;;
+esac
