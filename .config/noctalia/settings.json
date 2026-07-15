@@ -198,6 +198,14 @@
                     "id": "plugin:model-usage"
                 },
                 {
+                    "hideWhenZero": false,
+                    "hideWhenZeroUnread": false,
+                    "iconColor": "none",
+                    "id": "NotificationHistory",
+                    "showUnreadBadge": true,
+                    "unreadBadgeColor": "primary"
+                },
+                {
                     "defaultSettings": {
                         "aurCmd": "paru -Qua 2>/dev/null",
                         "aurHomepageCmd": "LC_ALL=C paru -Si {id} 2>/dev/null | awk '/^URL/ {print $3}'",
@@ -227,14 +235,6 @@
                         "useDistroLogo": false
                     },
                     "id": "plugin:arch-updater"
-                },
-                {
-                    "hideWhenZero": false,
-                    "hideWhenZeroUnread": false,
-                    "iconColor": "none",
-                    "id": "NotificationHistory",
-                    "showUnreadBadge": true,
-                    "unreadBadgeColor": "primary"
                 },
                 {
                     "defaultSettings": {
