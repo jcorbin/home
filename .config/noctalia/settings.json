@@ -237,6 +237,15 @@
                     "id": "plugin:arch-updater"
                 },
                 {
+                    "iconColor": "none",
+                    "id": "KeepAwake",
+                    "textColor": "none"
+                },
+                {
+                    "iconColor": "none",
+                    "id": "PowerProfile"
+                },
+                {
                     "defaultSettings": {
                         "compactMode": false,
                         "defaultPeerAction": "copy-ip",
