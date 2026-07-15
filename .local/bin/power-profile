@@ -19,6 +19,8 @@
 #
 #   power-profile                  # what is this box doing right now
 #   power-profile set performance  # full send
+#   power-profile persist          # ...and re-assert it on every boot
+#   power-profile nosleep          # mask suspend/hibernate entirely
 #   power-profile why              # what put this box to sleep
 #
 # nosleep refuses on laptops unless --force. With sleep masked a closed lid
@@ -38,6 +40,9 @@ SLEEP_TARGETS=(
 
 LOGIND_DROPIN="/etc/systemd/logind.conf.d/99-nosleep.conf"
 SLEEP_DROPIN="/etc/systemd/sleep.conf.d/99-nosleep.conf"
+PIN_UNIT="/etc/systemd/system/power-profile-pin.service"
+
+SELF="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 
 usage() {
   cat <<EOF
@@ -48,6 +53,8 @@ Inspect and pin the system power profile; optionally disable sleep entirely.
 Commands:
   status              Show profile, backend, and sleep state (default)
   set PROFILE         Set profile: $PROFILES
+  persist [PROFILE]   Re-assert PROFILE (default: performance) at every boot
+  unpersist           Remove the boot-time pin
   nosleep [--force]   Mask suspend/hibernate; ignore idle and power keys
   allow-sleep         Undo nosleep
   why                 Show recent sleep/wake events and what asked for them
@@ -282,6 +289,10 @@ status() {
       echo "           ^ noctalia will suspend after $((t / 60))m idle — 'power-profile nosleep' or set idle.suspendTimeout=0"
     fi
   fi
+
+  if [[ -e "$PIN_UNIT" ]]; then
+    echo "pin:       $(systemctl is-enabled power-profile-pin.service 2>/dev/null || echo present)"
+  fi
 }
 
 nosleep() {
@@ -346,6 +357,48 @@ allow_sleep() {
   status
 }
 
+persist() {
+  local profile="${1:-performance}"
+
+  if ! pick_first "$PROFILES" "$profile" >/dev/null; then
+    echo "error: unknown profile '$profile' (want: $PROFILES)" >&2
+    exit 2
+  fi
+
+  # power-profiles-daemon does not remember a profile across reboots, and a
+  # bare sysfs host forgets governors too. Re-assert once, late, at boot.
+  sudo_install 644 "$PIN_UNIT" <<EOF
+# Managed by power-profile(1).
+[Unit]
+Description=Pin power profile to $profile
+After=power-profiles-daemon.service tuned.service
+Wants=power-profiles-daemon.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=$SELF set $profile
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  run systemctl daemon-reload
+  echo ">> systemctl enable --now power-profile-pin.service"
+  run systemctl enable --now power-profile-pin.service
+  echo
+  echo "note: the unit runs $SELF as root at boot."
+  echo "      Keep it writable only by you."
+  echo
+  status
+}
+
+unpersist() {
+  run systemctl disable --now power-profile-pin.service 2>/dev/null || true
+  run rm -fv "$PIN_UNIT"
+  run systemctl daemon-reload
+}
+
 why() {
   echo "=== recent sleep/wake events ==="
   # Deliberately no -u/-k filter: the interesting lines span systemd-logind
@@ -378,6 +431,8 @@ cmd="${1:-status}"
 case "$cmd" in
   status)      status ;;
   set)         set_profile "${1:-}" ;;
+  persist)     persist "${1:-performance}" ;;
+  unpersist)   unpersist ;;
   nosleep)     nosleep "${1:-no}" ;;
   allow-sleep) allow_sleep ;;
   why)         why ;;
