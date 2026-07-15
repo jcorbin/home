@@ -53,23 +53,33 @@ exec_session() {
 # they should run ONLY from a real VT login, not from terminal emulators that
 # spawn a redundant login shell under an existing graphical login session.
 #
+# $session_launch:
+#    1  candidate VT login → run the session-bootstrap path
+#    0  login shell where it has no business being → fire the tripwire
+if [ "${XDG_SESSION_TYPE-}" = wayland ]; then
+  session_launch=1
+else
+  session_launch=0
+fi
+
 # Any gate that trips below clears $session_launch.
-session_launch=1
+# Each only bothers checking while we're still a candidate,
+# so already-rejected (0) short-circuit past all of them.
 
 # (a) No compositor yet: a real VT login runs before wayland/X exist;
 #     a terminal emulator always has WAYLAND_DISPLAY (or DISPLAY) set.
-if [ -n "$WAYLAND_DISPLAY" ] || [ -n "$DISPLAY" ]; then
+if [ "$session_launch" = 1 ] && { [ -n "$WAYLAND_DISPLAY" ] || [ -n "$DISPLAY" ] }; then
   session_launch=0
 fi
 
 # (b) Controlling terminal is a kernel VT (/dev/tty1..N), not a pty
 #     (/dev/pts/N) handed to a terminal emulator.
-if [[ "$(tty)" != /dev/tty[0-9]* ]]; then
+if [ "$session_launch" = 1 ] && [[ "$(tty)" != /dev/tty[0-9]* ]]; then
   session_launch=0
 fi
 
 # (c) Not running inside a known terminal emulator (each exports a marker var).
-if [ -n "${WEZTERM_PANE-}${GHOSTTY_RESOURCES_DIR-}${ALACRITTY_WINDOW_ID-}${TERM_PROGRAM-}" ]; then
+if [ "$session_launch" = 1 ] && [ -n "${WEZTERM_PANE-}${GHOSTTY_RESOURCES_DIR-}${ALACRITTY_WINDOW_ID-}${TERM_PROGRAM-}" ]; then
   session_launch=0
 fi
 
@@ -82,7 +92,7 @@ if [ "$session_launch" = 1 ]; then
   if uwsm check may-start -q; then
     exec_session uwsm start default
   fi
-else
+elif [ "$session_launch" = 0 ]; then
   # Something spawned a login shell inside an existing session
   # — i.e. a terminal emulator is opening a login scope beneath the compositor,
   # which it should not.
