@@ -1,0 +1,66 @@
+// Noctalia v4 (Quickshell) session wiring: startup + IPC keybinds.
+// Included by config.kdl.
+
+spawn-at-startup "qs" "-c" "noctalia-shell"
+
+binds {
+    Mod+Space hotkey-overlay-title="Launcher" {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle";
+    }
+
+    Mod+Semicolon hotkey-overlay-title="Settings" {
+      // spawn "qs" "-c" "noctalia-shell" "ipc" "call" "settings" "toggle";
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "controlCenter" "toggle";
+    }
+
+    Super+Alt+L hotkey-overlay-title="Lock the Screen" {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "lock";
+    }
+
+    // ─── Audio Controls ───
+    XF86AudioRaiseVolume allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "increase";
+    }
+    XF86AudioLowerVolume allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "decrease";
+    }
+    XF86AudioMute allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "muteOutput";
+    }
+    XF86AudioMicMute allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "volume" "muteInput";
+    }
+
+    // ─── Media Controls ───
+    XF86AudioPlay allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "playPause";
+    }
+    XF86AudioStop allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "stop";
+    }
+    XF86AudioPause allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "pause";
+    }
+    XF86AudioNext allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "next";
+    }
+    XF86AudioPrev allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "media" "previous";
+    }
+
+    // ─── Screen Controls ───
+    XF86MonBrightnessUp allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "brightness" "increase";
+    }
+    XF86MonBrightnessDown allow-when-locked=true {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "brightness" "decrease";
+    }
+
+    // ─── Session / Power ───
+    Mod+Shift+E {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
+    }
+    Ctrl+Alt+Delete {
+      spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
+    }
+}
