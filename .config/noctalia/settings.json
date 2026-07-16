@@ -405,10 +405,10 @@
                     "id": "Bluetooth"
                 },
                 {
-                    "id": "WallpaperSelector"
+                    "id": "AirplaneMode"
                 },
                 {
-                    "id": "NoctaliaPerformance"
+                    "id": "PowerProfile"
                 }
             ],
             "right": [
@@ -416,10 +416,10 @@
                     "id": "Notifications"
                 },
                 {
-                    "id": "PowerProfile"
+                    "id": "KeepAwake"
                 },
                 {
-                    "id": "KeepAwake"
+                    "id": "DarkMode"
                 },
                 {
                     "id": "NightLight"
