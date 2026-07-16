@@ -120,7 +120,7 @@
                 {
                     "clockColor": "tertiary",
                     "customFont": "JetBrains Mono ExtraBold",
-                    "formatHorizontal": "yyyy-MM-ddTHH:mmt",
+                    "formatHorizontal": "yyyy-MM-ddTHH:mm:sst",
                     "formatVertical": "HH mm - dd MM",
                     "id": "Clock",
                     "tooltipFormat": "yyyy-MM-dd HH:mm:ss t",
