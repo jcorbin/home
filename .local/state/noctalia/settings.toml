@@ -1,0 +1,233 @@
+config_version = 2
+
+[accessibility]
+ui_scale = 1.2
+
+[bar.default]
+background_opacity = 0.0
+capsule = true
+capsule_border = "outline"
+capsule_opacity = 0.6
+capsule_padding = 8.0
+capsule_thickness = 1.0
+center = [ "workspaces", "taskbar" ]
+color = "primary"
+end = [ "notifications", "tray", "clipboard", "network", "bluetooth", "volume", "brightness", "battery" ]
+icon_color = "secondary"
+margin_edge = 4
+margin_ends = 4
+padding = 10
+radius = 0
+scale = 1.1
+start = [ "clock", "group:g1" ]
+
+    [[bar.default.capsule_group]]
+    enabled = true
+    fill = "surface_variant"
+    id = "g1"
+    members = [ "cpu", "temp", "ram" ]
+    opacity = 1.0
+    padding = 6.0
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [
+    "desktop-widget-0000000000000002",
+    "desktop-widget-0000000000000003",
+    "desktop-widget-0000000000000004",
+    "desktop-widget-0000000000000005",
+    "desktop-widget-0000000000000006",
+    "desktop-widget-0000000000000007"
+]
+
+    [desktop_widgets.grid]
+    cell_size = 8
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000002]
+    box_height = 208.0
+    box_width = 688.0
+    cx = 910.5
+    cy = 996.0
+    output = "eDP-1"
+    rotation = 0.0
+    type = "audio_visualizer"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
+        background = false
+        bands = 128
+        centered = true
+        color_2 = "secondary"
+        mirrored = true
+        show_when_idle = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000003]
+    box_height = 392.0
+    box_width = 376.0
+    cx = 202.5
+    cy = 245.5
+    output = "eDP-1"
+    rotation = 0.0
+    type = "weather"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000003.settings]
+        background = false
+        color = "primary"
+        forecast_days = 5
+        show_forecast = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000004]
+    box_height = 288.0
+    box_width = 472.0
+    cx = 1562.5
+    cy = 200.0
+    output = "eDP-1"
+    rotation = 0.0
+    type = "sysmon"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+        background = false
+        display = "graph"
+        shadow = true
+        show_label = true
+        stat = "cpu_usage"
+        stat2 = "cpu_temp"
+
+    [desktop_widgets.widget.desktop-widget-0000000000000005]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 1678.5
+    cy = 425.5
+    output = "eDP-1"
+    rotation = 0.0
+    type = "sysmon"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000005.settings]
+        background = false
+        stat = "ram_pct"
+        stat2 = "swap_pct"
+
+    [desktop_widgets.widget.desktop-widget-0000000000000006]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 1442.5
+    cy = 425.5
+    output = "eDP-1"
+    rotation = 0.0
+    type = "sysmon"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000006.settings]
+        background = false
+        stat = "net_rx"
+        stat2 = "net_tx"
+
+    [desktop_widgets.widget.desktop-widget-0000000000000007]
+    box_height = 64.0
+    box_width = 328.0
+    cx = 1633.5
+    cy = 1161.5
+    output = "eDP-1"
+    rotation = 0.0
+    type = "clock"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000007.settings]
+        background = false
+        clock_style = "digital"
+        color = "tertiary"
+        format = "{:%S:%M:%H %a %d %b %Y}"
+
+[location]
+address = "Ithaca, NY"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@eDP-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 70.0
+    box_width = 400.0
+    cx = 903.0
+    cy = 1084.0
+    output = "eDP-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_password_hint = true
+
+[shell]
+clipboard_auto_paste = "off"
+launch_apps_as_systemd_services = true
+niri_overview_type_to_launch_enabled = true
+polkit_agent = true
+time_format = "{:%H:%M:%S}"
+
+    [shell.launcher]
+    compact = true
+
+    [shell.panel]
+    clipboard_placement = "attached"
+    launcher_placement = "attached"
+    launcher_position = "auto"
+    open_near_click_control_center = true
+    open_near_click_launcher = true
+    polkit_placement = "attached"
+    transparency_mode = "glass"
+
+    [shell.screen_corners]
+    enabled = true
+
+    [shell.screenshot]
+    save_to_file = false
+
+[theme]
+builtin = "Eldritch"
+community_palette = "Oxocarbon"
+mode = "dark"
+source = "community"
+wallpaper_scheme = "m3-content"
+
+[wallpaper]
+directory = "/usr/share/backgrounds"
+directory_dark = "/usr/share/backgrounds"
+directory_light = "/usr/share/backgrounds"
+
+    [wallpaper.default]
+    path = "/usr/share/backgrounds/archlinux/wave.png"
+
+    [wallpaper.last]
+    path = "/usr/share/backgrounds/archlinux/wave.png"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/usr/share/backgrounds/archlinux/wave.png"
+
+[widget.clock]
+format = "{:%Y-%m-%dT%H:%M:%S%z}"
+
+[widget.network]
+show_label = false
+
+[widget.taskbar]
+anchor = true
+only_active_workspace = true
+show_window_title = true
+window_title_max_width = 75
+
+[widget.workspaces]
+style = "minimal"

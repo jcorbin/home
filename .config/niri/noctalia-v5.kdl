@@ -1,0 +1,68 @@
+// Noctalia v5 (native) session wiring: startup + IPC keybinds.
+// Included by config.kdl in place of noctalia-v4.kdl when trialing v5.
+
+spawn-at-startup "noctalia"
+// Prefer this instead if you want it backgrounded once initialized:
+// spawn-sh-at-startup "noctalia --daemon"
+
+binds {
+    Mod+Space hotkey-overlay-title="Launcher" {
+      spawn "noctalia" "msg" "panel-toggle" "launcher";
+    }
+
+    Mod+Semicolon hotkey-overlay-title="Settings" {
+      spawn "noctalia" "msg" "panel-toggle" "control-center";
+    }
+
+    Super+Alt+L hotkey-overlay-title="Lock the Screen" {
+      spawn "noctalia" "msg" "session" "lock";
+    }
+
+    // ─── Audio Controls ───
+    XF86AudioRaiseVolume allow-when-locked=true {
+      spawn "noctalia" "msg" "volume-up";
+    }
+    XF86AudioLowerVolume allow-when-locked=true {
+      spawn "noctalia" "msg" "volume-down";
+    }
+    XF86AudioMute allow-when-locked=true {
+      spawn "noctalia" "msg" "volume-mute";
+    }
+    XF86AudioMicMute allow-when-locked=true {
+      spawn "noctalia" "msg" "mic-mute";
+    }
+
+    // ─── Media Controls ───
+    // v5 has no distinct pause; XF86AudioPause maps to `media toggle`.
+    XF86AudioPlay allow-when-locked=true {
+      spawn "noctalia" "msg" "media" "toggle";
+    }
+    XF86AudioStop allow-when-locked=true {
+      spawn "noctalia" "msg" "media" "stop";
+    }
+    XF86AudioPause allow-when-locked=true {
+      spawn "noctalia" "msg" "media" "toggle";
+    }
+    XF86AudioNext allow-when-locked=true {
+      spawn "noctalia" "msg" "media" "next";
+    }
+    XF86AudioPrev allow-when-locked=true {
+      spawn "noctalia" "msg" "media" "previous";
+    }
+
+    // ─── Screen Controls ───
+    XF86MonBrightnessUp allow-when-locked=true {
+      spawn "noctalia" "msg" "brightness-up";
+    }
+    XF86MonBrightnessDown allow-when-locked=true {
+      spawn "noctalia" "msg" "brightness-down";
+    }
+
+    // ─── Session / Power ───
+    Mod+Shift+E {
+      spawn "noctalia" "msg" "panel-toggle" "session";
+    }
+    Ctrl+Alt+Delete {
+      spawn "noctalia" "msg" "panel-toggle" "session";
+    }
+}
