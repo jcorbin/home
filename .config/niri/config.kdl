@@ -126,6 +126,16 @@ clipboard {
     disable-primary
 }
 
+// ────────────── Xwayland ──────────────
+// niri manages xwayland-satellite natively (on-demand): it creates the X11
+// socket, exports $DISPLAY for spawned children, and (re)starts the satellite
+// when an X11 client first connects. Do NOT also hardcode DISPLAY in the
+// environment block below, and disable any xwayland-satellite.service systemd
+// unit — a second satellite is redundant and fights this integration.
+xwayland-satellite {
+    path "xwayland-satellite"
+}
+
 // ────────────── Layout Settings ──────────────
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
@@ -500,8 +510,9 @@ debug {
 // TODO $ gamescope -f -w 1920 -h 1080 -W 1920 -H 1080 --force-grab-cursor --backend sdl -- <game>
 
 environment {
+    // NOTE: DISPLAY is managed by niri's built-in xwayland-satellite integration above.
+
     // TODO does uwsm set these? aren't they redundant?
-    DISPLAY ":1"
     XDG_SESSION_TYPE "wayland"
     XDG_CURRENT_DESKTOP "niri"
 }
