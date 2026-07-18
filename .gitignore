@@ -106,6 +106,15 @@
 .local/state/noctalia/*
 !/.local/state/noctalia/settings.toml
 
+# noctalia v5 local (hand-written) plugins. v5 requires these live under
+# XDG_DATA_HOME, so force-track this one in place (same idiom as
+# color-schemes above) rather than symlinking it in from elsewhere.
+!.local/share/noctalia
+.local/share/noctalia/*
+!.local/share/noctalia/plugins
+.local/share/noctalia/plugins/*
+!.local/share/noctalia/plugins/model-usage
+
 # Systemd User Config
 /.config/systemd/**/notify-server*
 /.config/systemd/**/my-www*

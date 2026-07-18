@@ -12,7 +12,17 @@ capsule_padding = 8.0
 capsule_thickness = 1.0
 center = [ "workspaces", "taskbar" ]
 color = "primary"
-end = [ "notifications", "tray", "clipboard", "network", "bluetooth", "volume", "brightness", "battery" ]
+end = [
+    "jcorbin/model-usage:indicator",
+    "notifications",
+    "tray",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery"
+]
 icon_color = "secondary"
 margin_edge = 4
 margin_ends = 4
@@ -170,6 +180,9 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_keyboard_layout = true
         show_login_button = true
         show_password_hint = true
+
+[plugins]
+enabled = [ "jcorbin/model-usage" ]
 
 [shell]
 clipboard_auto_paste = "off"
