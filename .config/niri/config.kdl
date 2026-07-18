@@ -511,10 +511,6 @@ debug {
 
 environment {
     // NOTE: DISPLAY is managed by niri's built-in xwayland-satellite integration above.
-
-    // TODO does uwsm set these? aren't they redundant?
-    XDG_SESSION_TYPE "wayland"
-    XDG_CURRENT_DESKTOP "niri"
 }
 
 // ────────────── Keybindings ──────────────
