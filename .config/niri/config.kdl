@@ -511,6 +511,12 @@ debug {
 
 environment {
     // NOTE: DISPLAY is managed by niri's built-in xwayland-satellite integration above.
+
+    // Nudge Electron/Chromium and Firefox onto native Wayland.
+    NIXOS_OZONE_WL "1"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    MOZ_ENABLE_WAYLAND "1"
+    // Don't set GDK_BACKEND globally — it breaks the screencast portal.
 }
 
 // ────────────── Keybindings ──────────────
