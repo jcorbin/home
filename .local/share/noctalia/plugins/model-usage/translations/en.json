@@ -1,0 +1,5 @@
+{
+  "settings.refresh_interval.label": "Refresh interval (seconds)",
+  "settings.refresh_interval.description": "How often to poll Claude usage.",
+  "settings.glyph.label": "Bar icon"
+}

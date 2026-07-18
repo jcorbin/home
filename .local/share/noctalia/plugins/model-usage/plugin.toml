@@ -1,0 +1,53 @@
+# Model Usage — Claude Code usage on the noctalia (v5) bar.
+# Local custom plugin. A port (rewrite) of the v4 QML plugin's Claude provider.
+#
+# plugin_api = 3 matches v5.0.0-beta.3 (the shipped official/example and portctl
+# plugins use 3). Level 4 is only needed for httpStream/SSE, which this plugin
+# doesn't use — the helper script shells out to curl instead. The API is still
+# beta; if a future noctalia update breaks this, re-check the entry symbols
+# against the shipped noctalia.d.luau type definitions.
+
+id           = "jcorbin/model-usage"
+name         = "Model Usage"
+version      = "0.1.0"
+plugin_api   = 3
+author       = "jcorbin"
+license      = "MIT"
+icon         = "brain"
+description  = "Claude Code usage (rate limits + today's prompts) on the bar."
+tags         = ["bar", "panel", "service", "ai"]
+dependencies = ["curl", "jq"]   # informational: the helper script needs these
+
+# ── Plugin-wide settings ──
+[[setting]]
+key            = "refresh_interval"
+type           = "int"
+label_key      = "settings.refresh_interval.label"
+description_key = "settings.refresh_interval.description"
+default        = 30
+min            = 5
+max            = 300
+
+# ── Background poller: runs the helper on a timer, publishes to plugin state ──
+[[service]]
+id    = "poller"
+entry = "service.luau"
+
+# ── Bar item: shows the worst-case rate-limit percent ──
+[[widget]]
+id    = "indicator"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key       = "glyph"
+  type      = "glyph"
+  label_key = "settings.glyph.label"
+  default   = "brain"
+
+# ── Detail popup ──
+[[panel]]
+id              = "panel"
+entry           = "panel.luau"
+width           = 380
+height          = 240
+open_near_click = true

@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+# claude-usage — emit one compact JSON blob describing Claude Code usage.
+#
+# Used by the noctalia v5 "model-usage" plugin (service.luau runs this on a
+# timer). Doing the work here keeps the OAuth token entirely in the shell —
+# it is read, used for the usage probe, and never printed. Output is the only
+# thing the plugin sees.
+#
+# The authoritative usage endpoint (api.anthropic.com/api/oauth/usage) rate
+# limits aggressive polling (HTTP 429), so its result is cached to disk with a
+# TTL — 5 min after a success, 60 s after a failure (matching the v4 plugin's
+# ~5 min probe interval). Today's prompt/session counts are cheap local reads
+# and refresh every call. On a transient probe failure we reuse the last good
+# numbers and back off, rather than blanking the widget or hammering the API.
+#
+# Overridable for testing: CLAUDE_CREDENTIALS, CLAUDE_HISTORY,
+# CLAUDE_USAGE_CACHE, CLAUDE_USAGE_PROBE_TTL, CLAUDE_USAGE_FAIL_TTL,
+# CLAUDE_USAGE_URL.
+#
+# Output shape:
+#   { ok, auth, status, tier,
+#     session_pct, session_reset, weekly_pct, weekly_reset,
+#     today_prompts, today_sessions }
+# where *_pct is an integer 0..100 or -1 (unknown), *_reset is a human string.
+
+set -u
+
+CRED="${CLAUDE_CREDENTIALS:-$HOME/.claude/.credentials.json}"
+HIST="${CLAUDE_HISTORY:-$HOME/.claude/history.jsonl}"
+CACHE="${CLAUDE_USAGE_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/noctalia-model-usage/claude-probe.json}"
+PROBE_TTL="${CLAUDE_USAGE_PROBE_TTL:-300}"   # reuse a successful probe this long (v4 used ~5 min)
+FAIL_TTL="${CLAUDE_USAGE_FAIL_TTL:-180}"     # wait this long before retrying a failed probe
+                                             # (keeps well under the endpoint's rate limit)
+USAGE_URL="${CLAUDE_USAGE_URL:-https://api.anthropic.com/api/oauth/usage}"
+
+emit() { # <ok> <auth> <status> <tier> <s_pct> <s_reset> <w_pct> <w_reset> <t_prompts> <t_sessions>
+  jq -cn \
+    --argjson ok "$1" --arg auth "$2" --arg status "$3" --arg tier "$4" \
+    --argjson s_pct "$5" --arg s_reset "$6" --argjson w_pct "$7" --arg w_reset "$8" \
+    --argjson t_prompts "$9" --argjson t_sessions "${10}" \
+    '{ok:$ok, auth:$auth, status:$status, tier:$tier,
+      session_pct:$s_pct, session_reset:$s_reset,
+      weekly_pct:$w_pct, weekly_reset:$w_reset,
+      today_prompts:$t_prompts, today_sessions:$t_sessions}'
+}
+
+# normalize a utilization value (0..1 or 0..100) to an integer percent, or -1.
+norm_pct() {
+  awk -v u="${1:-}" 'BEGIN{
+    if (u=="" || u+0!=u) { print -1; exit }
+    u=u+0; if (u<0){print -1; exit}
+    if (u>1) u=u/100; p=u*100;
+    if (p<0) p=0; if (p>100) p=100;
+    printf("%d", int(p+0.5))
+  }'
+}
+
+# humanize a reset timestamp (epoch seconds/ms or ISO8601) to "2d 4h"/"3h 20m"/"5m".
+human_reset() {
+  local raw="${1:-}" now target diff h m
+  [[ -z "$raw" || "$raw" == "null" ]] && { echo ""; return; }
+  now=$(date +%s)
+  if [[ "$raw" =~ ^[0-9]+$ ]]; then
+    target=$raw; (( target > 1000000000000 )) && target=$(( target / 1000 ))
+  else
+    target=$(date -d "$raw" +%s 2>/dev/null) || { echo ""; return; }
+  fi
+  diff=$(( target - now ))
+  (( diff <= 0 )) && { echo "now"; return; }
+  h=$(( diff / 3600 )); m=$(( (diff % 3600) / 60 ))
+  if   (( h > 24 )); then echo "$(( h / 24 ))d $(( h % 24 ))h"
+  elif (( h > 0 ));  then echo "${h}h ${m}m"
+  else                    echo "${m}m"; fi
+}
+
+# ── probe cache ──
+c_ts=0 c_ok=0 c_spct=-1 c_srraw="" c_wpct=-1 c_wrraw=""
+read_cache() { # populate c_* globals; returns 0 if a parseable cache exists
+  [[ -f "$CACHE" ]] || return 1
+  c_ts=$(jq -r '.ts // 0' "$CACHE" 2>/dev/null) || return 1
+  [[ "$c_ts" =~ ^[0-9]+$ ]] || c_ts=0
+  c_ok=$(jq -r 'if .ok then 1 else 0 end' "$CACHE" 2>/dev/null); [[ "$c_ok" =~ ^[01]$ ]] || c_ok=0
+  c_spct=$(jq -r '.session_pct // -1' "$CACHE" 2>/dev/null); [[ "$c_spct" =~ ^-?[0-9]+$ ]] || c_spct=-1
+  c_wpct=$(jq -r '.weekly_pct // -1'  "$CACHE" 2>/dev/null); [[ "$c_wpct" =~ ^-?[0-9]+$ ]] || c_wpct=-1
+  c_srraw=$(jq -r '.session_reset_raw // ""' "$CACHE" 2>/dev/null)
+  c_wrraw=$(jq -r '.weekly_reset_raw // ""'  "$CACHE" 2>/dev/null)
+  return 0
+}
+write_cache() { # <ok 0|1> <s_pct> <s_rraw> <w_pct> <w_rraw>  (stamps ts=now)
+  mkdir -p "$(dirname "$CACHE")" 2>/dev/null || return 0
+  jq -cn --argjson ts "$(date +%s)" --argjson ok "$1" \
+    --argjson sp "$2" --arg sr "$3" --argjson wp "$4" --arg wr "$5" \
+    '{ts:$ts, ok:($ok==1), session_pct:$sp, session_reset_raw:$sr,
+      weekly_pct:$wp, weekly_reset_raw:$wr}' > "$CACHE" 2>/dev/null || true
+}
+emit_from_cache() { # emit reusing cached values (globals already read)
+  local s_reset w_reset
+  s_reset=$(human_reset "$c_srraw"); w_reset=$(human_reset "$c_wrraw")
+  emit true oauth "" "$tier" "$c_spct" "$s_reset" "$c_wpct" "$w_reset" "$t_prompts" "$t_sessions"
+}
+
+# ── today's prompt / session counts (local, no network) ──
+t_prompts=0; t_sessions=0
+if [[ -f "$HIST" ]]; then
+  read -r t_prompts t_sessions < <(
+    jq -rn --argjson start "$(date -d 'today 00:00:00' +%s000)" '
+      [inputs | select((.timestamp // 0) >= $start)] as $t
+      | "\($t|length) \($t|map(.sessionId)|unique|length)"
+    ' "$HIST" 2>/dev/null
+  ) || { t_prompts=0; t_sessions=0; }
+fi
+t_prompts="${t_prompts:-0}"; t_sessions="${t_sessions:-0}"
+
+# ── credentials ──
+if [[ ! -f "$CRED" ]]; then
+  emit false none "No credentials" "" -1 "" -1 "" "$t_prompts" "$t_sessions"; exit 0
+fi
+
+token=$(jq -r '.claudeAiOauth.accessToken // ""'  "$CRED" 2>/dev/null)
+expires=$(jq -r '.claudeAiOauth.expiresAt // 0'   "$CRED" 2>/dev/null)
+subtype=$(jq -r '.claudeAiOauth.subscriptionType // ""' "$CRED" 2>/dev/null)
+rltier=$(jq -r  '.claudeAiOauth.rateLimitTier // ""'    "$CRED" 2>/dev/null)
+
+# tier label: "max_20x" -> "Max 20x"; else capitalized subscription type.
+tier=""
+if [[ "$rltier" =~ max_([0-9]+x) ]]; then
+  tier="Max ${BASH_REMATCH[1]}"
+elif [[ -n "$subtype" ]]; then
+  tier="${subtype^}"
+fi
+
+if [[ -z "$token" ]]; then
+  emit false none "Not logged in" "$tier" -1 "" -1 "" "$t_prompts" "$t_sessions"; exit 0
+fi
+
+now_ms=$(date +%s000)
+if [[ "$expires" =~ ^[0-9]+$ ]] && (( expires > 0 )) && (( expires <= now_ms )); then
+  emit false expired "Token expired" "$tier" -1 "" -1 "" "$t_prompts" "$t_sessions"; exit 0
+fi
+
+# ── serve from cache while it's fresh, so we don't re-hit (and get rate limited
+#    by) the usage endpoint every tick. Successful probes are good for
+#    PROBE_TTL; after a failure we retry sooner (FAIL_TTL). ──
+if read_cache && (( c_ts > 0 )); then
+  ttl=$PROBE_TTL; (( c_ok == 0 )) && ttl=$FAIL_TTL
+  if (( $(date +%s) - c_ts < ttl )); then emit_from_cache; exit 0; fi
+fi
+
+# ── cache stale/missing: probe the authoritative usage endpoint ──
+probe_failed() { # <status>: bump attempt time (back off), keep last good values
+  read_cache || { c_spct=-1; c_srraw=""; c_wpct=-1; c_wrraw=""; }
+  write_cache 0 "$c_spct" "$c_srraw" "$c_wpct" "$c_wrraw"
+  if (( c_spct >= 0 || c_wpct >= 0 )); then
+    emit_from_cache            # show last good numbers rather than n/a
+  else
+    emit true oauth "$1" "$tier" -1 "" -1 "" "$t_prompts" "$t_sessions"
+  fi
+  exit 0
+}
+
+resp=$(curl -s --max-time 8 -w $'\n%{http_code}' "$USAGE_URL" \
+  -H "Authorization: Bearer $token" \
+  -H "anthropic-beta: oauth-2025-04-20" \
+  -H "Accept: application/json" 2>/dev/null)
+code="${resp##*$'\n'}"
+body="${resp%$'\n'*}"
+
+# Opt-in diagnostics (never prints the token): CLAUDE_USAGE_DEBUG=1
+if [[ -n "${CLAUDE_USAGE_DEBUG:-}" ]]; then
+  {
+    echo "DEBUG http_code=$code"
+    echo "DEBUG body_top_keys=$(jq -cr 'keys' <<<"$body" 2>/dev/null)"
+    echo "DEBUG five_hour=$(jq -cr '.five_hour' <<<"$body" 2>/dev/null)"
+    echo "DEBUG seven_day_oauth_apps=$(jq -cr '.seven_day_oauth_apps' <<<"$body" 2>/dev/null)"
+    echo "DEBUG seven_day=$(jq -cr '.seven_day' <<<"$body" 2>/dev/null)"
+  } >&2
+fi
+
+if [[ -z "$code" || "$code" == "000" ]]; then probe_failed "Probe failed"; fi
+if [[ "$code" == "401" || "$code" == "403" ]]; then
+  emit false expired "Token expired" "$tier" -1 "" -1 "" "$t_prompts" "$t_sessions"; exit 0
+fi
+if [[ "$code" != "200" ]]; then probe_failed "HTTP $code"; fi
+
+s_util=$(jq -r '.five_hour.utilization // empty'                                  <<<"$body" 2>/dev/null)
+s_rraw=$(jq -r '.five_hour.resets_at // empty'                                    <<<"$body" 2>/dev/null)
+w_util=$(jq -r '(.seven_day_oauth_apps.utilization // .seven_day.utilization) // empty' <<<"$body" 2>/dev/null)
+w_rraw=$(jq -r '(.seven_day_oauth_apps.resets_at // .seven_day.resets_at) // empty'     <<<"$body" 2>/dev/null)
+
+s_pct=$(norm_pct "$s_util"); w_pct=$(norm_pct "$w_util")
+write_cache 1 "$s_pct" "$s_rraw" "$w_pct" "$w_rraw"
+
+s_reset=$(human_reset "$s_rraw"); w_reset=$(human_reset "$w_rraw")
+emit true oauth "" "$tier" "$s_pct" "$s_reset" "$w_pct" "$w_reset" "$t_prompts" "$t_sessions"
