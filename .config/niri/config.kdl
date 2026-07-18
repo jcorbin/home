@@ -314,6 +314,12 @@ layout {
 
 // Shell specific config live in a specific include file at the bottom.
 
+// Keep the last clipboard selection alive after the source app closes.
+// (cliphist history watchers run as a systemd user service; this just stops
+// the live clipboard from vanishing.) Use "regular", not "both" — including
+// the primary selection has an open crash report against niri.
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
+
 // TODO relevant?
 // spawn-sh-at-startup "uwsm app -s s /usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
 
