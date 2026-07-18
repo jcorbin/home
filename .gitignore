@@ -87,6 +87,11 @@
 !/.config/wlogout
 !/.config/wofi
 
+# xdg-desktop-portal: track only the niri portal backend override.
+!/.config/xdg-desktop-portal
+/.config/xdg-desktop-portal/*
+!/.config/xdg-desktop-portal/niri-portals.conf
+
 # Systemd User Config
 /.config/systemd/**/notify-server*
 /.config/systemd/**/my-www*

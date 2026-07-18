@@ -31,6 +31,9 @@ REPO_PKGS=(
   adw-gtk-theme                  # adw-gtk3-dark: GTK3 theme honoring the accent
   qt5ct                          # Qt5 appearance (loads the noctalia palette)
   qt6ct                          # Qt6 appearance (loads the noctalia palette)
+
+  # Wayland / niri desktop plumbing.
+  xdg-desktop-portal-gnome       # screencast backend niri recommends (Mutter.ScreenCast)
 )
 
 # Packages from the AUR (needs an AUR helper: paru or yay).
