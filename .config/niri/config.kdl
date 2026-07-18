@@ -793,6 +793,7 @@ binds {
     Ctrl+Shift+1 { screenshot; }
     Ctrl+Shift+2 { screenshot-screen; }
     Ctrl+Shift+3 { screenshot-window; }
+    Ctrl+Shift+4 { spawn-sh "grim -g \"$(slurp)\" - | satty --filename -"; }
     Ctrl+Shift+9 { spawn-sh "niri msg -j windows | jq -c '.[]' | wl-copy"; }
 
     // ─── Emergency Escape Key ───

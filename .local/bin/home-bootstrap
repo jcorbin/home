@@ -33,6 +33,7 @@ REPO_PKGS=(
   qt6ct                          # Qt6 appearance (loads the noctalia palette)
 
   # Wayland / niri desktop plumbing.
+  satty                          # screenshot annotation (grim+slurp -> satty)
   wl-clip-persist                # keep clipboard after the source app closes
   xdg-desktop-portal-gnome       # screencast backend niri recommends (Mutter.ScreenCast)
 )
