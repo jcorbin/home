@@ -608,6 +608,16 @@ binds {
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
 
+    // Cycle columns within the current workspace,
+    // like Mod+H / Mod+L but wrapping around the ends.
+    Alt+Tab       repeat=false { focus-column-right-or-first; }
+    Alt+Shift+Tab repeat=false { focus-column-left-or-last; }
+
+    // Cycle windows within the current column,
+    // like Mod+J / Mod+K but with wrapping around the ends.
+    Mod+Tab       repeat=false { focus-window-down-or-top; }
+    Mod+Shift+Tab repeat=false { focus-window-up-or-bottom; }
+
     Mod+Ctrl+Left  { move-column-left; }
     Mod+Ctrl+Down  { move-window-down; }
     Mod+Ctrl+Up    { move-window-up; }
