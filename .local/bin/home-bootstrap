@@ -27,6 +27,9 @@ REPO_PKGS=(
   zsh-completions                # extra completion defs
   zsh-history-substring-search   # up/down substring history search
 
+  niri                           # scrolling-tiling wayland compositor
+  noctalia                       # v4 quickshell
+
   # Desktop theming backends (Carbonfox via noctalia templates).
   adw-gtk-theme                  # adw-gtk3-dark: GTK3 theme honoring the accent
   qt5ct                          # Qt5 appearance (loads the noctalia palette)
@@ -42,6 +45,7 @@ REPO_PKGS=(
 AUR_PKGS=(
   fzf-tab-git                    # Aloxaf/fzf-tab: fzf-powered tab completion
   python-pywalfox                # applies the Carbonfox palette to Firefox chrome
+  noctalia-git                   # v5 noctalia dev build
 )
 
 have() { command -v "$1" >/dev/null 2>&1; }
