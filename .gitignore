@@ -11,6 +11,9 @@
 .*.sw?
 # TODO: incomplete, needs more?
 
+# Local patched Arch package recipes (e.g. niri + PR#1791 SHM screencast).
+!/pkgs/
+
 !.local/
 .local/*
 
