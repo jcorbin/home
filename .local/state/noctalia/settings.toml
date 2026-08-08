@@ -10,7 +10,7 @@ capsule_border = "outline"
 capsule_opacity = 0.6
 capsule_padding = 8.0
 capsule_thickness = 1.0
-center = [ "workspaces", "taskbar" ]
+center = []
 color = "primary"
 end = [
     "jcorbin/model-usage:indicator",
@@ -29,7 +29,7 @@ margin_ends = 4
 padding = 10
 radius = 0
 scale = 1.1
-start = [ "clock", "group:g1" ]
+start = [ "clock", "group:g1", "taskbar" ]
 
     [[bar.default.capsule_group]]
     enabled = true
@@ -261,6 +261,7 @@ show_label = false
 anchor = true
 only_active_workspace = true
 show_window_title = true
+taskbar_max_width = 500
 window_title_max_width = 75
 
 [widget.workspaces]
