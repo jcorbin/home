@@ -119,6 +119,13 @@
 # ...churns with usage
 /.jupyter/lab/workspaces
 
+# Claude Code user config: skills ONLY. Everything else under .claude/ is
+# secrets or churning runtime state (.credentials.json, sessions/, history.jsonl,
+# projects/, shell-snapshots/) — keep the deny-by-default and add narrowly.
+!/.claude
+/.claude/*
+!/.claude/skills
+
 !README.md
 !TODO.md
 !CLAUDE.md
