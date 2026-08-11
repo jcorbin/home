@@ -2,7 +2,7 @@
 kind: lore
 tags: [tooling, false-green, agent-harness, skills, evidence-quality, recurring]
 created: 2026-08-11
-sources: [pivoker LORE/skill_body_is_a_template_not_a_file.md, pivoker TADA/1537, pivoker TODO/1538, distilled in session e9c14ce3-6b84-4667-935a-3816a12dd323]
+sources: [pivoker LORE/skill_body_is_a_template_not_a_file.md, pivoker TADA/1537, pivoker TODO/1538, distilled in session e9c14ce3-6b84-4667-935a-3816a12dd323, incident 2026-08-11 authoring ~/.claude/skills/lore-capture in that same session]
 ---
 
 # A skill body is a template, not a file — a dollar-digit token is rewritten before you read it
@@ -51,8 +51,15 @@ the invocation.
 
 ## The rule
 
-When editing **any** skill: a dollar-digit token in a code block is not inert
-text. Write runnable recipes with no positional token at all.
+When editing **any** skill: a dollar-digit token is not inert text **anywhere in
+the body — prose and code fences alike.** Write runnable recipes with no
+positional token at all.
+
+> **Corrected by the 2026-08-11 incident below:** this rule previously read *"a
+> dollar-digit token **in a code block** is not inert text"*. Scoped that way it
+> reads as licensing prose, which is exactly the mistake that incident made.
+> `Superseded (2026-08-11):` "a dollar-digit token in a code block is not inert
+> text."
 
 - **awk** — let `gsub` re-split the record and use `NF` / `$i`; never the
   whole-record or first-field variables by their positional names.
@@ -65,6 +72,38 @@ text. Write runnable recipes with no positional token at all.
 If a positional is genuinely unavoidable, say so in the skill *next to it*, with
 what a correct delivery looks like — a warning three lines below a
 copy-pasteable broken command loses to the command.
+
+## Incident, 2026-08-11: the warning is subject to the warning
+
+Authoring `~/.claude/skills/lore-capture` — a skill whose closing section exists
+purely to warn future editors about this hazard — the warning itself was written
+as:
+
+```
+**Never put a bare `$0`–`$9` in a fenced block in a SKILL.md body.**
+```
+
+Three literal dollar-digit tokens, in inline code, in prose. Invoked with any
+arguments, the loader would have delivered *"Never put a bare `pivoker`–`` in a
+fenced block"* — the warning about mangling, mangled, and mangled in a way that
+destroys the very characters that identify the hazard. Caught on a final
+`grep -n '\$[0-9]'` sweep of the file before finishing, not by writing it.
+
+Two things generalise:
+
+- **The scope was the bug, not the carelessness.** The author knew the rule and
+  applied it correctly to every code fence in the file. The rule as written said
+  "code block", so prose read as exempt. A rule stated narrower than its
+  mechanism will be obeyed exactly as narrowly as it is stated.
+- **A document about a hazard is written in the medium the hazard operates on.**
+  Warnings, examples, and the "here is what the broken version looks like"
+  snippet are all live text. **After writing any document that describes a
+  trap, run the trap's own detector against that document.** Here that is one
+  command:
+
+  ```sh
+  /usr/bin/grep -n '\$[0-9]' path/to/SKILL.md
+  ```
 
 ## Siblings
 
