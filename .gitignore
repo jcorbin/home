@@ -14,6 +14,11 @@
 # Local patched Arch package recipes (e.g. niri + PR#1791 SHM screencast).
 !/pkgs/
 
+# Cross-project LORE corpus: portable lessons that aren't bound to any one
+# repo (tool behaviour, harness hazards, working method). Per-repo lessons
+# live in that repo's own LORE/ instead. See ~/.claude/skills/lore-capture.
+!/LORE/
+
 !.local/
 .local/*
 
