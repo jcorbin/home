@@ -21,7 +21,8 @@ end = [
     "bluetooth",
     "volume",
     "brightness",
-    "battery"
+    "battery",
+    "jcorbin/whatcable:indicator"
 ]
 icon_color = "secondary"
 margin_edge = 4
