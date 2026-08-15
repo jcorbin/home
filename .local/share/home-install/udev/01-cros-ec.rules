@@ -1,0 +1,15 @@
+# Hand /dev/cros_ec to whoever holds the active local seat session, as a logind
+# ACL that is dropped when that session ends. Lets USB-PD tooling (the noctalia
+# whatcable plugin, ectool) talk to the embedded controller without root, while
+# staying narrower than a static GROUP=, which would cover every member of that
+# group in every session, active or not.
+#
+# The number matters: 73-seat-late.rules is what turns the uaccess tag into an
+# ACL, so this has to sort before it. A 99- prefix would be applied too late to
+# have any effect.
+#
+# Note the mode is not the boundary here — cros_ec_chardev_ioctl performs no
+# f_mode or capability check, so anything that can open the node at all can
+# issue arbitrary EC commands. Who gets to open it is the whole question.
+
+SUBSYSTEM=="misc", KERNEL=="cros_ec", TAG+="uaccess"

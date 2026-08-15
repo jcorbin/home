@@ -23,6 +23,19 @@ setup_system() {
     $do systemctl add-wants getty.target getty@tty1.service
     set +x
   fi
+
+  # ChromeOS EC (Framework laptops): let USB-PD tooling read /dev/cros_ec
+  # without root. See the rule file for why it is numbered 01-.
+  if [ -d "$dest/etc/udev/rules.d" ] && [ -e "$dest/sys/class/chromeos/cros_ec" ]; then
+    set -x
+    $do install -D -m 0644 "$DATA_DIR/udev/01-cros-ec.rules" "$dest/etc/udev/rules.d/01-cros-ec.rules"
+    # Only against the real root; there is nothing to reload for a fake dest.
+    [ -n "$dest" ] || {
+      $do udevadm control --reload
+      $do udevadm trigger --subsystem-match=misc
+    }
+    set +x
+  fi
 }
 
 confirm() {
@@ -204,6 +217,8 @@ case "$1" in
     install -d "$fake/etc/systemd"
     install -d "$fake/usr/lib/systemd/system"
     echo 'nonesense' > "$fake/usr/lib/systemd/system/getty@.service"
+    install -d "$fake/etc/udev/rules.d"
+    install -d "$fake/sys/class/chromeos/cros_ec"
 
     setup_system "$fake" just
     ;;
