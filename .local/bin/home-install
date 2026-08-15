@@ -19,7 +19,7 @@ setup_system() {
   do=${2:-sudo}
   if [ -d "$dest/etc/systemd" ] && [ -e "$dest/usr/lib/systemd/system/getty@.service" ]; then
     set -x
-    $do install -D "$DATA_DIR/autologin.conf" "$dest/etc/systemd/system/getty@tty1.service.d/autologin.conf"
+    $do install -D "$DATA_DIR/systemd/autologin.conf" "$dest/etc/systemd/system/getty@tty1.service.d/autologin.conf"
     $do systemctl add-wants getty.target getty@tty1.service
     set +x
   fi
