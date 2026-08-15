@@ -21,7 +21,8 @@ end = [
     "bluetooth",
     "volume",
     "brightness",
-    "battery"
+    "battery",
+    "jcorbin/whatcable:indicator"
 ]
 icon_color = "secondary"
 margin_edge = 4
@@ -203,7 +204,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_weather = true
 
 [plugins]
-enabled = [ "jcorbin/model-usage" ]
+enabled = [ "jcorbin/model-usage", "jcorbin/whatcable" ]
 
 [shell]
 clipboard_auto_paste = "off"
