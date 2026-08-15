@@ -182,7 +182,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_password_hint = true
 
 [plugins]
-enabled = [ "jcorbin/model-usage" ]
+enabled = [ "jcorbin/model-usage", "jcorbin/whatcable" ]
 
 [shell]
 clipboard_auto_paste = "off"

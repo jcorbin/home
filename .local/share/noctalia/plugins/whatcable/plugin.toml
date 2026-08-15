@@ -1,0 +1,100 @@
+# WhatCable — USB-C, cable e-marker and Power Delivery diagnostics on the bar.
+#
+# A port of https://github.com/nedrichards/whatcable-linux (GTK4/libadwaita +
+# Python) to a noctalia v5 plugin. The scanning logic is reimplemented in Luau
+# under lib/; only the Chrome EC ioctl stayed in Python, because a Luau plugin
+# can read sysfs but cannot issue an ioctl. See README.md.
+#
+# plugin_api = 3 matches what the shipped v5 plugins use, same as
+# jcorbin/model-usage. Level 4 is only needed for httpStream/SSE.
+
+id           = "jcorbin/whatcable"
+name         = "WhatCable"
+version      = "0.1.0"
+plugin_api   = 3
+author       = "jcorbin"
+license      = "GPL-3.0-or-later"
+icon         = "plug-connected"
+description  = "USB-C port, cable e-marker and USB Power Delivery diagnostics."
+tags         = ["bar", "panel", "service", "hardware", "usb"]
+dependencies = ["python3"]   # informational: only the Chrome EC helper needs it
+
+# ── Plugin-wide settings ──
+
+[[setting]]
+key             = "refresh_interval"
+type            = "int"
+label_key       = "settings.refresh_interval.label"
+description_key = "settings.refresh_interval.description"
+default         = 10
+min             = 2
+max             = 300
+
+[[setting]]
+key             = "query_ec"
+type            = "bool"
+label_key       = "settings.query_ec.label"
+description_key = "settings.query_ec.description"
+default         = true
+
+[[setting]]
+key             = "show_advanced"
+type            = "bool"
+label_key       = "settings.show_advanced.label"
+description_key = "settings.show_advanced.description"
+default         = false
+
+[[setting]]
+key             = "show_usb_devices"
+type            = "bool"
+label_key       = "settings.show_usb_devices.label"
+description_key = "settings.show_usb_devices.description"
+default         = false
+
+[[setting]]
+key             = "show_root_hubs"
+type            = "bool"
+label_key       = "settings.show_root_hubs.label"
+description_key = "settings.show_root_hubs.description"
+default         = false
+advanced        = true
+visible_when    = { key = "show_usb_devices", values = ["true"] }
+
+# ── Background scanner: sysfs + EC helper on a timer, published to state ──
+
+[[service]]
+id    = "scanner"
+entry = "service.luau"
+
+# ── Bar item ──
+
+[[widget]]
+id    = "indicator"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key       = "glyph"
+  type      = "glyph"
+  label_key = "settings.glyph.label"
+  default   = "plug-connected"
+
+  [[widget.setting]]
+  key             = "display"
+  type            = "select"
+  label_key       = "settings.display.label"
+  description_key = "settings.display.description"
+  default         = "power"
+  options = [
+    { value = "power", label_key = "settings.display.power" },
+    { value = "ports", label_key = "settings.display.ports" },
+    { value = "none",  label_key = "settings.display.none" },
+  ]
+
+# ── Detail panel ──
+
+[[panel]]
+id              = "panel"
+entry           = "panel.luau"
+width           = 470
+height          = 560
+open_near_click = true

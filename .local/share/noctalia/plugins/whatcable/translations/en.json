@@ -1,0 +1,32 @@
+{
+  "settings.refresh_interval.label": "Refresh interval (seconds)",
+  "settings.refresh_interval.description": "How often to rescan sysfs and the embedded controller.",
+  "settings.query_ec.label": "Query the Chrome/Framework EC",
+  "settings.query_ec.description": "Read per-port voltage, current and power over /dev/cros_ec. Needs read access to that device; see the plugin README.",
+  "settings.show_advanced.label": "Show Thunderbolt / USB4 devices",
+  "settings.show_advanced.description": "Add a panel section for the Thunderbolt and USB4 buses and, where readable, the USB debugfs dump.",
+  "settings.show_usb_devices.label": "Show USB devices",
+  "settings.show_usb_devices.description": "Add a panel section listing every device on /sys/bus/usb/devices.",
+  "settings.show_root_hubs.label": "Include USB root hubs",
+  "settings.show_root_hubs.description": "Keep the host controllers in the USB device list instead of hiding them.",
+  "settings.glyph.label": "Bar icon",
+  "settings.display.label": "Bar text",
+  "settings.display.description": "What to show next to the icon.",
+  "settings.display.power": "Negotiated power",
+  "settings.display.ports": "Connected ports",
+  "settings.display.none": "Icon only",
+
+  "tooltip.scanning": "USB-C · scanning…",
+
+  "panel.typec": "TYPE-C PORTS",
+  "panel.ec": "EMBEDDED CONTROLLER",
+  "panel.framework": "FRAMEWORK PORTS",
+  "panel.firmware": "FIRMWARE",
+  "panel.advanced": "THUNDERBOLT / USB4",
+  "panel.usb": "USB DEVICES",
+  "panel.more.one": "· … and 1 more",
+  "panel.more.other": "· … and {count} more",
+  "panel.empty": "No Type-C data exposed",
+  "panel.empty-detail": "The kernel is not publishing any Type-C ports or Power Delivery capabilities. That is normal when firmware negotiates PD without handing identity data to the kernel; what is available then comes from the embedded controller.",
+  "panel.permission-hint": "Grant read access to /dev/cros_ec to see per-port power: sudo setfacl -m \"u:$USER:r\" /dev/cros_ec (see the plugin README for a persistent udev rule)."
+}

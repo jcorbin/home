@@ -114,6 +114,7 @@
 !.local/share/noctalia/plugins
 .local/share/noctalia/plugins/*
 !.local/share/noctalia/plugins/model-usage
+!.local/share/noctalia/plugins/whatcable
 
 # Systemd User Config
 /.config/systemd/**/notify-server*
