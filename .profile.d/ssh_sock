@@ -2,18 +2,40 @@
 # shellcheck disable=SC3043
 # before: bootstrap
 
+# TODO abstract provider interfaces out:
+# 1. systemd getenv & setenv
+# 2. tmux getnev & setenv
+# 3. gpg-agent discover only
+# 4. ssh-agent discover and oneshot spawn
+
+# TODO if running in tmux and we're set to use gpg-agent, test if it even works, and if not switch to a oneshot-spawned ssh-agent; export only into our own tmux env, not systemd
+
 find_ssh_sock()
 {
   if [ -n "$SSH_AUTH_SOCK" ]; then
     return
   fi
 
-  if systemctl --user whoami >/dev/null 2>&1; then
-    local systemd_sock
-    systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
-    if [ -n "$systemd_sock" ]; then
-      export SSH_AUTH_SOCK="$systemd_sock"
-      echo 'Set SSH_AUTH_SOCK from systemd'
+  # inside tmux, the session's own agent (see tmux-session) is authoritative;
+  # never fall through to systemd/gpg-agent and leak it back into systemd
+  if [ -n "$TMUX" ]; then
+    local tmux_sock
+    tmux_sock=$(tmux show-environment SSH_AUTH_SOCK 2>/dev/null | sed -n 's/^SSH_AUTH_SOCK=//p')
+    if [ -n "$tmux_sock" ]; then
+      export SSH_AUTH_SOCK="$tmux_sock"
+      echo 'Set SSH_AUTH_SOCK from tmux session'
+    fi
+    return
+  fi
+
+  if [ -z "$SSH_AUTH_SOCK" ]; then
+    if systemctl --user whoami >/dev/null 2>&1; then
+      local systemd_sock
+      systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
+      if [ -n "$systemd_sock" ]; then
+        export SSH_AUTH_SOCK="$systemd_sock"
+        echo 'Set SSH_AUTH_SOCK from systemd'
+      fi
     fi
   fi
 
@@ -35,6 +57,11 @@ export_ssh_sock() {
     return
   fi
 
+  # a tmux session's agent stays private to that session
+  if [ -n "$TMUX" ]; then
+    return
+  fi
+
   if systemctl --user whoami >/dev/null 2>&1; then
     local systemd_sock
     systemd_sock=$(systemctl --user show-environment | grep SSH_AUTH_SOCK | cut -d= -f2-)
@@ -44,11 +71,13 @@ export_ssh_sock() {
     fi
   fi
 
-  if type tmux >/dev/null && tmux has-session >/dev/null 2>&1; then
-    tmux setenv -g SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
-    tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
-    echo 'Exported SSH_AUTH_SOCK into tmux'
-  fi
+  # TODO which session tho ; and maybe opt-out/in
+  # if type tmux >/dev/null && tmux has-session >/dev/null 2>&1; then
+  #   tmux setenv -g SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+  #   tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+  #   echo 'Exported SSH_AUTH_SOCK into tmux'
+  # fi
+
 }
 
 find_ssh_sock
