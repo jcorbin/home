@@ -1,6 +1,13 @@
 #!/bin/bash
 # after: bootstrap
 
+if [ -n "$MOSH_SESSION_TERMINAL" ]; then
+    # Fix for mosh sessions where tmux falls back to magenta background.
+    # mosh strips TMUX and may not pass TERM through the mosh protocol,
+    # so tmux inside mosh can't detect the real background color.
+    export TERM=${TERM:-xterm-256color}
+fi
+
 # Try to fix broken $TERM
 if [ -n "$TERM" ] && command -v tput &>/dev/null; then
     while ! tput longname &>/dev/null; do
