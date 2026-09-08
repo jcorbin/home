@@ -445,15 +445,14 @@ window-rule {
 // Make zoom ancillary windows float
 window-rule {
     match app-id=r#"^zoom$"# title=r#"^annotate_toolbar$"#
-    open-floating true
-    open-focused true
-}
-
-window-rule {
+    match app-id=r#"^zoom$"# title=r#"^meeting bottombar popup$"#
+    match app-id=r#"^zoom$"# title=r#"^Toolbar Menu$"#
+    match app-id=r#"^zoom$"# title=r#"^zoom$"# // overlay e.g. Fullscreen notice
     match app-id="Zoom Workplace" title=".*menu.*"
     open-floating true
     open-focused true
 }
+
 
 // Make password manager prompts float
 window-rule {
