@@ -3,7 +3,7 @@ name: Comma Fucker
 interaction: chat
 description: Fix my grammar
 tools:
-- buffer
+  - buffer
 opts:
   alias: grammar
   is_slash_cmd: true
