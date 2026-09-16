@@ -53,11 +53,13 @@ return {
 
               schema = {
                 model = {
-                  default = "glm-4.7-flash"
+                  -- default = "glm-4.7-flash"
+                  default = "qwen3.8"
                 },
 
                 num_ctx = {
-                  default = 131072,
+                  -- default = 131072,
+                  default = 262144,
                 },
 
                 -- think = {
