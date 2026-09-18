@@ -1,0 +1,14 @@
+[Unit]
+Description=PipeWire virtual speaker/mic for OBS audio
+After=pipewire.service wireplumber.service
+Wants=wireplumber.service
+Requisite=pipewire.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/jcorbin/.local/bin/virt-mic start
+ExecStop=/home/jcorbin/.local/bin/virt-mic stop
+
+[Install]
+WantedBy=default.target

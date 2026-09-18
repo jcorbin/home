@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# State file to track module indices for clean unload
+STATE_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+IDX_FILE="${STATE_DIR}/virt-mic-modules"
+
+log() {
+  echo "virt-mic: $*"
+}
+
+wait_for() {
+  name=$1
+  for i in $(seq 1 60); do
+    if [ -n "$(pw-link -o $name)" ]; then
+      break
+    fi
+    sleep 0.2
+  done
+}
+
+start() {
+  mkdir -p "$STATE_DIR"
+
+  # Create the speaker-side sink (what OBS monitors into)
+  local speaker_idx
+  speaker_idx=$(pactl load-module module-null-sink \
+      sink_name=VirtualSpeaker \
+      sink_properties=device.description=VirtualSpeaker,object.linger=1 |
+    awk '{print $NF}')
+  echo "$speaker_idx" > "$IDX_FILE"
+  log "Created VirtualSpeaker sink (module index: $speaker_idx)"
+
+  # Create the virtual microphone Zoom will capture
+  local mic_idx
+  mic_idx=$(pactl load-module module-null-sink \
+      media.class=Audio/Source/Virtual \
+      sink_name=VirtualMic \
+      channel_map=front-left,front-right \
+      sink_properties=device.description=VirtualMic,object.linger=1 |
+    awk '{print $NF}')
+  echo "$mic_idx" >> "$IDX_FILE"
+  log "Created VirtualMic source (module index: $mic_idx)"
+
+  # Wait for the nodes to appear in the graph, then wire them together
+  wait_for VirtualSpeaker
+  wait_for VirtualMic
+  pw-link VirtualSpeaker:monitor_FL VirtualMic:input_FL
+  pw-link VirtualSpeaker:monitor_FR VirtualMic:input_FR
+  log "Linked VirtualSpeaker monitor → VirtualMic input"
+}
+
+stop() {
+  # Unlink first
+  pw-link -d VirtualSpeaker:monitor_FL VirtualMic:input_FL 2>/dev/null || true
+  pw-link -d VirtualSpeaker:monitor_FR VirtualMic:input_FR 2>/dev/null || true
+  log "Unlinked VirtualSpeaker monitor → VirtualMic input"
+
+  # Unload modules by saved index
+  if [[ -f "$IDX_FILE" ]]; then
+    while IFS= read -r idx; do
+      [[ -n "$idx" ]] && pactl unload-module "$idx" 2>/dev/null || true
+      log "Unloaded modules $idx from state file"
+    done < "$IDX_FILE"
+    rm -f "$IDX_FILE"
+    log "Removed state file"
+  else
+    # Fallback: try to find by name
+    pactl list short modules | awk '/module-null-sink.*Virtual(Speaker|Mic)/ {print $1}' |
+      while IFS= read -r idx; do
+        [[ -n "$idx" ]] && pactl unload-module "$idx" 2>/dev/null || true
+        log "Unloaded modules $idx by name fallback"
+      done
+  fi
+}
+
+status() {
+  if [[ -f "$IDX_FILE" ]]; then
+    echo "virt-mic: running (module indices: $(tr '\n' ' ' < "$IDX_FILE"))"
+    pactl list short modules | awk -v idxs="$(cat "$IDX_FILE" | tr '\n' '|')" '
+      BEGIN { split(idxs, a, "|"); for (i in a) wanted[a[i]]=1 }
+      $1 in wanted { print "  module " $1 ": " $2 " " $3 }
+    '
+  else
+    echo "virt-mic: stopped"
+  fi
+}
+
+install_unit() {
+  local unit_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+  local unit_file="$unit_dir/virt-mic.service"
+  local script_path="$(realpath "$0")"
+  mkdir -p "$unit_dir"
+  cat > "$unit_file" <<EOF
+[Unit]
+Description=PipeWire virtual speaker/mic for OBS audio
+After=pipewire.service wireplumber.service
+Wants=wireplumber.service
+Requisite=pipewire.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=$script_path start
+ExecStop=$script_path stop
+
+[Install]
+WantedBy=default.target
+EOF
+
+  log "Installed user unit to $unit_file"
+  log "Running systemctl --user daemon-reload..."
+  systemctl --user daemon-reload
+  read -rp "Enable and start virt-mic now? [y/N] " confirm
+  if [[ "$confirm" =~ ^[Yy]$ ]]; then
+    systemctl --user enable --now virt-mic
+    log "virt-mic enabled and started"
+  else
+    log "Skipped enable/start. Run: systemctl --user enable --now virt-mic"
+  fi
+}
+
+# Command dispatch
+case "${1:-}" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status
+    ;;
+  install)
+    install_unit
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|status|install}" >&2
+    exit 1
+    ;;
+esac
