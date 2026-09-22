@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Decide btrbk mode: full run (home LAN) vs snapshot-only (roaming/offline).
+
+set -euo pipefail
+set -x
+
+CONF=/etc/btrbk/btrbk.conf
+TS=/usr/bin/tailscale
+
+# --- host from:  target ssh://[user@]host[:port]/path
+host=$(sed -nE 's/^[[:space:]]*target[[:space:]]+ssh:\/\/([^@\/]+@)?([^\/:]+).*/\2/p' "$CONF" | head -1)
+
+if [[ -z $host ]]; then
+    echo "btrbk-lan-gate: no ssh target found in $CONF, snapshot-only"
+    exec btrbk snapshot
+fi
+
+# --- one successful pong is enough; DERP relays show "via DERP-xxx" (no IP:port)
+line=$(timeout 30 "$TS" ping --timeout=10s --c=4 "$host" 2>/dev/null | grep -m1 pong) || line=""
+via=$(sed -nE 's/.*[[:space:]]via[[:space:]]([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+):[0-9]+.*/\1/p' <<<"$line")
+
+if [[ -n $via ]] && ! ip route get "$via" 2>/dev/null | grep -qw tailscale0; then
+    echo "btrbk-lan-gate: $host is direct via $via on LAN -> full run"
+    exec btrbk run
+else
+    echo "btrbk-lan-gate: $host relayed/unreachable -> snapshot-only"
+    exec btrbk snapshot
+fi
+
