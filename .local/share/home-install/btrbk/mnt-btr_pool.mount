@@ -1,0 +1,11 @@
+[Unit]
+Description=Pool mount for snapshots and backups
+
+[Mount]
+What=/dev/disk/by-uuid/ff292585-067c-4cce-9dd6-a85ad13df82d
+Where=/mnt/btr_pool
+Type=btrfs
+Options=subvolid=5,noatime
+
+[Install]
+WantedBy=multi-user.target
