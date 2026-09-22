@@ -1,4 +1,4 @@
-config_version = 14
+config_version = 15
 
 [accessibility]
 ui_scale = 1.2
@@ -7,38 +7,104 @@ ui_scale = 1.2
 background_opacity = 0.0
 capsule = true
 capsule_border = "outline"
-capsule_opacity = 0.6
-capsule_padding = 8.0
+capsule_border_width = 0.0
+capsule_opacity = 0.59999999999999998
+capsule_padding = 4.0
 capsule_thickness = 1.0
-center = []
+center = [ "group:g7", "group:g2" ]
 color = "primary"
-end = [
-    "jcorbin/model-usage:indicator",
-    "notifications",
-    "tray",
-    "clipboard",
-    "network",
-    "bluetooth",
-    "volume",
-    "brightness",
-    "battery",
-    "jcorbin/whatcable:indicator"
-]
+end = [ "group:g1" ]
 icon_color = "secondary"
-margin_edge = 4
-margin_ends = 4
-padding = 10
+margin_edge = 2
+margin_ends = 2
+padding = 0
 radius = 0
-scale = 1.1
-start = [ "clock", "group:g1", "taskbar" ]
+scale = 1.1000000000000001
+start = [ "clock", "weather", "group:g5", "group:g6", "group:g4", "group:g3" ]
 
     [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g4"
+    members = [ "status", "network" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
     enabled = true
     fill = "surface_variant"
     id = "g1"
-    members = [ "cpu", "temp", "ram" ]
-    opacity = 1.0
-    padding = 6.0
+    members = [ "summary" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g2"
+    members = [ "active_window", "notifications", "clipboard", "status_2", "tray" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g3"
+    members = [ "battery", "jcorbin/whatcable:indicator", "power_profile" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g5"
+    members = [ "caffeine", "widget", "brightness" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g6"
+    members = [ "audio_visualizer", "volume", "input_volume", "airpods_2", "bluetooth" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border = "outline"
+    border_width = 0.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g7"
+    members = [ "control-center", "launcher", "session" ]
+    opacity = 0.60000002384185791
+    padding = 4.0
 
 [control_center.calendar]
 show_week_numbers = true
@@ -62,11 +128,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000002]
     box_height = 208.0
     box_width = 688.0
-    cx = 910.5
-    cy = 996.0
+    cx = 907.97784423828125
+    cy = 993.51629638671875
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "audio_visualizer"
 
@@ -81,11 +147,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000003]
     box_height = 392.0
     box_width = 376.0
-    cx = 202.5
-    cy = 245.5
+    cx = 270.0
+    cy = 310.00006103515625
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "weather"
 
@@ -98,11 +164,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000004]
     box_height = 288.0
     box_width = 472.0
-    cx = 1562.5
-    cy = 200.0
+    cx = 1485.0
+    cy = 249.99998474121094
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "sysmon"
 
@@ -117,11 +183,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000005]
     box_height = 0.0
     box_width = 0.0
-    cx = 1678.5
-    cy = 425.5
+    cx = 1640.0
+    cy = 561.0
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "sysmon"
 
@@ -133,11 +199,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000006]
     box_height = 0.0
     box_width = 0.0
-    cx = 1442.5
-    cy = 425.5
+    cx = 1335.0
+    cy = 555.0
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "sysmon"
 
@@ -149,11 +215,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000007]
     box_height = 64.0
     box_width = 328.0
-    cx = 1633.5
-    cy = 1161.5
+    cx = 1575.0
+    cy = 1130.0
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "clock"
 
@@ -179,11 +245,11 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
     box_width = 720.0
-    cx = 903.0
-    cy = 1084.0
+    cx = 900.49859619140625
+    cy = 1081.2969970703125
     output = "eDP-1"
-    placement_height = 1203.0
-    placement_width = 1805.0
+    placement_height = 1200.0
+    placement_width = 1800.0
     rotation = 0.0
     type = "login_box"
 
@@ -203,8 +269,24 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_unlock_hint = true
         show_weather = true
 
+[plugin_settings."davemhammer/tailscale"]
+notify_on_peer_change = false
+
+[plugin_settings."harveywuk/airpods"]
+ctl_path = "/usr/bin/librepods-ctl"
+
 [plugins]
-enabled = [ "jcorbin/model-usage", "jcorbin/whatcable" ]
+enabled = [
+    "jcorbin/model-usage",
+    "jcorbin/whatcable",
+    "harveywuk/airpods",
+    "alexander/screen-toolkit",
+    "tmelik/system-monitor",
+    "srounce/systemd",
+    "davemhammer/tailscale",
+    "aristides/udiskie",
+    "noctalia/bitwarden"
+]
 
 [shell]
 clipboard_auto_paste = "off"
@@ -238,19 +320,25 @@ mode = "dark"
 source = "community"
 wallpaper_scheme = "m3-content"
 
+    [theme.templates]
+    builtin_ids = [ "alacritty", "btop", "gtk3", "gtk4", "ghostty", "niri", "qt", "starship" ]
+
 [wallpaper]
-directory = "/usr/share/backgrounds"
-directory_dark = "/usr/share/backgrounds"
-directory_light = "/usr/share/backgrounds"
+directory = "/usr/share/wallpapers"
+directory_dark = "/usr/share/wallpapers"
+directory_light = "/usr/share/wallpapers"
 
     [wallpaper.default]
-    path = "/usr/share/backgrounds/archlinux/wave.png"
+    path = "/usr/share/wallpapers/cachyos-wallpapers/Cachy depths 5K.png"
 
     [wallpaper.last]
-    path = "/usr/share/backgrounds/archlinux/wave.png"
+    path = "/usr/share/wallpapers/cachyos-wallpapers/Cachy depths 5K.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/usr/share/backgrounds/archlinux/wave.png"
+    path = "/usr/share/wallpapers/cachyos-wallpapers/Cachy depths 5K.png"
+
+[widget.airpods_2]
+type = "harveywuk/airpods:airpods"
 
 [widget.clock]
 format = "{:%Y-%m-%dT%H:%M:%S%z}"
@@ -258,12 +346,25 @@ format = "{:%Y-%m-%dT%H:%M:%S%z}"
 [widget.network]
 show_label = false
 
+[widget.status]
+type = "davemhammer/tailscale:status"
+
+[widget.status_2]
+type = "aristides/udiskie:status"
+
+[widget.summary]
+show_separators = false
+type = "tmelik/system-monitor:summary"
+
 [widget.taskbar]
 anchor = true
 only_active_workspace = true
 show_window_title = true
 taskbar_max_width = 500
 window_title_max_width = 75
+
+[widget.widget]
+type = "alexander/screen-toolkit:widget"
 
 [widget.workspaces]
 style = "minimal"
