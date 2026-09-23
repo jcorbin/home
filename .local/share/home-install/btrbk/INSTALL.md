@@ -27,4 +27,4 @@ sudo install -m 0644 btrbk.timer.d_hourly.conf /etc/systemd/system/btrbk.timer.d
 ```
 then `systemctl daemon-reload && systemctl enable --now btrbk.timer` and verify `systemctl list-timers`  / watch `systemctl status btrbk.service` for next run
 
-TODO port all of the above into an install script
+TOOD: try out install.sh next time
