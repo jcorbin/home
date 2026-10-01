@@ -16,6 +16,7 @@
 !home-backup
 !home-bootstrap
 !home-install
+!ollama-sync
 !quotecmd
 !recshot
 !run

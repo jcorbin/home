@@ -1,0 +1,189 @@
+#!/bin/bash
+set -euo pipefail
+
+# Copy ollama models, by name, from another host's model store into ours.
+#
+# Usage:
+#   ollama-sync [-H host] [-n] MODEL[:TAG]...  # copy models (-n: dry run)
+#   ollama-sync [-H host] [-n] -p [MODEL...]   # also pick (fzf -m) from remote models not yet local
+#   ollama-sync [-H host] -l                   # list remote models, * marks ones present locally
+#
+# Assumes the store lives at the same $OLLAMA_DIR on both hosts, that we can
+# read it remotely (e.g. by being in the ollama group), and that we may sudo
+# locally to write into it.
+
+host=${OLLAMA_SYNC_HOST:-doral}
+ollama_dir=${OLLAMA_DIR:-/var/lib/ollama}
+staging="$ollama_dir/.sync-staging"
+self=$(uname -n)
+dry_run=
+pick=
+list=
+
+# shell-quote args, but only those that need it
+quote() {
+	local arg out=()
+	for arg; do
+		if [[ $arg =~ ^[[:alnum:]_./:=+@%,-]+$ ]]; then
+			out+=("$arg")
+		else
+			out+=("${arg@Q}")
+		fi
+	done
+	echo "${out[*]}"
+}
+
+# log a command, tagged with the host it runs on, to stderr
+show() {
+	local on=$1
+	shift
+	echo "[$on]\$ $(quote "$@")" >&2
+}
+
+# run a command locally, logging it first
+run() {
+	show "$self" "$@"
+	"$@"
+}
+
+# run a shell command line on the remote host, logging it first
+remote() {
+	echo "[$host]\$ $1" >&2
+	ssh "$host" "$1"
+}
+
+usage() {
+	sed -n '/^# Usage:/,/^#$/s/^# \?//p' "$0" >&2
+	exit 2
+}
+
+# model spec to manifest path, following ollama's naming defaults:
+#   name[:tag]           -> registry.ollama.ai/library/name/tag
+#   ns/name[:tag]        -> registry.ollama.ai/ns/name/tag
+#   reg/ns/name[:tag]    -> reg/ns/name/tag
+manifest_path() {
+	local spec=$1 name tag=latest
+	name=$spec
+	if [[ ${spec##*/} == *:* ]]; then
+		name=${spec%:*}
+		tag=${spec##*:}
+	fi
+	case "${name//[^\/]/}" in
+		'') echo "registry.ollama.ai/library/$name/$tag" ;;
+		/) echo "registry.ollama.ai/$name/$tag" ;;
+		*) echo "$name/$tag" ;;
+	esac
+}
+
+# manifest path back to the short form ollama shows
+model_name() {
+	local path=${1#registry.ollama.ai/}
+	path=${path#library/}
+	echo "${path%/*}:${path##*/}"
+}
+
+# manifest json to "blob-filename size" lines
+manifest_blobs() {
+	run jq -r '([.config] + .layers)[] | "\(.digest | sub(":"; "-")) \(.size)"' "$@"
+}
+
+list_models() {
+	local path
+	remote "cd $(quote "$ollama_dir/manifests") && find . -type f" | sed 's~^\./~~' | sort |
+	while read -r path; do
+		if [[ -f "$ollama_dir/manifests/$path" ]]; then
+			printf '* '
+		else
+			printf '  '
+		fi
+		model_name "$path"
+	done
+}
+
+sync_model() {
+	local spec=$1 path manifest blob size total=0 sum
+	local -a need=()
+
+	path=$(manifest_path "$spec")
+	manifest="$tmp/manifest"
+
+	echo "## $spec -> $path" >&2
+	if ! remote "cat $(quote "$ollama_dir/manifests/$path")" >"$manifest"; then
+		echo "$spec: no manifest $path on $host" >&2
+		return 1
+	fi
+
+	while read -r blob size; do
+		if [[ -e "$ollama_dir/blobs/$blob" ]]; then
+			echo "[$self] have $blob ($(numfmt --to=iec "$size")B)" >&2
+		else
+			echo "[$self] need $blob ($(numfmt --to=iec "$size")B)" >&2
+			need+=("$blob")
+			total=$(( total + size ))
+		fi
+	done < <(manifest_blobs "$manifest")
+
+	echo "$(model_name "$path"): ${#need[@]} blob(s) to copy, $(numfmt --to=iec "$total")B"
+	[[ -n $dry_run ]] && return 0
+
+	if [[ ${#need[@]} -gt 0 ]]; then
+		[[ -d "$staging" ]] || run sudo install -d -o "$USER" -g "$(id -gn)" -m 755 "$staging"
+
+		# rsync runs here, pulling from $host
+		printf '%s\n' "${need[@]}" |
+			run rsync --partial --progress --files-from=- "$host:$ollama_dir/blobs/" "$staging/"
+
+		for blob in "${need[@]}"; do
+			sum=$(run sha256sum "$staging/$blob")
+			if [[ ${sum%% *} != "${blob#sha256-}" ]]; then
+				echo "[$self] checksum mismatch: $staging/$blob" >&2
+				return 1
+			fi
+			echo "[$self] checksum ok: $blob" >&2
+		done
+
+		for blob in "${need[@]}"; do
+			run sudo chown ollama:ollama "$staging/$blob"
+			run sudo mv "$staging/$blob" "$ollama_dir/blobs/$blob"
+		done
+	fi
+
+	# manifest last, so the model only appears once all of its blobs exist
+	run sudo install -D -m 644 -o ollama -g ollama "$manifest" "$ollama_dir/manifests/$path"
+}
+
+while getopts 'H:lnph' opt; do
+	case $opt in
+		H) host=$OPTARG ;;
+		l) list=1 ;;
+		p) pick=1 ;;
+		n) dry_run=1 ;;
+		*) usage ;;
+	esac
+done
+shift $(( OPTIND - 1 ))
+
+if [[ -n $list ]]; then
+	list_models
+	exit
+fi
+
+if [[ -n $pick ]]; then
+	mapfile -t picked < <(list_models | sed -n 's/^  //p' | fzf -m --prompt="$host> ")
+	if [[ ${#picked[@]} -eq 0 && $# -eq 0 ]]; then
+		echo "nothing picked" >&2
+		exit 1
+	fi
+	set -- "$@" "${picked[@]}"
+fi
+
+[[ $# -gt 0 ]] || usage
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+status=0
+for spec in "$@"; do
+	sync_model "$spec" || status=1
+done
+exit $status
