@@ -20,6 +20,7 @@
 !quotecmd
 !recshot
 !run
+!tmux-session
 !tpm-luks-reenroll
 !uwofi
 !whoamai

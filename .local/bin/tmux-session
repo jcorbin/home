@@ -1,0 +1,351 @@
+#!/bin/bash
+# tmux-session: "just (re)connect me to session NAME"
+#
+# Usage:
+#   tmux-session [-d] [-f] [-r] [NAME]   attach to NAME, creating/restoring it as needed
+#   tmux-session ls                      list live, saved, closed, and template sessions
+#   tmux-session save [-q] [NAME...]     snapshot sessions (default: all live ones)
+#   tmux-session forget NAME             drop NAME's saved snapshots
+#   tmux-session agent NAME              ensure NAME's ssh-agent is running; print its socket
+#   tmux-session closed NAME             (hook) session-closed: archive snapshot, stop agent
+#
+# Flags:
+#   -d  create/restore only, do not attach (e.g. for systemd tmux@.service)
+#   -f  fresh: ignore any snapshot, start from template (if any)
+#   -r  revive: restore from the last *closed* snapshot (after a kill-session)
+#
+# With no NAME: inside tmux, or on a tty with fzf, offers a picker; else "main".
+# Inside tmux, switches the current client rather than nesting.
+#
+# Creation sources, in order of preference:
+#   1. $XDG_STATE_HOME/tmux/sessions/NAME.tmux        auto-saved snapshot (see save)
+#   2. ~/.config/tmux/sessions/NAME.tmux              hand-written template
+# Both are plain tmux command files, sourced right after `new-session`, so
+# un-targeted commands (new-window, split-window, send-keys...) apply to the
+# new session. Snapshots are written by hooks in tmux.conf; when a session is
+# deliberately closed (kill-session, last shell exits, kill-server) its snapshot
+# is moved aside to NAME.closed.tmux so it isn't resurrected unbidden; a server
+# that dies by signal (shutdown, reboot) leaves its snapshots for recall.
+#
+# Each session gets its own ssh-agent (socket in $XDG_RUNTIME_DIR/tmux-agents/),
+# isolated from any graphical session's gpg-agent/ssh-agent. Set
+# TMUX_SESSION_AGENT=inherit to instead pass through the caller's SSH_AUTH_SOCK.
+#
+# Remote use (mosh-server/ssh start in $HOME, without a login PATH):
+#   mosh HOST -- .local/bin/tmux-session NAME
+#   ssh -t HOST .local/bin/tmux-session NAME
+
+set -euo pipefail
+
+template_dir=${XDG_CONFIG_HOME:-$HOME/.config}/tmux/sessions
+state_dir=${XDG_STATE_HOME:-$HOME/.local/state}/tmux/sessions
+agent_dir=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/tmux-agents
+[ -d "${agent_dir%/*}" ] || agent_dir=$HOME/.ssh/agent/tmux
+
+# programs whose command line is replayed into a restored pane; extend via
+# `set -g @session-restore-commands "..."` in tmux.conf
+default_restore_commands='nvim vim vi less man tail journalctl watch htop btop top ssh mosh claude'
+
+# save throttle (seconds) for `save -q`, which runs from the status line
+save_interval=60
+
+die() { echo "tmux-session: $*" >&2; exit 1; }
+
+tm() { command tmux ${TMUX_SESSION_L:+-L "$TMUX_SESSION_L"} "$@"; }
+
+has_session() { tm has-session -t "=$1" 2>/dev/null; }
+
+# tmux session names may contain most anything except : and .
+check_name() {
+  case $1 in
+  '' | *[:.]* | */*) die "invalid session name ${1@Q}" ;;
+  esac
+}
+
+## ssh-agent per session
+
+agent_sock() { echo "$agent_dir/$1.sock"; }
+agent_unit() { echo "tmux-agent-$(systemd-escape -- "$1")"; }
+have_systemd() { command -v systemd-run >/dev/null && systemctl --user show-environment >/dev/null 2>&1; }
+
+agent_alive() {
+  local rc=0
+  SSH_AUTH_SOCK=$1 ssh-add -l >/dev/null 2>&1 || rc=$?
+  # 0: has keys, 1: no keys; 2: could not connect
+  [ $rc -lt 2 ]
+}
+
+agent_ensure() {
+  local name=$1 sock
+  sock=$(agent_sock "$name")
+  if agent_alive "$sock"; then
+    echo "$sock"
+    return
+  fi
+  mkdir -p -m 700 "$agent_dir"
+  rm -f "$sock"
+  if have_systemd; then
+    # own unit, so it outlives whatever terminal scope we were launched from
+    systemctl --user reset-failed "$(agent_unit "$name")" 2>/dev/null || true
+    systemd-run --user --quiet --collect \
+      --unit="$(agent_unit "$name")" \
+      --description="ssh-agent for tmux session $name" \
+      ssh-agent -D -a "$sock" >/dev/null
+    for _ in $(seq 50); do
+      [ -S "$sock" ] && break
+      sleep 0.02
+    done
+  else
+    ssh-agent -a "$sock" -s >"$agent_dir/$name.env"
+  fi
+  [ -S "$sock" ] || die "failed to start ssh-agent for $name"
+  echo "$sock"
+}
+
+agent_stop() {
+  local name=$1 sock pid
+  sock=$(agent_sock "$name")
+  if have_systemd && systemctl --user -q is-active "$(agent_unit "$name")" 2>/dev/null; then
+    systemctl --user stop "$(agent_unit "$name")"
+  elif [ -f "$agent_dir/$name.env" ]; then
+    pid=$(sed -n 's/^SSH_AGENT_PID=\([0-9]*\);.*/\1/p' "$agent_dir/$name.env")
+    [ -n "$pid" ] && kill "$pid" 2>/dev/null || true
+  fi
+  rm -f "$sock" "$agent_dir/$name.env"
+}
+
+session_agent_env() {
+  local name=$1
+  if [ "${TMUX_SESSION_AGENT:-own}" = inherit ]; then
+    echo "SSH_AUTH_SOCK=${SSH_AUTH_SOCK:-}"
+  else
+    echo "SSH_AUTH_SOCK=$(agent_ensure "$name")"
+  fi
+}
+
+## snapshots
+
+# quote a string for the tmux command parser
+tq() {
+  local s=$1
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  s=${s//\$/\\\$}
+  printf '"%s"' "$s"
+}
+
+# command line of the foreground job in a pane, if it's one worth restoring
+pane_restore_cmd() {
+  local pane_pid=$1 pane_cmd=$2 restore=$3 fg args
+  [[ " $restore " == *" $pane_cmd "* ]] || return 0
+  fg=$(ps -o tpgid= -p "$pane_pid" 2>/dev/null | tr -d ' ') || return 0
+  [ -n "$fg" ] && [ "$fg" != "$pane_pid" ] && [ "$fg" -gt 0 ] || return 0
+  args=$(ps -o args= -p "$fg" 2>/dev/null) || return 0
+  [ -n "$args" ] && echo "$args"
+}
+
+save_session() {
+  local name=$1 restore out tmp
+  restore=$(tm show -gqv @session-restore-commands 2>/dev/null) || true
+  restore=${restore:-$default_restore_commands}
+  out=$state_dir/$name.tmux
+  tmp=$out.tmp.$$
+
+  local active_window='' first=1 ord=0 sep=$'\x1f'
+  {
+    echo "# tmux-session snapshot of ${name@Q} at $(date -Iseconds)"
+    local w_idx w_active w_auto w_name w_layout
+    while IFS=$sep read -r w_idx w_active w_auto w_name w_layout; do
+      [ "$w_active" = 1 ] && active_window=$ord
+      ord=$((ord + 1))
+      local name_arg=''
+      [ "$w_auto" = 1 ] || name_arg=" -n $(tq "$w_name")"
+
+      local p_first=1 active_pane=0 p_idx p_active p_path p_pid p_cmd cmd
+      while IFS=$sep read -r p_idx p_active p_path p_pid p_cmd; do
+        [ "$p_active" = 1 ] && active_pane=$p_idx
+        if [ $p_first = 1 ]; then
+          if [ $first = 1 ]; then
+            # reuse the window that new-session made
+            echo "respawn-pane -k -c $(tq "$p_path")"
+            [ -z "$name_arg" ] || echo "rename-window $(tq "$w_name")"
+          else
+            echo "new-window$name_arg -c $(tq "$p_path")"
+          fi
+          p_first=0
+        else
+          echo "split-window -c $(tq "$p_path")"
+          # keep room for the next split; real layout is applied below
+          echo "select-layout tiled"
+        fi
+        cmd=$(pane_restore_cmd "$p_pid" "$p_cmd" "$restore")
+        [ -z "$cmd" ] || echo "send-keys $(tq "$cmd") Enter"
+      done < <(tm list-panes -t "=$name:$w_idx" -F "#{pane_index}$sep#{pane_active}$sep#{pane_current_path}$sep#{pane_pid}$sep#{pane_current_command}")
+
+      echo "select-layout $(tq "$w_layout")"
+      echo "select-pane -t :.$active_pane"
+      first=0
+    done < <(tm list-windows -t "=$name" -F "#{window_index}$sep#{window_active}$sep#{automatic-rename}$sep#{window_name}$sep#{window_layout}")
+    [ -z "$active_window" ] || echo "# active window ordinal: $active_window"
+  } >"$tmp"
+  mv -f "$tmp" "$out"
+}
+
+cmd_save() {
+  local quiet=0
+  if [ "${1:-}" = -q ]; then
+    quiet=1
+    shift
+  fi
+  mkdir -p "$state_dir"
+  if [ $quiet = 1 ]; then
+    # throttled, silent; runs from status-right #()
+    local stamp=$state_dir/.last-save now last=0
+    now=$(date +%s)
+    [ -f "$stamp" ] && last=$(<"$stamp")
+    [ $((now - last)) -ge $save_interval ] || return 0
+    echo "$now" >"$stamp"
+  fi
+  local names=("$@")
+  [ ${#names[@]} -gt 0 ] || mapfile -t names < <(tm list-sessions -F '#{session_name}' 2>/dev/null)
+  local n
+  for n in "${names[@]}"; do
+    if has_session "$n"; then
+      save_session "$n" || [ $quiet = 1 ] || echo "tmux-session: failed to save $n" >&2
+    fi
+  done
+}
+
+cmd_closed() {
+  local name=$1
+  [ -f "$state_dir/$name.tmux" ] && mv -f "$state_dir/$name.tmux" "$state_dir/$name.closed.tmux"
+  [ "${TMUX_SESSION_AGENT:-own}" = inherit ] || agent_stop "$name"
+}
+
+cmd_forget() {
+  check_name "$1"
+  rm -fv "$state_dir/$1.tmux" "$state_dir/$1.closed.tmux"
+}
+
+cmd_ls() {
+  local f n
+  tm list-sessions -F 'live      #{session_name}	#{session_windows} windows#{?session_attached, (attached),}' 2>/dev/null || true
+  for f in "$state_dir"/*.tmux; do
+    [ -e "$f" ] || continue
+    n=${f##*/}
+    n=${n%.tmux}
+    case $n in
+    *.closed) n=${n%.closed} && ! has_session "$n" && printf 'closed    %s\n' "$n" ;;
+    *) has_session "$n" || printf 'saved     %s\n' "$n" ;;
+    esac
+  done
+  for f in "$template_dir"/*.tmux; do
+    [ -e "$f" ] || continue
+    n=${f##*/}
+    n=${n%.tmux}
+    has_session "$n" || [ -f "$state_dir/$n.tmux" ] || printf 'template  %s\n' "$n"
+  done
+}
+
+pick() {
+  local out
+  if ! out=$(cmd_ls | fzf --print-query --no-sort --prompt='session> ' \
+    --header='enter: attach/create  (type a new name to create)' --height=~40% --reverse); then
+    # no match: fzf exits 1 but still prints the query
+    [ -n "$out" ] || return 1
+  fi
+  local query sel
+  query=$(sed -n 1p <<<"$out")
+  sel=$(sed -n 2p <<<"$out")
+  if [ -n "$sel" ]; then
+    sel=${sel#* }
+    sel=${sel#"${sel%%[! ]*}"}
+    echo "${sel%%	*}"
+  else
+    echo "$query"
+  fi
+}
+
+## create / attach
+
+create() {
+  local name=$1 fresh=$2 revive=$3 src='' env
+  if [ $revive = 1 ]; then
+    src=$state_dir/$name.closed.tmux
+    [ -f "$src" ] || die "no closed snapshot for $name"
+  elif [ $fresh = 0 ] && [ -f "$state_dir/$name.tmux" ]; then
+    src=$state_dir/$name.tmux
+  elif [ -f "$template_dir/$name.tmux" ]; then
+    src=$template_dir/$name.tmux
+  fi
+  env=$(session_agent_env "$name")
+
+  # large detached size so restored splits fit; resized on attach
+  local args=(new-session -d -s "$name" -x 400 -y 120 -c "$HOME" -e "$env")
+  if [ -n "$src" ]; then
+    args+=(\; source-file "$src")
+  fi
+  tm "${args[@]}"
+  if [ -n "$src" ]; then
+    # select the window that was active, as recorded in a snapshot
+    local aw base
+    aw=$(sed -n 's/^# active window ordinal: \([0-9]*\)$/\1/p' "$src")
+    base=$(tm show -gv base-index)
+    [ -z "$aw" ] || tm select-window -t "=$name:$((base + aw))" 2>/dev/null || true
+  fi
+  [ $revive = 0 ] || rm -f "$src"
+}
+
+attach() {
+  local name=$1
+  if [ "${TMUX_SESSION_AGENT:-own}" != inherit ]; then
+    # (re)start the agent if it died; same socket path, so existing panes recover
+    tm set-environment -t "=$name" SSH_AUTH_SOCK "$(agent_ensure "$name")"
+  fi
+  if [ -n "${TMUX:-}" ] || [ -n "${TMUX_SESSION_CLIENT:-}" ]; then
+    exec tmux switch-client ${TMUX_SESSION_CLIENT:+-c "$TMUX_SESSION_CLIENT"} -t "=$name"
+  fi
+  # mosh passes TERM=xterm-256color but no COLORTERM, even though it renders
+  # 24-bit color; tell tmux so it doesn't quantize to the 256 palette
+  if [ -z "${COLORTERM:-}" ] && [ "$(ps -o comm= -p $PPID 2>/dev/null)" = mosh-server ]; then
+    export COLORTERM=truecolor
+  fi
+  exec tmux ${TMUX_SESSION_L:+-L "$TMUX_SESSION_L"} attach-session -t "=$name"
+}
+
+main() {
+  case ${1:-} in
+  ls | list) cmd_ls; return ;;
+  save) shift; cmd_save "$@"; return ;;
+  forget) shift; cmd_forget "${1:?NAME required}"; return ;;
+  agent) shift; check_name "${1:?NAME required}"; agent_ensure "$1"; return ;;
+  closed) shift; cmd_closed "${1:?NAME required}"; return ;;
+  -h | --help) sed -n '2,/^$/s/^# \{0,1\}//p' "$0"; return ;;
+  esac
+
+  local detach=0 fresh=0 revive=0 opt
+  while getopts dfr opt; do
+    case $opt in
+    d) detach=1 ;;
+    f) fresh=1 ;;
+    r) revive=1 ;;
+    *) die "see --help" ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+
+  local name=${1:-}
+  if [ -z "$name" ]; then
+    if [ -t 0 ] && [ -t 1 ] && command -v fzf >/dev/null; then
+      name=$(pick) || exit 0
+    else
+      name=main
+    fi
+  fi
+  check_name "$name"
+
+  has_session "$name" || create "$name" $fresh $revive
+  [ $detach = 1 ] || attach "$name"
+}
+
+main "$@"
