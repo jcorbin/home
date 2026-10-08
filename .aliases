@@ -48,3 +48,12 @@ if [ -n "$USE_GNU" ]; then
 else
     alias ps="ps -w"
 fi
+
+# tmux sessions: attach-or-create (switch if already in tmux); see `tmux-session --help`
+tm() { tmux-session "$@"; }
+# ... on a remote host over mosh; NAME defaults to a picker there
+tmosh() {
+    local host=${1:?usage: tmosh HOST [NAME]}
+    shift
+    mosh "$host" -- .local/bin/tmux-session "$@"
+}

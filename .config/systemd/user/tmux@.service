@@ -4,9 +4,11 @@ Slice=app.slice
 
 [Service]
 Type=forking
-; TODO split server out into a socket activated unit?
-ExecStart=/usr/bin/tmux new-session -d -s%i
-ExecStop=/usr/bin/tmux kill-session -t%i
+; creates or restores the session (snapshot or template) with its own ssh-agent
+ExecStart=%h/.local/bin/tmux-session -d %i
+; snapshot only: killing the session would count as a deliberate close and
+; archive the snapshot; let systemd's SIGTERM preserve it for next start
+ExecStop=%h/.local/bin/tmux-session save %i
 
 [Install]
 WantedBy=default.target
