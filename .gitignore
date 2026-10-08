@@ -148,6 +148,7 @@
 !/.claude
 /.claude/*
 !/.claude/skills
+/.claude/skills/synced
 
 !README.md
 !TODO.md
