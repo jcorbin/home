@@ -1,5 +1,5 @@
 [Unit]
-Description=Named tmux session
+Description=Named tmux session %i
 Slice=app.slice
 
 [Service]
