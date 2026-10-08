@@ -67,6 +67,10 @@ vim.opt.guifont = 'Kelmscott Mono:h18'
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
 vim.opt.mouse = 'a'
+-- inside tmux, route the clipboard through it: copies reach whichever client
+-- is attached (via OSC 52, even over mosh), rather than a possibly stale
+-- $WAYLAND_DISPLAY inherited from when the session was created
+if vim.env.TMUX then vim.g.clipboard = 'tmux' end
 vim.cmd.colorscheme 'carbonfox'
 vim.opt.laststatus = 2
 vim.opt.smoothscroll = true
