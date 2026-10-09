@@ -68,6 +68,7 @@
 !/.config/alacritty
 !/.config/autostart
 !/.config/btop
+!/.config/chromium-flags.conf
 !/.config/flake8
 !/.config/foot
 !/.config/ghostty
