@@ -62,11 +62,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000002]
     box_height = 208.0
     box_width = 688.0
-    cx = 907.97784423828125
-    cy = 993.51629638671875
+    cx = 726.38226318359375
+    cy = 794.81304931640625
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "audio_visualizer"
 
@@ -81,11 +81,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000003]
     box_height = 392.0
     box_width = 376.0
-    cx = 270.0
-    cy = 310.00003051757812
+    cx = 216.0
+    cy = 248.00003051757812
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "weather"
 
@@ -98,11 +98,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000004]
     box_height = 288.0
     box_width = 472.0
-    cx = 1485.0
-    cy = 249.99998474121094
+    cx = 1188.0
+    cy = 199.99998474121094
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "sysmon"
 
@@ -117,11 +117,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000005]
     box_height = 0.0
     box_width = 0.0
-    cx = 1640.0
-    cy = 561.0
+    cx = 1312.0
+    cy = 448.80001831054688
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "sysmon"
 
@@ -133,11 +133,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000006]
     box_height = 0.0
     box_width = 0.0
-    cx = 1335.0
-    cy = 555.0
+    cx = 1068.0
+    cy = 444.0
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "sysmon"
 
@@ -149,11 +149,11 @@ widget_order = [
     [desktop_widgets.widget.desktop-widget-0000000000000007]
     box_height = 64.0
     box_width = 328.0
-    cx = 1575.0
-    cy = 1130.0
+    cx = 1260.0
+    cy = 904.0
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "clock"
 
@@ -179,11 +179,11 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
     box_width = 720.0
-    cx = 900.49859619140625
-    cy = 1081.296875
+    cx = 720.39886474609375
+    cy = 865.03753662109375
     output = "eDP-1"
-    placement_height = 1200.0
-    placement_width = 1800.0
+    placement_height = 960.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "login_box"
 
