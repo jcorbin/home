@@ -1,0 +1,84 @@
+# Terminal title setting
+HARDSTATUS="%n@%m:%~"
+if [[ $TERM == screen* ]] && ( [ -n "$TMUX" ] || [ -n "$STY" ] ); then
+	WINDOWTITLE="%~"
+else
+	WINDOWTITLE=$HARDSTATUS
+fi
+
+setup-terminal-titles() {
+	case "$TERM" in
+		# Standalone terminal emulator
+		*xterm*|rxvt*|putty*|gnome-terminal|*onsole|zvt|(dt|k|E|z)term)
+			set-terminal-title() {
+				print -Pn "\e]0;$1\a"
+			}
+			;;
+		# Fucked up osx vt100
+		vt100)
+			if test "$TERM_PROGRAM" = "Apple_Terminal"; then
+				set-terminal-title() {
+					print -Pn "\e]0;$1\a"
+				}
+			fi
+			;;
+		# Screen
+		screen*)
+			set-terminal-title() {
+				# The usual hardstatus (screen %h)
+				print -Pn "\e]0;$1\a"
+				# The screen window title (screen %t)
+				print -Pn "\ek$2\e\\"
+			}
+			;;
+		*)
+			return
+			;;
+	esac
+
+	zsh_term_status_precmd() {
+		set-terminal-title $HARDSTATUS $WINDOWTITLE
+	}
+
+	zsh_term_status_preexec() {
+		local -a cmd
+		local resumejob=
+		cmd=(${(z)1})
+
+		case $cmd[1] in
+			fg)
+				if (( $#cmd == 1 )); then
+					resumejob='%+'
+				else
+					resumejob=$cmd[2]
+				fi
+				;;
+			%*)
+				resumejob=$cmd[1]
+				;;
+		esac
+
+		if [ -n "$resumejob" ]; then
+			resumecmd=$(jobs $resumejob 2>/dev/null)
+			if (( $? != 0 )); then
+				return
+			fi
+			resumedir=$(jobs -d $resumejob 2>/dev/null)
+			resumecmd=${${resumecmd#*  }#*  }
+			resumedir=${${resumedir#*pwd : }%)*}
+
+			set-terminal-title \
+				"${HARDSTATUS/'%~'/$resumedir} $resumecmd" \
+				"${WINDOWTITLE/'%~'/$resumedir} $resumecmd"
+		else
+			set-terminal-title "$HARDSTATUS $cmd" "$WINDOWTITLE $cmd"
+		fi
+	}
+
+	add-zsh-hook precmd zsh_term_status_precmd
+	add-zsh-hook preexec zsh_term_status_preexec
+}
+
+setup-terminal-titles
+
+# vim:set ft=zsh:
